@@ -8,30 +8,18 @@ import javax.persistence.*;
 @Entity
 @Table(name = "devices")
 public class Device {
-    public static final int READER = 0;
-    public static final int VALIDATOR = 1;
-    public static final int READER_VALIDATOR = 2;
-    public static final int FIXED = 0;
-    public static final int VARIABLE = 1;
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(unique=true)
+    private String name;
     private String deviceId;
-    private int type;
-    private String ownerId;
-    private String versionHardware;
-    private String versionSoftware;
-    private String versionEmv;
-    private int fareType;
-    private String periodTransactionUpload;
-    private String periodGps;
-    private String status;
-
-
-    public enum DeviceType {
-        READER, VALIDATOR, READER_VALIDATOR
-    }
-
-    public enum FareType {
-        FIXED, VARIABLE
-    }
+    private Enum.DeviceType type;
+    @ManyToOne()
+    private User owner;
+    private String hardwareVersion;
+    private String softwareVersion;
+    private Enum.FareType fareType;
+    private Enum.DeviceStatus deviceStatus;
+    private boolean isActive;
 }

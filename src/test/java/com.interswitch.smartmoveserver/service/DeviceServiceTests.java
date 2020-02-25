@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Device;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.request.DeviceConnection;
 import com.interswitch.smartmoveserver.model.request.GetDeviceId;
 import com.interswitch.smartmoveserver.model.request.GetOwnerId;
@@ -8,7 +9,6 @@ import com.interswitch.smartmoveserver.model.response.DeviceConnectionResponse;
 import com.interswitch.smartmoveserver.model.response.GetDeviceIdResponse;
 import com.interswitch.smartmoveserver.model.response.GetOwnerIdResponse;
 import com.interswitch.smartmoveserver.repository.DeviceRepository;
-import com.interswitch.smartmoveserver.service.DeviceService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,10 +40,10 @@ public class DeviceServiceTests {
     @Before
     public void setup() {
         device = new Device();
-        device.setOwnerId("id_bus");
+        device.setOwner(new User());
         device.setDeviceId("id_device");
         deviceConnection = new DeviceConnection();
-        deviceConnection.setOwnerId("id_bus");
+        deviceConnection.setOwner(new User());
         deviceConnection.setDeviceId("id_device");
         deviceConnection.setMessageId("id_message");
         deviceConnectionResponse = new DeviceConnectionResponse();
@@ -66,11 +66,6 @@ public class DeviceServiceTests {
     public void testConnectDevice() {
         when(deviceRepository.save(device)).thenReturn(device);
         assertThat(deviceService.connectDevice(deviceConnection).getMessageId()).isEqualTo(deviceConnectionResponse.getMessageId());
-    }
-
-    @Test
-    public void testGetOwnerID() {
-        assertThat(deviceService.getOwnerId(getOwnerId).getMessageId()).isEqualTo(getOwnerIdResponse.getMessageId());
     }
 
     @Test

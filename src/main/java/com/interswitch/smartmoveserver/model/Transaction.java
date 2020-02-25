@@ -2,30 +2,24 @@ package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "transactions")
 public class Transaction {
-    public static final int CREDIT = 0;
-    public static final int DEBIT = 1;
-    public static final int TRIP = 2;
-    public static final int AGENT = 3;
-    public static final int CARD_DISABLED = 4;
-
-
     @Id
-    private String id;
-    private String deviceId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String cardNumber;
-    private String amount;
-    private int type;
-    private String timeDate;
-
-    public enum TransactionType {
-        CREDIT, DEBIT, TRIP, AGENT, CARD_DISABLED
-    }
+    @ManyToOne
+    private Device device;
+    @ManyToOne
+    private User sender;
+    @ManyToOne
+    private User recipient;
+    private double amount;
+    private Enum.TransactionType type;
+    private Date timeStamp;
 }

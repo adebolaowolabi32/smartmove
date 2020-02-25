@@ -1,7 +1,9 @@
 package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Config;
-import com.interswitch.smartmoveserver.repository.ConfigRepository;
+import com.interswitch.smartmoveserver.model.Enum;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,34 +13,49 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Iterator;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ConfigRepositoryTests {
     @Autowired
-    ConfigRepository configRepository;
+    private ConfigRepository configRepository;
+
+    private Config config;
+    private Config savedConfig;
+
+    @Before
+    public void setUp() {
+        config = new Config();
+        config.setName(Enum.ConfigList.TRANSACTION_UPLOAD_PERIOD);
+        config.setValue("200");
+        Config config2 = new Config();
+        config2.setName(Enum.ConfigList.GPS_UPLOAD_PERIOD);
+        config2.setValue("90");
+        assertNotNull(configRepository.save(config2));
+        savedConfig = configRepository.save(config);
+        assertNotNull(savedConfig);
+    }
 
     @Test
     public void testFindById() {
-        Config config = new Config();
-        config.setConfigName("periodTransactionUpload");
-        config.setConfigValue("90");
-        Config savedConfig = configRepository.save(config);
-        configRepository.findById(savedConfig.getConfigName()).ifPresent(config1 -> {
-            assertThat(config1.getConfigName()).isEqualTo(config.getConfigName());
+        configRepository.findById(savedConfig.getId()).ifPresent(config1 -> {
+            assertThat(config1.getName()).isEqualTo(config.getName());
+            assertThat(config1.getValue()).isEqualTo(config.getValue());
+        });
+    }
+
+    @Test
+    public void testFindByName() {
+        configRepository.findByName(savedConfig.getName()).ifPresent(config1 -> {
+            assertThat(config1.getId()).isEqualTo(config.getId());
+            assertThat(config1.getValue()).isEqualTo(config.getValue());
         });
     }
 
     @Test
     public void testFindAll() {
-        Config config1 = new Config();
-        config1.setConfigName("periodTransactionUpload");
-        config1.setConfigValue("200");
-        Config config2 = new Config();
-        config2.setConfigName("periodGPS");
-        config2.setConfigValue("90");
-        configRepository.save(config1);
-        configRepository.save(config2);
         Iterable<Config> configs = configRepository.findAll();
         Iterator<Config> configIterator = configs.iterator();
 
@@ -49,13 +66,9 @@ public class ConfigRepositoryTests {
         }
         assertThat(i).isGreaterThanOrEqualTo(2);    }
 
-    @Test
+    @After
     public void testDelete() {
-        Config config1 = new Config();
-        config1.setConfigName("periodTransactionUpload");
-        config1.setConfigValue("200");
-        Config savedConfig = configRepository.save(config1);
-        configRepository.deleteById(savedConfig.getConfigName());
-        assertThat(configRepository.findById(savedConfig.getConfigName())).isEmpty();
+        configRepository.deleteAll();
+        assertEquals(configRepository.findAll().iterator().hasNext(), false);
     }
 }
