@@ -1,0 +1,145 @@
+<!-- TITLE FRAGMENT BEGINS -->
+<title th:fragment="title" th:text="${#themes.code('client')} + ' | Signup'">Signup</title>
+<!-- /TITLE FRAGMENT ENDS -->
+
+<!-- CONTENT FRAGMENT BEGINS -->
+<div th:fragment="content">
+    <div class="register-container col-lg-6 col-md-6 col-md-push-3 col-lg-push-3 col-xs-12 col-sm-8 col-sm-push-2">
+        <div class="passport-app-logo">
+            <img th:src="@{__${mufasa}__/v1_0_2__${#themes.code('logo')}__}"
+                 alt="Passport Client Logo" class="center-block img-responsive" width="220" />
+        </div>
+
+        <div class="text-center">
+            <div class="h1">Create one account. Use everywhere</div>
+            <div>
+                Your <span th:text="${#themes.code('account')}">Interswitch</span> account gives you access
+                <br />to Quickteller and all other <span th:text="${#themes.code('account')}">Interswitch</span> apps.
+            </div>
+        </div>
+
+        <div class="alert alert-info" role="alert"
+             th:if="${message}">
+            <i class="ion ion-information-circled ion-background"></i>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <span class="alert-content" th:text="${message}">Message</span>
+        </div>
+
+        <div class="alert alert-danger" role="alert"
+             th:if="${error}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <i class="ion ion-alert-circled ion-background"></i>
+            <span class="alert-content" th:text="${error}">Error</span>
+        </div>
+
+        <div class="register-card card container-fluid">
+            <form id="signup-form" method="post" th:action="@{/signup}"
+                  th:object="${userAccountForm}" data-parsley-validate="true" autocomplete="off">
+                <div class="col-lg-6 col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" placeholder="First Name"
+                               id="firstName" name="firstName" th:field="*{firstName}"
+                               required="required"
+                               data-parsley-required-message="Please provide your first name"
+                               data-parsley-length="[3, 40]"
+                               data-parsley-length-message="Please provide a name between 3 and 40 characters long" />
+
+                        <div class="small text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
+                            Please provide a name between 3 and 40 characters long</div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" placeholder="Last Name"
+                               id="lastName" name="lastName" th:field="*{lastName}"
+                               required="required"
+                               data-parsley-required-message="Please provide your last name"
+                               data-parsley-length="[3, 40]"
+                               data-parsley-length-message="Please provide a name between 3 and 40 characters long" />
+
+                        <p class="small text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
+                            Please provide a name between 3 and 40 characters long</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <input type="email" class="form-control input-lg" placeholder="Email Address"
+                               id="email" name="email" th:field="*{email}"
+                               th:readonly="${!#strings.isEmpty(userAccountForm.email) and !#fields.hasErrors('email')}"
+                               data-parsley-maxlength="70"
+                               data-parsley-maxlength-message="Please provide an email no more than 70 characters long" />
+
+                        <p class="small text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                            Please provide a valid email address</p>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+
+                        <input type="text" class="form-control input-lg mobile-no" placeholder="Mobile Number"
+                               id="mobileNo" name="mobileNo" th:field="*{mobileNo}"
+                               th:readonly="${!#strings.isEmpty(userAccountForm.mobileNo) and !#fields.hasErrors('mobileNo')}"
+                               data-parsley-pattern="^((\+|00)?[1-9]|0)\d{1,14}$"
+                               data-parsley-error-message="Please provide a valid mobile number" />
+
+                        <p class="small text-danger" th:if="${#fields.hasErrors('mobileNo')}" th:errors="*{mobileNo}">
+                            Please provide a valid mobile number</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <input type="password" class="form-control input-lg strengthify" placeholder="Password"
+                               id="password" name="password" th:field="*{password}"
+                               required="required"
+                               data-parsley-required-message="Please provide a password" />
+
+                        <p class="small text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                            Please provide a password</p>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <input type="password" class="form-control input-lg" placeholder="Confirm Password"
+                               id="confirmPassword" name="confirmPassword" th:field="*{confirmPassword}"
+                               required="required"
+                               data-parsley-required-message="Please confirm your password"
+                               data-parsley-equalto="#password"
+                               data-parsley-equalto-message="Confirm password does not match provided password" />
+
+                        <p class="small text-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">
+                            Please confirm your password</p>
+                    </div>
+                </div>
+                <div th:if="false" class="col-lg-12 col-md-12 terms-conditions small">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            <span class="lbl">I agree to
+                                <span th:text="${#themes.code('account')}">Interswitch</span>'s
+                                <a href="#"> Terms of Service</a> and <a href="#">Privacy Policy</a>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-dark-blue btn-block btn-high btn-spin">Create account</button>
+                    </div>
+                </div>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <div th:replace="fragments/access :: inputs"></div>
+            </form>
+        </div>
+        <div class="sign-in-link small text-center">
+            Already have an account? <a th:href="@{/login}">Sign in</a>
+        </div>
+    </div>
+</div>
+<!-- /CONTENT FRAGMENT ENDS -->
+<script th:fragment="access" th:replace="fragments/access :: scripts"></script>

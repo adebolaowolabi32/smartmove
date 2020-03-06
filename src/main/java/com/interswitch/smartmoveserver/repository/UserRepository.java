@@ -2,17 +2,24 @@ package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
-    Optional<User> findByUsername(String name);
+    Optional<User> findByUsername(String username);
     Optional<User> findByMobileNo(String mobile);
     Optional<User> findByEmail(String email);
-    Iterable<User> findAllByType(Enum.UserType type);
-    Iterable<User> findAllByParent(User parent);
-    Iterable<User> findAllByTypeAndParentId(Enum.UserType type, long parent);
+    Page<User> findAllByRole(Pageable pageable, Enum.Role role);
+    List<User> findAllByRole(Enum.Role role);
+    List<User> findAllByParent(User parent);
+    List<User> findAllByRoleAndParent(Enum.Role type, User parent);
+    Long countByRole(Enum.Role role);
+    Page<User> findAll(Pageable pageable);
+    List<User> findAll();
 }

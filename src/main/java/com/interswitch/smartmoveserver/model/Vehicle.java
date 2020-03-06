@@ -5,6 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * @author adebola.owolabi
+ */
 @Data
 @Entity
 @Table(name = "vehicles")
@@ -18,9 +21,10 @@ public class Vehicle {
     @Column(unique=true)
     private String regNo;
     @ManyToOne
+    @JoinColumn(name = "owner_id")
     private User owner;
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "device_id")
     private Device device;
     private boolean isActive;
     @ManyToMany(mappedBy = "vehicles")

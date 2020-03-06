@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:fragment="title" >Error</title>
+<body>
+<div class="wrapper">
+    <div class="container-fluid red-border-top">
+        <div th:fragment="content">
+            <div class="error-image col-lg-6 col-md-6 col-sm-3 col-xs-12"></div>
+            <div class="error-content col-lg-push-6 col-md-push-6 col-sm-push-3 col-lg-6 col-md-6 col-sm-9 col-xs-12">
+                <div class="text-content">
+                    <div th:if="${status}" class="h3">
+                        <span th:text="${status}">500</span>
+                    </div>
+
+                    <div th:if="${error}" class="h4">
+                        Error: <span th:text="${error}">server_error</span>
+                    </div>
+
+                    <div th:if="${client}" class="h4">
+                        Application: <span th:text="${client}">Passport</span>
+                    </div>
+
+                    <div th:if="${message}" class="h4">
+                        <span th:text="${message}">Something went wrong. Please bear with us while we fix it</span>
+                    </div>
+
+                    <br />
+
+                    <a th:if="${retry}" th:href="@{/retry}" class="btn btn-primary btn-high create-btn">
+                        Retry
+                    </a>
+
+                    <a th:if="${back}" th:href="@{${back}}" class="btn btn-primary btn-high create-btn">
+                        Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- SCRIPTS BEGINS -->
+<div th:replace="fragments/keep-alive :: keep-alive"></div>
+<!-- /SCRIPTS ENDS -->
+</body>
+</html>

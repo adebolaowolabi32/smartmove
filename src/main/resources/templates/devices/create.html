@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<title th:fragment="title" th:text="${title}">Users</title>
+	<div th:fragment="content" class="card mb-4">
+		<div class="card-header"><i class="fas fa-user mr-1"></i>
+			<span>Devices</span></div>
+		<div class="card-body">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-4">
+						<h2> <b> Create New Device</b></h2>
+					</div>
+
+				</div>
+			</div>
+			<form class="card p-3" action="#" method="post"
+				  th:action="@{/devices/create}" th:object="${device}"
+				  data-parsley-validate="true">
+			  <div class="form-group row">
+				<label class="control-label col-sm-2" for="name">Name:</label>
+				<div class="col-sm-10">
+					<input class="form-control" placeholder="Name"
+						   id="name" name="name" th:field="*{name}"
+						   required="required"
+						   data-parsley-required-message="Please provide device name"
+						   data-parsley-length="[3, 40]"
+						   data-parsley-length-message="Please provide a name between 3 and 40 characters long">
+					<p class="small text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+				</div>
+			  </div>
+			  <div class="form-group row">
+				<label class="control-label col-sm-2" for="deviceId">Device Serial ID:</label>
+					<div class="col-sm-10">
+						<input class="form-control" placeholder="Device Id"
+							   id="deviceId" name="deviceId" th:field="*{deviceId}"
+							   required="required"
+							   data-parsley-required-message="Please provide device id"
+							   data-parsley-length="[3, 40]"
+							   data-parsley-length-message="Please provide a number between 3 and 40 characters long">
+						<p class="small text-danger" th:if="${#fields.hasErrors('deviceId')}" th:errors="*{deviceId}"></p>
+					</div>
+			  </div>
+				<div class="form-group row">
+				  <label class="control-label col-sm-2" for="type">Device Type:</label>
+					  <div class="col-sm-10">
+						<select class="form-control" th:field="*{type}"  id="type">
+							<option value="" disabled>Select...</option>
+							<option value="READER">Reader</option>
+							<option value="VALIDATOR">Validator</option>
+							<option value="READER_VALIDATOR">Reader_Validator</option>
+						</select></div>
+			  </div>
+			   <div class="form-group row">
+				<label class="control-label col-sm-2" for="hardwareVersion">Version Hardware:</label>
+					<div class="col-sm-10">
+						<input class="form-control" th:field="*{hardwareVersion}" id="hardwareVersion">
+						<p class="small text-danger" th:if="${#fields.hasErrors('hardwareVersion')}" th:errors="*{hardwareVersion}"></p>
+					</div>
+			  </div>
+			   <div class="form-group row">
+				<label class="control-label col-sm-2" for="softwareVersion">Version Software:</label>
+					<div class="col-sm-10">
+						<input class="form-control" th:field="*{softwareVersion}" id="softwareVersion">
+						<p class="small text-danger" th:if="${#fields.hasErrors('softwareVersion')}" th:errors="*{softwareVersion}"></p>
+					</div>
+			  </div>
+			   <div class="form-group row">
+				  <label class="control-label col-sm-2" for="fareType">Fare Type</label>
+					  <div class="col-sm-10">
+						<select class="form-control" th:field="*{fareType}" id="fareType">
+							<option value="" disabled>Select...</option>
+							<option value="FIXED">Fixed</option>
+							<option value="VARIABLE">Variable</option>
+						</select>
+					  </div>
+			  </div>
+			   <div class="form-group row">
+				  <label class="control-label col-sm-2" for="isActive">Status</label>
+					  <div class="col-sm-10">
+						<select class="form-control" th:field="*{isActive}" id="isActive">
+							<option value="" disabled>Select...</option>
+							<option value="true">Enabled</option>
+							<option value="false">Disabled</option>
+						</select>
+					  </div>
+			  </div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="owner">Assign To Agent </label>
+					<div class="col-sm-10">
+						<select class="form-control" th:field="*{owner}"  id="owner">
+							<option value=0 disabled>Select ...</option>
+							<option th:each="owner : ${owners}" th:value="${owner}" th:text="${owner.firstName}+' '+${owner.lastName}"></option>
+						</select>
+						<p class="small text-danger" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></p>
+					</div>
+				</div>
+					<button type="submit" class="btn btn-outline-info">Submit</button>
+			</form>
+			<div th:replace="fragments/alerts :: alerts"></div>
+		</div>
+	</div>
+</html>

@@ -6,12 +6,18 @@ import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author adebola.owolabi
+ */
 @Service
 public class VehicleService {
     @Autowired
@@ -20,8 +26,13 @@ public class VehicleService {
     @Autowired
     UserRepository userRepository;
 
-    public Iterable<Vehicle> getAll() {
+    public List<Vehicle> getAll() {
         return vehicleRepository.findAll();
+    }
+
+    public Page<Vehicle> findAllPaginated(int page, int size) {
+        PageRequest pageable = PageRequest.of(page - 1, size);
+        return vehicleRepository.findAll(pageable);
     }
 
     public Vehicle save(Vehicle vehicle) {
@@ -35,15 +46,16 @@ public class VehicleService {
         return vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist"));
     }
 
-    public Iterable<Vehicle> find(Enum.TransportMode type) {
+    public List<Vehicle> find(Enum.TransportMode type) {
         return vehicleRepository.findAllByType(type);
     }
 
-    public Iterable<Vehicle> findAllByOwner(long owner) {
-        Optional<User> user = userRepository.findById(owner);
-        if(user.isPresent())
-            return vehicleRepository.findAllByOwner(user.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
+    public List<Vehicle> findAllByOwner(User owner) {
+        return vehicleRepository.findAllByOwner(owner);
+    }
+
+    public List<Vehicle> findAllByOwner(long owner) {
+        return vehicleRepository.findAll();//urgent
     }
 
     public Vehicle update(Vehicle vehicle) {
@@ -80,5 +92,9 @@ public class VehicleService {
             vehicleRepository.save(vehicle);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
+    }
+
+    public Long countByOwner(User user){
+        return vehicleRepository.countByOwner(user);
     }
 }

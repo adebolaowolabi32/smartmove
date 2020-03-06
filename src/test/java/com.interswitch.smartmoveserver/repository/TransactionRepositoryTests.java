@@ -1,9 +1,7 @@
 package com.interswitch.smartmoveserver.repository;
 
-import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.Transaction;
-import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +39,7 @@ public class TransactionRepositoryTests {
         transaction.setDevice(new Device());
         transaction.setType(Enum.TransactionType.TRIP);
         transaction.setAmount(200.00);
-        transaction.setCardNumber("123456789123456");
+        transaction.setCard(new Card());
         transaction.setSender(user);
         transaction.setRecipient(user);
         transaction.setTimeStamp(new Date());
@@ -49,7 +47,7 @@ public class TransactionRepositoryTests {
         transaction1.setDevice(new Device());
         transaction1.setType(Enum.TransactionType.TRIP);
         transaction1.setAmount(300);
-        transaction1.setCardNumber("123786789123456");
+        transaction1.setCard(new Card());
         transaction1.setSender(user);
         transaction1.setRecipient(user);
         transaction1.setTimeStamp(new Date());
@@ -60,15 +58,8 @@ public class TransactionRepositoryTests {
 
     @Test
     public void testFind() {
-        Iterable<Transaction> transactions = transactionRepository.findAllByType(savedTransaction.getType());
-        Iterator<Transaction> transactionIterator = transactions.iterator();
-
-        int i = 0;
-        while(transactionIterator.hasNext()) {
-            i++;
-            transactionIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
+        List<Transaction> transactions = transactionRepository.findAllByType(savedTransaction.getType());
+        assertThat(transactions.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
@@ -77,73 +68,38 @@ public class TransactionRepositoryTests {
             assertThat(transaction1.getDevice()).isEqualTo(transaction.getDevice());
             assertThat(transaction1.getType()).isEqualTo(transaction.getType());
             assertThat(transaction1.getAmount()).isEqualTo(transaction.getAmount());
-            assertThat(transaction1.getCardNumber()).isEqualTo(transaction.getCardNumber());
+            assertThat(transaction1.getCard()).isEqualTo(transaction.getCard());
         });
     }
 
     @Test
     public void testFindBySender() {
-        Iterable<Transaction> transactions = transactionRepository.findAllBySender(savedTransaction.getSender());
-        Iterator<Transaction> transactionIterator = transactions.iterator();
-
-        int i = 0;
-        while(transactionIterator.hasNext()) {
-            i++;
-            transactionIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
+        List<Transaction> transactions = transactionRepository.findAllBySender(savedTransaction.getSender());
+        assertThat(transactions.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
     public void testFindByRecipient() {
-        Iterable<Transaction> transactions = transactionRepository.findAllByRecipient(savedTransaction.getRecipient());
-        Iterator<Transaction> transactionIterator = transactions.iterator();
-
-        int i = 0;
-        while(transactionIterator.hasNext()) {
-            i++;
-            transactionIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
+        List<Transaction> transactions = transactionRepository.findAllByRecipient(savedTransaction.getRecipient());
+        assertThat(transactions.size()).isGreaterThanOrEqualTo(2);
     }
 
-    @Test
+   /* @Test
     public void testFindByCardNumber() {
-        Iterable<Transaction> transactions = transactionRepository.findAllByCardNumber(savedTransaction.getCardNumber());
-        Iterator<Transaction> transactionIterator = transactions.iterator();
-
-        int i = 0;
-        while(transactionIterator.hasNext()) {
-            i++;
-            transactionIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(1);
-    }
+        List<Transaction> transactions = transactionRepository.findAllByCard(savedTransaction.getCard());
+        assertThat(transactions.size()).isGreaterThanOrEqualTo(1);
+    }*/
 
     @Test
     public void testFindByDeviceId() {
-        Iterable<Transaction> transactions = transactionRepository.findAllByDevice(savedTransaction.getDevice());
-        Iterator<Transaction> transactionIterator = transactions.iterator();
-
-        int i = 0;
-        while(transactionIterator.hasNext()) {
-            i++;
-            transactionIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(1);
+        List<Transaction> transactions = transactionRepository.findAllByDevice(savedTransaction.getDevice());
+        assertThat(transactions.size()).isGreaterThanOrEqualTo(1);
     }
 
     @Test
     public void testFindAll() {
-        Iterable<Transaction> transactions = transactionRepository.findAll();
-        Iterator<Transaction> transactionIterator = transactions.iterator();
-
-        int i = 0;
-        while(transactionIterator.hasNext()) {
-            i++;
-            transactionIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
+        List<Transaction> transactions = transactionRepository.findAll();
+        assertThat(transactions.size()).isGreaterThanOrEqualTo(2);
     }
 
     @After

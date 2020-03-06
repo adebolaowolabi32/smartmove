@@ -1,0 +1,41 @@
+<!-- TITLE FRAGMENT BEGINS -->
+<title th:fragment="title" th:text="${#themes.code('client')} + ' | Home'">Home</title>
+<!-- /TITLE FRAGMENT ENDS -->
+
+<!-- CONTENT FRAGMENT BEGINS -->
+<div th:fragment="content">
+    <div class="banner">
+        <div class="container">
+            <div class="pull-left col-md-6 col-lg-6 col-sm-8 col-xs-12">
+                <div class="h1">Your Passport Board</div>
+                <div class="h3">All your connected services live here</div>
+            </div>
+            <div class="banner-avatar col-lg-6 col-md-6 col-sm-4"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row search">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <div class="alert alert-info" role="alert"
+                     th:if="${message}">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <i class="ion ion-information-circled ion-background"></i>
+                    <span class="alert-content" th:text="${message}">Message</span>
+                </div>
+
+                <div class="alert alert-danger" role="alert"
+                     th:if="${error}">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <i class="ion ion-alert-circled ion-background"></i>
+                    <span class="alert-content" th:text="${error}">Error</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

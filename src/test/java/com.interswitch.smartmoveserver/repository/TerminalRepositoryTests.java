@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Iterator;
+import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,28 +64,14 @@ public class TerminalRepositoryTests {
 
     @Test
     public void testFindAll() {
-        Iterable<Terminal> terminals = terminalRepository.findAll();
-        Iterator<Terminal> terminalIterator = terminals.iterator();
-
-        int i = 0;
-        while(terminalIterator.hasNext()) {
-            i++;
-            terminalIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
+        List<Terminal> terminals = terminalRepository.findAll();
+        assertThat(terminals.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
     public void testFindByOwner() {
-        Iterable<Terminal> terminals = terminalRepository.findAllByOwner(savedTerminal.getOwner());
-        Iterator<Terminal> terminalIterator = terminals.iterator();
-
-        int i = 0;
-        while(terminalIterator.hasNext()) {
-            i++;
-            terminalIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(1);
+        List<Terminal> terminals = terminalRepository.findAllByOwner(savedTerminal.getOwner());
+        assertThat(terminals.size()).isGreaterThanOrEqualTo(1);
     }
 
 

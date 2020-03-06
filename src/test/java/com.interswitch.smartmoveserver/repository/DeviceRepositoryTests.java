@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Iterator;
+import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,28 +72,14 @@ public class DeviceRepositoryTests {
 
     @Test
     public void testFindAll() {
-        Iterable<Device> devices = deviceRepository.findAll();
-        Iterator<Device> deviceIterator = devices.iterator();
-
-        int i = 0;
-        while(deviceIterator.hasNext()) {
-            i++;
-            deviceIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
+        List<Device> devices = deviceRepository.findAll();
+        assertThat(devices.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
     public void testFindByOwner() {
-        Iterable<Device> devices = deviceRepository.findAllByOwner(device.getOwner());
-        Iterator<Device> deviceIterator = devices.iterator();
-
-        int i = 0;
-        while(deviceIterator.hasNext()) {
-            i++;
-            deviceIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(1);
+        List<Device> devices = deviceRepository.findAllByOwner(device.getOwner());
+        assertThat(devices.size()).isGreaterThanOrEqualTo(1);
     }
 
     @After

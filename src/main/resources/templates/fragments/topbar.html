@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="topbar">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-light">
+            <img alt="Interswitch Logo" class="img-brand" th:src="@{/assets/img/interswitchngnew.png}">
+            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars-alt"></i></button>
+            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+            <ul class="navbar-nav ml-auto ml-md-0 m-nav__item m-topbar__user-profile m-topbar__user-profile--img m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light m-dropdown--open" m-dropdown-toggle="click" aria-expanded="true">
+                <li class="nav-item dropdown">
+                    <a class="m-nav__link m-dropdown__toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img th:src="@{/assets/img/MyUser.jpg}" alt=""  width="50px" height="50px"></a>
+
+                        <div class="dropdown-menu dropdown-menu-right" style="z-index: 101;" aria-labelledby="userDropdown">
+                            <div class="m-dropdown__wrapper" style="z-index: 101;">
+                                <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 15px;"></span>
+                                <div class="m-dropdown__inner">
+                                    <div class="m-dropdown__header m--align-center" style="background: url(/Content/assets/app/media/img/misc/user_profile_bg.jpg); background-size: cover;">
+                                        <div class="m-card-user m-card-user--skin-dark">
+                                            <div class="m-card-user__pic">
+                                                <img th:src="@{/assets/img/MyUser.jpg}" alt="" width="50px" height="50px">
+
+                                            </div>
+                                            <div class="m-card-user__details">
+                                                <span class="m-card-user__name m--font-weight-500"> Company Name</span>
+                                                <a href="#" class="m-card-user__email m--font-weight-300 m-link">company@email.com</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-dropdown__body">
+
+                                        <div class="m-dropdown__content">
+                                            <ul class="m-nav m-nav--skin-light">
+                                                <li class="m-nav__section m--hide">
+                                                    <span class="m-nav__section-text">Section</span>
+                                                </li>
+                                                <li class="m-nav__item">
+                                                    <a href="#" class="m-nav__link">
+                                                        <i class="m-nav__link-icon flaticon-profile-1"></i>
+                                                        <span class="m-nav__link-title">
+                                                            <span class="m-nav__link-wrap">
+                                                                <span class="m-nav__link-text">My Profile</span>
+                                                                <span class="m-nav__link-badge"><span class="m-badge m-badge--success">2</span></span>
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="m-nav__item">
+                                                    <a data-toggle="modal" data-target="#CompanyList" class="m-nav__link">
+                                                        <i class="m-nav__link-icon flaticon-share"></i>
+                                                        <span class="m-nav__link-text">Change Company</span>
+                                                        <span class="m-badge m-badge--success" style="margin-left:-1.5pc">nisw</span>
+                                                    </a>
+                                                </li>
+                                                <li class="m-nav__item">
+                                                    <a href="#" class="m-nav__link">
+                                                        <i class="m-nav__link-icon flaticon-chat-1"></i>
+                                                        <span class="m-nav__link-text">Messages</span>
+                                                    </a>
+                                                </li>
+                                                <li class="m-nav__separator m-nav__separator--fit">
+                                                </li>
+                                                <li class="m-nav__item">
+                                                    <a href="#" class="m-nav__link">
+                                                        <i class="m-nav__link-icon flaticon-info"></i>
+                                                        <span class="m-nav__link-text">FAQ</span>
+                                                    </a>
+                                                </li>
+                                                <li class="m-nav__item">
+                                                    <a href="#" class="m-nav__link">
+                                                        <i class="m-nav__link-icon flaticon-lifebuoy"></i>
+                                                        <span class="m-nav__link-text">Support</span>
+                                                    </a>
+                                                </li>
+                                                <li class="m-nav__separator m-nav__separator--fit">
+                                                </li>
+                                                <li class="m-nav__item"><a class="dropdown-item" th:href="@{/logout}" href="#">Logout</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</html>

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Iterator;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -56,15 +56,8 @@ public class ConfigRepositoryTests {
 
     @Test
     public void testFindAll() {
-        Iterable<Config> configs = configRepository.findAll();
-        Iterator<Config> configIterator = configs.iterator();
-
-        int i = 0;
-        while(configIterator.hasNext()) {
-            i++;
-            configIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);    }
+        List<Config> configs = configRepository.findAll();
+        assertThat(configs.size()).isGreaterThanOrEqualTo(2);    }
 
     @After
     public void testDelete() {

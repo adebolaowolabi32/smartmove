@@ -1,5 +1,8 @@
 package com.interswitch.smartmoveserver.model;
 
+/**
+ * @author adebola.owolabi
+ */
 public class Enum {
     public enum TransportMode {
         BUS, KEKE, RAIL, WATERWAY
@@ -21,8 +24,8 @@ public class Enum {
         CREDIT, DEBIT, TRIP, AGENT, CARD_DISABLED
     }
 
-    public enum UserType {
-        ISW_ADMIN, REGULATOR, OPERATOR, BUS_OWNER, AGENT
+    public enum Role {
+        ISW_ADMIN, REGULATOR, OPERATOR, VEHICLE_OWNER, AGENT
     }
 
     public enum CardType {

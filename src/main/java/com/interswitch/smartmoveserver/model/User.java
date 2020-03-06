@@ -3,8 +3,10 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
+/**
+ * @author adebola.owolabi
+ */
 @Data
 @Entity
 @Table(name = "users")
@@ -13,6 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String username;
+    private String password;
     private String firstName;
     private String lastName;
     private String address;
@@ -20,11 +23,10 @@ public class User {
     private String mobileNo;
     @Column(unique=true)
     private String email;
-    private Enum.UserType type;
-    @ManyToMany
-    @JoinColumn(name = "id")
-    private Set<Role> roles;
+    //@ElementCollection
+    private Enum.Role role;
     @ManyToOne
+    @JoinColumn(name="parent_id")
     private User parent;
     private boolean isActive;
 }

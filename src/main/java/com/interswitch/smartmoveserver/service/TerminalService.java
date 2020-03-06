@@ -6,13 +6,18 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.TerminalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * @author adebola.owolabi
+ */
 @Service
 public class TerminalService {
     @Autowired
@@ -21,8 +26,13 @@ public class TerminalService {
     @Autowired
     UserRepository userRepository;
 
-    public Iterable<Terminal> getAll() {
+    public List<Terminal> getAll() {
         return terminalRepository.findAll();
+    }
+
+    public Page<Terminal> findAllPaginated(int page, int size) {
+        PageRequest pageable = PageRequest.of(page - 1, size);
+        return terminalRepository.findAll(pageable);
     }
 
     public Terminal save(Terminal terminal) {
@@ -36,11 +46,11 @@ public class TerminalService {
         return terminalRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist"));
     }
 
-    public Iterable<Terminal> find(Enum.TransportMode type) {
+    public List<Terminal> find(Enum.TransportMode type) {
         return terminalRepository.findAllByType(type);
     }
 
-    public Iterable<Terminal> findByOwner(long owner) {
+    public List<Terminal> findByOwner(long owner) {
         Optional<User> user = userRepository.findById(owner);
         if(user.isPresent())
             return terminalRepository.findAllByOwner(user.get());
@@ -81,5 +91,9 @@ public class TerminalService {
             terminalRepository.save(terminal);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
+    }
+
+    public Long countByOwner(User user){
+        return terminalRepository.countByOwner(user);
     }
 }

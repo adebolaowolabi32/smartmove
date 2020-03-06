@@ -1,0 +1,89 @@
+<!-- TITLE FRAGMENT BEGINS -->
+<title th:fragment="title" th:text="${#themes.code('client')} + ' | Login'">Login</title>
+<!-- /TITLE FRAGMENT ENDS -->
+
+<!-- CONTENT FRAGMENT BEGINS -->
+<div th:fragment="content">
+    <div class="login-container col-lg-4 col-md-4 col-md-push-4 col-lg-push-4 col-xs-12 col-sm-8 col-sm-push-2">
+        <div class="passport-app-logo">
+            <img th:src="@{__${mufasa}__/v1_0_2__${#themes.code('logo')}__}"
+                 alt="Passport Client Logo" class="center-block img-responsive" width="220" />
+        </div>
+        <div class="small login-text text-center">
+            Login with your <span th:text="${#themes.code('account')}">Interswitch</span> account.
+            <a data-toggle="modal" data-target="#passportWhatIs">What's this?</a>
+        </div>
+
+        <div class="alert alert-info" role="alert"
+             th:if="${param.message != null or message != null}"
+             th:with="msg = ${param.message} ? ${param.message[0]} : ${message}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <i class="ion ion-information-circled ion-background"></i>
+            <span class="alert-content" th:text="${msg}">Message</span>
+        </div>
+
+        <div class="alert alert-danger" role="alert"
+             th:if="${param.error != null or param.access_denied != null or error != null}"
+             th:with="err = ${session['SPRING_SECURITY_LAST_EXCEPTION'] != null and param.error != null} ?
+             ${session['SPRING_SECURITY_LAST_EXCEPTION'].message} :
+             (${session['SPRING_SECURITY_403_EXCEPTION'] != null and param.access_denied != null} ?
+             ${session['SPRING_SECURITY_403_EXCEPTION'].message} : ${error})">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <i class="ion ion-alert-circled ion-background"></i>
+            <span class="alert-content" th:text="${err}">Error</span>
+        </div>
+
+        <div class="login-card card container-fluid">
+            <form id="login-form" method="post" th:action="@{/login}"
+                  data-parsley-validate="true" autocomplete="off">
+                <div class="form-group">
+                    <input type="text" class="form-control input-lg mobile-no" placeholder="Email or Mobile Number"
+                           id="username" name="username" required="required"
+                           data-parsley-required-message="Please provide your email address or mobile number" />
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control input-lg" placeholder="Password"
+                           id="password" name="password" required="required"
+                           data-parsley-required-message="Please provide your password" />
+                </div>
+                <button type="submit" class="btn btn-dark-blue btn-block btn-high btn-spin">Sign in</button>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <div th:replace="fragments/access :: inputs"></div>
+                <div class="text-center small">
+                    <a th:href="@{/accounts/recovery}" class="link">Forgot your password</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="create-link small text-center">
+            Don't have an account?
+            <a th:href="@{/signup}">Create one now</a>
+        </div>
+    </div>
+
+    <!-- What's this Modal-->
+    <div class="modal fade" id="passportWhatIs" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+                <div class="modal-body text-center">
+                    <p>
+                        Your <span th:text="${#themes.code('account')}">Interswitch</span> account gives you access to
+                        Quickteller and all other <span th:text="${#themes.code('account')}">Interswitch</span> apps.
+                    </p>
+                    <p>
+                    <div><strong>But I already have a Quickteller account!</strong></div>
+                    No worries. That works as your <span th:text="${#themes.code('account')}">Interswitch</span> account now.
+                    You can use it to access any of our services.
+                    </p>
+                    <div data-dismiss="modal" aria-label="Close" class="modal-close">Great, got it!</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

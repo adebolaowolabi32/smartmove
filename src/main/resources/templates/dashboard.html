@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<title th:fragment="title">Dashboard</title>
+	<div th:fragment="content" class="container-fluid overflow">
+		<h1 class="mt-4">Dashboard</h1>
+		<div class="row">
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')">
+				<div class="card bg-primary text-white mb-4">
+					<div class="card-body heavy">Administrators <span class="number" th:text="${no_admins}">21</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/users/get?role=ADMINISTRATOR}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_REGULATORS')">
+				<div class="card bg-secondary text-white mb-4">
+					<div class="card-body heavy">Regulators <span class="number" th:text="${no_regulators}">21</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/users/get?role=REGULATOR}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_OPERATORS')">
+				<div class="card bg-success text-white mb-4">
+					<div class="card-body heavy">Operators <span class="number" th:text="${no_operators}">21</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/users/get?role=OPERATOR}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_AGENTS')">
+				<div class="card bg-info text-white mb-4">
+					<div class="card-body heavy">Agents <span class="number" th:text="${no_agents}">21</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/users/get?role=AGENT}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_VEHICLES')">
+				<div class="card bg-warning text-white mb-4">
+					<div class="card-body heavy">Vehicles <span class="number" th:text="${no_vehicles}">21</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/vehicles/get}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TERMINALS')">
+				<div class="card bg-danger text-white mb-4">
+					<div class="card-body heavy">Terminals <span class="number" th:text="${no_terminals}">25</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/terminals/get}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_ROUTES')">
+				<div class="card bg-dark text-white mb-4">
+					<div class="card-body heavy">Routes <span class="number" th:text="${no_routes}">50</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link"  th:href="@{/routes/get}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_DEVICES')">
+				<div class="card bg-danger text-white mb-4">
+					<div class="card-body heavy">Devices <span class="number" th:text="${no_devices}">21</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link"  th:href="@{/devices/get}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')">
+				<div class="card bg-primary text-white mb-4">
+					<div class="card-body heavy">Transactions <span class="number" th:text="${no_transactions}">21</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link"  th:href="@{/transactions/get}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')">
+				<div class="card bg-warning text-white mb-4">
+					<div class="card-body heavy">Settlements <span class="number" th:text="${no_settlements}">25</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/settlements/get}" href="#">View Details</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')">
+				<div class="card bg-success text-white mb-4">
+					<div class="card-body heavy">Wallet <span class="number" th:text="${wallet_balance}">N5000</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/wallet/get}" href="#">View Wallet</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_CARD_DETAILS')">
+				<div class="card bg-info text-white mb-4">
+					<div class="card-body heavy">Card <span class="number" th:text="${card_balance}">N2000</span></div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" th:href="@{/card/get}" href="#">View Card</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card mb-4">
+			<div class="card-header"><i class="fas fa-chart-area mr-1"></i>Activities</div>
+			<div class="card-body heavy"><canvas id="myAreaChart" width="100%" height="30"></canvas></div>
+			<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="card mb-4">
+					<div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Transactions</div>
+					<div class="card-body heavy"><canvas id="myBarChart" width="100%" height="50"></canvas></div>
+					<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="card mb-4">
+					<div class="card-header"><i class="fas fa-chart-pie mr-1"></i>Analytics</div>
+					<div class="card-body heavy"><canvas id="myPieChart" width="100%" height="50"></canvas></div>
+					<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+		<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+		<script th:src="@{/assets/demo/chart-area-demo.js}"></script>
+		<script th:src="@{/assets/demo/chart-bar-demo.js}"></script>
+		<script th:src="@{/assets/demo/chart-pie-demo.js}"></script>
+	</div>
+</html>

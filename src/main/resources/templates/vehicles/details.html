@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:fragment="title" th:text="${title}">Vehicles</title>
+<div th:fragment="content" class="card mb-4">
+	<div class="card-header"><i class="fas fa-vehicle mr-1"></i><span th:text="${title}">Vehicles</span></div>
+	<div class="card-body">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-4">
+						<h2><b>View <span th:text="${title}">Vehicle</span></b></h2>
+					</div>
+					<div class="col-sm-8">
+						<a th:href="@{/vehicles/update/{id}(id=${vehicle.id})}">
+							<button type='button' class='btn btn-outline-info'><i class='fas fa-edit'></i>Edit </button>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="card p-3">
+				<div class="form-group row">
+					<label class="col-sm-2" for="name">Name:</label>
+					<div class="col-sm-10">
+						<span id="name" th:text="${vehicle.name}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2" for="regNo">Vehicle Registration Number:</label>
+					<div class="col-sm-10">
+						<span id="regNo" th:text="${vehicle.regNo}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2" for="type">Type:</label>
+					<div class="col-sm-10">
+						<span id="type" th:text="${vehicle.type}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="owner">Assigned to:</label>
+					<div class="col-sm-10">
+						<span id="owner" th:text="${vehicle.owner.name}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2" for="isActive">Is Active:</label>
+					<div class="col-sm-10"><span id="isActive" th:text="${vehicle.isActive}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="device">Device:</label>
+					<div class="col-sm-10">
+						<span id="device" th:text="${vehicle.device.name}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="route">Route:</label>
+					<div class="col-sm-10">
+						<span id="route" th:text="${vehicle.route.name}"></span></div>
+				</div>
+				<a href="http://demo4.traccar.org/">
+					<button type='button' class='btn btn-outline-info'><i class='fas fa-eye'></i>Track Vehicle </button>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

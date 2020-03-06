@@ -3,11 +3,20 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DeviceRepository extends CrudRepository<Device, Long> {
-    Iterable<Device> findAllByType(Enum.DeviceType type);
-    Iterable<Device> findAllByOwner(User owner);
+    List<Device> findAllByType(Enum.DeviceType type);
+    List<Device> findAllByOwner(User owner);
+    Page<Device> findAllByType(Pageable pageable, Enum.DeviceType type);
+    Page<Device> findAllByOwner(Pageable pageable, User owner);
+    Long countByOwner(User owner);
+    Page<Device> findAll(Pageable pageable);
+    List<Device> findAll();
 }

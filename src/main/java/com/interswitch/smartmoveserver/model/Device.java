@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * @author adebola.owolabi
+ */
 @Data
 @Entity
 @Table(name = "devices")
@@ -15,7 +18,8 @@ public class Device {
     private String name;
     private String deviceId;
     private Enum.DeviceType type;
-    @ManyToOne()
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
     private User owner;
     private String hardwareVersion;
     private String softwareVersion;

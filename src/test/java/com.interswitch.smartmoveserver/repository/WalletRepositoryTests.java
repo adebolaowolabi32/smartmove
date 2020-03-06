@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Iterator;
-
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -54,18 +52,6 @@ public class WalletRepositoryTests {
             assertThat(wallet1.getCurrency()).isEqualTo(wallet1.getCurrency());
             assertThat(wallet1.isActive()).isEqualTo(wallet1.isActive());
         });
-    }
-
-    @Test
-    public void testFindAll() {
-        Iterable<Wallet> wallets = walletRepository.findAll();
-        Iterator<Wallet> walletIterator = wallets.iterator();
-        int i = 0;
-        while(walletIterator.hasNext()) {
-            i++;
-            walletIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
     }
 
     @After

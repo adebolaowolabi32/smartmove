@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Iterator;
+import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,27 +60,14 @@ public class VehicleRepositoryTests {
 
     @Test
     public void testFindAll() {
-        Iterable<Vehicle> vehicles = vehicleRepository.findAll();
-        Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-        int i = 0;
-        while(vehicleIterator.hasNext()) {
-            i++;
-            vehicleIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        assertThat(vehicles.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
     public void testFindByOwner() {
-        Iterable<Vehicle> vehicles = vehicleRepository.findAllByOwner(savedVehicle.getOwner());
-        Iterator<Vehicle> vehicleIterator = vehicles.iterator();
-
-        int i = 0;
-        while(vehicleIterator.hasNext()) {
-            i++;
-            vehicleIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(1);
+        List<Vehicle> vehicles = vehicleRepository.findAllByOwner(savedVehicle.getOwner());
+        assertThat(vehicles.size()).isGreaterThanOrEqualTo(1);
     }
 
 

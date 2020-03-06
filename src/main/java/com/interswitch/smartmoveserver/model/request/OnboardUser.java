@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class OnboardUser {
-    private Enum.UserType type;
+    private Enum.Role type;
     private String emailAddress;
 }

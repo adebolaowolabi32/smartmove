@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * @author adebola.owolabi
+ */
 @Component
 public class JwtHelper {
 

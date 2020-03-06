@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<title th:fragment="title" th:text="${title}">Users</title>
+	<div th:fragment="content" class="card mb-4">
+		<div class="card-header"><i class="fas fa-user mr-1"></i><span th:text="${title}">Users</span></div>
+		<div class="card-body">
+			<div class="table-wrapper">
+				<div class="table-title">
+					<div class="row">
+						<div class="col-sm-4">
+							<h2><b>View <span th:text="${title}">User</span></b></h2>
+						</div>
+						<div class="col-sm-8">
+							<a th:href="@{/users/update/{id}(id=${user.id})}">
+								<button type='button' class='btn btn-outline-info'><i class='fas fa-edit'></i>Edit </button>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="card p-3">
+					  <div class="form-group row">
+						<label class="col-sm-2" for="firstName">First Name:</label>
+						<div class="col-sm-10">
+							<span id="firstName" th:text="${user.firstName}"></span></div>
+					  </div>
+					  <div class="form-group row">
+						<label class="col-sm-2" for="lastName">Last Name:</label>
+						<div class="col-sm-10">
+							<span id="lastName" th:text="${user.lastName}"></span></div>
+					  </div>
+					   <div class="form-group row">
+						<label class="col-sm-2" for="email">Email Address:</label>
+							<div class="col-sm-10">
+								<span id="email" th:text="${user.email}"></span></div>
+					  </div>
+					  <div class="form-group row">
+						<label class="col-sm-2" for="phone">Mobile Number:</label>
+							<div class="col-sm-10"><span id="phone" th:text="${user.phone}"></span></div>
+					  </div>
+
+					  <div class="form-group row">
+						  <label class="control-label col-sm-2" for="owner" th:text="${'Assigned To ' + assign}"> </label>
+							  <div class="col-sm-10">
+								<span id="owner" th:text="${user.parent.name}"></span></div>
+					  </div>
+					  <div class="form-group row">
+						  <label class="col-sm-2" for="device">Devices:</label>
+							  <div class="col-sm-10" id="device">
+									<div class="form-group row" th:each="device : ${devices}">
+										<span class="col-sm-3"th:text="${device.name} "></span>
+										<a th:href="@{/devices/details/{id}(id=${device.id})}">
+											<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
+										</a>
+									</div>
+								</div>
+					  </div>
+					<div class="form-group row">
+						<label class="col-sm-2" for="vehicle">Vehicles:</label>
+						<div class="col-sm-10" id="vehicle">
+							<div class="form-group row" th:each="vehicle : ${vehicles}">
+								<span class="col-sm-3"th:text="${vehicle.name} "></span>
+								<a th:href="@{/vehicles/details/{id}(id=${vehicle.id})}">
+									<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</html>

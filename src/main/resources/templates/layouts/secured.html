@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+</head>
+<body id="pageBody">
+<div class="wrapper">
+    <div class="container-fluid red-border-top">
+        <nav class="navbar navbar-default navbar-red-border-top">
+            <div class="container">
+                <div class="navbar-header pull-left">
+                    <a class="navbar-brand" th:href="@{/home}">
+                        <img th:src="@{__${mufasa}__/v1_0_2__${#themes.code('logo')}__}" alt="" class="img-responsive" />
+                    </a>
+                    <div class="profile-container pull-right"
+                         th:with="first=${#authentication.principal.firstName},last=${#authentication.principal.lastName}">
+                        <ul class="list unstyled list-inline">
+                            <li class="hidden-xs">
+                                Hi, <span th:text="${first}"></span>
+                            </li>
+                            <li class="profile-initials text-center">
+                                <span th:with="initials=${#strings.substring(first, 0, 1) + #strings.substring(last, 0, 1)}"
+                                      th:text="${initials}"></span>
+                            </li>
+                            <div class="dropdown pull-right">
+                                <div class="dropdown-toggle" data-toggle="dropdown"
+                                     aria-haspopup="true"
+                                     aria-expanded="false">
+                                    <span class="caret"></span>
+                                </div>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                                    <li class="visible-xs">
+                                        <span class="profile-name">Hi, <span th:text="${first}"></span></span>
+                                    </li>
+                                    <li><a th:href="@{/change-password}">Change Password</a></li>
+                                    <li><a th:href="@{/logout}">Logout</a></li>
+                                </ul>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div th:replace="${view} :: content"></div>
+    </div>
+</div>
+<div th:replace="fragments/scripts :: scripts"></div>
+</body>
+</html>

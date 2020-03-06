@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Iterator;
+import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,28 +70,14 @@ public class RouteRepositoryTests {
 
     @Test
     public void testFindAll() {
-        Iterable<Route> routes = routeRepository.findAll();
-        Iterator<Route> routeIterator = routes.iterator();
-
-        int i = 0;
-        while(routeIterator.hasNext()) {
-            i++;
-            routeIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(2);
+        List<Route> routes = routeRepository.findAll();
+        assertThat(routes.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test
     public void testFindByOwner() {
-        Iterable<Route> routes = routeRepository.findAllByOwner(savedRoute.getOwner());
-        Iterator<Route> routeIterator = routes.iterator();
-
-        int i = 0;
-        while(routeIterator.hasNext()) {
-            i++;
-            routeIterator.next();
-        }
-        assertThat(i).isGreaterThanOrEqualTo(1);
+        List<Route> routes = routeRepository.findAllByOwner(savedRoute.getOwner());
+        assertThat(routes.size()).isGreaterThanOrEqualTo(1);
     }
 
 

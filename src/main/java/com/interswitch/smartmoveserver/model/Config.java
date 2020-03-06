@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * @author adebola.owolabi
+ */
 @Data
 @Entity
 @Table(name = "systemConfigurations")

@@ -6,6 +6,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * @author adebola.owolabi
+ */
 @Data
 public abstract class AbstractModel implements Serializable {
     @JsonIgnore

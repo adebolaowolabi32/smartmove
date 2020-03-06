@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,15 +77,8 @@ public class CardRepositoryTests {
 
     @Test
     public void testFindAll() {
-        Iterable<Card> cards = cardRepository.findAll();
-        Iterator<Card> cardIterator = cards.iterator();
-
-        int i = 0;
-        while(cardIterator.hasNext()) {
-            i++;
-            cardIterator.next();
-        }
-        assertThat(i).isEqualTo(2);
+        List<Card> cards = cardRepository.findAll();
+        assertThat(cards.size()).isEqualTo(2);
     }
 
     @After

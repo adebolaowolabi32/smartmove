@@ -10,17 +10,7 @@ public final class TestUtils {
         User user = new User();
         user.setFirstName("Alice");
         user.setLastName("Com");
-        user.setType(Enum.UserType.BUS_OWNER);
-        user.setEmail("alice@example.com");
-        user.setMobileNo("123456789");
-        return user;
-    }
-
-    public static User buildTestDevice(){
-        User user = new User();
-        user.setFirstName("Alice");
-        user.setLastName("Com");
-        user.setType(Enum.UserType.BUS_OWNER);
+        user.setRole(Enum.Role.VEHICLE_OWNER);
         user.setEmail("alice@example.com");
         user.setMobileNo("123456789");
         return user;

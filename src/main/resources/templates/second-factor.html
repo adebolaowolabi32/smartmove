@@ -1,0 +1,80 @@
+<!-- TITLE FRAGMENT BEGINS -->
+<title th:fragment="title" th:text="${#themes.code('client')} + ' | One Time Password'">One Time Password</title>
+<!-- /TITLE FRAGMENT ENDS -->
+
+<!-- ADDITIONAL SCRIPTS FRAGMENT BEGINS -->
+<script th:fragment="parsley"
+        th:src="@{/webjars/parsleyjs/2.0.6/parsley.min.js}"
+        src="https://cdn.jsdelivr.net/parsleyjs/2.0.6/parsley.min.js"></script>
+<script th:fragment="spin"
+        th:src="@{/webjars/spin-js/2.0.0/spin.js}"
+        src="https://cdn.jsdelivr.net/spinjs/2.0.1/spin.min.js"></script>
+<script th:fragment="fingerprint"
+        th:src="@{/js/fingerprint2.min.js}"
+        src="../public/js/fingerprint2.min.js"></script>
+<script th:fragment="detect"
+        th:src="@{/js/detect.min.js}"
+        src="../public/js/detect.min.js"></script>
+<!-- /ADDITIONAL SCRIPTS FRAGMENT ENDS -->
+
+<!-- CONTENT FRAGMENT BEGINS -->
+<div th:fragment="content" class="Passport__Login__section col-md-6 col-sm-6  col-xs-12 ">
+    <form id="authenticate-form" class="Passport__Login__form clearfix" method="POST"
+          th:action="@{/second-factor/otp/authenticate}" action="#" th:object="${authenticateRequest}"
+          data-parsley-validate="true" autocomplete="off">
+        <h3 class="form__title">
+            Login<span class="app__name__to"> to </span><span class="app__name" th:text="${#themes.code('client')}">Client</span>
+        </h3>
+
+        <div class="alert message__notify"
+             th:if="${param.message != null or message != null}"
+             th:with="msg = ${param.message} ? ${param.message[0]} : ${message}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <span th:text="${msg}">
+                <strong>Message</strong>
+            </span>
+        </div>
+        <div class="alert error__notify"
+             th:if="${param.error != null or param.access_denied != null or error != null}"
+             th:with="err = ${session['SPRING_SECURITY_LAST_EXCEPTION'] != null and param.error != null} ?
+             ${session['SPRING_SECURITY_LAST_EXCEPTION'].message} :
+             (${session['SPRING_SECURITY_403_EXCEPTION'] != null and param.access_denied != null} ?
+             ${session['SPRING_SECURITY_403_EXCEPTION'].message} : ${error})">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <span th:text="${err}">
+				<strong>Error</strong>
+            </span>
+        </div>
+        <div class="form__elem__group clearfix">
+            <div class="form__elem">
+                <label class="form__label">One Time Password</label>
+                <input class="form-control input__text" type="text" placeholder="One Time Password"
+                       id="otp" name="otp" th:field="*{otp}" required="required"
+                       data-parsley-required-message="Please enter your One Time Password"/>
+            </div>
+            <div class="form__elem action__item clearfix">
+                <button type="submit" id="validate" name="validate" class="btn login__action__button">Submit</button>
+            </div>
+        </div>
+        <th:block th:if="${authenticateRequest.tokenType} == 'soft'">
+            <div class="create__account___label clearfix">
+                <div class="forgot__password">
+                    <a th:href="@{/second-factor/otp/resend}" href="#">Resend
+                        One Time Password</a>
+                </div>
+            </div>
+        </th:block>
+        <div th:replace="fragments/access :: inputs"></div>
+        <input type="hidden" id="tokenType" name="tokenType" th:field="*{tokenType}" />
+        <input type="hidden" id="tokenId" name="tokenId" th:field="*{tokenId}" />
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    </form>
+
+    <div th:replace="fragments/keep-alive :: keep-alive"></div>
+    <script th:replace="fragments/access-log :: access-log"></script>
+    <script type="text/javascript">
+
+
+    </script>
+</div>
+<!-- /CONTENT FRAGMENT ENDS -->

@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Transaction;
@@ -29,14 +30,14 @@ public class TransactionServiceTests {
         transaction = new Transaction();
         transaction.setDevice(new Device());
         transaction.setAmount(200.00);
-        transaction.setCardNumber("0123456789");
+        transaction.setCard(new Card());
         transaction.setTimeStamp(new Date());
         transaction.setType(Enum.TransactionType.TRIP);
         logTransaction = new LogTransaction();
         logTransaction.setDevice(new Device());
         logTransaction.setMessageId("id_message");
         logTransaction.setAmount(20.00);
-        logTransaction.setCardNumber("0123456789");
+        logTransaction.setCard(new Card());
         logTransaction.setTimeStamp(new Date());
         logTransaction.setType(Enum.TransactionType.CREDIT);
         logTransactionResponse = new LogTransactionResponse();

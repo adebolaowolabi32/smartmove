@@ -12,6 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+/**
+ * @author adebola.owolabi
+ */
 @Service
 public class WalletService {
     @Autowired
@@ -19,10 +22,6 @@ public class WalletService {
 
     @Autowired
     UserRepository userRepository;
-
-    public Iterable<Wallet> getAll() {
-        return walletRepository.findAll();
-    }
 
     public Wallet save(Wallet wallet) {
         long id = wallet.getId();
@@ -35,8 +34,8 @@ public class WalletService {
         return walletRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist"));
     }
 
-    public Wallet findByOwner(long owner) {
-        Optional<User> user = userRepository.findById(owner);
+    public Wallet findByOwner(String owner) {
+        Optional<User> user = userRepository.findByUsername(owner);
         if(user.isPresent())
             return walletRepository.findByOwner(user.get()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist"));;
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");

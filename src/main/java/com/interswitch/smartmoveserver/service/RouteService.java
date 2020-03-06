@@ -8,13 +8,19 @@ import com.interswitch.smartmoveserver.repository.RouteRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * @author adebola.owolabi
+ */
 @Service
 public class RouteService {
     @Autowired
@@ -26,8 +32,13 @@ public class RouteService {
     @Autowired
     UserRepository userRepository;
 
-    public Iterable<Route> getAll() {
+    public List<Route> getAll() {
         return routeRepository.findAll();
+    }
+
+    public Page<Route> findAllPaginated(int page, int size) {
+        PageRequest pageable = PageRequest.of(page - 1, size);
+        return routeRepository.findAll(pageable);
     }
 
     public Route save(Route route) {
@@ -41,11 +52,11 @@ public class RouteService {
         return routeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist"));
     }
 
-    public Iterable<Route> find(Enum.TransportMode type) {
+    public List<Route> find(Enum.TransportMode type) {
         return routeRepository.findAllByType(type);
     }
 
-    public Iterable<Route> findByOwner(long owner) {
+    public List<Route> findByOwner(long owner) {
         Optional<User> user = userRepository.findById(owner);
         if(user.isPresent())
             return routeRepository.findAllByOwner(user.get());
@@ -120,5 +131,9 @@ public class RouteService {
             routeRepository.save(route);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
+    }
+
+    public Long countByOwner(User user){
+        return routeRepository.countByOwner(user);
     }
 }

@@ -12,14 +12,20 @@ import com.interswitch.smartmoveserver.repository.DeviceRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * @author adebola.owolabi
+ */
 @Service
 public class DeviceService {
     @Autowired
@@ -55,7 +61,12 @@ public class DeviceService {
         return getDeviceIdResponse;
     }
 
-    public Iterable<Device> getAll() {
+    public Page<Device> findAllPaginated(int page, int size) {
+        PageRequest pageable = PageRequest.of(page - 1, size);
+        return deviceRepository.findAll(pageable);
+    }
+
+    public List<Device> getAll() {
         return deviceRepository.findAll();
     }
 
@@ -70,15 +81,16 @@ public class DeviceService {
         return deviceRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist"));
     }
 
-    public Iterable<Device> find(Enum.DeviceType type) {
+    public List<Device> find(Enum.DeviceType type) {
         return deviceRepository.findAllByType(type);
     }
 
-    public Iterable<Device> findAllByOwner(long owner) {
-        Optional<User> user = userRepository.findById(owner);
-        if(user.isPresent())
-            return deviceRepository.findAllByOwner(user.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
+    public List<Device> findAllByOwner(User owner) {
+        return deviceRepository.findAllByOwner(owner);
+    }
+
+    public List<Device> findAllByOwner(long owner) {
+        return deviceRepository.findAll();//urgent
     }
 
     public Device update(Device device) {
@@ -143,5 +155,9 @@ public class DeviceService {
             deviceRepository.save(device);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist");
-    }    
+    }
+
+    public Long countByOwner(User user){
+        return deviceRepository.countByOwner(user);
+    }
 }

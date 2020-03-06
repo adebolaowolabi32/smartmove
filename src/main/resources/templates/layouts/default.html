@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title th:replace="${view} :: title"></title>
+        <!--
+            <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+        -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <link th:href="@{/css/styles.css}" href="#" rel="stylesheet" crossorigin="anonymous" />
+    </head>
+    <body class="sb-nav-fixed">
+        <div th:replace="fragments/topbar :: topbar"></div>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <div th:replace="fragments/sidebar :: sidebar"></div>
+            </div>
+            <div id="layoutSidenav_content">
+                <div th:replace="${view} :: content"></div>
+                <div th:replace="fragments/footer :: footer"></div>
+            </div>
+        </div>
+        <div th:replace="fragments/scripts :: scripts"></div>
+    </body>
+</html>

@@ -5,12 +5,18 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.CardRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author adebola.owolabi
+ */
 @Service
 public class CardService {
     @Autowired
@@ -19,8 +25,13 @@ public class CardService {
     @Autowired
     UserRepository userRepository;
 
-    public Iterable<Card> getAll() {
+    public List<Card> getAll() {
         return cardRepository.findAll();
+    }
+
+    public Page<User> findAllPaginated(int page, int size) {
+        PageRequest pageable = PageRequest.of(page - 1, size);
+        return userRepository.findAll(pageable);
     }
 
     public Card save(Card card) {
@@ -36,6 +47,13 @@ public class CardService {
 
     public Card findByPan(String cardNumber) {
         return cardRepository.findByPan(cardNumber).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
+    }
+
+    public Card findByOwner(long owner) {
+        Optional<User> user = userRepository.findById(owner);
+        if(user.isPresent())
+            return cardRepository.findByOwner(user.get()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
     public Card update(Card card) {
