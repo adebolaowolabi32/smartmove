@@ -6,7 +6,7 @@ LABEL maintainer="adebola.owolabi@interswitchgroup.com"
 
 ADD target/smartmove.jar /opt/smartmove.jar
 
-COPY resources /opt/resources
+COPY src/main/resources /opt/resources
 
 WORKDIR /opt
 
