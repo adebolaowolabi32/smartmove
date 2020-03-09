@@ -6,10 +6,7 @@
     <groupId>com.interswitch</groupId>
     <artifactId>smartmove</artifactId>
     <version>1.0-SNAPSHOT</version>
-  	<packaging>jar</packaging>
-	 <build>
-  	 <finalName>smartmove</finalName>
-	 </build>
+  
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -25,6 +22,7 @@
         <spring-security-oauth-boot.version>2.2.5.RELEASE</spring-security-oauth-boot.version>
         <thymeleaf-security.version>3.0.4.RELEASE</thymeleaf-security.version>
         <spring-security.version>5.3.0.RELEASE</spring-security.version>
+      <jar.finalName>${smartmove}</jar.finalName>
     </properties>
 
     <dependencies>
