@@ -13,7 +13,7 @@
         <version>2.2.5.RELEASE</version>
         <relativePath/>
     </parent>
-
+  
     <properties>
         <jquery.version>3.4.1</jquery.version>
         <bootstrap.version>4.4.1-1</bootstrap.version>
@@ -22,8 +22,34 @@
         <spring-security-oauth-boot.version>2.2.5.RELEASE</spring-security-oauth-boot.version>
         <thymeleaf-security.version>3.0.4.RELEASE</thymeleaf-security.version>
         <spring-security.version>5.3.0.RELEASE</spring-security.version>
-      <jar.finalName>${smartmove}</jar.finalName>
-    </properties>
+    	<fortify-plugin.version>1.0-SNAPSHOT</fortify-plugin.version>
+   	 <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
+	</properties>
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <executable>true</executable>
+                <profiles>
+                    <profile>dev</profile>
+                </profiles>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.sourceforge.fortify</groupId>
+            <artifactId>fortify-plugin</artifactId>
+            <version>${fortify-plugin.version}</version>
+        </plugin>
+        <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>${sonar-maven-plugin.version}</version>
+        </plugin>
+    </plugins>
+</build>
 
     <dependencies>
         <dependency>
