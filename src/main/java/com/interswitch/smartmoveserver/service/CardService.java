@@ -11,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author adebola.owolabi
@@ -29,15 +31,25 @@ public class CardService {
         return cardRepository.findAll();
     }
 
-    public Page<User> findAllPaginated(int page, int size) {
+    public Page<Card> findAllPaginated(int page, int size) {
         PageRequest pageable = PageRequest.of(page - 1, size);
-        return userRepository.findAll(pageable);
+        return cardRepository.findAll(pageable);
     }
 
     public Card save(Card card) {
         long id = card.getId();
         boolean exists = cardRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Card already exists");
+        return cardRepository.save(card);
+    }
+
+    public Card autoCreateForUser(User user){
+        Card card = new Card();
+        card.setPan(UUID.randomUUID().toString());
+        card.setExpiry(LocalDate.now ().plusYears(3));
+        card.setOwner(user);
+        card.setBalance(0);
+        card.setEnabled(true);
         return cardRepository.save(card);
     }
 
@@ -91,7 +103,7 @@ public class CardService {
         Optional<Card> cardOptional = cardRepository.findById(cardId);
         if(cardOptional.isPresent()){
             Card card = cardOptional.get();
-            card.setActive(true);
+            card.setEnabled(true);
             cardRepository.save(card);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist");
@@ -101,9 +113,13 @@ public class CardService {
         Optional<Card> cardOptional = cardRepository.findById(cardId);
         if(cardOptional.isPresent()){
             Card card = cardOptional.get();
-            card.setActive(false);
+            card.setEnabled(false);
             cardRepository.save(card);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist");
+    }
+
+    public Long countAll(){
+        return cardRepository.count();
     }
 }

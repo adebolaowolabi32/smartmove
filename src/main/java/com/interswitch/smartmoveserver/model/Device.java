@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 /**
  * @author adebola.owolabi
@@ -14,16 +15,29 @@ public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(unique=true)
     private String name;
-    private String deviceId;
+
+    @Column(unique=true)
+    private String deviceId = UUID.randomUUID().toString();
+
+    @Enumerated(EnumType.STRING)
     private Enum.DeviceType type;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+
     private String hardwareVersion;
+
     private String softwareVersion;
+
+    @Enumerated(EnumType.STRING)
     private Enum.FareType fareType;
+
+    @Enumerated(EnumType.STRING)
     private Enum.DeviceStatus deviceStatus;
-    private boolean isActive;
+
+    private boolean enabled;
 }

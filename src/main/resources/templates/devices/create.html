@@ -19,7 +19,7 @@
 			  <div class="form-group row">
 				<label class="control-label col-sm-2" for="name">Name:</label>
 				<div class="col-sm-10">
-					<input class="form-control" placeholder="Name"
+					<input class="form-control"
 						   id="name" name="name" th:field="*{name}"
 						   required="required"
 						   data-parsley-required-message="Please provide device name"
@@ -31,10 +31,10 @@
 			  <div class="form-group row">
 				<label class="control-label col-sm-2" for="deviceId">Device Serial ID:</label>
 					<div class="col-sm-10">
-						<input class="form-control" placeholder="Device Id"
+						<input class="form-control"
 							   id="deviceId" name="deviceId" th:field="*{deviceId}"
 							   required="required"
-							   data-parsley-required-message="Please provide device id"
+							   data-parsley-required-message="Please provide a device id"
 							   data-parsley-length="[3, 40]"
 							   data-parsley-length-message="Please provide a number between 3 and 40 characters long">
 						<p class="small text-danger" th:if="${#fields.hasErrors('deviceId')}" th:errors="*{deviceId}"></p>
@@ -44,7 +44,7 @@
 				  <label class="control-label col-sm-2" for="type">Device Type:</label>
 					  <div class="col-sm-10">
 						<select class="form-control" th:field="*{type}"  id="type">
-							<option value="" disabled>Select...</option>
+							<option value="" >Select...</option>
 							<option value="READER">Reader</option>
 							<option value="VALIDATOR">Validator</option>
 							<option value="READER_VALIDATOR">Reader_Validator</option>
@@ -68,32 +68,32 @@
 				  <label class="control-label col-sm-2" for="fareType">Fare Type</label>
 					  <div class="col-sm-10">
 						<select class="form-control" th:field="*{fareType}" id="fareType">
-							<option value="" disabled>Select...</option>
+							<option value="" >Select...</option>
 							<option value="FIXED">Fixed</option>
 							<option value="VARIABLE">Variable</option>
 						</select>
 					  </div>
 			  </div>
-			   <div class="form-group row">
-				  <label class="control-label col-sm-2" for="isActive">Status</label>
-					  <div class="col-sm-10">
-						<select class="form-control" th:field="*{isActive}" id="isActive">
-							<option value="" disabled>Select...</option>
-							<option value="true">Enabled</option>
-							<option value="false">Disabled</option>
-						</select>
-					  </div>
-			  </div>
 				<div class="form-group row">
-					<label class="control-label col-sm-2" for="owner">Assign To Agent </label>
+					<label class="control-label col-sm-2" for="owner">Assign Device To</label>
 					<div class="col-sm-10">
 						<select class="form-control" th:field="*{owner}"  id="owner">
-							<option value=0 disabled>Select ...</option>
-							<option th:each="owner : ${owners}" th:value="${owner}" th:text="${owner.firstName}+' '+${owner.lastName}"></option>
+							<option value=0 >Select ...</option>
+							<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 						</select>
 						<p class="small text-danger" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></p>
 					</div>
 				</div>
+			   <div class="form-group row">
+				  <label class="control-label col-sm-2" for="enabled">Status</label>
+					  <div class="col-sm-10">
+						  <label class="switch">
+							  <input type="checkbox" name="enabled" id="enabled">
+							  <span class="slider round"></span>
+						  </label>
+					  </div>
+			  </div>
+
 					<button type="submit" class="btn btn-outline-info">Submit</button>
 			</form>
 			<div th:replace="fragments/alerts :: alerts"></div>

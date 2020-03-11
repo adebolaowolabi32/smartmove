@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,17 @@ public class VehicleService {
         long id = vehicle.getId();
         boolean exists = vehicleRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle already exists");
+        return vehicleRepository.save(vehicle);
+    }
+
+    public Vehicle save(Vehicle vehicle, Principal principal) {
+        long id = vehicle.getId();
+        boolean exists = vehicleRepository.existsById(id);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle already exists");
+        if(vehicle.getOwner() == null) {
+            Optional<User> owner = userRepository.findByUsername(principal.getName());
+            if(owner.isPresent()) vehicle.setOwner(owner.get());
+        }
         return vehicleRepository.save(vehicle);
     }
 
@@ -78,7 +90,7 @@ public class VehicleService {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
         if(vehicleOptional.isPresent()){
             Vehicle vehicle = vehicleOptional.get();
-            vehicle.setActive(true);
+            vehicle.setEnabled(true);
             vehicleRepository.save(vehicle);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
@@ -88,7 +100,7 @@ public class VehicleService {
         Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
         if(vehicleOptional.isPresent()){
             Vehicle vehicle = vehicleOptional.get();
-            vehicle.setActive(false);
+            vehicle.setEnabled(false);
             vehicleRepository.save(vehicle);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
@@ -96,5 +108,9 @@ public class VehicleService {
 
     public Long countByOwner(User user){
         return vehicleRepository.countByOwner(user);
+    }
+
+    public Long countAll(){
+        return vehicleRepository.count();
     }
 }

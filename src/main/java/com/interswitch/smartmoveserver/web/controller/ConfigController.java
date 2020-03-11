@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.web.controller;
 
+import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Config;
 import com.interswitch.smartmoveserver.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,43 +18,44 @@ import javax.validation.Valid;
  * @author adebola.owolabi
  */
 @Controller
+@Layout(value = "layouts/default")
 @RequestMapping("/configurations")
 public class ConfigController {
     @Autowired
     private ConfigService configService;
     @GetMapping("/get")
     public String getAll(Model model) {
-        model.addAttribute("configs", configService.getAll());
-        return "configs/get";
+        model.addAttribute("configurations", configService.getAll());
+        return "configurations/get";
     }
 
     @GetMapping("/details/{id}")
     public String getDetails(@PathVariable("id") long id, Model model) {
         Config config = configService.findById(id);
-        model.addAttribute("config", config);
-        return "configs/details/" + id;
+        model.addAttribute("configuration", config);
+        return "configurations/details/" + id;
     }
 
-    @GetMapping("/add")
+    @GetMapping("/create")
     public String showCreate(Model model) {
-        return "createconfig";
+        return "configurations/create";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public String create(@Valid Config config, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "configs/create";
+            return "configurations/create";
         }
         configService.save(config);
-        model.addAttribute("configs", configService.getAll());
-        return "configs/get";
+        model.addAttribute("configurations", configService.getAll());
+        return "configurations/get";
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(@PathVariable("id") long id, Model model) {
         Config config = configService.findById(id);
-        model.addAttribute("config", config);
-        return "configs/update";
+        model.addAttribute("configuration", config);
+        return "configurations/update";
     }
 
     @PostMapping("/update/{id}")
@@ -61,18 +63,17 @@ public class ConfigController {
                          BindingResult result, Model model) {
         if (result.hasErrors()) {
             config.setId(id);
-            return "configs/update";
+            return "configurations/update";
         }
 
         configService.update(config);
-        model.addAttribute("configs", configService.getAll());
-        return "configs/get";
+        return "redirect:/configurations/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") long id, Model model) {
         configService.delete(id);
-        model.addAttribute("configs", configService.getAll());
-        return "configs/get";
+        model.addAttribute("configurations", configService.getAll());
+        return "configurations/get";
     }
 }

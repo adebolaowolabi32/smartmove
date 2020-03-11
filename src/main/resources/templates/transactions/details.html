@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:fragment="title" th:text="${title}">Transactions</title>
+<div th:fragment="content" class="card mb-4">
+	<div class="card-header"><i class="fas fa-transaction mr-1"></i><span th:text="${title}">Transactions</span></div>
+	<div class="card-body">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-4">
+						<h2><b>View <span th:text="${title}">Transaction</span></b></h2>
+					</div>
+				</div>
+			</div>
+			<div class="card p-3">
+				<div class="form-group row">
+					<label class="col-sm-2" for="name">Transaction ID:</label>
+					<div class="col-sm-10">
+						<span id="name" th:text="${transaction.transactionId}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2" for="type">Type:</label>
+					<div class="col-sm-10">
+						<span id="type" th:text="${transaction.type}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="card">Card:</label>
+					<div class="col-sm-10">
+						<span id="card" th:text="${transaction.card != null ? transaction.card.name : ''}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="device">Device:</label>
+					<div class="col-sm-10">
+						<span id="device" th:text="${transaction.device != null ? transaction.device.name : ''}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="sender">Sender:</label>
+					<div class="col-sm-10">
+						<span id="sender" th:text="${transaction.sender != null ? transaction.sender.username : ''}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="recipient">Recipient:</label>
+					<div class="col-sm-10">
+						<span id="recipient" th:text="${transaction.recipient != null ? transaction.recipient.username : ''}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2" for="amount">Amount:</label>
+					<div class="col-sm-10"><span id="amount" th:1="${transaction.amount}"></span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

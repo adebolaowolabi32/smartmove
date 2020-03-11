@@ -66,19 +66,59 @@ public class HomeController {
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
-        model.addAttribute("no_admins", userService.countByRole(Enum.Role.ISW_ADMIN));
-        model.addAttribute("no_regulators", userService.countByRole(Enum.Role.REGULATOR));
-        model.addAttribute("no_operators", userService.countByRole(Enum.Role.OPERATOR));
-        model.addAttribute("no_agents", userService.countByRole(Enum.Role.AGENT));
-        model.addAttribute("no_vehicles", vehicleService.countByOwner(user));
-        model.addAttribute("no_terminals", terminalService.countByOwner(user));
-        model.addAttribute("no_routes", routeService.countByOwner(user));
-        model.addAttribute("no_devices", deviceService.countByOwner(user));
-        model.addAttribute("no_transactions", transactionService.countAll());
-        model.addAttribute("no_settlements", 0);
-        model.addAttribute("wallet_balance", walletService.findByOwner(user.getUsername()).getBalance());
-        model.addAttribute("card_balance", cardService.findByOwner(user.getId()).getBalance());
+        Enum.Role role = user.getRole();
 
+        if(role.equals(Enum.Role.ISW_ADMIN)){
+            model.addAttribute("no_admins", userService.countByRole(Enum.Role.ISW_ADMIN));
+            model.addAttribute("no_regulators", userService.countByRole(Enum.Role.REGULATOR));
+            model.addAttribute("no_operators", userService.countByRole(Enum.Role.OPERATOR));
+            model.addAttribute("no_agents", userService.countByRole(Enum.Role.AGENT));
+            model.addAttribute("no_vehicles", vehicleService.countAll());
+            model.addAttribute("no_terminals", terminalService.countAll());
+            model.addAttribute("no_routes", routeService.countAll());
+            model.addAttribute("no_devices", deviceService.countAll());
+            model.addAttribute("no_transactions", transactionService.countAll());
+            model.addAttribute("no_settlements", 0);
+        }
+        else if(role.equals(Enum.Role.REGULATOR)){
+            model.addAttribute("no_regulators", userService.countByRoleAndParent(Enum.Role.REGULATOR, user));
+            model.addAttribute("no_operators", userService.countByRoleAndParent(Enum.Role.OPERATOR, user));
+            model.addAttribute("no_agents", userService.countByRoleAndParent(Enum.Role.AGENT, user));
+            model.addAttribute("no_vehicles", vehicleService.countByOwner(user));
+            model.addAttribute("no_terminals", terminalService.countByOwner(user));
+            model.addAttribute("no_routes", routeService.countByOwner(user));
+            model.addAttribute("no_devices", deviceService.countByOwner(user));
+            model.addAttribute("no_transactions", transactionService.countAll());
+            model.addAttribute("no_settlements", 0);
+        }
+        else if(role.equals(Enum.Role.OPERATOR)){
+            model.addAttribute("no_regulators", userService.countByRole(Enum.Role.REGULATOR));
+            model.addAttribute("no_operators", userService.countByRoleAndParent(Enum.Role.OPERATOR, user));
+            model.addAttribute("no_agents", userService.countByRoleAndParent(Enum.Role.AGENT, user));
+            model.addAttribute("no_vehicles", vehicleService.countByOwner(user));
+            model.addAttribute("no_terminals", terminalService.countByOwner(user));
+            model.addAttribute("no_routes", routeService.countByOwner(user));
+            model.addAttribute("no_devices", deviceService.countByOwner(user));
+            model.addAttribute("no_transactions", transactionService.countAll());
+            model.addAttribute("no_settlements", 0);
+        }
+        else if(role.equals(Enum.Role.VEHICLE_OWNER)){
+            model.addAttribute("no_operators", userService.countByRole(Enum.Role.OPERATOR));
+            model.addAttribute("no_vehicles", vehicleService.countByOwner(user));
+            model.addAttribute("no_terminals", terminalService.countAll());
+            model.addAttribute("no_routes", routeService.countAll());
+            model.addAttribute("no_settlements", 0);
+        }
+        else if(role.equals(Enum.Role.AGENT)){
+            model.addAttribute("no_regulators", userService.countByRole(Enum.Role.REGULATOR));
+            model.addAttribute("no_operators", userService.countByRole(Enum.Role.OPERATOR));
+            model.addAttribute("no_terminals", terminalService.countByOwner(user));
+            model.addAttribute("no_devices", deviceService.countByOwner(user));
+            model.addAttribute("no_transactions", transactionService.countAll());
+            model.addAttribute("no_settlements", 0);
+            model.addAttribute("wallet_balance", walletService.findByOwner(user.getUsername()).getBalance());
+            model.addAttribute("card_balance", cardService.findByOwner(user.getId()).getBalance());
+        }
         return "dashboard";
     }
 

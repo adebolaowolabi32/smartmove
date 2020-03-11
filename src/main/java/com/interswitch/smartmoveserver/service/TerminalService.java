@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,17 @@ public class TerminalService {
         return terminalRepository.save(terminal);
     }
 
+    public Terminal save(Terminal terminal, Principal principal) {
+        long id = terminal.getId();
+        boolean exists = terminalRepository.existsById(id);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Terminal already exists");
+        if(terminal.getOwner() == null) {
+            Optional<User> owner = userRepository.findByUsername(principal.getName());
+            if(owner.isPresent()) terminal.setOwner(owner.get());
+        }
+        return terminalRepository.save(terminal);
+    }
+    
     public Terminal findById(long id) {
         return terminalRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist"));
     }
@@ -77,7 +89,7 @@ public class TerminalService {
         Optional<Terminal> terminalOptional = terminalRepository.findById(terminalId);
         if(terminalOptional.isPresent()){
             Terminal terminal = terminalOptional.get();
-            terminal.setActive(true);
+            terminal.setEnabled(true);
             terminalRepository.save(terminal);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
@@ -87,7 +99,7 @@ public class TerminalService {
         Optional<Terminal> terminalOptional = terminalRepository.findById(terminalId);
         if(terminalOptional.isPresent()){
             Terminal terminal = terminalOptional.get();
-            terminal.setActive(false);
+            terminal.setEnabled(false);
             terminalRepository.save(terminal);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
@@ -95,5 +107,9 @@ public class TerminalService {
 
     public Long countByOwner(User user){
         return terminalRepository.countByOwner(user);
+    }
+
+    public Long countAll(){
+        return terminalRepository.count();
     }
 }

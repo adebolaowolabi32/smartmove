@@ -46,7 +46,7 @@ public class TerminalApiTests {
         terminal.setType(Enum.TransportMode.RAIL);
         terminal.setOwner(new User());
         terminal.setLocation("my_location_one");
-        terminal.setActive(true);
+        terminal.setEnabled(true);
     }
 
     @Test

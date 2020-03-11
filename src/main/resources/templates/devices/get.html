@@ -30,7 +30,6 @@
 					<th>Hardware Version</th>
 					<th>softwareVersion</th>
 					<th>Fare Type</th>
-					<th>isActive</th>
 					<th>View Details</th>
 					<th>Remove</th>
 				</tr>
@@ -41,11 +40,10 @@
 					<td th:text="${device.name}"></td>
 					<td th:text="${device.deviceId}"></td>
 					<td th:text="${device.type}"></td>
-					<td th:text="${device.owner != null ? device.owner.name : ''}"></td>
+					<td th:text="${device.owner != null ? device.owner.username : ''}"></td>
 					<td th:text="${device.hardwareVersion}"></td>
 					<td th:text="${device.softwareVersion}"></td>
 					<td th:text="${device.fareType}"></td>
-					<td th:text="${device.isActive}"></td>
 					<td>
 						<a class="justify-content-center" th:href="@{/devices/details/{id}(id=${device.id})}">
 							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>

@@ -39,10 +39,9 @@ public class WalletApiTests {
         wallet = new Wallet();
         long id = 10000023;
         wallet.setId(id);
-        wallet.setCurrency("NGN");
         wallet.setOwner(new User());
         wallet.setBalance(200000);
-        wallet.setActive(true);
+        wallet.setEnabled(true);
     }
 
     @Test

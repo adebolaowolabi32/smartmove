@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
@@ -40,16 +40,16 @@ public class CardRepositoryTests {
         userRepository.save(user);
         card.setOwner(user);
         card.setType(Enum.CardType.AGENT);
-        card.setExpiry(new Date());
+        card.setExpiry(LocalDate.now());
         card.setBalance(10000);
-        card.setActive(false);
+        card.setEnabled(false);
         Card card1 = new Card();
         card1.setPan("0123458789012345");
         card1.setOwner(user);
         card1.setType(Enum.CardType.EMV);
-        card1.setExpiry(new Date());
+        card1.setExpiry(LocalDate.now());
         card1.setBalance(32000000);
-        card1.setActive(true);
+        card1.setEnabled(true);
         assertNotNull(cardRepository.save(card1));
         savedCard = cardRepository.save(card);
         assertNotNull(savedCard);
@@ -61,7 +61,7 @@ public class CardRepositoryTests {
             assertThat(card1.getOwner()).isEqualTo(card.getOwner());
             assertThat(card1.getType()).isEqualTo(card.getType());
             assertThat(card1.getBalance()).isEqualTo(card.getBalance());
-            assertThat(card1.isActive()).isEqualTo(card.isActive());
+            assertThat(card1.isEnabled()).isEqualTo(card.isEnabled());
         });
     }
 
@@ -71,7 +71,7 @@ public class CardRepositoryTests {
             assertThat(card1.getOwner()).isEqualTo(card.getOwner());
             assertThat(card1.getType()).isEqualTo(card.getType());
             assertThat(card1.getBalance()).isEqualTo(card.getBalance());
-            assertThat(card1.isActive()).isEqualTo(card.isActive());
+            assertThat(card1.isEnabled()).isEqualTo(card.isEnabled());
         });
     }
 

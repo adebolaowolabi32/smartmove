@@ -33,10 +33,9 @@ public class UserApi {
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private User save(@Validated @RequestBody User user) {
-        return userService.save(user);
+    private void save(@Validated @RequestBody User user) {
+        userService.save(user);
     }
-
     @GetMapping(value = "/{id}", produces = "application/json")
     private User findById(@Validated @PathVariable long id) {
         return userService.findById(id);

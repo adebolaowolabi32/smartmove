@@ -39,13 +39,13 @@ public class TerminalRepositoryTests {
         userRepository.save(user);
         terminal.setOwner(user);
         terminal.setLocation("my_location_one");
-        terminal.setActive(true);
+        terminal.setEnabled(true);
         Terminal terminal1 = new Terminal();
         terminal1.setName("my_terminal2");
         terminal1.setType(Enum.TransportMode.BUS);
         terminal1.setOwner(user);
         terminal1.setLocation("my_location_two");
-        terminal1.setActive(true);
+        terminal1.setEnabled(true);
         assertNotNull(terminalRepository.save(terminal1));
         savedTerminal = terminalRepository.save(terminal);
         assertNotNull(savedTerminal);
@@ -58,7 +58,7 @@ public class TerminalRepositoryTests {
             assertThat(terminal1.getOwner()).isEqualTo(terminal.getOwner());
             assertThat(terminal1.getType()).isEqualTo(terminal.getType());
             assertThat(terminal1.getLocation()).isEqualTo(terminal.getLocation());
-            assertThat(terminal1.isActive()).isEqualTo(terminal.isActive());
+            assertThat(terminal1.isEnabled()).isEqualTo(terminal.isEnabled());
         });
     }
 

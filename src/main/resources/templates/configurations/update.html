@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:fragment="title" th:text="${title}">Configurations</title>
+<div th:fragment="content" class="card mb-4">
+	<div class="card-header"><i class="fas fa-user mr-1"></i>
+		<span>Configurations</span></div>
+	<div class="card-body">
+		<div class="table-title">
+			<div class="row">
+				<div class="col-sm-4">
+					<h2> <b> Update Configuration</b></h2>
+				</div>
+
+			</div>
+		</div>
+		<form class="card p-3" action="#" method="post"
+			  th:action="@{/configurations/update/{id}(id=${configuration.id})}" th:object="${configuration}"
+			  data-parsley-validate="true">
+			<div class="form-group row">
+				<label class="control-label col-sm-2" for="name">Name:</label>
+				<div class="col-sm-10">
+					<select class="form-control" th:field="*{name}"  id="name">
+						<option value="" disabled>Select...</option>
+						<option value="TRANSACTION_UPLOAD_PERIOD">Transaction Upload Period</option>
+						<option value="GPS_UPLOAD_PERIOD">GPS Upload Period</option>
+					</select></div>
+
+			</div>
+			<div class="form-group row">
+				<label class="control-label col-sm-2" for="value">Value:</label>
+				<div class="col-sm-10">
+					<input class="form-control"
+						   id="value" name="value" th:field="*{value}"
+						   required="required"
+						   data-parsley-required-message="Please provide configuration value">
+					<p class="small text-danger" th:if="${#fields.hasErrors('value')}" th:errors="*{value}"></p>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-outline-info">Submit</button>
+		</form>
+		<div th:replace="fragments/alerts :: alerts"></div>
+	</div>
+</div>
+</html>

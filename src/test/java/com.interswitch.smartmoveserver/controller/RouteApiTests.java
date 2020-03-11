@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Route;
+import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.RouteService;
 import org.junit.Before;
@@ -45,10 +46,10 @@ public class RouteApiTests {
         route.setName("my_route");
         route.setType(Enum.TransportMode.RAIL);
         route.setOwner(new User());
-        route.setStart("start_terminal");
-        route.setStop("stop_terminal");
+        route.setStart(new Terminal());
+        route.setStop(new Terminal());
         route.setPrice(500);
-        route.setActive(true);
+        route.setEnabled(true);
     }
 
     @Test

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:fragment="title" th:text="${title}">Configurations</title>
+<div th:fragment="content" class="card mb-4">
+	<div class="card-header"><i class="fas fa-user mr-1"></i><span>Configurations</span></div>
+	<div class="card-body">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-8">
+						<h2><b><span>Configurations</span></b></h2>
+					</div>
+					<div class="col-sm-4">
+						<div class="row">
+							<a href="#" th:href="@{/configurations/create}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New</a>
+							<a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
+							<a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+				<thead class='thead-light'>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Value</th>
+					<th>View Details</th>
+					<th>Remove</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="configuration : ${configurations}">
+					<td th:text="${configuration.id}"></td>
+					<td th:text="${configuration.name}"></td>
+					<td th:text="${configuration.value}"></td>
+					<td>
+						<a class="justify-content-center" th:href="@{/configurations/details/{id}(id=${configuration.id})}">
+							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
+						</a>
+					</td>
+					<td>
+						<a class="justify-content-center" th:href="@{/configurations/delete/{id}(id=${configuration.id})}">
+							<button type='button' class='btn btn-danger'><i class='far fa-trash-alt'></i></button>
+						</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</html>

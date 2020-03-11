@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class TransactionServiceTests {
 
@@ -31,14 +31,14 @@ public class TransactionServiceTests {
         transaction.setDevice(new Device());
         transaction.setAmount(200.00);
         transaction.setCard(new Card());
-        transaction.setTimeStamp(new Date());
+        transaction.setTimeStamp(LocalDateTime.now());
         transaction.setType(Enum.TransactionType.TRIP);
         logTransaction = new LogTransaction();
         logTransaction.setDevice(new Device());
         logTransaction.setMessageId("id_message");
         logTransaction.setAmount(20.00);
         logTransaction.setCard(new Card());
-        logTransaction.setTimeStamp(new Date());
+        logTransaction.setTimeStamp(LocalDateTime.now());
         logTransaction.setType(Enum.TransactionType.CREDIT);
         logTransactionResponse = new LogTransactionResponse();
         logTransactionResponse.setMessageId("id_message");

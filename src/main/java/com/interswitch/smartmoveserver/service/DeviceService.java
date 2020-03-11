@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -77,6 +78,17 @@ public class DeviceService {
         return deviceRepository.save(device);
     }
 
+    public Device save(Device device, Principal principal) {
+        long id = device.getId();
+        boolean exists = deviceRepository.existsById(id);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Device already exists");
+        if(device.getOwner() == null) {
+            Optional<User> owner = userRepository.findByUsername(principal.getName());
+            if(owner.isPresent()) device.setOwner(owner.get());
+        }
+        return deviceRepository.save(device);
+    }
+    
     public Device findById(long id) {
         return deviceRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist"));
     }
@@ -141,7 +153,7 @@ public class DeviceService {
         Optional<Device> deviceOptional = deviceRepository.findById(deviceId);
         if(deviceOptional.isPresent()){
             Device device = deviceOptional.get();
-            device.setActive(true);
+            device.setEnabled(true);
             deviceRepository.save(device);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist");
@@ -151,7 +163,7 @@ public class DeviceService {
         Optional<Device> deviceOptional = deviceRepository.findById(deviceId);
         if(deviceOptional.isPresent()){
             Device device = deviceOptional.get();
-            device.setActive(false);
+            device.setEnabled(false);
             deviceRepository.save(device);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist");
@@ -159,5 +171,9 @@ public class DeviceService {
 
     public Long countByOwner(User user){
         return deviceRepository.countByOwner(user);
+    }
+
+    public Long countAll(){
+        return deviceRepository.count();
     }
 }

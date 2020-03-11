@@ -37,7 +37,7 @@ public class IswCoreServiceTests {
 
         user.setRole(Enum.Role.AGENT);
         user.setUsername("username");
-        user.setActive(false);
+        user.setEnabled(false);
         user.setAddress("Lagos");
         user.setEmail("user@gmail.com");
         user.setLastName("roland");
@@ -53,7 +53,7 @@ public class IswCoreServiceTests {
         iswUser.setDomainCode("ISW");
         iswUser.setAppCode("smart-move");
         iswUser.setMobileNo("0800");
-        iswUser.setActive(false);
+        iswUser.setEnabled(false);
         iswUser.setAddress("Lagos");
         iswUser.setEmail("user@gmail.com");
         iswUser.setUsername("username");

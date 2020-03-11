@@ -28,17 +28,15 @@ public class WalletRepositoryTests {
     @Before
     public void setUp() {
         wallet = new Wallet();
-        wallet.setCurrency("NGN");
         User user = buildTestUser();
         userRepository.save(user);
         wallet.setOwner(user);
         wallet.setBalance(200000);
-        wallet.setActive(true);
+        wallet.setEnabled(true);
         Wallet wallet1 = new Wallet();
-        wallet1.setCurrency("USD");
         wallet1.setOwner(user);
         wallet1.setBalance(2000);
-        wallet1.setActive(true);
+        wallet1.setEnabled(true);
         assertNotNull(walletRepository.save(wallet1));
         savedWallet = walletRepository.save(wallet);
         assertNotNull(savedWallet);
@@ -49,8 +47,7 @@ public class WalletRepositoryTests {
         walletRepository.findById(savedWallet.getId()).ifPresent(wallet1 -> {
             assertThat(wallet1.getBalance()).isEqualTo(wallet1.getBalance());
             assertThat(wallet1.getOwner()).isEqualTo(wallet1.getOwner());
-            assertThat(wallet1.getCurrency()).isEqualTo(wallet1.getCurrency());
-            assertThat(wallet1.isActive()).isEqualTo(wallet1.isActive());
+            assertThat(wallet1.isEnabled()).isEqualTo(wallet1.isEnabled());
         });
     }
 

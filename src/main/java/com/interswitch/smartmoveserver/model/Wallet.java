@@ -14,9 +14,11 @@ public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @OneToOne
     private User owner;
-    private String currency;
+
     private double balance;
-    private boolean isActive;
+
+    private boolean enabled;
 }

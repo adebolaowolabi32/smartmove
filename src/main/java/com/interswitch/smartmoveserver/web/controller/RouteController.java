@@ -1,79 +1,102 @@
 package com.interswitch.smartmoveserver.web.controller;
 
+import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.service.RouteService;
+import com.interswitch.smartmoveserver.service.UserService;
+import com.interswitch.smartmoveserver.web.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 /**
  * @author adebola.owolabi
  */
 @Controller
+@Layout(value = "layouts/default")
 @RequestMapping("/routes")
 public class RouteController {
+
     @Autowired
-    RouteService routeService;
+    private RouteService routeService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    PageUtil pageUtil;
 
     @GetMapping("/get")
-    public String getAll(Model model) {
-        model.addAttribute("routes", routeService.getAll());
-        return "getroutes";
+    public String getAll(Model model, @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "10") int size) {
+        Page<Route> routePage = routeService.findAllPaginated(page, size);
+        model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
+        model.addAttribute("routePage", routePage);
+        return "routes/get";
     }
 
     @GetMapping("/details/{id}")
     public String getDetails(@PathVariable("id") long id, Model model) {
         Route route = routeService.findById(id);
         model.addAttribute("route", route);
-        return "getroutedetails";
+        return "routes/details";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/create")
     public String showCreate(Model model) {
-        return "createroute";
+        Route route = new Route();
+        model.addAttribute("route", route);
+        model.addAttribute("owners", userService.getAll());
+        return "routes/create";
     }
 
-    @PostMapping("/add")
-    public String create(@Valid Route route, BindingResult result, Model model) {
+    @PostMapping("/create")
+    public String create(Principal principal, @Valid Route route, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "create-route";
+            model.addAttribute("route", route);
+            model.addAttribute("owners", userService.getAll());
+            return "routes/create";
         }
-        routeService.save(route);
-        model.addAttribute("routes", routeService.getAll());
-        return "getroutes";
+        routeService.save(route, principal);
+        Page<Route> routePage = routeService.findAllPaginated(1, 10);
+        model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
+        model.addAttribute("routePage", routePage);
+        return "redirect:/routes/get";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/update/{id}")
     public String showUpdate(@PathVariable("id") long id, Model model) {
         Route route = routeService.findById(id);
         model.addAttribute("route", route);
-        return "updateroute";
+        model.addAttribute("owners", userService.getAll());
+        return "routes/update";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/update/{id}")
     public String update(@PathVariable("id") long id, @Valid Route route,
                          BindingResult result, Model model) {
+        route.setId(id);
+        model.addAttribute("route", route);
         if (result.hasErrors()) {
-            route.setId(id);
-            return "updateroute";
+            model.addAttribute("owners", userService.getAll());
+            return "routes/update";
         }
-
         routeService.update(route);
-        model.addAttribute("routes", routeService.getAll());
-        return "getroutes";
+        return "redirect:/routes/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") long id, Model model) {
         routeService.delete(id);
-        model.addAttribute("routes", routeService.getAll());
-        return "getroutes";
+        Page<Route> routePage = routeService.findAllPaginated(1, 10);
+        model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
+        model.addAttribute("routePage", routePage);
+        return "redirect:/routes/get";
     }
 }

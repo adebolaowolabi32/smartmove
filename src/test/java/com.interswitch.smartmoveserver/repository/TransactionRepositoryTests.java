@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
@@ -42,7 +42,7 @@ public class TransactionRepositoryTests {
         transaction.setCard(new Card());
         transaction.setSender(user);
         transaction.setRecipient(user);
-        transaction.setTimeStamp(new Date());
+        transaction.setTimeStamp(LocalDateTime.now());
         Transaction transaction1 = new Transaction();
         transaction1.setDevice(new Device());
         transaction1.setType(Enum.TransactionType.TRIP);
@@ -50,7 +50,7 @@ public class TransactionRepositoryTests {
         transaction1.setCard(new Card());
         transaction1.setSender(user);
         transaction1.setRecipient(user);
-        transaction1.setTimeStamp(new Date());
+        transaction1.setTimeStamp(LocalDateTime.now());
         assertNotNull(transactionRepository.save(transaction1));
         savedTransaction = transactionRepository.save(transaction);
         assertNotNull(savedTransaction);

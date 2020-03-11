@@ -64,7 +64,6 @@ public class UserApiTests {
 
     @Test
     public void testSave() throws Exception {
-        when(userService.save(user)).thenReturn(user);
         mvc.perform(post("/users")
                 .content(new ObjectMapper().writeValueAsString(user))
                 .characterEncoding("utf-8")

@@ -13,12 +13,12 @@
 					</div>
 				</div>
 				<form class="card p-3" action="#" method="post"
-					  th:action="@{/users/create}" th:object="${user}"
+					  th:action="${'/users/create?role=' + role}" th:object="${user}"
 					  data-parsley-validate="true" autocomplete="off">
 					<div class="form-group row">
 						<label class="control-label col-sm-2" for="firstName">First Name:</label>
 						<div class="col-sm-10">
-							<input class="form-control" placeholder="First Name"
+							<input class="form-control"
 								   id="firstName" name="firstName" th:field="*{firstName}"
 								   required="required"
 								   data-parsley-required-message="Please provide your first name"
@@ -30,7 +30,7 @@
 					<div class="form-group row">
 						<label class="control-label col-sm-2" for="email">Last Name:</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" placeholder="Last Name"
+							<input type="text" class="form-control"
 								   id="lastName" name="lastName" th:field="*{lastName}"
 								   required="required"
 								   data-parsley-required-message="Please provide your last name"
@@ -42,7 +42,7 @@
 					<div class="form-group row">
 						<label class="control-label col-sm-2" for="email">Email Address:</label>
 						<div class="col-sm-10">
-							<input class="form-control" placeholder="Email Address"
+							<input class="form-control" type="email"
 								   id="email" name="email" th:field="*{email}"
 								   required="required"
 								   data-parsley-required-message="Please provide your email address"
@@ -54,7 +54,7 @@
 					<div class="form-group row">
 						<label class="control-label col-sm-2" for="mobileNo">Mobile Number:</label>
 						<div class="col-sm-10">
-							<input type="mobileNo" class="form-control" placeholder="Mobile Number"
+							<input type="phone" class="form-control"
 								   id="mobileNo" name="mobileNo" th:field="*{mobileNo}"
 								   required="required"
 								   data-parsley-required-message="Please provide your mobile number"
@@ -64,37 +64,36 @@
 						</div>
 					</div>
 
-					<div class="form-group row">
-						<label class="control-label col-sm-2" for="parent" th:text="${'Assign To ' + title}"> </label>
+					<div class="form-group row" th:if="${role!='ISW_ADMIN'}">
+						<label class="control-label col-sm-2" for="parent"> Assign To Parent:</label>
 						<div class="col-sm-10">
 							<select class="form-control" th:field="*{parent}"  id="parent">
-								<option value=0 disabled>Select Regulator</option>
-								<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner.firstName}+' '+${owner.lastName}"></option>
+								<option value=0 >Select ...</option>
+								<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 							</select>
 							<p class="small text-danger" th:if="${#fields.hasErrors('parent')}" th:errors="*{parent}"></p>
 						</div>
 					</div>
-						<div class="form-group row">
-							<label class="control-label col-sm-2" for="password">Password</label>
-							<div class="col-sm-10">
-								<input type="password" class="form-control input-lg strengthify" placeholder="Password"
-									   id="password" name="password" th:field="*{password}"
-									   required="required"
-									   data-parsley-required-message="Please provide a password" />
-								<p class="small text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-							</div>
+					<div class="form-group row">
+						<label class="control-label col-sm-2" for="password">Password:</label>
+						<div class="col-sm-10">
+							<input type="password" class="form-control input-lg strengthify"
+								   id="password" name="password" th:field="*{password}"
+								   required="required"
+								   data-parsley-required-message="Please provide a password" />
+							<p class="small text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
 						</div>
-						<div class="form-group row">
-							<label class="control-label col-sm-2" for="confirmPassword">Confirm Password</label>
-							<div class="col-sm-10">
-								<input type="password" class="form-control input-lg" placeholder="Confirm Password"
-									   id="confirmPassword" name="confirmPassword"
-									   required="required"
-									   data-parsley-required-message="Please confirm your password"
-									   data-parsley-equalto="#password"
-									   data-parsley-equalto-message="Confirm password does not match provided password" />
-							</div>
+					</div>
+					<div class="form-group row">
+						<label class="control-label col-sm-2" for="enabled">Enabled</label>
+						<div class="col-sm-10">
+							<label class="switch">
+								<input type="checkbox" name="enabled" id="enabled">
+								<span class="slider round"></span>
+							</label>
 						</div>
+					</div>
+					<input type="hidden" th:field="*{role}">
 					<div class="form-group row">
 						<span class="control-label col-sm-2"></span>
 						<div class="col-sm-10">

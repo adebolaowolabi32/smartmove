@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
+import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.request.IswRole;
 import com.interswitch.smartmoveserver.model.request.IswUser;
@@ -29,19 +30,17 @@ public class IswCoreService {
     @Autowired
     PassportService passportService;
 
-    @Value("${spring.user.url}")
+    @Value("${spring.application.core.user-url}")
     private String userUrl;
-    @Value("${spring.accesstoken}")
+    @Value("${spring.application.core.user-permission-url}")
     private  String accessToken;
-    @Value("${spring.domainCode}")
+    @Value("${spring.application.domainCode}")
     private  String domainCode;
-    @Value("${spring.appCode}")
+    @Value("${spring.application.appCode}")
     private String appCode ;
-    @Value("${spring.user.roles}")
-    private String roleurl ;
-    @Value("${spring.domainId}")
+    @Value("${spring.application.domainId}")
     private  int domainId;
-    @Value("${spring.appId}")
+    @Value("${spring.application.appId}")
     private int appId ;
 
     IswRole iswRole;
@@ -85,6 +84,227 @@ public class IswCoreService {
         return userPermissions;
     }
 
+    public  List<String> getPermissions(User user) {
+        List<String> permissions = new ArrayList<>();
+        Enum.Role role = user.getRole();
+        switch (role) {
+            case ISW_ADMIN: {
+                permissions = new ArrayList<>();
+                permissions.add("VIEW_CARDS");
+                permissions.add("VIEW_AGENTS");
+                permissions.add("VIEW_DEVICES");
+                permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_OPERATORS");
+                permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_VEHICLE_OWNERS");
+                permissions.add("VIEW_ADMINISTRATORS");
+                permissions.add("VIEW_TRANSACTIONS");
+                permissions.add("VIEW_SETTLEMENTS");
+                permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLES");
+                permissions.add("VIEW_CONFIGURATIONS");
+
+                permissions.add("CREATE_CARD");
+                permissions.add("CREATE_AGENT");
+                permissions.add("CREATE_DEVICE");
+                permissions.add("CREATE_TERMINAL");
+                permissions.add("CREATE_OPERATOR");
+                permissions.add("CREATE_REGULATOR");
+                permissions.add("CREATE_VEHICLE_OWNER");
+                permissions.add("CREATE_ADMINISTRATOR");
+                permissions.add("CREATE_WALLET");
+                permissions.add("CREATE_TRANSACTION");
+                permissions.add("CREATE_SETTLEMENT");
+                permissions.add("CREATE_ROUTE");
+                permissions.add("CREATE_VEHICLE");
+                permissions.add("CREATE_CONFIGURATION");
+
+                permissions.add("VIEW_AGENT_DETAILS");
+                permissions.add("VIEW_DEVICE_DETAILS");
+                permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_OPERATOR_DETAILS");
+                permissions.add("VIEW_REGULATOR_DETAILS");
+                permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
+                permissions.add("VIEW_ADMINISTRATOR_DETAILS");
+                permissions.add("VIEW_TRANSACTION_DETAILS");
+                permissions.add("VIEW_SETTLEMENT_DETAILS");
+                permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_CONFIGURATION_DETAILS");
+
+                permissions.add("UPDATE_CARD");
+                permissions.add("UPDATE_AGENT");
+                permissions.add("UPDATE_DEVICE");
+                permissions.add("UPDATE_TERMINAL");
+                permissions.add("UPDATE_OPERATOR");
+                permissions.add("UPDATE_REGULATOR");
+                permissions.add("UPDATE_VEHICLE_OWNER");
+                permissions.add("UPDATE_ADMINISTRATOR");
+                permissions.add("UPDATE_WALLET");
+                permissions.add("UPDATE_ROUTE");
+                permissions.add("UPDATE_VEHICLE");
+                permissions.add("UPDATE_CONFIGURATION");
+
+                permissions.add("DELETE_CARD");
+                permissions.add("DELETE_AGENT");
+                permissions.add("DELETE_DEVICE");
+                permissions.add("DELETE_TERMINAL");
+                permissions.add("DELETE_OPERATOR");
+                permissions.add("DELETE_REGULATOR");
+                permissions.add("DELETE_VEHICLE_OWNER");
+                permissions.add("DELETE_ADMINISTRATOR");
+                permissions.add("DELETE_WALLET");
+                permissions.add("DELETE_ROUTE");
+                permissions.add("DELETE_VEHICLE");
+                permissions.add("DELETE_CONFIGURATION");
+                return permissions;
+            }
+            case REGULATOR: {
+                permissions = new ArrayList<>();
+                permissions.add("VIEW_AGENTS");
+                permissions.add("VIEW_DEVICES");
+                permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_OPERATORS");
+                permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_VEHICLE_OWNERS");
+                permissions.add("VIEW_TRANSACTIONS");
+                permissions.add("VIEW_SETTLEMENTS");
+                permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLES");
+
+                permissions.add("CREATE_AGENT");
+                permissions.add("CREATE_DEVICE");
+                permissions.add("CREATE_TERMINAL");
+                permissions.add("CREATE_OPERATOR");
+                permissions.add("CREATE_REGULATOR");
+                permissions.add("CREATE_VEHICLE_OWNER");
+                permissions.add("CREATE_ROUTE");
+                permissions.add("CREATE_VEHICLE");
+
+                permissions.add("VIEW_AGENT_DETAILS");
+                permissions.add("VIEW_DEVICE_DETAILS");
+                permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_OPERATOR_DETAILS");
+                permissions.add("VIEW_REGULATOR_DETAILS");
+                permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
+                permissions.add("VIEW_TRANSACTION_DETAILS");
+                permissions.add("VIEW_SETTLEMENT_DETAILS");
+                permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_VEHICLE_DETAILS");
+
+                permissions.add("UPDATE_AGENT");
+                permissions.add("UPDATE_DEVICE");
+                permissions.add("UPDATE_TERMINAL");
+                permissions.add("UPDATE_OPERATOR");
+                permissions.add("UPDATE_REGULATOR");
+                permissions.add("UPDATE_VEHICLE_OWNER");
+                permissions.add("UPDATE_ROUTE");
+                permissions.add("UPDATE_VEHICLE");
+
+                permissions.add("DELETE_AGENT");
+                permissions.add("DELETE_DEVICE");
+                permissions.add("DELETE_TERMINAL");
+                permissions.add("DELETE_OPERATOR");
+                permissions.add("DELETE_REGULATOR");
+                permissions.add("DELETE_VEHICLE_OWNER");
+                permissions.add("DELETE_ROUTE");
+                permissions.add("DELETE_VEHICLE");
+                return permissions;
+            }
+            case OPERATOR: {
+                permissions = new ArrayList<>();
+                permissions.add("VIEW_AGENTS");
+                permissions.add("VIEW_DEVICES");
+                permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_OPERATORS");
+                permissions.add("VIEW_VEHICLE_OWNERS");
+                permissions.add("VIEW_TRANSACTIONS");
+                permissions.add("VIEW_SETTLEMENTS");
+                permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLES");
+
+                permissions.add("CREATE_AGENT");
+                permissions.add("CREATE_DEVICE");
+                permissions.add("CREATE_TERMINAL");
+                permissions.add("CREATE_OPERATOR");
+                permissions.add("CREATE_VEHICLE_OWNER");
+                permissions.add("CREATE_ROUTE");
+                permissions.add("CREATE_VEHICLE");
+
+                permissions.add("VIEW_AGENT_DETAILS");
+                permissions.add("VIEW_DEVICE_DETAILS");
+                permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_REGULATOR_DETAILS");
+                permissions.add("VIEW_OPERATOR_DETAILS");
+                permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
+                permissions.add("VIEW_TRANSACTION_DETAILS");
+                permissions.add("VIEW_SETTLEMENT_DETAILS");
+                permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_VEHICLE_DETAILS");
+
+                permissions.add("UPDATE_AGENT");
+                permissions.add("UPDATE_DEVICE");
+                permissions.add("UPDATE_TERMINAL");
+                permissions.add("UPDATE_OPERATOR");
+                permissions.add("UPDATE_VEHICLE_OWNER");
+                permissions.add("UPDATE_ROUTE");
+                permissions.add("UPDATE_VEHICLE");
+
+                permissions.add("DELETE_AGENT");
+                permissions.add("DELETE_DEVICE");
+                permissions.add("DELETE_TERMINAL");
+                permissions.add("DELETE_OPERATOR");
+                permissions.add("DELETE_VEHICLE_OWNER");
+                permissions.add("DELETE_ROUTE");
+                permissions.add("DELETE_VEHICLE");
+                return permissions;
+            }
+            case VEHICLE_OWNER: {
+                permissions = new ArrayList<>();
+                permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_OPERATORS");
+                permissions.add("VIEW_SETTLEMENTS");
+                permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLES");
+
+                permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_OPERATOR_DETAILS");
+                permissions.add("VIEW_SETTLEMENT_DETAILS");
+                permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_VEHICLE_DETAILS");
+                return permissions;
+            }
+            case AGENT: {
+                permissions = new ArrayList<>();
+                permissions.add("VIEW_CARDS");
+                permissions.add("VIEW_DEVICES");
+                permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_OPERATORS");
+                permissions.add("VIEW_TRANSACTIONS");
+                permissions.add("VIEW_SETTLEMENTS");
+
+                permissions.add("CREATE_DEVICE");
+
+                permissions.add("VIEW_CARD_DETAILS");
+                permissions.add("VIEW_DEVICE_DETAILS");
+                permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_REGULATOR_DETAILS");
+                permissions.add("VIEW_OPERATOR_DETAILS");
+                permissions.add("VIEW_WALLET_DETAILS");
+                permissions.add("VIEW_TRANSACTION_DETAILS");
+                permissions.add("VIEW_SETTLEMENT_DETAILS");
+
+                permissions.add("UPDATE_DEVICE");
+                permissions.add("UPDATE_WALLET");
+                return permissions;
+            }
+           default:
+                return permissions;
+        }
+
+    }
+
     public IswUser buildUser(User user){
         iswRole = new IswRole();
         iswRole.setAppId(domainId);
@@ -95,8 +315,7 @@ public class IswCoreService {
         iswUser.setAppCode(appCode);
         iswUser.setId(user.getId());
         iswUser.setMobileNo(user.getMobileNo());
-        iswUser.setActive(user.isActive());
-        iswUser.setAddress(user.getAddress());
+        iswUser.setEnabled(user.isEnabled());
         iswUser.setEmail(user.getEmail());
         iswUser.setUsername(user.getUsername());
         iswUser.setLastName(user.getLastName());

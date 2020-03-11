@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,11 @@ public class UserService {
     IswCoreService iswCoreService;
 
     @Autowired
+    WalletService walletService;
+
+    @Autowired
+    CardService cardService;
+    @Autowired
     private JwtHelper jwtHelper;
 
     public List<User> getAll() {
@@ -46,24 +52,34 @@ public class UserService {
         return userRepository.findAllByRole(pageable, role);
     }
 
-    public User save(User user) {
-        long id = user.getId();
-        boolean exists = userRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
-
-        passportService.createUser(user);
-        iswCoreService.createUser(user);
-        return userRepository.save(user);
+    public void save(User user) {
+        Optional<User> exists = userRepository.findByUsername(user.getUsername());
+        if (exists.isPresent()) return;
+        //passportService.createUser(user);
+        //iswCoreService.createUser(user);
+        else userRepository.save(user);
     }
 
-    public User save(User user, User parent) {
-        long id = user.getId();
-        boolean exists = userRepository.existsById(id);
+    public User save(User user, Principal principal) {
+        boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
-        user.setParent(parent);
-        passportService.createUser(user);
-        iswCoreService.createUser(user);
-        return userRepository.save(user);    }
+        Enum.Role role = user.getRole();
+        user.setParent(null);
+        if(!role.equals(Enum.Role.ISW_ADMIN)){
+            Optional<User> parent = userRepository.findByUsername(principal.getName());
+            if(parent.isPresent()) user.setParent(parent.get());
+        }
+        //passportService.createUser(user);
+        user.setUsername(user.getEmail());
+        user.setPassword(null);
+        //iswCoreService.createUser(user);
+        userRepository.save(user);
+        if(role.equals(Enum.Role.AGENT)){
+            walletService.autoCreateForUser(user);
+            cardService.autoCreateForUser(user);
+        }
+        return user;
+    }
 
     public User findById(long id) {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
@@ -87,6 +103,10 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
+    public List<User> findAllByRole(Enum.Role role) {
+        return userRepository.findAllByRole(role);
+    }
+
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
     }
@@ -101,7 +121,10 @@ public class UserService {
     public User update(User user) {
         Optional<User> existing = userRepository.findById(user.getId());
         if(existing.isPresent())
+        {
+            user.setUsername(user.getEmail());
             return userRepository.save(user);
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
     }
 
@@ -113,49 +136,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
         }
     }
-   /* public User save(Enum.Role type, long id) {
-        User user = new User();
-        user.setType(type);//fetch type from id
-        user.setParent(id);
-        user.setFirstName(jwtHelper.getClaim("firstName"));
-        user.setLastName(jwtHelper.getClaim("lastName"));
-        user.setEmail(jwtHelper.getClaim("email"));
-        user.setMobileNo(jwtHelper.getClaim("mobileNo"));
-        return userRepository.save(user);
-    }*/
-
-    /*public OnboardUser onBoard(OnboardUser onboardUser) {
-        String email = jwtHelper.getClaim("email");
-        User user = userRepository.findByEmail(email).get();
-        Enum.Role parentType = user != null ? user.getRoles() : null;
-        if(parentType != null){
-            Enum.Role onboardRole = onboardUser.getType();
-            switch (parentType){
-                case ISW_ADMIN:
-                    break;
-                case REGULATOR:
-                    if(onboardRole.equals(Enum.Role.AGENT) || onboardRole.equals(Enum.Role.OPERATOR)){
-                        // send mail to all
-                        break;
-                    }
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You are not permitted to create a user of this type");
-                case OPERATOR:
-                    if(onboardRole.equals(Enum.Role.VEHICLE_OWNER))
-                        //send mail to agent
-                        break;
-                default:
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You are not permitted to create any user");
-            }
-            *//*onboardUser.getEmail();
-            try{
-                //notify user's email
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }*//*
-        }
-        return onboardUser;
-    }*/
 
     public List<User> getAllNext(Enum.Role type, User parent) {
         return userRepository.findAllByRoleAndParent(type, parent);
@@ -165,7 +145,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isPresent()){
             User user = userOptional.get();
-            user.setActive(true);
+            user.setEnabled(true);
             userRepository.save(user);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
@@ -175,7 +155,7 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(userId);
         if(userOptional.isPresent()){
             User user = userOptional.get();
-            user.setActive(false);
+            user.setEnabled(false);
             userRepository.save(user);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
@@ -183,5 +163,9 @@ public class UserService {
 
     public Long countByRole(Enum.Role role){
         return userRepository.countByRole(role);
+    }
+
+    public Long countByRoleAndParent(Enum.Role role, User parent){
+        return userRepository.countByRoleAndParent(role, parent);
     }
 }

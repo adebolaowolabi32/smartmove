@@ -30,6 +30,14 @@ public class WalletService {
         return walletRepository.save(wallet);
     }
 
+    public Wallet autoCreateForUser(User user){
+        Wallet wallet = new Wallet();
+        wallet.setBalance(0);
+        wallet.setOwner(user);
+        wallet.setEnabled(true);
+        return walletRepository.save(wallet);
+    }
+
     public Wallet findById(long id) {
         return walletRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist"));
     }
@@ -58,9 +66,9 @@ public class WalletService {
     }
 
 
-    public void transfer(Transfer transfer) {
+    public void transfer(Transfer transfer, User authenticatedUser) {
         double amount = transfer.getAmount();
-        Optional<Wallet> fromOptional = walletRepository.findById(transfer.getFrom());
+        Optional<Wallet> fromOptional = walletRepository.findById(authenticatedUser.getId());
         if(fromOptional.isPresent()){
             Optional<Wallet> toOptional = walletRepository.findById(transfer.getTo());
             if(toOptional.isPresent()) {
@@ -84,7 +92,7 @@ public class WalletService {
         Optional<Wallet> walletOptional = walletRepository.findById(walletId);
         if(walletOptional.isPresent()){
             Wallet wallet = walletOptional.get();
-            wallet.setActive(true);
+            wallet.setEnabled(true);
             walletRepository.save(wallet);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
@@ -94,7 +102,7 @@ public class WalletService {
         Optional<Wallet> walletOptional = walletRepository.findById(walletId);
         if(walletOptional.isPresent()){
             Wallet wallet = walletOptional.get();
-            wallet.setActive(false);
+            wallet.setEnabled(false);
             walletRepository.save(wallet);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");

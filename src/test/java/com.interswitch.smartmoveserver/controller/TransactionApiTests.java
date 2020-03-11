@@ -18,8 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
@@ -55,7 +55,7 @@ public class TransactionApiTests {
         transaction.setCard(new Card());
         transaction.setSender(new User());
         transaction.setRecipient(new User());
-        transaction.setTimeStamp(new Date());
+        transaction.setTimeStamp(LocalDateTime.now());
     }
 
     @Test

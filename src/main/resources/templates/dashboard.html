@@ -5,10 +5,10 @@
 		<h1 class="mt-4">Dashboard</h1>
 		<div class="row">
 			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')">
-				<div class="card bg-primary text-white mb-4">
+				<div class="card bg-info text-white mb-4">
 					<div class="card-body heavy">Administrators <span class="number" th:text="${no_admins}">21</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="small text-white stretched-link" th:href="@{/users/get?role=ADMINISTRATOR}" href="#">View Details</a>
+						<a class="small text-white stretched-link" th:href="@{/users/get?role=ISW_ADMIN}" href="#">View Details</a>
 						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
 					</div>
 				</div>
@@ -77,7 +77,7 @@
 				</div>
 			</div>
 			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')">
-				<div class="card bg-primary text-white mb-4">
+				<div class="card bg-info text-white mb-4">
 					<div class="card-body heavy">Transactions <span class="number" th:text="${no_transactions}">21</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
 						<a class="small text-white stretched-link"  th:href="@{/transactions/get}" href="#">View Details</a>
@@ -98,7 +98,7 @@
 				<div class="card bg-success text-white mb-4">
 					<div class="card-body heavy">Wallet <span class="number" th:text="${wallet_balance}">N5000</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="small text-white stretched-link" th:href="@{/wallet/get}" href="#">View Wallet</a>
+						<a class="small text-white stretched-link" th:href="@{/wallets/details}" href="#">View Wallet</a>
 						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
 					</div>
 				</div>
@@ -107,7 +107,7 @@
 				<div class="card bg-info text-white mb-4">
 					<div class="card-body heavy">Card <span class="number" th:text="${card_balance}">N2000</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="small text-white stretched-link" th:href="@{/card/get}" href="#">View Card</a>
+						<a class="small text-white stretched-link" th:href="@{/cards/details}" href="#">View Card</a>
 						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
 					</div>
 				</div>

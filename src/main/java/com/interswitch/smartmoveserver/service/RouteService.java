@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,6 +46,17 @@ public class RouteService {
         long id = route.getId();
         boolean exists = routeRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route already exists");
+        return routeRepository.save(route);
+    }
+
+    public Route save(Route route, Principal principal) {
+        long id = route.getId();
+        boolean exists = routeRepository.existsById(id);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route already exists");
+        if(route.getOwner() == null) {
+            Optional<User> owner = userRepository.findByUsername(principal.getName());
+            if(owner.isPresent()) route.setOwner(owner.get());
+        }
         return routeRepository.save(route);
     }
 
@@ -117,7 +129,7 @@ public class RouteService {
         Optional<Route> routeOptional = routeRepository.findById(routeId);
         if(routeOptional.isPresent()){
             Route route = routeOptional.get();
-            route.setActive(true);
+            route.setEnabled(true);
             routeRepository.save(route);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
@@ -127,7 +139,7 @@ public class RouteService {
         Optional<Route> routeOptional = routeRepository.findById(routeId);
         if(routeOptional.isPresent()){
             Route route = routeOptional.get();
-            route.setActive(false);
+            route.setEnabled(false);
             routeRepository.save(route);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
@@ -135,5 +147,9 @@ public class RouteService {
 
     public Long countByOwner(User user){
         return routeRepository.countByOwner(user);
+    }
+
+    public Long countAll(){
+        return routeRepository.count();
     }
 }

@@ -27,7 +27,6 @@
 					<th>Vehicle Registration Number</th>
 					<th>Type</th>
 					<th>Owner</th>
-					<th>isActive</th>
 					<th>Device</th>
 					<th>Route</th>
 					<th>View Details</th>
@@ -40,8 +39,7 @@
 					<td th:text="${vehicle.name}"></td>
 					<td th:text="${vehicle.regNo}"></td>
 					<td th:text="${vehicle.type}"></td>
-					<td th:text="${vehicle.owner != null ? vehicle.owner.name : ''}"></td>
-					<td th:text="${vehicle.isActive}"></td>
+					<td th:text="${vehicle.owner != null ? vehicle.owner.username : ''}"></td>
 					<td th:text="${vehicle.device != null ? vehicle.device.name : ''}"></td>
 					<td th:text="${vehicle.route != null ? vehicle.route.name : ''}"></td>
 					<td>

@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Route;
+import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import org.junit.After;
 import org.junit.Before;
@@ -38,18 +39,18 @@ public class RouteRepositoryTests {
         User user = buildTestUser();
         userRepository.save(user);
         route.setOwner(user);
-        route.setStart("start_terminal");
-        route.setStop("stop_terminal");
+        route.setStart(new Terminal());
+        route.setStop(new Terminal());
         route.setPrice(500);
-        route.setActive(true);
+        route.setEnabled(true);
         Route route1 = new Route();
         route1.setName("my_route2");
         route1.setType(Enum.TransportMode.BUS);
         route1.setOwner(user);
-        route1.setStart("start_terminal");
-        route1.setStop("stop_terminal");
+        route1.setStart(new Terminal());
+        route1.setStop(new Terminal());
         route1.setPrice(100);
-        route1.setActive(false);
+        route1.setEnabled(false);
         assertNotNull(routeRepository.save(route1));
         savedRoute = routeRepository.save(route);
         assertNotNull(savedRoute);
@@ -64,7 +65,7 @@ public class RouteRepositoryTests {
             assertThat(route1.getStart()).isEqualTo(route.getStart());
             assertThat(route1.getStop()).isEqualTo(route.getStop());
             assertThat(route1.getPrice()).isEqualTo(route.getPrice());
-            assertThat(route1.isActive()).isEqualTo(route.isActive());
+            assertThat(route1.isEnabled()).isEqualTo(route.isEnabled());
         });
     }
 

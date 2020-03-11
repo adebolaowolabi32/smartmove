@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" th:text="${title}">Users</title>
+<title th:fragment="title" th:text="${title}">Vehicles</title>
 <div th:fragment="content" class="card mb-4">
 	<div class="card-header"><i class="fas fa-user mr-1"></i>
 		<span>Vehicles</span></div>
@@ -19,7 +19,7 @@
 			<div class="form-group row">
 				<label class="control-label col-sm-2" for="name">Name:</label>
 				<div class="col-sm-10">
-					<input class="form-control" placeholder="Name"
+					<input class="form-control"
 						   id="name" name="name" th:field="*{name}"
 						   required="required"
 						   data-parsley-required-message="Please provide vehicle name"
@@ -31,8 +31,8 @@
 			<div class="form-group row">
 				<label class="control-label col-sm-2" for="regNo">Vehicle Registration Number:</label>
 				<div class="col-sm-10">
-					<input class="form-control" placeholder="Vehicle Id"
-						   id="regNo" name="regNo" th:field="*{vehicleId}"
+					<input class="form-control"
+						   id="regNo" name="regNo" th:field="*{regNo}"
 						   required="required"
 						   data-parsley-required-message="Please provide vehicle id"
 						   data-parsley-length="[3, 40]"
@@ -44,7 +44,7 @@
 				<label class="control-label col-sm-2" for="type">Vehicle Type:</label>
 				<div class="col-sm-10">BUS, KEKE, RAIL, WATERWAY
 					<select class="form-control" th:field="*{type}"  id="type">
-						<option value="" disabled>Select...</option>
+						<option value="" >Select...</option>
 						<option value="BUS">Bus</option>
 						<option value="WATERWAY">Waterway</option>
 						<option value="RAIL">Rail</option>
@@ -55,28 +55,28 @@
 				<label class="control-label col-sm-2" for="owner">Vehicle Owner </label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{owner}"  id="owner">
-						<option value=0 disabled>Select ...</option>
-						<option th:each="owner : ${owners}" th:value="${owner}" th:text="${owner.firstName}+' '+${owner.lastName}"></option>
+						<option value=0 >Select ...</option>
+						<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 					</select>
 					<p class="small text-danger" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="device">Device: </label>
+				<label class="control-label col-sm-2" for="device">Device </label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{device}"  id="device">
-						<option value=0 disabled>Select ...</option>
-						<option th:each="device : ${devices}" th:value="${device}" th:text="${device.name}"></option>
+						<option value=0 >Select ...</option>
+						<option th:each="device : ${devices}" th:value="${device.id}" th:text="${device.name}"></option>
 					</select>
 					<p class="small text-danger" th:if="${#fields.hasErrors('device')}" th:errors="*{device}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="route">Route: </label>
+				<label class="control-label col-sm-2" for="route">Route </label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{route}"  id="route">
-						<option value=0 disabled>Select ...</option>
-						<option th:each="device : ${devices}" th:value="${route}" th:text="${route.name}"></option>
+						<option value=0 >Select ...</option>
+						<option th:each="device : ${devices}" th:value="${route.id}" th:text="${route.name}"></option>
 					</select>
 					<p class="small text-danger" th:if="${#fields.hasErrors('route')}" th:errors="*{route}"></p>
 				</div>
@@ -85,20 +85,19 @@
 				<label class="control-label col-sm-2" for="fareType">Fare Type</label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{fareType}" id="fareType">
-						<option value="" disabled>Select...</option>
+						<option value="" >Select...</option>
 						<option value="FIXED">Fixed</option>
 						<option value="VARIABLE">Variable</option>
 					</select>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="isActive">Status</label>
+				<label class="control-label col-sm-2" for="enabled">Enabled</label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{isActive}" id="isActive">
-						<option value="" disabled>Select...</option>
-						<option value="true">Enabled</option>
-						<option value="false">Disabled</option>
-					</select>
+					<label class="switch">
+						<input type="checkbox" name="enabled" id="enabled">
+						<span class="slider round"></span>
+					</label>
 				</div>
 			</div>
 

@@ -22,7 +22,7 @@ import java.util.Map;
 @Service
 public class PassportService {
 
-    @Value("${spring.security.oauth2.client.provider.passport.user-info-uri}")
+    @Value("${spring.application.passport.user-url}")
     private String userUrl;
     @Value("${spring.security.oauth2.client.provider.passport.token-uri}")
     private String tokenUrl;
@@ -56,9 +56,7 @@ public class PassportService {
         headers.add(HttpHeaders.AUTHORIZATION, authHeader);
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED.toString());
         MultiValueMap formData = new LinkedMultiValueMap();
-        formData.add("username", "adebola.owolabi");
-        formData.add("password", "Skimchy678");
-        formData.add("grant_type", "password");
+        formData.add("grant_type", "client_credentials");
         formData.add("scope", "profile");
         ResponseEntity response = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, Object.class);
         Map<String, Object> resultToJson = (Map<String, Object>) response.getBody();

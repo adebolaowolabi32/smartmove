@@ -6,6 +6,7 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.DeviceService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.service.VehicleService;
+import com.interswitch.smartmoveserver.web.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -39,21 +39,15 @@ public class UserController {
     @Autowired
     private VehicleService vehicleService;
 
-    Enum.Role role;
+    @Autowired
+    PageUtil pageUtil;
 
     @GetMapping("/get")
-    public String getAll(Model model, @RequestParam("role") Enum.Role role, @RequestParam("page") Optional<Integer> page,
-                         @RequestParam("size") Optional<Integer> size) {
-        this.role = role;
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(5);
-        Page<User> userPage = userService.findByRolePaginated(currentPage, pageSize, role);
-        int totalPages = userPage.getTotalPages();
-        if(totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+    public String getAll(Model model, @RequestParam("role") Enum.Role role,@RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "10") int size) {
+        Page<User> userPage = userService.findByRolePaginated(page, size, role);
         model.addAttribute("userPage", userPage);
+        model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
         model.addAttribute("title", buildTitle(role));
         model.addAttribute("role", role);
         return "users/get";
@@ -72,37 +66,31 @@ public class UserController {
 
 
     @GetMapping("/create")
-    @Layout("layouts/default")
     public String showCreate(@RequestParam("role") Enum.Role role, Model model) {
         User user = new User();
-        user.setRole(role);
         model.addAttribute("title", buildTitle(role));
         model.addAttribute("user", user);
         model.addAttribute("owners", userService.getAll());
+        model.addAttribute("role", role);
         return "users/create";
     }
 
     @PostMapping("/create")
-    public String create(Principal principal, @Valid User user, BindingResult result, Model model) {
+    public String create(Principal principal, @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("title", buildTitle(user.getRole()));
             model.addAttribute("owners", userService.getAll());
             model.addAttribute("user", user);
+            model.addAttribute("role", role);
             return "users/create";
         }
-        User parent = userService.findByUsername(principal.getName());
-        userService.save(user, parent);
-        Page<User> userPage = userService.getAllPaginated(1, 5);
-
-        int totalPages = userPage.getTotalPages();
-
-        if(totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+        user.setRole(role);
+        userService.save(user, principal);
+        Page<User> userPage = userService.getAllPaginated(1, 10);
+        model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
         model.addAttribute("title", buildTitle(user.getRole()));
         model.addAttribute("userPage", userPage);
-        return "redirect:/users/get";
+        return "redirect:/users/get?role=" + role;
     }
 
     @GetMapping("/update/{id}")
@@ -127,16 +115,8 @@ public class UserController {
 
         userService.update(user);
         model.addAttribute("title", buildTitle(user.getRole()));
-        Page<User> userPage = userService.getAllPaginated(1, 5);
-        int totalPages = userPage.getTotalPages();
-        if(totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
-        model.addAttribute("userPage", userPage);
-        model.addAttribute("title", buildTitle(user.getRole()));
         model.addAttribute("role", user.getRole());
-        return "redirect:/users/get";
+        return "redirect:/users/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
@@ -149,10 +129,11 @@ public class UserController {
             List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
+        Enum.Role role = user.getRole();
         model.addAttribute("userPage", userPage);
-        model.addAttribute("title", buildTitle(user.getRole()));
-        model.addAttribute("role", user.getRole());
-        return "redirect:/users/get";
+        model.addAttribute("title", buildTitle(role));
+        model.addAttribute("role", role);
+        return "redirect:/users/get?role=" + role;
     }
 
     public String buildTitle(Enum.Role role){

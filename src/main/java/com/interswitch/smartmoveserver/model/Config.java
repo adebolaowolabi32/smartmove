@@ -14,7 +14,10 @@ public class Config {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(unique=true)
+    @Enumerated(EnumType.STRING)
     private Enum.ConfigList name;
+
     private String value;
 }

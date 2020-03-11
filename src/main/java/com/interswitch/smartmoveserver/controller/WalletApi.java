@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Wallet;
-import com.interswitch.smartmoveserver.model.request.Transfer;
 import com.interswitch.smartmoveserver.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,12 +40,6 @@ public class WalletApi {
     @DeleteMapping("/{id}")
     private void delete(@Validated @PathVariable long id) {
         walletService.delete(id);
-    }
-
-    @PostMapping(value = "/transfer", produces = "application/json", consumes = "application/json")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    private void transfer(@Validated @RequestBody Transfer transferObj) {
-        walletService.transfer(transferObj);
     }
 
     @PostMapping(value = "/activate/{id}", produces = "application/json")

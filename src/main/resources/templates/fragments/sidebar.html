@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-	<div th:fragment="sidebar">
-		<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+	<div th:fragment="sidebar" id="layoutSidenav_nav">
+		<nav class="sb-sidenav accordion sb-sidenav-dark full-height" id="sidenavAccordion">
 			<div class="sb-sidenav-menu">
 				<div class="nav"><!--sec:authorize="hasAnyAuthority('VIEW_REGULATORS', 'VIEW_OPERATORS')"-->
 					<div class="sb-sidenav-menu-heading">Core</div>
@@ -9,48 +9,72 @@
 						<div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
 						Dashboard</a>
 					<div class="sb-sidenav-menu-heading">Management</div>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')" th:href="@{/users/get?role=ISW_ADMIN}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
-						Administrators</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_REGULATORS')" th:href="@{/users/get?role=REGULATOR}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
-						Regulators</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_OPERATORS')" th:href="@{/users/get?role=OPERATOR}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-container-storage"></i></div>
-						Operators</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_AGENTS')" th:href="@{/users/get?role=AGENT}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
-						Agents</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLE_OWNERS')" th:href="@{/users/get?role=VEHICLE_OWNER}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
-						Vehicle Owners</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_WALLETS')" th:href="@{/wallets/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
-					Wallets</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_CARDS')" th:href="@{/cards/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
-					Cards</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLES')" th:href="@{/vehicles/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
-						Vehicles</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_TERMINALS')" th:href="@{/terminals/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-container-storage"></i></div>
-						Terminals</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_ROUTES')" th:href="@{/routes/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
-						Routes</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_DEVICES')" th:href="@{/devices/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
-						Devices</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')" th:href="@{/transactions/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-						Transactions</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')" th:href="@{/settlements/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-						Settlements</a>
-					<a class="nav-link" sec:authorize="hasAuthority('VIEW_CONFIGURATIONS')" th:href="@{/configurations/get}" href="#">
-						<div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
-						Settings</a>
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser"
+					><div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+						User Management
+						<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
+						></a>
+					<div class="collapse" id="collapseUser" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+						<nav class="sb-sidenav-menu-nested nav">
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')" th:href="@{/users/get?role=ISW_ADMIN}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
+								Administrators</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_REGULATORS')" th:href="@{/users/get?role=REGULATOR}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
+								Regulators</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_OPERATORS')" th:href="@{/users/get?role=OPERATOR}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-container-storage"></i></div>
+								Operators</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_AGENTS')" th:href="@{/users/get?role=AGENT}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
+								Agents</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLE_OWNERS')" th:href="@{/users/get?role=VEHICLE_OWNER}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
+								Vehicle Owners</a>
+						</nav>
+					</div>
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAsset" aria-expanded="false" aria-controls="collapseAsset"
+					><div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+						Asset Management
+						<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
+						></a>
+					<div class="collapse" id="collapseAsset" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+						<nav class="sb-sidenav-menu-nested nav">
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_CARDS')" th:href="@{/cards/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
+								Cards</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLES')" th:href="@{/vehicles/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
+								Vehicles</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_TERMINALS')" th:href="@{/terminals/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-container-storage"></i></div>
+								Terminals</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_ROUTES')" th:href="@{/routes/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
+								Routes</a>
+							<a class="nav-link" C th:href="@{/devices/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
+								Devices</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_CONFIGURATIONS')" th:href="@{/configurations/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+								Settings</a>
+						</nav>
+					</div>
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory"
+					><div class="sb-nav-link-icon"><i class="fas fa-history"></i></div>
+						History
+						<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
+						></a>
+					<div class="collapse" id="collapseHistory" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+						<nav class="sb-sidenav-menu-nested nav">
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')" th:href="@{/transactions/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+								Transactions</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')" th:href="@{/settlements/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+								Settlements</a>
+						</nav>
+					</div>
 				</div>
 			</div>
 			<div class="sb-sidenav-footer">

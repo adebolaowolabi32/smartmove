@@ -14,12 +14,18 @@ public class Terminal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(unique=true)
     private String name;
+
+    @Enumerated(EnumType.STRING)
     private Enum.TransportMode type;
+
     private String location;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
-    private boolean isActive;
+
+    private boolean enabled;
 }

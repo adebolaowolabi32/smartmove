@@ -20,6 +20,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findAllByParent(User parent);
     List<User> findAllByRoleAndParent(Enum.Role type, User parent);
     Long countByRole(Enum.Role role);
+    Long countByRoleAndParent(Enum.Role role, User user);
     Page<User> findAll(Pageable pageable);
     List<User> findAll();
 }
