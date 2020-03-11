@@ -31,12 +31,6 @@
         <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
-            <configuration>
-                <executable>true</executable>
-                <profiles>
-                    <profile>dev</profile>
-                </profiles>
-            </configuration>
         </plugin>
         <plugin>
             <groupId>org.sourceforge.fortify</groupId>
