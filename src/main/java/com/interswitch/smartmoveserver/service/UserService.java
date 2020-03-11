@@ -60,6 +60,16 @@ public class UserService {
         else userRepository.save(user);
     }
 
+    public void saveAdmin(User user) {
+        Optional<User> exists = userRepository.findByUsername(user.getUsername());
+        if (exists.isPresent()) return;
+            //iswCoreService.createUser(user);
+        else {
+            passportService.createUser(user);
+            userRepository.save(user);
+        }
+    }
+
     public User save(User user, Principal principal) {
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");

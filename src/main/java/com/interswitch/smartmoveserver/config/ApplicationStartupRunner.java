@@ -28,7 +28,7 @@ public class ApplicationStartupRunner implements CommandLineRunner {
         adminUser.setAddress("Lagos Nigeria");
         adminUser.setRole(Enum.Role.ISW_ADMIN);
         adminUser.setEnabled(true);
-        userService.save(adminUser);
+        userService.saveAdmin(adminUser);
         logger.info("System Administrator created successfully!");
 
         User user = new User();
