@@ -26,10 +26,12 @@ public class User {
 
     private String address;
 
-    @Column(unique=true)
+    //@Column(unique=true)
+    //add non null unique constraint
     private String mobileNo;
 
-    @Column(unique=true)
+    //@Column(unique=true)
+    //add non null unique constraint
     private String email;
 
     @Enumerated(EnumType.STRING)

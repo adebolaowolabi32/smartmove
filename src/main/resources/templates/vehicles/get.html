@@ -28,7 +28,9 @@
 					<th>Type</th>
 					<th>Owner</th>
 					<th>Device</th>
+<!--
 					<th>Route</th>
+-->
 					<th>View Details</th>
 					<th>Remove</th>
 				</tr>
@@ -41,7 +43,9 @@
 					<td th:text="${vehicle.type}"></td>
 					<td th:text="${vehicle.owner != null ? vehicle.owner.username : ''}"></td>
 					<td th:text="${vehicle.device != null ? vehicle.device.name : ''}"></td>
+<!--
 					<td th:text="${vehicle.route != null ? vehicle.route.name : ''}"></td>
+-->
 					<td>
 						<a class="justify-content-center" th:href="@{/vehicles/details/{id}(id=${vehicle.id})}">
 							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>

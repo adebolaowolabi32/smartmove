@@ -3,6 +3,8 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.helper.JwtHelper;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.ViewResponse;
+import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,40 +57,52 @@ public class UserService {
     public void save(User user) {
         Optional<User> exists = userRepository.findByUsername(user.getUsername());
         if (exists.isPresent()) return;
-        //passportService.createUser(user);
-        //iswCoreService.createUser(user);
-        else userRepository.save(user);
-    }
-
-    public void saveAdmin(User user) {
-        Optional<User> exists = userRepository.findByUsername(user.getUsername());
-        if (exists.isPresent()) return;
-            //iswCoreService.createUser(user);
         else {
-            passportService.createUser(user);
+            PassportUser passportUser = passportService.findUserByUsername(user.getUsername());
+            if(passportUser == null) passportUser = passportService.createUser(user);
+            user.setUsername(passportUser.getUsername());
+            user.setPassword(passportUser.getPassword());
+            //iswCoreService.createUser(user);
             userRepository.save(user);
         }
     }
 
     public User save(User user, Principal principal) {
+        ViewResponse response = new ViewResponse();
+        //if user role is admin, user.owner must be null
+        //else must have value
+        //if principal is admin user.owner must be populated
+        //if not, bounce request
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+        //iswCoreService.createUser(user);
+        PassportUser passportUser = passportService.findUserByUsername(user.getEmail());
+        if(passportUser == null) {
+            passportUser = passportService.createUser(user);
+            save(passportUser, user, principal);
+            response.setMessage(user.getRole().toString().toLowerCase() + " saved successfully");
+        }
+        else{
+            save(passportUser, user, principal);
+            response.setError("User already exists. Kindly ask user to login with their Quickteller credentials");
+        }
+        return user;
+    }
+
+    private void save(PassportUser passportUser, User user, Principal principal){
         Enum.Role role = user.getRole();
         user.setParent(null);
-        if(!role.equals(Enum.Role.ISW_ADMIN)){
+        if(!role.equals(Enum.Role.ISW_ADMIN)) {
             Optional<User> parent = userRepository.findByUsername(principal.getName());
             if(parent.isPresent()) user.setParent(parent.get());
         }
-        //passportService.createUser(user);
-        user.setUsername(user.getEmail());
-        user.setPassword(null);
-        //iswCoreService.createUser(user);
+        user.setUsername(passportUser.getUsername());
+        user.setPassword(passportUser.getPassword());
         userRepository.save(user);
         if(role.equals(Enum.Role.AGENT)){
             walletService.autoCreateForUser(user);
             cardService.autoCreateForUser(user);
         }
-        return user;
     }
 
     public User findById(long id) {
@@ -177,5 +191,12 @@ public class UserService {
 
     public Long countByRoleAndParent(Enum.Role role, User parent){
         return userRepository.countByRoleAndParent(role, parent);
+    }
+
+    private boolean isOwnedEntity(Enum.Role role) {
+        if(role == Enum.Role.ISW_ADMIN) {
+            return true;
+        }
+        return false;
     }
 }

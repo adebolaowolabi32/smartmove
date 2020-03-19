@@ -29,10 +29,6 @@
     <finalName>${project.artifactId}</finalName>
     <plugins>
         <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-        </plugin>
-        <plugin>
             <groupId>org.sourceforge.fortify</groupId>
             <artifactId>fortify-plugin</artifactId>
             <version>${fortify-plugin.version}</version>

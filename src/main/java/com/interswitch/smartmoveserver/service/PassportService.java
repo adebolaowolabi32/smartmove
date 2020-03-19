@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.request.PassportUser;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,17 +39,21 @@ public class PassportService {
     @Autowired
     APIRequestClient apiRequestClient;
 
-    public User createUser(User user){
+    public PassportUser createUser(User user){
+        PassportUser passportUser = buildUser(user);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-        return apiRequestClient.Process(user, headers, null, userUrl, HttpMethod.POST, User.class).getBody();
+        return retrievePassportUser(apiRequestClient.Process(passportUser, headers, null, userUrl, HttpMethod.POST, Object.class).getBody());
     }
 
-    public User getUserByUsername(String username){
-        Object[] params = new Object[]{username};
-        ResponseEntity response = apiRequestClient.Process(null, new HttpHeaders(),  params, userUrl, HttpMethod.GET, User.class);
-        return (User) response.getBody();
+    public PassportUser findUserByUsername(String username){
+        Map<String, String> variables = new HashMap<>();
+        variables.put("username", username);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
+        ResponseEntity response = apiRequestClient.Process(null, headers,  variables, userUrl + "/{username}", HttpMethod.GET, Object.class);
+        return retrievePassportUser(response.getBody());
     }
 
     public String getAccessToken(){
@@ -61,5 +70,29 @@ public class PassportService {
         ResponseEntity response = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, Object.class);
         Map<String, Object> resultToJson = (Map<String, Object>) response.getBody();
         return "Bearer " + resultToJson.get("access_token").toString();
+    }
+
+    private PassportUser buildUser(User user){
+        PassportUser passportUser = new PassportUser();
+        passportUser.setUsername(user.getUsername());
+        passportUser.setEmail(user.getEmail());
+        passportUser.setFirstName(user.getFirstName());
+        passportUser.setLastName(user.getLastName());
+        passportUser.setMobileNo(user.getMobileNo());
+        passportUser.setPassword(user.getPassword());
+        passportUser.setEnabled(user.isEnabled());
+        return passportUser;
+    }
+
+    private PassportUser retrievePassportUser(Object response){
+        PassportUser passportUser = null;
+        Map<String, Object> resultMap = (Map<String, Object>) response;
+        Object username = resultMap.get("username");
+        if(username != null){
+            passportUser = new PassportUser();
+            passportUser.setUsername(username.toString());
+            passportUser.setPassword(null);
+        }
+        return passportUser;
     }
 }

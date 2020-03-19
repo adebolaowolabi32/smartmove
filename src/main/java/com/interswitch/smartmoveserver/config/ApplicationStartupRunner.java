@@ -17,18 +17,18 @@ public class ApplicationStartupRunner implements CommandLineRunner {
     UserService userService;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         User adminUser = new User();
-        adminUser.setUsername("smart.move");
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
-        adminUser.setEmail("smart.move@interswitch.com");
-        adminUser.setMobileNo("0801234567");
+        adminUser.setUsername("smart.move13@interswitch.com");
+        adminUser.setPassword("Password123$");
+        adminUser.setEmail("smart.move13@interswitch.com");
         adminUser.setAddress("Lagos Nigeria");
         adminUser.setRole(Enum.Role.ISW_ADMIN);
         adminUser.setEnabled(true);
-        userService.saveAdmin(adminUser);
+        userService.save(adminUser);
         logger.info("System Administrator created successfully!");
 
         User user = new User();

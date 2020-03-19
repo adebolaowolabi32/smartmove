@@ -10,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configurable
 @Component
 public class APIRequestClient {
 
-    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -24,8 +26,8 @@ public class APIRequestClient {
                 .build();
     }
 
-    public <S, T> ResponseEntity<T> Process(S request, HttpHeaders headers, Object[] pathVariables, String requestUrl, HttpMethod method, Class<T> responseClass) {
-        if(pathVariables == null) pathVariables = new Object[0];
+    public <S, T> ResponseEntity<T> Process(S request, HttpHeaders headers, Map<String, String> pathVariables, String requestUrl, HttpMethod method, Class<T> responseClass) {
+        if(pathVariables == null) pathVariables = new HashMap<>();
         HttpEntity requestEntity = new HttpEntity(request, headers);
         ResponseEntity<T> responseEntity = restTemplate.exchange(requestUrl, method, requestEntity, responseClass, pathVariables);
         return responseEntity;
