@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.repository.DeviceRepository;
 import com.interswitch.smartmoveserver.repository.TransactionRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author adebola.owolabi
@@ -51,29 +50,12 @@ public class TransactionService {
         return transactionRepository.findAllByType(type);
     }
 
-    public List<Transaction> findBySender(long sender) {
-        Optional<User> user = userRepository.findById(sender);
-        if(user.isPresent())
-            return transactionRepository.findAllBySender(user.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sender does not exist");
+    public List<Transaction> findByAgent(String agentId) {
+        return transactionRepository.findAllByAgentId(agentId);
     }
 
-    public List<Transaction> findByRecipient(long recipient) {
-        Optional<User> user = userRepository.findById(recipient);
-        if(user.isPresent())
-            return transactionRepository.findAllByRecipient(user.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipient does not exist");
-    }
-
-    public List<Transaction> findByDevice(long deviceId) {
-        Optional<Device> device = deviceRepository.findById(deviceId);
-        if(device.isPresent())
-            return transactionRepository.findAllByDevice(device.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist");
-    }
-
-    public List<Transaction> findByCardNumber(String cardNumber) {
-        return transactionRepository.findAllByCard(new Card());
+    public List<Transaction> findByOperator(String operatorId) {
+        return transactionRepository.findAllByOperatorId(operatorId);
     }
 
     public Long countAll(){

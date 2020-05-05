@@ -14,11 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.lang.reflect.Field;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +26,7 @@ public class PassportService {
 
     @Value("${spring.application.passport.user-url}")
     private String userUrl;
-    @Value("${spring.security.oauth2.client.provider.passport.token-uri}")
+    @Value("${spring.application.passport.token-url}")
     private String tokenUrl;
     @Value("${spring.security.oauth2.client.registration.passport.client-id}")
     private String clientId;
@@ -45,6 +42,14 @@ public class PassportService {
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
         return retrievePassportUser(apiRequestClient.Process(passportUser, headers, null, userUrl, HttpMethod.POST, Object.class).getBody());
+    }
+
+    public PassportUser updateUser(User user){
+        PassportUser passportUser = buildUser(user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
+        return retrievePassportUser(apiRequestClient.Process(passportUser, headers, null, userUrl, HttpMethod.PUT, Object.class).getBody());
     }
 
     public PassportUser findUserByUsername(String username){

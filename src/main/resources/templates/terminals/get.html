@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" th:text="${title}">Terminals</title>
+<title th:fragment="title">Terminals</title>
 <div th:fragment="content" class="card mb-4">
-	<div class="card-header"><i class="fas fa-user mr-1"></i><span>Terminals</span></div>
+	<div class="card-header"><i class="fas fa-memory mr-1"></i><span>Terminals</span></div>
 	<div class="card-body">
 		<div class="table-wrapper">
 			<div class="table-title">
@@ -13,20 +13,22 @@
 					<div class="col-sm-4">
 						<div class="row">
 							<a href="#" th:href="@{/terminals/create}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New</a>
-							<a href="#" ccardlass="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
+							<a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
 							<a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{terminal.deleted.message} : false)"></div>
+			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
 				<thead class='thead-light'>
 				<tr>
 					<th>Id</th>
 					<th>Name</th>
-					<th>Type</th>
+					<th>Transport Mode</th>
 					<th>Owner</th>
-					<th>Location</th>
+					<th>Active</th>
 					<th>View Details</th>
 					<th>Remove</th>
 				</tr>
@@ -37,7 +39,12 @@
 					<td th:text="${terminal.name}"></td>
 					<td th:text="${terminal.type}"></td>
 					<td th:text="${terminal.owner != null ? terminal.owner.username : ''}"></td>
-					<td th:text="${terminal.location}"></td>
+					<td>
+						<label class="switch">
+							<input type="checkbox" id="enabled" name="enabled" th:checked="${terminal.enabled}" disabled>
+							<span class="slider round"></span>
+						</label>
+					</td>
 					<td>
 						<a class="justify-content-center" th:href="@{/terminals/details/{id}(id=${terminal.id})}">
 							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>

@@ -43,7 +43,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control input-lg" placeholder="First Name"
                                id="firstName" name="firstName" th:field="*{firstName}"
-                               required="required"
+                               required
                                data-parsley-required-message="Please provide your first name"
                                data-parsley-length="[3, 40]"
                                data-parsley-length-message="Please provide a name between 3 and 40 characters long" />
@@ -56,7 +56,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control input-lg" placeholder="Last Name"
                                id="lastName" name="lastName" th:field="*{lastName}"
-                               required="required"
+                               required
                                data-parsley-required-message="Please provide your last name"
                                data-parsley-length="[3, 40]"
                                data-parsley-length-message="Please provide a name between 3 and 40 characters long" />
@@ -96,7 +96,7 @@
                     <div class="form-group">
                         <input type="password" class="form-control input-lg strengthify" placeholder="Password"
                                id="password" name="password" th:field="*{password}"
-                               required="required"
+                               required
                                data-parsley-required-message="Please provide a password" />
 
                         <p class="small text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
@@ -107,7 +107,7 @@
                     <div class="form-group">
                         <input type="password" class="form-control input-lg" placeholder="Confirm Password"
                                id="confirmPassword" name="confirmPassword" th:field="*{confirmPassword}"
-                               required="required"
+                               required
                                data-parsley-required-message="Please confirm your password"
                                data-parsley-equalto="#password"
                                data-parsley-equalto-message="Confirm password does not match provided password" />

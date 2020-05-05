@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" th:text="${title}">Vehicles</title>
+<title th:fragment="title">Vehicles</title>
 <div th:fragment="content" class="card mb-4">
-	<div class="card-header"><i class="fas fa-user mr-1"></i><span>Vehicles</span></div>
+	<div class="card-header"><i class="fas fa-bus mr-1"></i><span>Vehicles</span></div>
 	<div class="card-body">
 		<div class="table-wrapper">
 			<div class="table-title">
@@ -19,18 +19,17 @@
 					</div>
 				</div>
 			</div>
+			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{vehicle.deleted.message} : false)"></div>
+			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
 				<thead class='thead-light'>
 				<tr>
 					<th>Id</th>
 					<th>Name</th>
-					<th>Vehicle Registration Number</th>
-					<th>Type</th>
+					<th>Registration Number</th>
+					<th>Transport Mode</th>
 					<th>Owner</th>
-					<th>Device</th>
-<!--
-					<th>Route</th>
--->
+					<th>Active</th>
 					<th>View Details</th>
 					<th>Remove</th>
 				</tr>
@@ -42,10 +41,12 @@
 					<td th:text="${vehicle.regNo}"></td>
 					<td th:text="${vehicle.type}"></td>
 					<td th:text="${vehicle.owner != null ? vehicle.owner.username : ''}"></td>
-					<td th:text="${vehicle.device != null ? vehicle.device.name : ''}"></td>
-<!--
-					<td th:text="${vehicle.route != null ? vehicle.route.name : ''}"></td>
--->
+					<td>
+						<label class="switch">
+							<input type="checkbox" id="enabled" name="enabled" th:checked="${vehicle.enabled}" disabled>
+							<span class="slider round"></span>
+						</label>
+					</td>
 					<td>
 						<a class="justify-content-center" th:href="@{/vehicles/details/{id}(id=${vehicle.id})}">
 							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>

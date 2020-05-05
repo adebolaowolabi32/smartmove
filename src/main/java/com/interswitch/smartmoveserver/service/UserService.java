@@ -1,11 +1,12 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.helper.JwtHelper;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.ViewResponse;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.repository.UserRepository;
+import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,24 +38,28 @@ public class UserService {
 
     @Autowired
     CardService cardService;
-    @Autowired
-    private JwtHelper jwtHelper;
 
-    public List<User> getAll() {
+    @Autowired
+    private SecurityUtil securityUtil;
+
+    @Autowired
+    private PageUtil pageUtil;
+
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public Page<User> getAllPaginated(int page, int size) {
+    public Page<User> findAll(int page, int size) {
         PageRequest pageable = PageRequest.of(page - 1, size);
         return userRepository.findAll(pageable);
     }
 
-    public Page<User> findByRolePaginated(int page, int size, Enum.Role role) {
+    public Page<User> findAllByRole(int page, int size, Enum.Role role) {
         PageRequest pageable = PageRequest.of(page - 1, size);
         return userRepository.findAllByRole(pageable, role);
     }
 
-    public void save(User user) {
+    public void setUp(User user) {
         Optional<User> exists = userRepository.findByUsername(user.getUsername());
         if (exists.isPresent()) return;
         else {
@@ -67,12 +72,13 @@ public class UserService {
         }
     }
 
+    //if user role is admin, user.owner must be null
+    //else must have value
+    //if principal is admin user.owner must be populated
+    //if not, bounce request
+
     public User save(User user, Principal principal) {
         ViewResponse response = new ViewResponse();
-        //if user role is admin, user.owner must be null
-        //else must have value
-        //if principal is admin user.owner must be populated
-        //if not, bounce request
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //iswCoreService.createUser(user);
@@ -89,12 +95,12 @@ public class UserService {
         return user;
     }
 
-    private void save(PassportUser passportUser, User user, Principal principal){
+    private User save(PassportUser passportUser, User user, Principal principal){
         Enum.Role role = user.getRole();
-        user.setParent(null);
+        user.setOwner(null);
         if(!role.equals(Enum.Role.ISW_ADMIN)) {
-            Optional<User> parent = userRepository.findByUsername(principal.getName());
-            if(parent.isPresent()) user.setParent(parent.get());
+            Optional<User> owner = userRepository.findByUsername(principal.getName());
+            if(owner.isPresent()) user.setOwner(owner.get());
         }
         user.setUsername(passportUser.getUsername());
         user.setPassword(passportUser.getPassword());
@@ -103,6 +109,7 @@ public class UserService {
             walletService.autoCreateForUser(user);
             cardService.autoCreateForUser(user);
         }
+        return user;
     }
 
     public User findById(long id) {
@@ -113,17 +120,10 @@ public class UserService {
         return userRepository.findAllByRole(role);
     }
 
-    public List<User> findByParent(long parent) {
-        Optional<User> user = userRepository.findById(parent);
+    public List<User> findByOwner(long owner) {
+        Optional<User> user = userRepository.findById(owner);
         if(user.isPresent())
-            return userRepository.findAllByParent(user.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
-    }
-
-    public List<User> findAllByRoleAndParent(long parent, Enum.Role role) {
-        Optional<User> optionalUser = userRepository.findById(parent);
-        if(optionalUser.isPresent())
-            return userRepository.findAllByRoleAndParent(role, optionalUser.get());
+            return userRepository.findAllByOwner(user.get());
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
@@ -135,18 +135,34 @@ public class UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
-    }
-    public User findByMobile(String mobile) {
-        return userRepository.findByMobileNo(mobile).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
+    public User findOrCreateUser(Principal principal) {
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if(user.isPresent()) {
+            return user.get();
+        }
+        PassportUser passportUser = passportService.findUserByUsername(principal.getName());
+        if(passportUser == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in principal does not exist");
+        }
+        else{
+            User user1 = new User();
+            //TODO:: change ISW_ADMIN
+            user1.setRole(Enum.Role.ISW_ADMIN);
+            return save(passportUser, user1, principal);
+        }
     }
 
     public User update(User user) {
         Optional<User> existing = userRepository.findById(user.getId());
         if(existing.isPresent())
         {
-            user.setUsername(user.getEmail());
+            User existingUser = existing.get();
+            user.setRole(existingUser.getRole());
+            user.setOwner(existingUser.getOwner());
+            user.setPassword(null);
+            //TODO:: Passport update user requires user credentials
+           /* PassportUser passportUser = passportService.updateUser(user);
+            user.setUsername(passportUser.getUsername());*/
             return userRepository.save(user);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
@@ -159,10 +175,6 @@ public class UserService {
         else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
         }
-    }
-
-    public List<User> getAllNext(Enum.Role type, User parent) {
-        return userRepository.findAllByRoleAndParent(type, parent);
     }
 
     public void activate(long userId) {
@@ -189,14 +201,34 @@ public class UserService {
         return userRepository.countByRole(role);
     }
 
-    public Long countByRoleAndParent(Enum.Role role, User parent){
-        return userRepository.countByRoleAndParent(role, parent);
+    public Long countByRoleAndOwner(User user, Enum.Role role){
+        return userRepository.countByRoleAndOwner(role, user);
     }
 
-    private boolean isOwnedEntity(Enum.Role role) {
-        if(role == Enum.Role.ISW_ADMIN) {
-            return true;
+    public Page<User> findAllByRole(Principal principal, long owner, Enum.Role role, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if(!user.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist");
+
+            return userRepository.findAllByRole(pageable, role);
+
+
+      /*  if(owner == 0) {
+            return userRepository.findAllByRoleAndOwner(pageable, role, user.get());
         }
-        return false;
+        else {
+            if(securityUtil.isOwnedEntity(role))
+                if(securityUtil.isOwner(principal, owner)){
+                    return userRepository.findAllByRoleAndOwner(pageable, role, user.get());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }*/
     }
+    public User findById(Principal principal, long id) {
+        if(securityUtil.isOwner(principal, id))
+            return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
+        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+    }
+
 }

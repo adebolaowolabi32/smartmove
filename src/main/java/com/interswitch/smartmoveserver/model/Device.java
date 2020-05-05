@@ -3,7 +3,6 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 /**
  * @author adebola.owolabi
@@ -20,7 +19,7 @@ public class Device {
     private String name;
 
     @Column(unique=true)
-    private String deviceId = UUID.randomUUID().toString();
+    private String deviceId;
 
     @Enumerated(EnumType.STRING)
     private Enum.DeviceType type;

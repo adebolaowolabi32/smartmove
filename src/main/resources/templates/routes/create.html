@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" th:text="${title}">Users</title>
+<title th:fragment="title">Routes</title>
 <div th:fragment="content" class="card mb-4">
-	<div class="card-header"><i class="fas fa-user mr-1"></i>
+	<div class="card-header"><i class="fas fa-route mr-1"></i>
 		<span>Routes</span></div>
 	<div class="card-body">
 		<div class="table-title">
@@ -13,66 +13,60 @@
 
 			</div>
 		</div>
+		<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 		<form class="card p-3" action="#" method="post"
 			  th:action="@{/routes/create}" th:object="${route}"
 			  data-parsley-validate="true">
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="name">Name:</label>
+				<label class="control-label col-sm-2" for="type">Transport Mode</label>
 				<div class="col-sm-10">
-					<input class="form-control"
-						   id="name" name="name" th:field="*{name}"
-						   required="required"
-						   data-parsley-required-message="Please provide a route name"
-						   data-parsley-length="[3, 40]"
-						   data-parsley-length-message="Please provide a name between 3 and 40 characters long">
-					<p class="small text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="control-label col-sm-2" for="type">Route Type:</label>
-				<div class="col-sm-10">
-					<select class="form-control" th:field="*{type}"  id="type">
+					<select class="form-control" th:field="*{type}"  id="type" required>
 						<option value="">Select...</option>
 						<option value="BUS">Bus</option>
 						<option value="CAR">Car</option>
 						<option value="RAIL">Rail</option>
 						<option value="FERRY">Ferry</option>
-						<option value="RICKSHAW">Rickshaw</option>
 					</select></div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="start">Start Terminal:</label>
+				<label class="control-label col-sm-2" for="startTerminalId">Start Terminal</label>
 				<div class="col-sm-10">
-					<input class="form-control" th:field="*{start}" id="start">
-					<p class="small text-danger" th:if="${#fields.hasErrors('start')}" th:errors="*{start}"></p>
+					<select class="form-control" th:field="*{startTerminalId}" id="startTerminalId" required>
+						<option value="">Select...</option>
+						<option th:each="terminal : ${terminals}" th:value="${terminal.id}" th:text="${terminal != null ? terminal.name : ''}"></option>
+					</select>
+					<p class="small text-danger" th:if="${#fields.hasErrors('startTerminalId')}" th:errors="*{startTerminalId}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="stop">Stop Terminal:</label>
+				<label class="control-label col-sm-2" for="stopTerminalId">Stop Terminal</label>
 				<div class="col-sm-10">
-					<input class="form-control" th:field="*{stop}" id="stop">
-					<p class="small text-danger" th:if="${#fields.hasErrors('stop')}" th:errors="*{stop}"></p>
+					<select class="form-control" th:field="*{stopTerminalId}" id="stopTerminalId" required>
+						<option value="">Select...</option>
+						<option th:each="terminal : ${terminals}" th:value="${terminal.id}" th:text="${terminal != null ? terminal.name : ''}"></option>
+					</select>
+					<p class="small text-danger" th:if="${#fields.hasErrors('stopTerminalId')}" th:errors="*{stopTerminalId}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="price">Price:</label>
+				<label class="control-label col-sm-2" for="price">Price</label>
 				<div class="col-sm-10">
-					<input class="form-control" th:field="*{price}" id="price">
+					<input class="form-control" th:field="*{price}" id="price" required>
 					<p class="small text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="owner">Assign To Regulator </label>
+				<label class="control-label col-sm-2" for="owner">Owner</label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{owner}"  id="owner">
-						<option value=0>Select ...</option>
+					<select class="form-control" th:field="*{owner}"  id="owner" required>
+						<option value="">Select ...</option>
 						<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 					</select>
 					<p class="small text-danger" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="enabled">Active:</label>
+				<label class="control-label col-sm-2" for="enabled">Active</label>
 				<div class="col-sm-10">
 					<label class="switch">
 						<input type="checkbox" name="enabled" id="enabled">
@@ -83,17 +77,16 @@
 
 			<!--TODO:Multi select dropdown-->
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="vehicle">Assign Route To Vehicle </label>
+				<label class="control-label col-sm-2" for="vehicle">Assign Route To Vehicle</label>
 				<div class="col-sm-10">
 					<select class="form-control" name="vehicle" id="vehicle">
-						<option value=0 disabled>Select ...</option>
+						<option value="">Select...</option>
 						<option th:each="vehicle : ${vehicles}" th:value="${vehicle.id}" th:text="${vehicle != null ? vehicle.name : ''}"></option>
 					</select>
 				</div>
 			</div>
 			<button type="submit" class="btn btn-outline-info">Submit</button>
 		</form>
-		<div th:replace="fragments/alerts :: alerts"></div>
 	</div>
 </div>
 </html>

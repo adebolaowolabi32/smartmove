@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .and()
                 .oauth2Login()
-                .defaultSuccessUrl("/dashboard")
+                //.defaultSuccessUrl("/dashboard")
                 //.successHandler(userAuthoritiesMapper)
                 //.failureUrl()
                 .authorizationEndpoint()
@@ -97,9 +97,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
             authorities.forEach(authority -> {
-                if (OidcUserAuthority.class.isInstance(authority)) {
+                if (authority instanceof OidcUserAuthority) {
                     //
-                } else if (OAuth2UserAuthority.class.isInstance(authority)) {
+                } else if (authority instanceof OAuth2UserAuthority) {
                     OAuth2UserAuthority oauth2UserAuthority = (OAuth2UserAuthority)authority;
 
                     Map<String, Object> userAttributes = oauth2UserAuthority.getAttributes();

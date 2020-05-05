@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
-
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -58,17 +56,19 @@ public class VehicleRepositoryTests {
         });
     }
 
-    @Test
+   /* @Test
     public void testFindAll() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
         assertThat(vehicles.size()).isGreaterThanOrEqualTo(2);
-    }
+    }*/
 
+/*
     @Test
     public void testFindByOwner() {
         List<Vehicle> vehicles = vehicleRepository.findAllByOwner(savedVehicle.getOwner());
         assertThat(vehicles.size()).isGreaterThanOrEqualTo(1);
     }
+*/
 
 
     @After

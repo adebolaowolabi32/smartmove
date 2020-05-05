@@ -17,6 +17,7 @@
 						</div>
 					</div>
 				</div>
+				<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{user.saved.message} : (${updated} ? #{user.updated.message} : false))"></div>
 				<div class="card p-3">
 					  <div class="form-group row">
 						<label class="col-sm-2" for="firstName">First Name</label>
@@ -38,43 +39,97 @@
 							<div class="col-sm-10"><span id="mobileNo" th:text="${user.mobileNo}"></span></div>
 					  </div>
 
-					  <div class="form-group row" th:if="${user.role!='ISW_ADMIN'}">
-						  <label class="control-label col-sm-2" for="owner" > Assigned To Parent: </label>
+					  <div class="form-group row" th:if="${isOwned}">
+						  <label class="control-label col-sm-2" for="owner">Owner</label>
 							  <div class="col-sm-10">
-								<span id="owner" th:text="${user.parent != null ? user.parent.username : ''}"></span>
+								<span id="owner" th:text="${user.owner != null ? user.owner.username : ''}"></span>
 							  </div>
 					  </div>
-						<div class="form-group row">
+					<div class="form-group row" th:if="${isOwned}">
+						<label class="control-label col-sm-2" for="regulators">Regulators</label>
+						<div class="col-sm-10">
+							<a href="#" th:href="@{/users/get?role=REGULATOR}" id="regulators"  class="btn btn-info">
+								<span th:text="${regulators_no}"></span> Regulators <i class="fas fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+					<div class="form-group row" th:if="${isOwned}">
+						<label class="control-label col-sm-2" for="operators">Operators</label>
+						<div class="col-sm-10">
+							<a href="#" th:href="@{/users/get?role=OPERATOR}" id="operators"  class="btn btn-info">
+								<span th:text="${operators_no}"></span> Operators <i class="fas fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+					<div class="form-group row" th:if="${isOwned}">
+						<label class="control-label col-sm-2" for="agents">Agents</label>
+						<div class="col-sm-10">
+							<a href="#" th:href="@{/users/get?role=AGENT}" id="agents"  class="btn btn-info">
+								<span th:text="${agents_no}"></span> Agents <i class="fas fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+					  <div class="form-group row" th:if="${isOwned}">
+						  <label class="control-label col-sm-2" for="devices">Devices</label>
+						  <div class="col-sm-10">
+							  <a href="#" th:href="@{/devices/get}" id="devices"  class="btn btn-info">
+								  <span th:text="${devices_no}"></span> Devices <i class="fas fa-angle-right"></i>
+							  </a>
+						  </div>
+					  </div>
+					<div class="form-group row" th:if="${isOwned}">
+						<label class="control-label col-sm-2" for="cards">Cards</label>
+						<div class="col-sm-10">
+							<a href="#" th:href="@{/cards/get}" id="cards"  class="btn btn-info">
+								<span th:text="${cards_no}"></span> Cards <i class="fas fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+					<div class="form-group row" th:if="${isOwned}">
+						<label class="control-label col-sm-2" for="vehicles">Vehicles</label>
+						<div class="col-sm-10">
+							<a href="#" th:href="@{/vehicles/get}" id="vehicles"  class="btn btn-info">
+								<span th:text="${vehicles_no}"></span> Vehicles <i class="fas fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+					<div class="form-group row" th:if="${isOwned}">
+						<label class="control-label col-sm-2" for="terminals">Terminals</label>
+						<div class="col-sm-10">
+							<a href="#" th:href="@{/terminals/get}" id="terminals"  class="btn btn-info">
+								<span th:text="${terminals_no}"></span> Terminals <i class="fas fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+
+					<div class="form-group row" th:if="${isOwned}">
+						<label class="control-label col-sm-2" for="routes">Routes</label>
+						<div class="col-sm-10">
+							<a href="#" th:href="@{/routes/get}" id="routes"  class="btn btn-info">
+								<span th:text="${routes_no}"></span> Routes <i class="fas fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+
+					<div class="form-group row" th:if="${isOwned}">
+						<label class="control-label col-sm-2" for="routes">Transactions</label>
+						<div class="col-sm-10">
+							<a href="#" th:href="@{/transactions/get}" id="transactions"  class="btn btn-info">
+								<span th:text="${transactions_no}"></span> Transactions <i class="fas fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+
+
+					<div class="form-group row">
 							<label class="col-sm-2" for="enabled">Active</label>
 							<div class="col-sm-10">
 								<label class="switch">
-									<input type="checkbox" id="enabled" name="enabled" th:checked="${user.enabled}">
+									<input type="checkbox" id="enabled" name="enabled" th:checked="${user.enabled}" disabled>
 									<span class="slider round"></span>
 								</label>
 								</span></div>
 						</div>
-					  <!--<div class="form-group row">
-						  <label class="col-sm-2" for="device">Devices:</label>
-							  <div class="col-sm-10" id="device">
-									<div class="form-group row" th:each="device : ${devices}">
-										<span class="col-sm-3"th:text="${device.name} "></span>
-										<a th:href="@{/devices/details/{id}(id=${device.id})}">
-											<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
-										</a>
-									</div>
-								</div>
-					  </div>-->
-					<!--<div class="form-group row">
-						<label class="col-sm-2" for="vehicle">Vehicles:</label>
-						<div class="col-sm-10" id="vehicle">
-							<div class="form-group row" th:each="vehicle : ${vehicles}">
-								<span class="col-sm-3"th:text="${vehicle.name} "></span>
-								<a th:href="@{/vehicles/details/{id}(id=${vehicle.id})}">
-									<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
-								</a>
-							</div>
-						</div>
-					</div>-->
 				</div>
 			</div>
 		</div>

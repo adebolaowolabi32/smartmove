@@ -18,7 +18,7 @@ public class Wallet {
     @OneToOne
     private User owner;
 
-    private double balance;
+    private double balance = 0;
 
     private boolean enabled;
 }

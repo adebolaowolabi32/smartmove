@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" th:text="${title}">Configurations</title>
+<title th:fragment="title">Configurations</title>
 <div th:fragment="content" class="card mb-4">
-	<div class="card-header"><i class="fas fa-user mr-1"></i><span>Configurations</span></div>
+	<div class="card-header"><i class="fas fa-cogs mr-1"></i><span>Configurations</span></div>
 	<div class="card-body">
 		<div class="table-wrapper">
 			<div class="table-title">
@@ -19,13 +19,14 @@
 					</div>
 				</div>
 			</div>
+			<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{config.saved.message} : (${updated} ? #{config.updated.message} : (${deleted} ? #{config.deleted.message} : false)))"></div>
+			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
 				<thead class='thead-light'>
 				<tr>
 					<th>Id</th>
 					<th>Name</th>
 					<th>Value</th>
-					<th>View Details</th>
 					<th>Remove</th>
 				</tr>
 				</thead>
@@ -34,11 +35,6 @@
 					<td th:text="${configuration.id}"></td>
 					<td th:text="${configuration.name}"></td>
 					<td th:text="${configuration.value}"></td>
-					<td>
-						<a class="justify-content-center" th:href="@{/configurations/details/{id}(id=${configuration.id})}">
-							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
-						</a>
-					</td>
 					<td>
 						<a class="justify-content-center" th:href="@{/configurations/delete/{id}(id=${configuration.id})}">
 							<button type='button' class='btn btn-danger'><i class='far fa-trash-alt'></i></button>

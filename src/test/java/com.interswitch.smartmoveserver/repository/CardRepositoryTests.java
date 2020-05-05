@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDate;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
@@ -40,14 +41,14 @@ public class CardRepositoryTests {
         userRepository.save(user);
         card.setOwner(user);
         card.setType(Enum.CardType.AGENT);
-        card.setExpiry(LocalDate.now());
+        card.setExpiry(Date.from(Instant.MAX));
         card.setBalance(10000);
         card.setEnabled(false);
         Card card1 = new Card();
         card1.setPan("0123458789012345");
         card1.setOwner(user);
         card1.setType(Enum.CardType.EMV);
-        card1.setExpiry(LocalDate.now());
+        card1.setExpiry(Date.from(Instant.MAX));
         card1.setBalance(32000000);
         card1.setEnabled(true);
         assertNotNull(cardRepository.save(card1));

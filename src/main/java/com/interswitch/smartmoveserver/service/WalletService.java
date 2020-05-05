@@ -45,8 +45,12 @@ public class WalletService {
     public Wallet findByOwner(String owner) {
         Optional<User> user = userRepository.findByUsername(owner);
         if(user.isPresent())
-            return walletRepository.findByOwner(user.get()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist"));;
+            return this.findByOwner(user.get());
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
+    }
+
+    public Wallet findByOwner(User user) {
+        return walletRepository.findByOwner(user).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist"));
     }
 
     public Wallet update(Wallet wallet) {

@@ -38,8 +38,8 @@ public class User {
     private Enum.Role role;
 
     @ManyToOne
-    @JoinColumn(name="parent_id")
-    private User parent;
+    @JoinColumn(name="owner_id")
+    private User owner;
 
     private boolean enabled;
 }

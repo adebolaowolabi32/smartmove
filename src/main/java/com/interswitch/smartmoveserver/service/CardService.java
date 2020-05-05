@@ -11,7 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,7 +47,7 @@ public class CardService {
     public Card autoCreateForUser(User user){
         Card card = new Card();
         card.setPan(UUID.randomUUID().toString());
-        card.setExpiry(LocalDate.now ().plusYears(3));
+        card.setExpiry(Date.from(Instant.MAX));
         card.setOwner(user);
         card.setBalance(0);
         card.setEnabled(true);
@@ -64,7 +65,7 @@ public class CardService {
     public Card findByOwner(long owner) {
         Optional<User> user = userRepository.findById(owner);
         if(user.isPresent())
-            return cardRepository.findByOwner(user.get()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));;
+            return cardRepository.findByOwner(user.get()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
@@ -121,5 +122,9 @@ public class CardService {
 
     public Long countAll(){
         return cardRepository.count();
+    }
+
+    public long countByOwner(User user){
+        return cardRepository.countByOwner(user);
     }
 }

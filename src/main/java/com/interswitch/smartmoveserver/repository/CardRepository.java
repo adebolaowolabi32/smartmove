@@ -16,4 +16,5 @@ public interface CardRepository extends CrudRepository<Card, Long> {
     Optional<Card> findByOwner(User owner);
     Page<Card> findAll(Pageable pageable);
     List<Card> findAll();
+    Long countByOwner(User owner);
 }

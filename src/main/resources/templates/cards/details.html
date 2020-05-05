@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" th:text="${title}">Cards</title>
+<title th:fragment="title">Cards</title>
 <div th:fragment="content" class="card mb-4">
-	<div class="card-header"><i class="fas fa-card mr-1"></i><span th:text="${title}">Cards</span></div>
+	<div class="card-header"><i class="fas fa-credit-card mr-1"></i><span>Cards</span></div>
 	<div class="card-body">
 		<div class="table-wrapper">
 			<div class="table-title">
 				<div class="row">
 					<div class="col-sm-4">
-						<h2><b>View <span th:text="${title}">Card</span></b></h2>
+						<h2><b>Card Details</b></h2>
 					</div>
 					<div class="col-sm-8">
 						<a th:href="@{/cards/update/{id}(id=${card.id})}">
@@ -17,36 +17,37 @@
 					</div>
 				</div>
 			</div>
+			<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{card.saved.message} : (${updated} ? #{card.updated.message} : false))"></div>
 			<div class="card p-3">
 				<div class="form-group row">
-					<label class="col-sm-2" for="type">Card Type:</label>
+					<label class="col-sm-2" for="type">Type</label>
 					<div class="col-sm-10">
 						<span id="type" th:text="${card.type}"></span></div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2" for="pan">Card Pan:</label>
+					<label class="col-sm-2" for="pan">Pan</label>
 					<div class="col-sm-10">
 						<span id="pan" th:text="${card.pan}"></span></div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2" for="expiry">Card Expiry:</label>
+					<label class="col-sm-2" for="expiry">Expiry Date</label>
 					<div class="col-sm-10">
 						<span id="expiry" th:text="${card.expiry}"></span></div>
 				</div>
 				<div class="form-group row">
-					<label class="control-label col-sm-2" for="owner">Assigned to:</label>
+					<label class="control-label col-sm-2" for="owner">Owner</label>
 					<div class="col-sm-10">
 						<span id="owner" th:text="${card.owner != null ? card.owner.username : ''}"></span></div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2" for="balance">Card Balance:</label>
+					<label class="col-sm-2" for="balance">Balance</label>
 					<div class="col-sm-10"><span id="balance" th:text="${card.balance}"></span></div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2" for="enabled">Active:</label>
+					<label class="col-sm-2" for="enabled">Active</label>
 					<div class="col-sm-10">
 						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${card.enabled}">
+							<input type="checkbox" id="enabled" name="enabled" th:checked="${card.enabled}" disabled>
 							<span class="slider round"></span>
 						</label>
 					</div>

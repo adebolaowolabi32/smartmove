@@ -1,23 +1,20 @@
 package com.interswitch.smartmoveserver.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
+
 /**
  * @author adebola.owolabi
  */
 @Configuration
 public class RestTemplateConfig {
 
-/*
-    @Autowired
+/*    @Autowired
     HttpComponentsClientHttpRequestFactory httpRequestFactory;
 
     @Autowired
     HttpClient httpClient;
-*/
 
-   /* @Bean
+ @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
         List<HttpMessageConverter<?>> converters = restTemplate.getMessageConverters();
@@ -35,10 +32,5 @@ public class RestTemplateConfig {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         clientHttpRequestFactory.setHttpClient(httpClient);
         return clientHttpRequestFactory;
-    }
-*/
-   @Bean
-   public RestTemplate restTemplate() {
-       return new RestTemplate();
-   }
+    }*/
 }

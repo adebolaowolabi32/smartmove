@@ -3,7 +3,7 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * @author adebola.owolabi
@@ -23,7 +23,7 @@ public class Card {
     @Column(unique=true)
     private String pan;
 
-    private LocalDate expiry;
+    private Date expiry;
 
     @Enumerated(EnumType.STRING)
     private Enum.CardType type;

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<title th:fragment="title" th:text="${title}">Cards</title>
+	<title th:fragment="title">Cards</title>
 	<div th:fragment="content" class="card mb-4">
-		<div class="card-header"><i class="fas fa-user mr-1"></i>
+		<div class="card-header"><i class="fas fa-credit-card mr-1"></i>
 			<span>Cards</span></div>
 		<div class="card-body">
 			<div class="table-title">
@@ -13,26 +13,30 @@
 
 				</div>
 			</div>
+
+			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 			<form class="card p-3" action="#" method="post"
 				  th:action="@{/cards/create}" th:object="${card}"
 				  data-parsley-validate="true">
 				<div class="form-group row">
-					<label class="control-label col-sm-2" for="type">Card Type:</label>
+					<label class="control-label col-sm-2" for="type">Type</label>
 					<div class="col-sm-10">
-						<select class="form-control" th:field="*{type}"  id="type">
+						<select class="form-control" th:field="*{type}"  id="type"
+								required>
 							<option value="">Select...</option>
 							<option value="AGENT">Agent</option>
-							<option value="PASSENGER">Passenger</option>
+							<option value="COMMUTER">Commuter</option>
 							<option value="DRIVER">Driver</option>
-						</select></div>
+						</select>
+						<p class="small text-danger" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></p>
+					</div>
 
 				</div>
 				<div class="form-group row">
-					<label class="control-label col-sm-2" for="pan">Card Pan:</label>
+					<label class="control-label col-sm-2" for="pan">Pan</label>
 					<div class="col-sm-10">
-						<input class="form-control"
-					   id="pan" name="pan" th:field="*{pan}"
-					   required="required"
+						<input class="form-control" id="pan" name="pan" th:field="*{pan}"
+					   required
 					   data-parsley-required-message="Please provide card number"
 					   data-parsley-length="[3, 40]"
 					   data-parsley-length-message="Please provide a number between 3 and 25 digits long">
@@ -40,20 +44,20 @@
 					</div>
 			</div>
 			  <div class="form-group row">
-				<label class="control-label col-sm-2" for="expiry">Expiry Date:</label>
+				<label class="control-label col-sm-2" for="expiry">Expiry Date</label>
 					<div class="col-sm-10">
-						<input class="form-control"
+						<input class="form-control" type="date"
 							   id="expiry" name="expiry" th:field="*{expiry}"
-							   required="required"
+							   required
 							   data-parsley-required-message="Please provide card expiry">
 						<p class="small text-danger" th:if="${#fields.hasErrors('expiry')}" th:errors="*{expiry}"></p>
 					</div>
 			  </div>
 				<div class="form-group row">
-					<label class="control-label col-sm-2" for="owner">Assign To Agent </label>
+					<label class="control-label col-sm-2" for="owner">Owner</label>
 					<div class="col-sm-10">
 						<select class="form-control" th:field="*{owner}"  id="owner">
-							<option value=0 >Select ...</option>
+							<option value="">Select...</option>
 							<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 						</select>
 						<p class="small text-danger" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></p>
@@ -70,7 +74,6 @@
 				</div>
 					<button type="submit" class="btn btn-outline-info">Submit</button>
 			</form>
-			<div th:replace="fragments/alerts :: alerts"></div>
 		</div>
 	</div>
 </html>

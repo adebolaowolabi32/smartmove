@@ -17,10 +17,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Page<User> findAllByRole(Pageable pageable, Enum.Role role);
     List<User> findAllByRole(Enum.Role role);
-    List<User> findAllByParent(User parent);
-    List<User> findAllByRoleAndParent(Enum.Role type, User parent);
+    List<User> findAllByOwner(User owner);
+    List<User> findAllByRoleAndOwner(Enum.Role type, User owner);
     Long countByRole(Enum.Role role);
-    Long countByRoleAndParent(Enum.Role role, User user);
+    Long countByRoleAndOwner(Enum.Role role, User user);
     Page<User> findAll(Pageable pageable);
+    Page<User> findAllByRoleAndOwner(Pageable pageable, Enum.Role role, User owner);
     List<User> findAll();
 }

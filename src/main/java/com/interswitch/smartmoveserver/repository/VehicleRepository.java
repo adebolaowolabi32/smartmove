@@ -18,5 +18,4 @@ public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
     Page<Vehicle> findAllByOwner(Pageable pageable, User owner);
     Long countByOwner(User owner);
     Page<Vehicle> findAll(Pageable pageable);
-    List<Vehicle> findAll();
 }

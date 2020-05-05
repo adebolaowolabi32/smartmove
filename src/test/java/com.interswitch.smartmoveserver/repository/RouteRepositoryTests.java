@@ -26,6 +26,9 @@ public class RouteRepositoryTests {
     private RouteRepository routeRepository;
 
     @Autowired
+    private TerminalRepository terminalRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     private Route route;
@@ -33,22 +36,34 @@ public class RouteRepositoryTests {
 
     @Before
     public void setUp() {
+        Terminal terminal = new Terminal();
+        terminal.setName("my_terminal");
+        terminal.setType(Enum.TransportMode.RAIL);
+        long startId = terminalRepository.save(terminal).getId();
+        Terminal terminal1 = new Terminal();
+        terminal1.setName("my_terminal_1");
+        terminal1.setType(Enum.TransportMode.RAIL);
+        long stopId = terminalRepository.save(terminal1).getId();
         route = new Route();
         route.setName("my_route");
         route.setType(Enum.TransportMode.RAIL);
         User user = buildTestUser();
         userRepository.save(user);
         route.setOwner(user);
-        route.setStart(new Terminal());
-        route.setStop(new Terminal());
+        route.setStartTerminalId(startId);
+        route.setStopTerminalId(stopId);
+        route.setStartTerminalName("my_terminal");
+        route.setStopTerminalName("my_terminal_1");
         route.setPrice(500);
         route.setEnabled(true);
         Route route1 = new Route();
         route1.setName("my_route2");
         route1.setType(Enum.TransportMode.BUS);
         route1.setOwner(user);
-        route1.setStart(new Terminal());
-        route1.setStop(new Terminal());
+        route1.setStartTerminalId(stopId);
+        route1.setStopTerminalId(startId);
+        route1.setStartTerminalName("my_terminal_1");
+        route1.setStopTerminalName("my_terminal");
         route1.setPrice(100);
         route1.setEnabled(false);
         assertNotNull(routeRepository.save(route1));
@@ -62,8 +77,8 @@ public class RouteRepositoryTests {
             assertThat(route1.getName()).isEqualTo(route.getName());
             assertThat(route1.getOwner()).isEqualTo(route.getOwner());
             assertThat(route1.getType()).isEqualTo(route.getType());
-            assertThat(route1.getStart()).isEqualTo(route.getStart());
-            assertThat(route1.getStop()).isEqualTo(route.getStop());
+            assertThat(route1.getStartTerminalId()).isEqualTo(route.getStartTerminalId());
+            assertThat(route1.getStopTerminalId()).isEqualTo(route.getStopTerminalId());
             assertThat(route1.getPrice()).isEqualTo(route.getPrice());
             assertThat(route1.isEnabled()).isEqualTo(route.isEnabled());
         });

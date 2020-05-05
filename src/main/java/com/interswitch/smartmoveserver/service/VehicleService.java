@@ -5,6 +5,8 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
+import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,15 +29,12 @@ public class VehicleService {
     @Autowired
     UserRepository userRepository;
 
-    public List<Vehicle> getAll() {
-        return vehicleRepository.findAll();
-    }
+    @Autowired
+    SecurityUtil securityUtil;
 
-    public Page<Vehicle> findAllPaginated(int page, int size) {
-        PageRequest pageable = PageRequest.of(page - 1, size);
-        return vehicleRepository.findAll(pageable);
-    }
-
+    @Autowired
+    PageUtil pageUtil;
+    
     public Vehicle save(Vehicle vehicle) {
         long id = vehicle.getId();
         boolean exists = vehicleRepository.existsById(id);
@@ -58,6 +57,10 @@ public class VehicleService {
         return vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist"));
     }
 
+    public Vehicle findById(Principal principal, long id) {
+        return vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist"));
+    }
+
     public List<Vehicle> find(Enum.TransportMode type) {
         return vehicleRepository.findAllByType(type);
     }
@@ -66,8 +69,9 @@ public class VehicleService {
         return vehicleRepository.findAllByOwner(owner);
     }
 
-    public List<Vehicle> findAllByOwner(long owner) {
-        return vehicleRepository.findAll();//urgent
+    public List<Vehicle> findAllByOwner(Long ownerId) {
+        Optional<User> owner = userRepository.findById(ownerId);
+        return vehicleRepository.findAllByOwner(owner.get());
     }
 
     public Vehicle update(Vehicle vehicle) {
@@ -106,11 +110,37 @@ public class VehicleService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
     }
 
-    public Long countByOwner(User user){
+    public long countByOwner(User user){
         return vehicleRepository.countByOwner(user);
     }
 
-    public Long countAll(){
+    public long countAll(){
         return vehicleRepository.count();
+    }
+
+    public Page<Vehicle> findAllPaginated(Principal principal) {
+        return this.findAllPaginated(principal, 0L, 1, 10);
+    }
+
+    public Page<Vehicle> findAllPaginated(Principal principal, Long owner, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if(!user.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist");
+
+        if(owner == 0) {
+            return vehicleRepository.findAllByOwner(pageable, user.get());
+        }
+        else {
+            if(securityUtil.isOwner(principal, owner)){
+                return vehicleRepository.findAllByOwner(pageable, user.get());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
+    public Page<Vehicle> findPaginatedByOwner(int page, int size, User owner) {
+        PageRequest pageable = PageRequest.of(page - 1, size);
+        return vehicleRepository.findAllByOwner(pageable, owner);
     }
 }

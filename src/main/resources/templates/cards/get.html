@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" th:text="${title}">Cards</title>
+<title th:fragment="title">Cards</title>
 <div th:fragment="content" class="card mb-4">
-	<div class="card-header"><i class="fas fa-user mr-1"></i><span>Cards</span></div>
+	<div class="card-header"><i class="fas fa-credit-card mr-1"></i><span>Cards</span></div>
 	<div class="card-body">
 		<div class="table-wrapper">
 			<div class="table-title">
@@ -19,15 +19,17 @@
 					</div>
 				</div>
 			</div>
+			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{card.deleted.message} : false)"></div>
+			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
 				<thead class='thead-light'>
 				<tr>
 					<th>Id</th>
 					<th>Type</th>
-					<th>Card Pan</th>
+					<th>Pan</th>
 					<th>Expiry</th>
-					<th>Balance</th>
 					<th>Owner</th>
+					<th>Active</th>
 					<th>View Details</th>
 					<th>Remove</th>
 				</tr>
@@ -38,8 +40,13 @@
 					<td th:text="${card.type}"></td>
 					<td th:text="${card.pan}"></td>
 					<td th:text="${card.expiry}"></td>
-					<td th:text="${card.balance}"></td>
 					<td th:text="${card.owner != null ? card.owner.username : ''}"></td>
+					<td>
+						<label class="switch">
+							<input type="checkbox" id="enabled" name="enabled" th:checked="${card.enabled}" disabled>
+							<span class="slider round"></span>
+						</label>
+					</td>
 					<td>
 						<a class="justify-content-center" th:href="@{/cards/details/{id}(id=${card.id})}">
 							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>

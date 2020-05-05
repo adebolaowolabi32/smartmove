@@ -22,13 +22,13 @@ public class Route {
     @Column(unique=true)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "start_id")
-    private Terminal start;
+    private Long startTerminalId;
 
-    @ManyToOne
-    @JoinColumn(name = "stop_id")
-    private Terminal stop;
+    private String startTerminalName;
+
+    private Long stopTerminalId;
+
+    private String stopTerminalName;
 
     private long price;
 

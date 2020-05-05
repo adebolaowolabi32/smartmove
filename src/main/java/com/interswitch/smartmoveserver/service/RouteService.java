@@ -1,9 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.Route;
-import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.Vehicle;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.RouteRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
@@ -26,6 +24,9 @@ import java.util.Set;
 public class RouteService {
     @Autowired
     RouteRepository routeRepository;
+
+    @Autowired
+    TerminalService terminalService;
 
     @Autowired
     VehicleRepository vehicleRepository;
@@ -51,6 +52,13 @@ public class RouteService {
 
     public Route save(Route route, Principal principal) {
         long id = route.getId();
+        Terminal startTerminal = terminalService.findById(route.getStartTerminalId());
+        Terminal stopTerminal = terminalService.findById(route.getStopTerminalId());
+        String startTerminalName = startTerminal.getName();
+        String stopTerminalName = stopTerminal.getName();
+        route.setStartTerminalName(startTerminalName);
+        route.setStopTerminalName(stopTerminalName);
+        route.setName(startTerminalName + " - " + stopTerminalName);
         boolean exists = routeRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route already exists");
         if(route.getOwner() == null) {
@@ -78,7 +86,16 @@ public class RouteService {
     public Route update(Route route) {
         Optional<Route> existing = routeRepository.findById(route.getId());
         if(existing.isPresent())
+        {
+            Terminal startTerminal = terminalService.findById(route.getStartTerminalId());
+            Terminal stopTerminal = terminalService.findById(route.getStopTerminalId());
+            String startTerminalName = startTerminal.getName();
+            String stopTerminalName = stopTerminal.getName();
+            route.setStartTerminalName(startTerminalName);
+            route.setStopTerminalName(stopTerminalName);
+            route.setName(startTerminalName + " - " + stopTerminalName);
             return routeRepository.save(route);
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
     }
 

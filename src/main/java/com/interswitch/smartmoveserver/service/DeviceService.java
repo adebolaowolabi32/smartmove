@@ -11,6 +11,7 @@ import com.interswitch.smartmoveserver.model.response.GetDeviceIdResponse;
 import com.interswitch.smartmoveserver.repository.DeviceRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
+import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +38,9 @@ public class DeviceService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PageUtil pageUtil;
 
     public DeviceConnectionResponse connectDevice(DeviceConnection deviceConnection) {
         Device device = new Device();
@@ -65,6 +69,16 @@ public class DeviceService {
     public Page<Device> findAllPaginated(int page, int size) {
         PageRequest pageable = PageRequest.of(page - 1, size);
         return deviceRepository.findAll(pageable);
+    }
+
+    public Page<Device> findAllPaginated(Enum.DeviceType type, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        if(type == null) {
+            return deviceRepository.findAll(pageable);
+        }
+        else {
+            return deviceRepository.findAllByType(pageable, type);
+        }
     }
 
     public List<Device> getAll() {

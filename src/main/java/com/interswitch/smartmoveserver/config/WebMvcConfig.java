@@ -1,6 +1,6 @@
 package com.interswitch.smartmoveserver.config;
 
-import com.interswitch.smartmoveserver.web.interceptor.ThymeleafLayoutInterceptor;
+import com.interswitch.smartmoveserver.interceptor.ThymeleafLayoutInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

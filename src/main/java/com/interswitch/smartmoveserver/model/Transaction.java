@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * @author adebola.owolabi
@@ -17,29 +16,32 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique=true)
-    private String transactionId = UUID.randomUUID().toString();
+    private String transactionId;
 
-    @ManyToOne
-    @JoinColumn(name = "card_id")
-    private Card card;
+    private String cardId;
 
-    @ManyToOne
-    @JoinColumn(name = "device_id")
-    private Device device;
+    private String deviceId;
 
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
+    private String terminalId;
 
-    @ManyToOne
-    @JoinColumn(name = "recipient_id")
-    private User recipient;
+    private String vehicleId;
+
+    private String routeId;
+
+    private String agentId;
+
+    private String operatorId;
 
     private double amount;
+
+    private String walletBalance;
+
+    private String cardBalance;
 
     @Enumerated(EnumType.STRING)
     private Enum.TransactionType type;
 
-    private LocalDateTime timeStamp;
+    private Enum.TransportMode mode;
+
+    private LocalDateTime transactionDateTime;
 }

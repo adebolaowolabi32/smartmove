@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" >Error</title>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Error</title>
+    <!--
+        <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <link th:href="@{/css/styles.css}" href="#" rel="stylesheet" crossorigin="anonymous" />
+</head>
 <body>
 <div class="wrapper">
     <div class="container-fluid red-border-top">
@@ -16,30 +28,19 @@
                         Error: <span th:text="${error}">server_error</span>
                     </div>
 
-                    <div th:if="${client}" class="h4">
-                        Application: <span th:text="${client}">Passport</span>
-                    </div>
-
                     <div th:if="${message}" class="h4">
                         <span th:text="${message}">Something went wrong. Please bear with us while we fix it</span>
                     </div>
 
                     <br />
 
-                    <a th:if="${retry}" th:href="@{/retry}" class="btn btn-primary btn-high create-btn">
-                        Retry
-                    </a>
-
-                    <a th:if="${back}" th:href="@{${back}}" class="btn btn-primary btn-high create-btn">
-                        Back
-                    </a>
+                    <a th:href="@{/dashboard.html}" class="btn btn-primary btn-high create-btn">
+                        <i class="fas fa-arrow-left mr-1"></i>Return to Dashboard</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- SCRIPTS BEGINS -->
-<div th:replace="fragments/keep-alive :: keep-alive"></div>
-<!-- /SCRIPTS ENDS -->
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>

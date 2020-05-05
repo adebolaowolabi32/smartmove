@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title" th:text="${title}">Vehicles</title>
+<title th:fragment="title">Vehicles</title>
 <div th:fragment="content" class="card mb-4">
-	<div class="card-header"><i class="fas fa-user mr-1"></i>
+	<div class="card-header"><i class="fas fa-bus mr-1"></i>
 		<span>Vehicles</span></div>
 	<div class="card-body">
 		<div class="table-title">
@@ -13,15 +13,16 @@
 
 			</div>
 		</div>
+		<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 		<form class="card p-3" action="#" method="post"
 			  th:action="@{/vehicles/create}" th:object="${vehicle}"
 			  data-parsley-validate="true">
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="name">Name:</label>
+				<label class="control-label col-sm-2" for="name">Name</label>
 				<div class="col-sm-10">
 					<input class="form-control"
 						   id="name" name="name" th:field="*{name}"
-						   required="required"
+						   required
 						   data-parsley-required-message="Please provide vehicle name"
 						   data-parsley-length="[3, 40]"
 						   data-parsley-length-message="Please provide a name between 3 and 40 characters long">
@@ -29,43 +30,43 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="regNo">Vehicle Registration Number:</label>
+				<label class="control-label col-sm-2" for="regNo">Registration Number</label>
 				<div class="col-sm-10">
 					<input class="form-control"
 						   id="regNo" name="regNo" th:field="*{regNo}"
-						   required="required"
+						   required
 						   data-parsley-required-message="Please provide vehicle id"
 						   data-parsley-length="[3, 40]"
-						   data-parsley-length-message="Please provide a number between 3 and 40 characters long">
+						   data-parsley-length-message="Please provide a number between 6 and 40 characters long">
 					<p class="small text-danger" th:if="${#fields.hasErrors('regNo')}" th:errors="*{regNo}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="type">Vehicle Type:</label>
-				<div class="col-sm-10">BUS, KEKE, RAIL, WATERWAY
-					<select class="form-control" th:field="*{type}"  id="type">
-						<option value="" >Select...</option>
+				<label class="control-label col-sm-2" for="type">Transport Mode</label>
+				<div class="col-sm-10">
+					<select class="form-control" th:field="*{type}"  id="type" required>
+						<option value="">Select...</option>
 						<option value="BUS">Bus</option>
-						<option value="WATERWAY">Waterway</option>
+						<option value="CAR">Car</option>
 						<option value="RAIL">Rail</option>
-						<option value="KEKE">Keke</option>
+						<option value="FERRY">Ferry</option>
 					</select></div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="owner">Vehicle Owner </label>
+				<label class="control-label col-sm-2" for="owner">Owner</label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{owner}"  id="owner">
-						<option value=0 >Select ...</option>
+					<select class="form-control" th:field="*{owner}"  id="owner" required>
+						<option value="">Select...</option>
 						<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 					</select>
 					<p class="small text-danger" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="device">Device </label>
+				<label class="control-label col-sm-2" for="device">Assign Device</label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{device}"  id="device">
-						<option value=0 >Select ...</option>
+					<select class="form-control" th:field="*{device}" id="device">
+						<option value="">Select...</option>
 						<option th:each="device : ${devices}" th:value="${device.id}" th:text="${device.name}"></option>
 					</select>
 					<p class="small text-danger" th:if="${#fields.hasErrors('device')}" th:errors="*{device}"></p>
@@ -75,22 +76,12 @@
 				<label class="control-label col-sm-2" for="route">Route </label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{route}"  id="route">
-						<option value=0 >Select ...</option>
+						<option value="" >Select ...</option>
 						<option th:each="device : ${devices}" th:value="${route.id}" th:text="${route.name}"></option>
 					</select>
 					<p class="small text-danger" th:if="${#fields.hasErrors('route')}" th:errors="*{route}"></p>
 				</div>
 			</div>-->
-			<div class="form-group row">
-				<label class="control-label col-sm-2" for="fareType">Fare Type</label>
-				<div class="col-sm-10">
-					<select class="form-control" th:field="*{fareType}" id="fareType">
-						<option value="" >Select...</option>
-						<option value="FIXED">Fixed</option>
-						<option value="VARIABLE">Variable</option>
-					</select>
-				</div>
-			</div>
 			<div class="form-group row">
 				<label class="control-label col-sm-2" for="enabled">Active</label>
 				<div class="col-sm-10">
@@ -104,7 +95,6 @@
 
 			<button type="submit" class="btn btn-outline-info">Submit</button>
 		</form>
-		<div th:replace="fragments/alerts :: alerts"></div>
 	</div>
 </div>
 </html>
