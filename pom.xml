@@ -23,7 +23,8 @@
         <thymeleaf-security.version>3.0.4.RELEASE</thymeleaf-security.version>
         <spring-security.version>5.3.0.RELEASE</spring-security.version>
     	<fortify-plugin.version>1.0-SNAPSHOT</fortify-plugin.version>
-   	 <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
+        <junit.jupiter.version>5.6.0</junit.jupiter.version>
+        <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
 	</properties>
   <build>
     <finalName>${project.artifactId}</finalName>
