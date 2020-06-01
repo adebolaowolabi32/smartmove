@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
@@ -55,7 +56,7 @@ public class PassportService {
         return retrievePassportUser(apiRequestClient.Process(passportUser, headers, null, userUrl, HttpMethod.PUT, Object.class).getBody());
     }
 
-    public PassportUser findUserByUsername(String username){
+    public PassportUser findUser(String username){
         Map<String, String> variables = new HashMap<>();
         variables.put("username", username);
         HttpHeaders headers = new HttpHeaders();
@@ -65,8 +66,6 @@ public class PassportService {
     }
 
     public String getAccessToken(){
-        logger.info(clientId + ":" + clientSecret);
-        logger.info("Token:" + tokenUrl);
         String auth = clientId + ":" + clientSecret;
         byte[] encodedAuth = Base64.encodeBase64(
                 auth.getBytes(Charset.forName("US-ASCII")) );
@@ -82,7 +81,7 @@ public class PassportService {
         return "Bearer " + resultToJson.get("access_token").toString();
     }
 
-    private PassportUser buildUser(User user){
+    public PassportUser buildUser(User user){
         PassportUser passportUser = new PassportUser();
         passportUser.setUsername(user.getUsername());
         passportUser.setEmail(user.getEmail());
@@ -94,15 +93,21 @@ public class PassportService {
         return passportUser;
     }
 
+    public User buildUser(PassportUser passportUser){
+        User user = new User();
+        user.setUsername(passportUser.getUsername());
+        user.setEmail(passportUser.getEmail());
+        user.setFirstName(passportUser.getFirstName());
+        user.setLastName(passportUser.getLastName());
+        user.setMobileNo(passportUser.getMobileNo());
+        user.setPassword(null);
+        user.setEnabled(passportUser.isEnabled());
+        return user;
+    }
+
     private PassportUser retrievePassportUser(Object response){
-        PassportUser passportUser = null;
-        Map<String, Object> resultMap = (Map<String, Object>) response;
-        Object username = resultMap.get("username");
-        if(username != null){
-            passportUser = new PassportUser();
-            passportUser.setUsername(username.toString());
-            passportUser.setPassword(null);
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        PassportUser passportUser = mapper.convertValue(response, PassportUser.class);
         return passportUser;
     }
 }

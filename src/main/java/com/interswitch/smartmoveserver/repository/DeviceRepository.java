@@ -16,7 +16,9 @@ public interface DeviceRepository extends CrudRepository<Device, Long> {
     List<Device> findAllByOwner(User owner);
     Page<Device> findAllByType(Pageable pageable, Enum.DeviceType type);
     Page<Device> findAllByOwner(Pageable pageable, User owner);
-    Long countByOwner(User owner);
     Page<Device> findAll(Pageable pageable);
     List<Device> findAll();
+    Long countByOwner(User owner);
+    Long countByType(Enum.DeviceType type);
+    Long countByTypeAndOwner(Enum.DeviceType type, User owner);
 }

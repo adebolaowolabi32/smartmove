@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:fragment="title">Blacklists</title>
+<div th:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-ban mr-1"></i><span>Blacklists</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2><b>Blacklist Item</b></h2>
+                    </div>
+                    <div class="col-sm-8">
+                        <a th:href="@{/blacklists/remove/{id}(id=${blacklist.id})}">
+                            <button type='button' class='btn btn-outline-info'><i class='fas fa-trash-alt'></i>Delete </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{blacklist.saved.message} : false)"></div>
+            <div class="card p-3">
+                <div class="form-group row">
+                    <label class="col-sm-2" for="id">ID</label>
+                    <div class="col-sm-10">
+                        <span id="id" th:text="${blacklist.id}"></span></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2" for="identifier">Identifier</label>
+                    <div class="col-sm-10">
+                        <span id="identifier" th:text="${blacklist.identifier}"></span></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2" for="type">Type</label>
+                    <div class="col-sm-10">
+                        <span id="type" th:text="${blacklist.type}"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

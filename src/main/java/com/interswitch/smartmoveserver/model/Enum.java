@@ -36,6 +36,9 @@ public class Enum {
         ISW_ADMIN, REGULATOR, OPERATOR, VEHICLE_OWNER, EMV, DRIVER, AGENT, COMMUTER
     }
 
+    public enum ItemType {
+        CARD, DEVICE, VEHICLE, USER
+    }
     public enum ConfigList {
         TRANSACTION_UPLOAD_PERIOD, GPS_UPLOAD_PERIOD
     }

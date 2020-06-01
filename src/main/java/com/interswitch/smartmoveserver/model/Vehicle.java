@@ -16,6 +16,8 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String vehicleId;
+
     @Enumerated(EnumType.STRING)
     private Enum.TransportMode type;
 
@@ -24,6 +26,11 @@ public class Vehicle {
 
     @Column(unique=true)
     private String regNo;
+
+    private String model;
+
+    //TODO:: add to frontend
+    private String color;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")

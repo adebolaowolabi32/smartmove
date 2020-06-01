@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:fragment="title">Blacklists</title>
+<div th:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-ban mr-1"></i><span>Blacklists</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2><b><span>Blacklists</span></b></h2>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <a href="#" th:href="@{/blacklists/add}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New Item</a>
+                            <a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
+                            <a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{blacklist.deleted.message} : false)"></div>
+            <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+            <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+                <thead class='thead-light'>
+                <tr>
+                    <th>Id</th>
+                    <th>Identifier</th>
+                    <th>Type</th>
+                    <th>View Details</th>
+                    <th>Remove</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="blacklist : ${blacklistPage.content}">
+                    <td th:text="${blacklist.id}"></td>
+                    <td th:text="${blacklist.identifier}"></td>
+                    <td th:text="${blacklist.type}"></td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/blacklists/details/{id}(id=${blacklist.id})}">
+                            <button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/blacklists/remove/{id}(id=${blacklist.id})}">
+                            <button type='button' class='btn btn-danger'><i class='far fa-trash-alt'></i></button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div th:if="${blacklistPage.totalPages > 0}" class="pagination"
+                 th:each="pageNumber : ${pageNumbers}">
+                <a th:href="@{/get(size=${blacklistPage.size}, page=${pageNumber})}"
+                   th:class="${pageNumber==blacklistPage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

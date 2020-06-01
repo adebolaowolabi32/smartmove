@@ -91,6 +91,7 @@ public class UserController {
 
     @GetMapping("/create")
     public String showCreate(Principal principal, @RequestParam("role") Enum.Role role, Model model) {
+        //TODO:: need to handle method level user permissions specific to each role
         User user = new User();
         user.setRole(role);
         model.addAttribute("title", pageUtil.buildTitle(role));

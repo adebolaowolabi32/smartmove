@@ -190,4 +190,12 @@ public class DeviceService {
     public Long countAll(){
         return deviceRepository.count();
     }
+
+    public Long countByType(Enum.DeviceType deviceType){
+        return deviceRepository.countByType(deviceType);
+    }
+
+    public Long countByTypeAndOwner(Enum.DeviceType deviceType, User owner){
+        return deviceRepository.countByTypeAndOwner(deviceType, owner);
+    }
 }

@@ -2,14 +2,20 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
+import com.interswitch.smartmoveserver.model.WalletTransfer;
 import com.interswitch.smartmoveserver.model.request.Transfer;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.WalletRepository;
+import com.interswitch.smartmoveserver.repository.WalletTransferRepository;
+import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.Optional;
 
 /**
@@ -21,7 +27,13 @@ public class WalletService {
     WalletRepository walletRepository;
 
     @Autowired
+    WalletTransferRepository transferRepository;
+
+    @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PageUtil pageUtil;
 
     public Wallet save(Wallet wallet) {
         long id = wallet.getId();
@@ -69,6 +81,24 @@ public class WalletService {
         }
     }
 
+    public Page<WalletTransfer> findAllTransfers(Principal principal, Long owner, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        Optional<Wallet> existing = walletRepository.findById(owner);
+        if(existing.isPresent()){
+            Wallet wallet = existing.get();
+            return transferRepository.findByWallet(pageable, wallet);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
+    }
+
+    public Long countTransfers(Principal principal, User owner){
+        Optional<Wallet> existing = walletRepository.findByOwner(owner);
+        if(existing.isPresent()){
+            Wallet wallet = existing.get();
+            return transferRepository.countByWallet(wallet);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
+    }
 
     public void transfer(Transfer transfer, User authenticatedUser) {
         double amount = transfer.getAmount();

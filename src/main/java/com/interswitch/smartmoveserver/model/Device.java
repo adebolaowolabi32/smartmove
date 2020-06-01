@@ -28,9 +28,13 @@ public class Device {
     @JoinColumn(name = "owner_id")
     private User owner;
 
+    private String imeiNo;
+
     private String hardwareVersion;
 
     private String softwareVersion;
+
+    private int batteryPercentage;
 
     @Enumerated(EnumType.STRING)
     private Enum.FareType fareType;

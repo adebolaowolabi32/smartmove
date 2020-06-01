@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .and()
                 .oauth2Login()
-                //.defaultSuccessUrl("/dashboard")
+                .defaultSuccessUrl("/dashboard")
                 //.successHandler(userAuthoritiesMapper)
                 //.failureUrl()
                 .authorizationEndpoint()
@@ -105,7 +105,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     Map<String, Object> userAttributes = oauth2UserAuthority.getAttributes();
                     if (userAttributes.containsKey("username")){
                         String username = userAttributes.get("username").toString();
-                        User user = userService.findByUsername(username);
+                        User user = userService.findOrCreateByUsername(username);
                         mappedAuthorities.addAll(getGrantedAuthorities(coreService.getPermissions(user)));
                     }
                 }

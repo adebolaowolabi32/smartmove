@@ -126,14 +126,17 @@ public class VehicleService {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         Optional<User> user = userRepository.findByUsername(principal.getName());
         if(!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
 
         if(owner == 0) {
             return vehicleRepository.findAllByOwner(pageable, user.get());
         }
         else {
             if(securityUtil.isOwner(principal, owner)){
-                return vehicleRepository.findAllByOwner(pageable, user.get());
+                Optional<User> ownerUser = userRepository.findById(owner);
+                if(!ownerUser.isPresent())
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
+                return vehicleRepository.findAllByOwner(pageable, ownerUser.get());
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }

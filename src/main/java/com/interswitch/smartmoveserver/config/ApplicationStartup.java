@@ -23,7 +23,6 @@ public class ApplicationStartup implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
         User adminUser = new User();
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
@@ -35,17 +34,5 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setEnabled(true);
         userService.setUp(adminUser);
         logger.info("System Administrator created successfully!");
-
-        User user = new User();
-        user.setUsername("adebola.owolabi");
-        user.setFirstName("Adebola");
-        user.setLastName("Owolabi");
-        user.setEmail("adebola.owolabi@interswitchgroup.com");
-        user.setMobileNo("08160275523");
-        user.setAddress("Lagos Nigeria");
-        user.setRole(Enum.Role.ISW_ADMIN);
-        user.setEnabled(true);
-        userService.setUp(user);
-        logger.info("System Administrator 2 created successfully!");
     }
 }

@@ -11,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author adebola.owolabi
@@ -64,38 +67,74 @@ public class HomeController {
     @Layout(value = "layouts/default")
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
-        User user = userService.findOrCreateUser(principal);
+        User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
+        Long no_admins = 0L;
+        Long no_regulators = 0L;
+        Long no_operators = 0L;
+        Long no_agents = 0L;
+        Long no_terminals = 0L;
+        Long no_vehicles = 0L;
+        Long no_routes = 0L;
+        Long no_readers = 0L;
+        Long no_validators = 0L;
+        Long no_transactions = 0L;
+        Long no_settlements = 0L;
+        Long no_cards = 0L;
+        Long no_topups = 0L;
+        Long no_transfers = 0L;
+        Long card_balance = 0L;
+        Double wallet_balance = 0D;
+
         if(securityUtil.isOwnedEntity(role)){
-            model.addAttribute("no_admins", userService.countByRoleAndOwner(user, Enum.Role.ISW_ADMIN));
-            model.addAttribute("no_regulators", userService.countByRoleAndOwner(user, Enum.Role.REGULATOR));
-            model.addAttribute("no_operators", userService.countByRoleAndOwner(user, Enum.Role.OPERATOR));
-            model.addAttribute("no_agents", userService.countByRoleAndOwner(user, Enum.Role.AGENT));
-            model.addAttribute("no_vehicles", vehicleService.countByOwner(user));
-            model.addAttribute("no_terminals", terminalService.countByOwner(user));
-            model.addAttribute("no_routes", routeService.countByOwner(user));
-            model.addAttribute("no_devices", deviceService.countByOwner(user));
-            model.addAttribute("no_transactions", transactionService.countAll());
-            model.addAttribute("no_settlements", 0);
-            model.addAttribute("no_cards", cardService.countByOwner(user));
+            no_regulators = userService.countByRole(principal, user, Enum.Role.REGULATOR);
+            no_operators = userService.countByRole(principal, user, Enum.Role.OPERATOR);
+            no_agents = userService.countByRole(principal, user, Enum.Role.AGENT);
+            no_vehicles = vehicleService.countByOwner(user);
+            no_terminals = terminalService.countByOwner(user);
+            no_routes = routeService.countByOwner(user);
+            no_validators = deviceService.countByTypeAndOwner(Enum.DeviceType.VALIDATOR, user);
+            no_readers = deviceService.countByTypeAndOwner(Enum.DeviceType.READER, user);
+            no_transactions = transactionService.countAll();
             if(role == Enum.Role.AGENT ) {
-                model.addAttribute("wallet_balance", walletService.findByOwner(user).getBalance());
+                card_balance = cardService.findByOwner(user.getId()).getBalance();
+                wallet_balance = walletService.findByOwner(user).getBalance();
+                no_transfers = walletService.countTransfers(principal, user);
             }
         }
         else {
-            model.addAttribute("no_admins", userService.countByRole(Enum.Role.ISW_ADMIN));
-            model.addAttribute("no_regulators", userService.countByRole(Enum.Role.REGULATOR));
-            model.addAttribute("no_operators", userService.countByRole(Enum.Role.OPERATOR));
-            model.addAttribute("no_agents", userService.countByRole(Enum.Role.AGENT));
-            model.addAttribute("no_vehicles", vehicleService.countAll());
-            model.addAttribute("no_terminals", terminalService.countAll());
-            model.addAttribute("no_routes", routeService.countAll());
-            model.addAttribute("no_devices", deviceService.countAll());
-            model.addAttribute("no_transactions", transactionService.countAll());
-            model.addAttribute("no_settlements", 0);
-            model.addAttribute("no_cards", cardService.countAll());
+            no_admins = userService.countByRole(principal, null, Enum.Role.ISW_ADMIN);
+            no_regulators = userService.countByRole(principal, null, Enum.Role.REGULATOR);
+            no_operators = userService.countByRole(principal, null, Enum.Role.OPERATOR);
+            no_agents = userService.countByRole(principal, null, Enum.Role.AGENT);
+            no_vehicles = vehicleService.countAll();
+            no_terminals = terminalService.countAll();
+            no_routes = routeService.countAll();
+            no_validators = deviceService.countByType(Enum.DeviceType.VALIDATOR);
+            no_readers = deviceService.countByType(Enum.DeviceType.READER);
+            no_transactions = transactionService.countAll();
+            no_cards = cardService.countAll();
         }
+        model.addAttribute("no_admins", no_admins);
+        model.addAttribute("no_regulators", no_regulators);
+        model.addAttribute("no_operators", no_operators);
+        model.addAttribute("no_agents", no_agents);
+        model.addAttribute("no_vehicles", no_vehicles);
+        model.addAttribute("no_terminals", no_terminals);
+        model.addAttribute("no_routes", no_routes);
+        model.addAttribute("no_validators", no_validators);
+        model.addAttribute("no_readers", no_readers);
+        model.addAttribute("no_transactions", no_transactions);
+        model.addAttribute("no_settlements", 0);
+        model.addAttribute("no_cards", no_cards);
+        model.addAttribute("card_balance", card_balance);
+        model.addAttribute("wallet_balance", wallet_balance);
+        model.addAttribute("no_transfers", no_transfers);
+        model.addAttribute("no_topups", no_topups);
 
+        DateFormat format = new SimpleDateFormat("MMM dd yyyy HH:mm aa");
+        Date dateobj = new Date();
+        model.addAttribute("time_date", format.format(dateobj));
         return "dashboard";
     }
 

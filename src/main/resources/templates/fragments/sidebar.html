@@ -34,6 +34,9 @@
 					</div>
 					<div data-parent="#sidenavAccordion">
 						<nav class=".sb-sidenav-menu nav">
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')" th:href="@{/wallets/details}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-wallet"></i></div>
+								Wallet</a>
 							<a class="nav-link" sec:authorize="hasAuthority('VIEW_CARDS')" th:href="@{/cards/get}" href="#">
 								<div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
 								Cards</a>
@@ -58,6 +61,9 @@
 							<a class="nav-link" sec:authorize="hasAuthority('VIEW_CONFIGURATIONS')" th:href="@{/configurations/get}" href="#">
 								<div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
 								Settings</a>
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_BLACKLISTS')" th:href="@{/blacklists/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-ban"></i></div>
+								Blacklists</a>
 						</nav>
 					</div>
 				</div>

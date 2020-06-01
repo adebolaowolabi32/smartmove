@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_REGULATORS')">
-				<div class="card bg-secondary text-white mb-4">
+				<div class="card bg-danger text-white mb-4">
 					<div class="card-body heavy">Regulators <span class="number" th:text="${no_regulators}">21</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
 						<a class="small text-white stretched-link" th:href="@{/users/get?role=REGULATOR}" href="#">View Details</a>
@@ -50,7 +50,7 @@
 				</div>
 			</div>
 			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TERMINALS')">
-				<div class="card bg-danger text-white mb-4">
+				<div class="card bg-secondary text-white mb-4">
 					<div class="card-body heavy">Transport Terminals <span class="number" th:text="${no_terminals}">25</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
 						<a class="small text-white stretched-link" th:href="@{/terminals/get}" href="#">View Details</a>
@@ -67,7 +67,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_DEVICES')">
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_VALIDATORS')">
 				<div class="card bg-danger text-white mb-4">
 					<div class="card-body heavy">Validators <span class="number" th:text="${no_validators}">21</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_DEVICES')">
+			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_READERS')">
 				<div class="card bg-danger text-white mb-4">
 					<div class="card-body heavy">Readers <span class="number" th:text="${no_readers}">21</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">
@@ -103,21 +103,49 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')">
-				<div class="card bg-success text-white mb-4">
-					<div class="card-body heavy">Wallet <span class="number" th:text="${wallet_balance}">N5000</span></div>
-					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="small text-white stretched-link" th:href="@{/wallets/details}" href="#">View Wallet</a>
-						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+
+			<div class="col-xl-4" sec:authorize="hasAuthority('VIEW_CARD_DETAILS')">
+				<div class="card bg-light mb-4">
+					<div class="card-body heavy">My Card
+						<span class="card-status"><i class="fas fa-check"></i><span>ACTIVE</span></span>
+						<br>
+						<div class="dark-text">
+							<span>₦<span th:text="${card_balance}">2,050.00</span></span>
+							<a href="#"><i class="fas fa-sync"></i></a>
+						</div>
+						<div class="balance-time">
+							<span>@ <span th:text="${time_date}">@ Jun 10 2020 3:06 PM </span></span>
+						</div>
+						<br>
+						<div class="dark-text">
+							<span>**** **** **** **** 3325</span>
+						</div>
+					</div>
+					<div class="card-footer dark-text d-flex align-items-center justify-content-between">
+						<a href="#"><i class="fas fa-coins"></i> Fund my Card</a>
+						<a href="#"><i class="fas fa-history"></i> Card History</a>
 					</div>
 				</div>
 			</div>
-			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_CARD_DETAILS')">
-				<div class="card bg-info text-white mb-4">
-					<div class="card-body heavy">Card <span class="number" th:text="${card_balance}">N2000</span></div>
-					<div class="card-footer d-flex align-items-center justify-content-between">
-						<a class="small text-white stretched-link" th:href="@{/cards/details}" href="#">View Card</a>
-						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+
+			<div class="col-xl-4" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')">
+				<div class="card bg-light mb-4">
+					<div class="card-body heavy">E-Wallet
+						<br>
+						<span class="card-status"><i class="fas fa-check"></i><span>ACTIVE</span></span>
+						<br>
+						<div class="dark-text">
+							<span>₦<span th:text="${wallet_balance}">15,052</span></span>
+							<a href="#"><i class="fas fa-sync"></i></a>
+						</div>
+						<div class="balance-time">
+							<span>@ <span th:text="${time_date}">@ Jun 10 2020 3:06 PM </span></span>
+						</div>
+						<br>
+					</div>
+					<div class=" card-footer dark-text d-flex align-items-center justify-content-between">
+						<a href="#"><i class="fas fa-coins"></i> <span th:text="${no_topups}"></span> Top-ups</a>
+						<a href="#"><i class="fas fa-exchange-alt"> </i><span th:text="${no_transfers}"></span> Transfers</a>
 					</div>
 				</div>
 			</div>

@@ -9,6 +9,8 @@ import java.security.Principal;
 public class SecurityUtil {
 
     public boolean isOwner(Principal principal, Long owner){
+        //TODO:: see below
+        //returns true if principal equals owner or is hierarchical parent of owner
         return true;
     }
 
