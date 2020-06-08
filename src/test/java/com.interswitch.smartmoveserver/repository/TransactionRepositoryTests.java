@@ -38,7 +38,7 @@ public class TransactionRepositoryTests {
         transaction.setTransactionId("");
         transaction.setDeviceId("123457385");
         transaction.setCardId("12345556");
-        transaction.setType(Enum.TransactionType.TRIP);
+        transaction.setType(Enum.TransactionType.TAP_IN);
         transaction.setAmount(200.00);
         transaction.setAgentId("peace.miracle");
         transaction.setOperatorId("OP4564");
@@ -51,7 +51,7 @@ public class TransactionRepositoryTests {
         transaction1.setTransactionId("");
         transaction1.setDeviceId("123457385");
         transaction1.setCardId("12345556");
-        transaction1.setType(Enum.TransactionType.TRIP);
+        transaction1.setType(Enum.TransactionType.TAP_OUT);
         transaction1.setAmount(200.00);
         transaction1.setAgentId("peace.miracle");
         transaction1.setOperatorId("OP4564");

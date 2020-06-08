@@ -52,7 +52,7 @@ public class TransactionApiTests {
         transaction.setTransactionId("");
         transaction.setDeviceId("123457385");
         transaction.setCardId("12345556");
-        transaction.setType(Enum.TransactionType.TRIP);
+        transaction.setType(Enum.TransactionType.CREDIT);
         transaction.setAmount(200.00);
         transaction.setAgentId("peace.miracle");
         transaction.setOperatorId("OP4564");

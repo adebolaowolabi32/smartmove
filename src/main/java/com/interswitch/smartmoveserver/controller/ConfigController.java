@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -44,14 +45,13 @@ public class ConfigController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid Config config, BindingResult result, Model model) {
+    public String create(@Valid Config config, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "configurations/create";
         }
         configService.save(config);
-        model.addAttribute("configurations", configService.getAll());
-        model.addAttribute("saved", true);
-        return "configurations/get";
+        redirectAttributes.addFlashAttribute("saved", true);
+        return "redirect:/configurations/get";
     }
 
     @GetMapping("/update/{id}")
@@ -63,22 +63,20 @@ public class ConfigController {
 
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") long id, @Valid Config config,
-                         BindingResult result, Model model) {
+                         BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        config.setId(id);
         if (result.hasErrors()) {
-            config.setId(id);
             return "configurations/update";
         }
-
         configService.update(config);
-        model.addAttribute("updated", true);
+        redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/configurations/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") long id, Model model) {
+    public String delete(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
         configService.delete(id);
-        model.addAttribute("configurations", configService.getAll());
-        model.addAttribute("deleted", true);
-        return "configurations/get";
+        redirectAttributes.addFlashAttribute("deleted", true);
+        return "redirect:/configurations/get";
     }
 }

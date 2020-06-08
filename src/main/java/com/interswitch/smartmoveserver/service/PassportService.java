@@ -101,13 +101,14 @@ public class PassportService {
         user.setLastName(passportUser.getLastName());
         user.setMobileNo(passportUser.getMobileNo());
         user.setPassword(null);
-        user.setEnabled(passportUser.isEnabled());
         return user;
     }
 
     private PassportUser retrievePassportUser(Object response){
         ObjectMapper mapper = new ObjectMapper();
         PassportUser passportUser = mapper.convertValue(response, PassportUser.class);
+        if(passportUser.getUsername() == null)
+            return null;
         return passportUser;
     }
 }

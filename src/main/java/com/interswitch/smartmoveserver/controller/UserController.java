@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -104,23 +105,21 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(Principal principal, @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model) {
-        model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
+    public String create(Principal principal, @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        user.setRole(role);
         if (result.hasErrors()) {
-            model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
-            //TODO change findAll to findAllEligible
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("title", pageUtil.buildTitle(role));
             model.addAttribute("user", user);
+            //TODO change findAll to findAllEligible
+            model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
+            model.addAttribute("owners", userService.findAll());
             return "users/create";
         }
-        user.setRole(role);
-        userService.save(user, principal);
-        Page<User> userPage = userService.findAllByRole(principal, 0, role, 1, 10);
-        model.addAttribute("title", pageUtil.buildTitle(role));
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
-        model.addAttribute("userPage", user);
-        model.addAttribute("saved", true);
-        return "redirect:/users/get?role=" + role;
+
+        User savedUser = userService.save(user, principal);
+        redirectAttributes.addFlashAttribute("saved", true);
+        redirectAttributes.addFlashAttribute("saved_message", pageUtil.buildSaveMessage(role));
+        return "redirect:/users/details/" + savedUser.getId();
     }
 
     @GetMapping("/update/{id}")
@@ -136,32 +135,33 @@ public class UserController {
 
     @PostMapping("/update/{id}")
     public String update(Principal principal, @PathVariable("id") long id, @Valid User user,
-                         BindingResult result, Model model) {
-        model.addAttribute("isOwned", securityUtil.isOwnedEntity(user.getRole()));
+                         BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        User existing = userService.findById(id);
+        Enum.Role role = existing.getRole();
         if (result.hasErrors()) {
-            model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
-            model.addAttribute("user", user);
             //TODO change findAll to findAllEligible
+            model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
+            model.addAttribute("title", pageUtil.buildTitle(role));
+            model.addAttribute("user", existing);
             model.addAttribute("owners", userService.findAll());
             return "users/update";
         }
-        userService.update(user);
-        model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
-        model.addAttribute("updated", true);
+        boolean enabled = user.isEnabled();
+        userService.update(id, enabled);
+        redirectAttributes.addFlashAttribute("updated", true);
+        redirectAttributes.addFlashAttribute("updated_message", pageUtil.buildUpdateMessage(role));
         return "redirect:/users/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Principal principal, @PathVariable("id") long id, Model model) {
+    public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
         User user = userService.findById(id);
         userService.delete(id);
-        Page<User> userPage = userService.findAll(1, 10);
-        model.addAttribute("userPage", userPage);
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
         Enum.Role role = user.getRole();
-        model.addAttribute("title", pageUtil.buildTitle(role));
-        model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
-        model.addAttribute("deleted", true);
-        return "redirect:/users/get?role=" + role;
+        User owner = user.getOwner();
+        long ownerId = owner != null ? owner.getId() : 0;
+        redirectAttributes.addFlashAttribute("deleted", true);
+        redirectAttributes.addFlashAttribute("deleted_message", pageUtil.buildDeleteMessage(role));
+        return "redirect:/users/get?role=" + role + "&owner=" + ownerId;
     }
 }

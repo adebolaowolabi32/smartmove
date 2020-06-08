@@ -55,4 +55,83 @@ public class PageUtil {
         }
         return title;
     }
+
+    public String buildSaveMessage(Enum.Role role){
+        String message = "";
+        switch(role)
+        {
+            case ISW_ADMIN:
+                message = "administrator.saved.message";
+                break;
+            case REGULATOR:
+                message = "regulator.saved.message";
+                break;
+            case OPERATOR:
+                message = "operator.saved.message";
+                break;
+            case VEHICLE_OWNER:
+                message = "vehicle-owner.saved.message";
+                break;
+            case AGENT:
+                message = "agent.saved.message";
+                break;
+            default:
+                message = "No Message";
+                break;
+        }
+        return message;
+    }
+
+    public String buildUpdateMessage(Enum.Role role){
+        String message = "";
+        switch(role)
+        {
+            case ISW_ADMIN:
+                message = "administrator.updated.message";
+                break;
+            case REGULATOR:
+                message = "regulator.updated.message";
+                break;
+            case OPERATOR:
+                message = "operator.updated.message";
+                break;
+            case VEHICLE_OWNER:
+                message = "vehicle-owner.updated.message";
+                break;
+            case AGENT:
+                message = "agent.updated.message";
+                break;
+            default:
+                message = "No Message";
+                break;
+        }
+        return message;
+    }
+
+    public String buildDeleteMessage(Enum.Role role){
+        String message = "";
+        switch(role)
+        {
+            case ISW_ADMIN:
+                message = "administrator.deleted.message";
+                break;
+            case REGULATOR:
+                message = "regulator.deleted.message";
+                break;
+            case OPERATOR:
+                message = "operator.deleted.message";
+                break;
+            case VEHICLE_OWNER:
+                message = "vehicle-owner.deleted.message";
+                break;
+            case AGENT:
+                message = "agent.deleted.message";
+                break;
+            default:
+                message = "No Message";
+                break;
+        }
+        return message;
+    }
+
 }

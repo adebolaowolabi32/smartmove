@@ -73,17 +73,6 @@ public class UserApiTests {
     }
 
     @Test
-    public void testUpdate() throws Exception {
-        when(userService.update(user)).thenReturn(user);
-        mvc.perform(put("/users")
-                .content(new ObjectMapper().writeValueAsString(user))
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }
-
-    @Test
     public void testGetAll() throws Exception {
         when(userService.findAll()).thenReturn(Arrays.asList(user, new User()));
         mvc.perform(get("/users")

@@ -19,33 +19,63 @@
 						<span id="name" th:text="${transaction.transactionId}"></span></div>
 				</div>
 				<div class="form-group row">
+					<label class="control-label col-sm-2" for="scheme">Scheme ID</label>
+					<div class="col-sm-10">
+						<span id="scheme" th:text="${transaction.schemeId}"></span></div>
+				</div>
+				<div class="form-group row">
 					<label class="col-sm-2" for="type">Transaction Type</label>
 					<div class="col-sm-10">
 						<span id="type" th:text="${transaction.type}"></span></div>
 				</div>
 				<div class="form-group row">
-					<label class="control-label col-sm-2" for="card">Card</label>
+					<label class="col-sm-2" for="mode">Transport Mode</label>
 					<div class="col-sm-10">
-						<span id="card" th:text="${transaction.card != null ? transaction.card.name : ''}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="device">Device</label>
-					<div class="col-sm-10">
-						<span id="device" th:text="${transaction.device != null ? transaction.device.name : ''}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="sender">Sender</label>
-					<div class="col-sm-10">
-						<span id="sender" th:text="${transaction.sender != null ? transaction.sender.username : ''}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="recipient">Recipient</label>
-					<div class="col-sm-10">
-						<span id="recipient" th:text="${transaction.recipient != null ? transaction.recipient.username : ''}"></span></div>
+						<span id="mode" th:text="${transaction.mode}"></span></div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-2" for="amount">Amount</label>
-					<div class="col-sm-10"><span id="amount" th:1="${transaction.amount}"></span></div>
+					<div class="col-sm-10"><span id="amount" th:text="${transaction.amount}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="card">Card Number</label>
+					<div class="col-sm-10">
+						<span id="card" th:text="${transaction.cardId}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="device">Device ID</label>
+					<div class="col-sm-10">
+						<span id="device" th:text="${transaction.deviceId}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="terminal">Terminal ID</label>
+					<div class="col-sm-10">
+						<span id="terminal" th:text="${transaction.terminalId}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="vehicle">Vehicle ID</label>
+					<div class="col-sm-10">
+						<span id="vehicle" th:text="${transaction.vehicleId}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="route">Route ID</label>
+					<div class="col-sm-10">
+						<span id="route" th:text="${transaction.routeId}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="agentId">Agent ID</label>
+					<div class="col-sm-10">
+						<span id="agentId" th:text="${transaction.agentId}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="operatorId">Operator ID</label>
+					<div class="col-sm-10">
+						<span id="operatorId" th:text="${transaction.operatorId}"></span></div>
+				</div>
+				<div class="form-group row">
+					<label class="control-label col-sm-2" for="transactiondate">Transaction Date</label>
+					<div class="col-sm-10">
+						<span id="transactiondate" th:text="${transaction.transactionDateTime}"></span></div>
 				</div>
 			</div>
 		</div>

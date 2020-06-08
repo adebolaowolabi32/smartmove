@@ -21,11 +21,7 @@ public class Enum {
     }
 
     public enum TransactionType {
-        CREDIT, DEBIT, TRIP, AGENT, CARD_DISABLED
-    }
-
-    public enum TransactionMode {
-        TAP_IN, TAP_OUT
+        CREDIT, DEBIT, TAP_IN, TAP_OUT, LOAD_CARD, DISABLE_CARD, CHECK_BALANCE
     }
 
     public enum Role {

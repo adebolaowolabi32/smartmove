@@ -51,11 +51,6 @@ public class UserApi {
         return userService.find(type);
     }
 
-    @PutMapping(produces = "application/json", consumes = "application/json")
-    private User update(@Validated @RequestBody User user) {
-        return userService.update(user);
-    }
-
     @DeleteMapping("/{id}")
     private void delete(@Validated @PathVariable long id) {
         userService.delete(id);

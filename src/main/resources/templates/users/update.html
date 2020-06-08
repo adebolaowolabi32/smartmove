@@ -19,7 +19,7 @@
 				<div class="form-group row">
 					<label class="control-label col-sm-2" for="firstName">First Name</label>
 					<div class="col-sm-10">
-						<input class="form-control"
+						<input disabled class="form-control"
 							   id="firstName" name="firstName" th:field="*{firstName}"
 							   required
 							   data-parsley-required-message="Please provide your first name"
@@ -31,7 +31,7 @@
 				<div class="form-group row">
 					<label class="control-label col-sm-2" for="email">Last Name</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control"
+						<input disabled type="text" class="form-control"
 							   id="lastName" name="lastName" th:field="*{lastName}"
 							   required
 							   data-parsley-required-message="Please provide your last name"
@@ -43,7 +43,7 @@
 				<div class="form-group row">
 					<label class="control-label col-sm-2" for="email">Email Address</label>
 					<div class="col-sm-10">
-						<input class="form-control"
+						<input disabled class="form-control"
 							   type="email"
 							   id="email" name="email" th:field="*{email}"
 							   required
@@ -56,7 +56,7 @@
 				<div class="form-group row">
 					<label class="control-label col-sm-2" for="mobileNo">Mobile Number</label>
 					<div class="col-sm-10">
-						<input class="form-control"
+						<input disabled class="form-control"
 							   id="mobileNo" name="mobileNo" th:field="*{mobileNo}"
 							   data-parsley-pattern="^((\+|00)?[1-9]|0)\d{1,14}$"
 							   data-parsley-error-message="Please provide a valid mobile number">
@@ -67,7 +67,7 @@
 				<div class="form-group row" th:if="${isOwned}">
 					<label class="control-label col-sm-2" for="owner">Owner</label>
 					<div class="col-sm-10">
-						<select class="form-control" th:field="*{owner}"  id="owner">
+						<select disabled class="form-control" th:field="*{owner}"  id="owner">
 							<option value="">Select...</option>
 							<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 						</select>

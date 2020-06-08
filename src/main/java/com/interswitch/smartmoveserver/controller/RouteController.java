@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Route;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.RouteService;
 import com.interswitch.smartmoveserver.service.TerminalService;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -63,19 +65,16 @@ public class RouteController {
     }
 
     @PostMapping("/create")
-    public String create(Principal principal, @Valid Route route, BindingResult result, Model model) {
+    public String create(Principal principal, @Valid Route route, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("route", route);
             model.addAttribute("owners", userService.findAll());
             model.addAttribute("terminals", terminalService.getAll());
             return "routes/create";
         }
-        routeService.save(route, principal);
-        Page<Route> routePage = routeService.findAllPaginated(1, 10);
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
-        model.addAttribute("routePage", routePage);
-        model.addAttribute("saved", true);
-        return "redirect:/routes/get";
+        Route savedRoute = routeService.save(route, principal);
+        redirectAttributes.addFlashAttribute("saved", true);
+        return "redirect:/routes/details/" + savedRoute.getId();
     }
 
     @GetMapping("/update/{id}")
@@ -89,7 +88,7 @@ public class RouteController {
 
     @PostMapping("/update/{id}")
     public String update(Principal principal, @PathVariable("id") long id, @Valid Route route,
-                         BindingResult result, Model model) {
+                         BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         route.setId(id);
         if (result.hasErrors()) {
             model.addAttribute("route", route);
@@ -98,17 +97,17 @@ public class RouteController {
             return "routes/update";
         }
         routeService.update(route);
-        model.addAttribute("updated", true);
+        redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/routes/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Principal principal, @PathVariable("id") long id, Model model) {
+    public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+        Route route = routeService.findById(id);
         routeService.delete(id);
-        Page<Route> routePage = routeService.findAllPaginated(1, 10);
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
-        model.addAttribute("routePage", routePage);
-        model.addAttribute("deleted", true);
-        return "redirect:/routes/get";
+        User owner = route.getOwner();
+        long ownerId = owner != null ? owner.getId() : 0;
+        redirectAttributes.addFlashAttribute("deleted", true);
+        return "redirect:/routes/get?owner=" + ownerId;
     }
 }

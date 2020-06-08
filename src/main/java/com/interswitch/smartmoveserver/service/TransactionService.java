@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author adebola.owolabi
@@ -30,6 +31,7 @@ public class TransactionService {
     DeviceRepository deviceRepository;
 
     public Transaction saveTransaction(Transaction transaction) {
+        transaction.setTransactionId(UUID.randomUUID().toString());
         return transactionRepository.save(transaction);
     }
 

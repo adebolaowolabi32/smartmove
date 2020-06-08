@@ -23,12 +23,11 @@
 				<tr>
 					<th>Id</th>
 					<th>Transaction ID</th>
-					<th>Transaction Type</th>
-					<th>Sender</th>
-					<th>Recipient</th>
+					<th>Type</th>
+					<th>Mode</th>
+					<th>Amount</th>
 					<th>Card</th>
 					<th>Device ID</th>
-					<th>Amount</th>
 					<th>Transaction Date</th>
 					<th>View Details</th>
 				</tr>
@@ -38,13 +37,11 @@
 					<td th:text="${transaction.id}"></td>
 					<td th:text="${transaction.transactionId}"></td>
 					<td th:text="${transaction.type}"></td>
-					<td th:text="${transaction.sender != null ? transaction.sender.name : ''}"></td>
-					<td th:text="${transaction.recipient != null ? transaction.recipient.name : ''}"></td>
-					<td th:text="${transaction.card != null ? transaction.card.pan : ''}"></td>
-					<td th:text="${transaction.device != null ? transaction.device.name : ''}"></td>
-					<td th:text="${transaction.type}"></td>
+					<td th:text="${transaction.mode}"></td>
 					<td th:text="${transaction.amount}"></td>
-					<td th:text="${transaction.timeStamp}"></td>
+					<td th:text="${transaction.cardId}"></td>
+					<td th:text="${transaction.deviceId}"></td>
+					<td th:text="${transaction.transactionDateTime}"></td>
 					<td>
 						<a class="justify-content-center" th:href="@{/transactions/details/{id}(id=${transaction.id})}">
 							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -55,26 +56,20 @@ public class BlacklistController {
         }
 
         @PostMapping("/add")
-        public String add(Principal principal, @Valid Blacklist blacklist, BindingResult result, Model model) {
+        public String add(Principal principal, @Valid Blacklist blacklist, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
             if (result.hasErrors()) {
                 model.addAttribute("blacklist", blacklist);
                 return "blacklists/add";
             }
             blacklistService.add(blacklist);
-            Page<Blacklist> blacklistPage = blacklistService.findAllPaginated(1, 10);
-            model.addAttribute("pageNumbers", pageUtil.getPageNumber(blacklistPage));
-            model.addAttribute("blacklistPage", blacklistPage);
-            model.addAttribute("saved", true);
+            redirectAttributes.addFlashAttribute("saved", true);
             return "redirect:/blacklists/get";
         }
 
         @GetMapping("/remove/{id}")
-        public String remove(Principal principal, @PathVariable("id") long id, Model model) {
+        public String remove(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
             blacklistService.remove(id);
-            Page<Blacklist> blacklistPage = blacklistService.findAllPaginated(1, 10);
-            model.addAttribute("pageNumbers", pageUtil.getPageNumber(blacklistPage));
-            model.addAttribute("blacklistPage", blacklistPage);
-            model.addAttribute("deleted", true);
+            redirectAttributes.addFlashAttribute("deleted", true);
             return "redirect:/blacklists/get";
         }
 }

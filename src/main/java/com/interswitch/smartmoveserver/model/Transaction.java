@@ -1,9 +1,11 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * @author adebola.owolabi
@@ -16,7 +18,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String transactionId;
+    private String transactionId = UUID.randomUUID().toString();
 
     private String cardId;
 
@@ -41,7 +43,13 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private Enum.TransactionType type;
 
+    @Enumerated(EnumType.STRING)
     private Enum.TransportMode mode;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime transactionDateTime;
+
+    private String schemeName;
+
+    private Integer schemeId;
 }

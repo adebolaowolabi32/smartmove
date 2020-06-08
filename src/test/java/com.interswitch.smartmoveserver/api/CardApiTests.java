@@ -17,9 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
@@ -47,7 +46,7 @@ public class CardApiTests {
         card.setPan("12345678901234");
         card.setBalance(40000);
         card.setOwner(new User());
-        card.setExpiry(Date.from(Instant.MAX));
+        card.setExpiry(LocalDate.now().plusYears(3));
         card.setType(Enum.CardType.AGENT);
         card.setEnabled(true);
     }

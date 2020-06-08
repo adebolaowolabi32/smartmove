@@ -99,6 +99,7 @@ public class UserService {
     private User saveAsAdmin(PassportUser passportUser){
         User user = passportService.buildUser(passportUser);
         user.setRole(Enum.Role.ISW_ADMIN);
+        user.setEnabled(true);
         return save(passportUser, user, null);
     }
 
@@ -156,17 +157,12 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You do not have permission to this resource");
     }
 
-    public User update(User user) {
-        Optional<User> existing = userRepository.findById(user.getId());
-        if(existing.isPresent())
+    public User update(long id, boolean enabled) {
+        Optional<User> existingUser = userRepository.findById(id);
+        if(existingUser.isPresent())
         {
-            User existingUser = existing.get();
-            user.setRole(existingUser.getRole());
-            user.setOwner(existingUser.getOwner());
-            user.setPassword(null);
-            //TODO:: Passport update user requires user credentials
-           /* PassportUser passportUser = passportService.updateUser(user);
-            user.setUsername(passportUser.getUsername());*/
+            User user = existingUser.get();
+            user.setEnabled(enabled);
             return userRepository.save(user);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");

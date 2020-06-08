@@ -11,8 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,7 +46,7 @@ public class CardService {
     public Card autoCreateForUser(User user){
         Card card = new Card();
         card.setPan(UUID.randomUUID().toString());
-        card.setExpiry(Date.from(Instant.MAX));
+        card.setExpiry(LocalDate.now().plusYears(3));
         card.setOwner(user);
         card.setBalance(0);
         card.setEnabled(true);
