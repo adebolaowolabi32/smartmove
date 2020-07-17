@@ -12,9 +12,11 @@ import java.util.Optional;
 
 @Repository
 public interface CardRepository extends CrudRepository<Card, Long> {
+    List<Card> findAll();
     Optional<Card> findByPan(String pan);
     Optional<Card> findByOwner(User owner);
     Page<Card> findAll(Pageable pageable);
-    List<Card> findAll();
+
+    Page<Card> findAllByOwner(Pageable pageable, User owner);
     Long countByOwner(User owner);
 }

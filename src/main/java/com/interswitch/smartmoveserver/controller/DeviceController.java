@@ -39,7 +39,7 @@ public class DeviceController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(required = false) Enum.DeviceType type, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Device> devicePage = deviceService.findAllPaginated(type, page, size);
+        Page<Device> devicePage = deviceService.findAllPaginatedByType(principal, owner, type, page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(devicePage));
         model.addAttribute("devicePage", devicePage);
         return "devices/get";

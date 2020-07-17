@@ -38,7 +38,7 @@ public class TerminalController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Terminal> terminalPage = terminalService.findAllPaginated(page, size);
+        Page<Terminal> terminalPage = terminalService.findAllPaginated(principal, owner, page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(terminalPage));
         model.addAttribute("terminalPage", terminalPage);
         return "terminals/get";

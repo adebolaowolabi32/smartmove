@@ -25,9 +25,6 @@ public class HomeController {
     private PassportService passportService;
 
     @Autowired
-    private CoreService coreService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired

@@ -12,6 +12,7 @@ import com.interswitch.smartmoveserver.repository.DeviceRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,10 @@ public class DeviceService {
     private UserRepository userRepository;
 
     @Autowired
-    private PageUtil pageUtil;
+    SecurityUtil securityUtil;
+
+    @Autowired
+    PageUtil pageUtil;
 
     public DeviceConnectionResponse connectDevice(DeviceConnection deviceConnection) {
         Device device = new Device();
@@ -66,18 +70,47 @@ public class DeviceService {
         return getDeviceIdResponse;
     }
 
-    public Page<Device> findAllPaginated(int page, int size) {
-        PageRequest pageable = PageRequest.of(page - 1, size);
-        return deviceRepository.findAll(pageable);
+    public Page<Device> findAllPaginatedByType(Principal principal, Long owner, Enum.DeviceType type, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if (!user.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.get().getRole()))
+                return deviceRepository.findAllByTypeAndOwner(pageable, type, user.get());
+            else
+                return deviceRepository.findAllByType(pageable, type);
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                Optional<User> ownerUser = userRepository.findById(owner);
+                if (!ownerUser.isPresent())
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
+                return deviceRepository.findAllByTypeAndOwner(pageable, type, ownerUser.get());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
 
-    public Page<Device> findAllPaginated(Enum.DeviceType type, int page, int size) {
+    public Page<Device> findAllPaginated(Principal principal, Long owner, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        if(type == null) {
-            return deviceRepository.findAll(pageable);
-        }
-        else {
-            return deviceRepository.findAllByType(pageable, type);
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if (!user.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.get().getRole()))
+                return deviceRepository.findAllByOwner(pageable, user.get());
+            else
+                return deviceRepository.findAll(pageable);
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                Optional<User> ownerUser = userRepository.findById(owner);
+                if (!ownerUser.isPresent())
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
+                return deviceRepository.findAllByOwner(pageable, ownerUser.get());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
 

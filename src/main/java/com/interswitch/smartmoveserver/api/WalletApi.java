@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/wallets")
+@RequestMapping("/api/wallet")
 public class WalletApi {
     @Autowired
     WalletService walletService;

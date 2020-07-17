@@ -18,7 +18,7 @@ import java.util.List;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/devices")
+@RequestMapping("/api/devices")
 public class DeviceApi {
 
     @Autowired

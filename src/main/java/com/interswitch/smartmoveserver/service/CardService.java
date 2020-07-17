@@ -4,6 +4,8 @@ import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.CardRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
+import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,13 +30,36 @@ public class CardService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SecurityUtil securityUtil;
+
+    @Autowired
+    PageUtil pageUtil;
+
     public List<Card> getAll() {
         return cardRepository.findAll();
     }
 
-    public Page<Card> findAllPaginated(int page, int size) {
-        PageRequest pageable = PageRequest.of(page - 1, size);
-        return cardRepository.findAll(pageable);
+    public Page<Card> findAllPaginated(Principal principal, Long owner, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if (!user.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.get().getRole()))
+                return cardRepository.findAllByOwner(pageable, user.get());
+            else
+                return cardRepository.findAll(pageable);
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                Optional<User> ownerUser = userRepository.findById(owner);
+                if (!ownerUser.isPresent())
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
+                return cardRepository.findAllByOwner(pageable, ownerUser.get());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
 
     public Card save(Card card) {

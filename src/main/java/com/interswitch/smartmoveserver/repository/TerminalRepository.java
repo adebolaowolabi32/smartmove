@@ -14,8 +14,10 @@ import java.util.List;
 public interface TerminalRepository extends CrudRepository<Terminal, Long>  {
     List<Terminal> findAllByType(Enum.TransportMode type);
     List<Terminal> findAllByOwner(User owner);
-    List<Terminal> findAllByType(Pageable pageable, Enum.TransportMode type);
-    List<Terminal> findAllByOwner(Pageable pageable, User owner);
+
+    Page<Terminal> findAllByType(Pageable pageable, Enum.TransportMode type);
+
+    Page<Terminal> findAllByOwner(Pageable pageable, User owner);
     Long countByOwner(User owner);
     Page<Terminal> findAll(Pageable pageable);
     List<Terminal> findAll();

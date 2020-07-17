@@ -42,7 +42,7 @@ public class RouteController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Route> routePage = routeService.findAllPaginated(page, size);
+        Page<Route> routePage = routeService.findAllPaginated(principal, owner, page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
         model.addAttribute("routePage", routePage);
         return "routes/get";

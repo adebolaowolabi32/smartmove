@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title th:fragment="title">Schemes</title>
+<div th:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-user mr-1"></i><span>Schemes</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2><b><span>Schemes</span></b></h2>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <a href="#" th:href="@{/schemes/create}" class="btn btn-info"><i class="fas fa-plus"
+                                                                                             aria-hidden="true"></i> Add
+                                New</a>
+                            <a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh
+                                List</a>
+                            <a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export
+                                to Excel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{scheme.deleted.message} : false)"></div>
+            <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+            <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+                <thead class='thead-light'>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Owner</th>
+                    <th>View Details</th>
+                    <th>Remove</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="scheme : ${schemes}">
+                    <td th:text="${scheme.id}"></td>
+                    <td th:text="${scheme.name}"></td>
+                    <td th:text="${scheme.owner}"></td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/schemes/details/{id}(id=${scheme.id})}">
+                            <button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/schemes/delete/{id}(id=${scheme.id})}">
+                            <button type='button' class='btn btn-danger'><i class='far fa-trash-alt'></i></button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

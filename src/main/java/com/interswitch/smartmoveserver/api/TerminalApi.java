@@ -14,7 +14,7 @@ import java.util.List;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/terminals")
+@RequestMapping("/api/terminals")
 public class TerminalApi {
     @Autowired
     TerminalService terminalService;

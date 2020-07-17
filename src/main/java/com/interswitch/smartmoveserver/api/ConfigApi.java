@@ -14,7 +14,7 @@ import java.util.List;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/configurations")
+@RequestMapping("/api/configurations")
 public class ConfigApi {
     @Autowired
     private ConfigService configService;
