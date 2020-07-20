@@ -35,10 +35,10 @@ public class Transaction {
     private String operatorId;
 
     private double amount;
-
+/*
     private String walletBalance;
 
-    private String cardBalance;
+    private String cardBalance;*/
 
     @Enumerated(EnumType.STRING)
     private Enum.TransactionType type;
