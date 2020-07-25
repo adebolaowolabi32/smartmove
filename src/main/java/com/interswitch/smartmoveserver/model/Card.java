@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class Card {
     @Column(unique=true)
     private String pan;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expiry;
 
     @Enumerated(EnumType.STRING)

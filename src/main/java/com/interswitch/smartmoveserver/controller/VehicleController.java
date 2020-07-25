@@ -5,7 +5,6 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.service.VehicleService;
-import com.interswitch.smartmoveserver.service.WebViewService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,9 +29,6 @@ public class VehicleController {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    WebViewService webViewService;
 
     @Autowired
     PageUtil pageUtil;
@@ -71,7 +67,7 @@ public class VehicleController {
             model.addAttribute("owners", userService.findAll());
             return "vehicles/create";
         }
-        Vehicle savedVehicle = vehicleService.save(vehicle, principal);
+        Vehicle savedVehicle = vehicleService.save(vehicle);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/vehicles/details/" + savedVehicle.getId();
     }
