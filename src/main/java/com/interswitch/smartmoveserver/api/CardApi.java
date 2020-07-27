@@ -13,7 +13,7 @@ import java.util.List;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/cards")
+@RequestMapping("/api/cards")
 public class CardApi {
     @Autowired
     CardService cardService;

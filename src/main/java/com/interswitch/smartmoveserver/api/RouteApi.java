@@ -14,7 +14,7 @@ import java.util.List;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/routes")
+@RequestMapping("/api/routes")
 public class RouteApi {
     @Autowired
     RouteService routeService;

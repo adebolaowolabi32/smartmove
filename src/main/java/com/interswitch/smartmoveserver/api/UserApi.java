@@ -15,7 +15,7 @@ import java.util.List;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserApi {
 
     @Autowired

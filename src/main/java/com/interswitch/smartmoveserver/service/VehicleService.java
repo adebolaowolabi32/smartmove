@@ -34,7 +34,11 @@ public class VehicleService {
 
     @Autowired
     PageUtil pageUtil;
-    
+
+    public List<Vehicle> findAll() {
+        return vehicleRepository.findAll();
+    }
+
     public Vehicle save(Vehicle vehicle) {
         long id = vehicle.getId();
         boolean exists = vehicleRepository.existsById(id);
@@ -118,10 +122,6 @@ public class VehicleService {
         return vehicleRepository.count();
     }
 
-    public Page<Vehicle> findAllPaginated(Principal principal) {
-        return this.findAllPaginated(principal, 0L, 1, 10);
-    }
-
     public Page<Vehicle> findAllPaginated(Principal principal, Long owner, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         Optional<User> user = userRepository.findByUsername(principal.getName());
@@ -129,7 +129,10 @@ public class VehicleService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
 
         if(owner == 0) {
-            return vehicleRepository.findAllByOwner(pageable, user.get());
+            if (securityUtil.isOwnedEntity(user.get().getRole()))
+                return vehicleRepository.findAllByOwner(pageable, user.get());
+            else
+                return vehicleRepository.findAll(pageable);
         }
         else {
             if(securityUtil.isOwner(principal, owner)){
@@ -140,10 +143,5 @@ public class VehicleService {
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
-    }
-
-    public Page<Vehicle> findPaginatedByOwner(int page, int size, User owner) {
-        PageRequest pageable = PageRequest.of(page - 1, size);
-        return vehicleRepository.findAllByOwner(pageable, owner);
     }
 }

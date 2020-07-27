@@ -6,6 +6,7 @@ import com.interswitch.smartmoveserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,6 +22,8 @@ import org.springframework.security.oauth2.client.web.HttpSessionOAuth2Authoriza
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +36,7 @@ import java.util.Set;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Order(1)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -49,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/", "/index", "/login",
                         "/signup/**",
                         "/health").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**"))).authenticated()
                 .and()
                 .httpBasic().disable()
                 .formLogin().disable()

@@ -14,16 +14,15 @@ import java.util.List;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/vehicles")
+@RequestMapping("/api/vehicles")
 public class VehicleApi {
     @Autowired
     VehicleService vehicleService;
 
-    /*@GetMapping(produces = "application/json")
+    @GetMapping(produces = "application/json")
     private List<Vehicle> findAll() {
-
         return vehicleService.findAll();
-    }*/
+    }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)

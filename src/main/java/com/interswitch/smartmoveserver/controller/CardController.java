@@ -38,7 +38,7 @@ public class CardController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Card> cardPage = cardService.findAllPaginated(page, size);
+        Page<Card> cardPage = cardService.findAllPaginated(principal, owner, page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(cardPage));
         model.addAttribute("cardPage", cardPage);
         return "cards/get";

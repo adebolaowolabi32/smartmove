@@ -5,6 +5,8 @@ import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.RouteRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
+import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,13 +36,36 @@ public class RouteService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SecurityUtil securityUtil;
+
+    @Autowired
+    PageUtil pageUtil;
+
     public List<Route> getAll() {
         return routeRepository.findAll();
     }
 
-    public Page<Route> findAllPaginated(int page, int size) {
-        PageRequest pageable = PageRequest.of(page - 1, size);
-        return routeRepository.findAll(pageable);
+    public Page<Route> findAllPaginated(Principal principal, Long owner, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        if (!user.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.get().getRole()))
+                return routeRepository.findAllByOwner(pageable, user.get());
+            else
+                return routeRepository.findAll(pageable);
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                Optional<User> ownerUser = userRepository.findById(owner);
+                if (!ownerUser.isPresent())
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
+                return routeRepository.findAllByOwner(pageable, ownerUser.get());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
 
     public Route save(Route route) {

@@ -14,7 +14,7 @@ import java.util.List;
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/api/transactions")
 public class TransactionApi {
     @Autowired
     private TransactionService transactionService;
