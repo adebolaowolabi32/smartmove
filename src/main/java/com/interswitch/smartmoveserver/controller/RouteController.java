@@ -66,12 +66,14 @@ public class RouteController {
 
     @PostMapping("/create")
     public String create(Principal principal, @Valid Route route, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
         if (result.hasErrors()) {
             model.addAttribute("route", route);
             model.addAttribute("owners", userService.findAll());
             model.addAttribute("terminals", terminalService.getAll());
             return "routes/create";
         }
+
         Route savedRoute = routeService.save(route, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/routes/details/" + savedRoute.getId();
