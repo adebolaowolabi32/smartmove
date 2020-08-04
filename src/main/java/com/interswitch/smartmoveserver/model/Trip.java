@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -31,7 +30,11 @@ public class Trip {
     @JoinColumn(name = "vehicle")
     private Vehicle vehicle;
 
-    private LocalDateTime departure;
+    private String departure;
 
-    private LocalDateTime arrival;
+    private String arrival;
+
+    private LocalDateTime departureDateTime;
+
+    private LocalDateTime arrivalDateTime;
 }

@@ -43,4 +43,7 @@ public class Enum {
     public enum SeatClass {
         STANDARD, PREMIUM, LUXURY
     }
+
+    public enum IdCategory {
+    }
 }

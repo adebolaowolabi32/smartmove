@@ -23,7 +23,6 @@ import java.util.Map;
 @Service
 public class IswCoreService {
 
-
     @Autowired
     APIRequestClient apiRequestClient;
 
@@ -45,7 +44,6 @@ public class IswCoreService {
 
     IswRole iswRole;
     IswUser iswUser;
-
 
     public IswUser createUser(User user)  {
         IswUser iswUser = buildUser(user);
@@ -106,6 +104,7 @@ public class IswCoreService {
                 permissions.add("VIEW_VEHICLES");
                 permissions.add("VIEW_CONFIGURATIONS");
                 permissions.add("VIEW_BLACKLISTS");
+                permissions.add("VIEW_TRIPS");
 
                 permissions.add("CREATE_CARD");
                 permissions.add("CREATE_AGENT");
@@ -124,6 +123,7 @@ public class IswCoreService {
                 permissions.add("CREATE_VEHICLE");
                 permissions.add("CREATE_CONFIGURATION");
                 permissions.add("CREATE_BLACKLIST");
+                permissions.add("CREATE_TRIP");
 
 
                 permissions.add("VIEW_AGENT_DETAILS");
@@ -140,6 +140,7 @@ public class IswCoreService {
                 permissions.add("VIEW_ROUTE_DETAILS");
                 permissions.add("VIEW_CONFIGURATION_DETAILS");
                 permissions.add("VIEW_BLACKLIST_DETAILS");
+                permissions.add("CREATE_TRIP_DETAILS");
 
 
                 permissions.add("UPDATE_CARD");
@@ -156,6 +157,7 @@ public class IswCoreService {
                 permissions.add("UPDATE_ROUTE");
                 permissions.add("UPDATE_VEHICLE");
                 permissions.add("UPDATE_CONFIGURATION");
+                permissions.add("UPDATE_TRIP");
 
                 permissions.add("DELETE_CARD");
                 permissions.add("DELETE_AGENT");
@@ -172,6 +174,8 @@ public class IswCoreService {
                 permissions.add("DELETE_VEHICLE");
                 permissions.add("DELETE_CONFIGURATION");
                 permissions.add("DELETE_BLACKLIST");
+                permissions.add("DELETE_TRIP");
+
                 return permissions;
             }
             case REGULATOR: {
@@ -188,6 +192,7 @@ public class IswCoreService {
                 permissions.add("VIEW_SETTLEMENTS");
                 permissions.add("VIEW_ROUTES");
                 permissions.add("VIEW_VEHICLES");
+                permissions.add("VIEW_TRIPS");
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
@@ -199,6 +204,7 @@ public class IswCoreService {
                 permissions.add("CREATE_VEHICLE_OWNER");
                 permissions.add("CREATE_ROUTE");
                 permissions.add("CREATE_VEHICLE");
+                permissions.add("CREATE_TRIP");
 
                 permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_DEVICE_DETAILS");
@@ -212,6 +218,7 @@ public class IswCoreService {
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
                 permissions.add("VIEW_ROUTE_DETAILS");
                 permissions.add("VIEW_VEHICLE_DETAILS");
+                permissions.add("VIEW_TRIP_DETAILS");
 
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");
@@ -223,6 +230,7 @@ public class IswCoreService {
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ROUTE");
                 permissions.add("UPDATE_VEHICLE");
+                permissions.add("UPDATE_TRIP");
 
                 permissions.add("DELETE_AGENT");
                 permissions.add("DELETE_DEVICE");
@@ -234,6 +242,7 @@ public class IswCoreService {
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ROUTE");
                 permissions.add("DELETE_VEHICLE");
+                permissions.add("DELETE_TRIP");
                 return permissions;
             }
             case OPERATOR: {
@@ -250,6 +259,7 @@ public class IswCoreService {
                 permissions.add("VIEW_SETTLEMENTS");
                 permissions.add("VIEW_ROUTES");
                 permissions.add("VIEW_VEHICLES");
+                permissions.add("VIEW_TRIPS");
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
@@ -260,6 +270,7 @@ public class IswCoreService {
                 permissions.add("CREATE_VEHICLE_OWNER");
                 permissions.add("CREATE_ROUTE");
                 permissions.add("CREATE_VEHICLE");
+                permissions.add("CREATE_TRIP");
 
                 permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_DEVICE_DETAILS");
@@ -273,6 +284,7 @@ public class IswCoreService {
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
                 permissions.add("VIEW_ROUTE_DETAILS");
                 permissions.add("VIEW_VEHICLE_DETAILS");
+                permissions.add("VIEW_TRIP_DETAILS");
 
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");
@@ -283,6 +295,7 @@ public class IswCoreService {
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ROUTE");
                 permissions.add("UPDATE_VEHICLE");
+                permissions.add("UPDATE_TRIP");
 
                 permissions.add("DELETE_AGENT");
                 permissions.add("DELETE_DEVICE");
@@ -293,6 +306,7 @@ public class IswCoreService {
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ROUTE");
                 permissions.add("DELETE_VEHICLE");
+                permissions.add("DELETE_TRIP");
                 return permissions;
             }
             case VEHICLE_OWNER: {
@@ -302,12 +316,14 @@ public class IswCoreService {
                 permissions.add("VIEW_SETTLEMENTS");
                 permissions.add("VIEW_ROUTES");
                 permissions.add("VIEW_VEHICLES");
+                permissions.add("VIEW_TRIPS");
 
                 permissions.add("VIEW_TERMINAL_DETAILS");
                 permissions.add("VIEW_OPERATOR_DETAILS");
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
                 permissions.add("VIEW_ROUTE_DETAILS");
                 permissions.add("VIEW_VEHICLE_DETAILS");
+                permissions.add("VIEW_TRIP_DETAILS");
                 return permissions;
             }
             case AGENT: {
@@ -316,6 +332,7 @@ public class IswCoreService {
                 permissions.add("VIEW_TERMINALS");
                 permissions.add("VIEW_REGULATORS");
                 permissions.add("VIEW_TRANSACTIONS");
+
 
                 permissions.add("CREATE_READER");
 

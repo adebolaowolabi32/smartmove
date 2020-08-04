@@ -16,7 +16,7 @@ public class Reservation {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "passenger")
     private User user;
 
     @ManyToOne
@@ -27,6 +27,6 @@ public class Reservation {
     private Enum.SeatClass seatClass;
 
     @ManyToOne
-    @JoinColumn(name = "seat")
+ @JoinColumn(name = "seat")
     private Seat seat;
 }

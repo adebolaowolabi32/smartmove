@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
+
     List<Transaction> findAllByType(Enum.TransactionType type);
     List<Transaction> findAllByAgentId(String agentId);
     List<Transaction> findAllByOperatorId(String operatorId);

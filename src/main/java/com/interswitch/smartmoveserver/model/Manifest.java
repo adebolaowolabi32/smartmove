@@ -15,25 +15,25 @@ public class Manifest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @ManyToOne
     @JoinColumn(name = "seat")
     private Seat seat;
-
-    @ManyToOne
-    @JoinColumn(name = "user")
-    private User user;
-
+    private String name;
+    private String gender;
+    private String nationality;
+    @Enumerated(EnumType.STRING)
+    private Enum.IdCategory idCategory;
+    private String idNumber;
+    private String address;
+    private String contactMobile;
+    private String contactEmail;
+    private String nextOfKinName;
+    private String nextOfKinMobile;
     @ManyToOne
     @JoinColumn(name = "trip")
     private Trip trip;
-
     private boolean boarded;
-
     private boolean completed;
-
     private LocalDateTime timeofBoarding;
-
     private LocalDateTime timeofCompletion;
-
 }

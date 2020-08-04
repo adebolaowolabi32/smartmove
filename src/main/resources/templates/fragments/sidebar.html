@@ -49,6 +49,11 @@
 							<a class="nav-link" sec:authorize="hasAuthority('VIEW_ROUTES')" th:href="@{/routes/get}" href="#">
 								<div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
 								Routes</a>
+
+							<a class="nav-link" sec:authorize="hasAuthority('VIEW_TRIPS')" th:href="@{/trips/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-road"></i></div>
+								Trips</a>
+
 							<a class="nav-link" sec:authorize="hasAuthority('VIEW_DEVICES')" th:href="@{/devices/get}" href="#">
 								<div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
 								Devices</a>
