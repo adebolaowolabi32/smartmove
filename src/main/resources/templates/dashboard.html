@@ -68,7 +68,18 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_VALIDATORS')">
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-dark text-white mb-4">
+                    <div class="card-body heavy">Trips <span class="number" th:text="${no_trips}">50</span></div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" th:href="@{/trips/get}" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_VALIDATORS')">
 				<div class="card bg-danger text-white mb-4">
 					<div class="card-body heavy">Validators <span class="number" th:text="${no_validators}">21</span></div>
 					<div class="card-footer d-flex align-items-center justify-content-between">

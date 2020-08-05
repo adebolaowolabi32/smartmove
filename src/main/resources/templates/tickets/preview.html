@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
-<title th:fragment="title">Tickets</title>
+<title layout:fragment="title">Tickets</title>
 <div layout:fragment="content" class="card mb-4">
     <div class="card-header"><i class="fas fa-memory mr-1"></i>
-        <span>Tickets</span></div>
+        <span>Tickets</span>
+        <a style="float:right;">
+            <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
+                ticket
+            </button>
+        </a>
+    </div>
     <div class="card-body">
         <img src="" alt="Operator Logo">
         <br>

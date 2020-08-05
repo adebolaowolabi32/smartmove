@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -30,22 +28,31 @@ public class TicketService {
     private UserRepository userRepository;
 
     @Autowired
+    private ManifestService manifestService;
+
+    @Autowired
+    private RouteService routeService;
+
+    @Autowired
+    private TripService tripService;
+
+    @Autowired
     PageUtil pageUtil;
 
     public List<Route> getRoutes() {
-        List<Route> routes = new ArrayList<>();
+        /*List<Route> routes = new ArrayList<>();
         Route route = new Route();
         route.setId(1);
         route.setName("Ojota - Oshodi");
         route.setStartTerminalId(2L);
         route.setStopTerminalId(1L);
         route.setPrice(200);
-        routes.add(route);
-        return routes;
+        routes.add(route);*/
+        return routeService.getAll();
     }
 
     public List<Trip> getTrips() {
-        List<Trip> trips = new ArrayList<>();
+        /*List<Trip> trips = new ArrayList<>();
         Route route = new Route();
         route.setId(1);
         route.setName("Ojota - Oshodi");
@@ -67,36 +74,17 @@ public class TicketService {
         trip.setRoute(route);
         trip.setVehicle(vehicle);
         trip.setName(route.getName() + trip.getDeparture());
-        trips.add(trip);
-        return trips;
+        trips.add(trip);*/
+        return tripService.getAll();
     }
 
     public TicketDetails makeBooking(TicketDetails ticketDetails) {
-        Route route = new Route();
-        route.setName("Ojota - Oshodi");
-        route.setStartTerminalId(2L);
-        route.setStopTerminalId(1L);
-        route.setPrice(200);
+        Route route = routeService.findById(Long.valueOf(ticketDetails.getRouteId()));
         ticketDetails.setRoute(route);
-
-        Vehicle vehicle = new Vehicle();
-        vehicle.setId(1);
-        vehicle.setName("Vehicle One");
-
-        Trip trip = new Trip();
-        trip.setId(1);
-        trip.setReferenceNo(UUID.randomUUID().toString());
-        DateFormat format = new SimpleDateFormat("MMM dd yyyy HH:mm aa");
-        Date dateobj = new Date();
-        trip.setArrival(format.format(dateobj));
-        trip.setDeparture(format.format(dateobj));
-        trip.setDriver(new User());
-        trip.setRoute(route);
-        trip.setVehicle(vehicle);
-        trip.setName(route.getName() + trip.getDeparture());
+        Trip trip = tripService.findById(Long.valueOf(ticketDetails.getTripId()));
         ticketDetails.setTrip(trip);
 
-        ticketDetails.setSeats(getAvailableSeats(vehicle.getId()));
+        ticketDetails.setSeats(getAvailableSeats());
         ticketDetails.setCountries(getAllCountries());
         return ticketDetails;
     }
@@ -138,14 +126,16 @@ public class TicketService {
         manifest.setIdCategory(ticketDetails.getIdCategory());
         manifest.setIdNumber(ticketDetails.getIdNumber());
         manifest.setNationality(ticketDetails.getNationality());
+        manifest.setAddress(ticketDetails.getNationality());
         manifest.setNextOfKinMobile(ticketDetails.getNextOfKinMobile());
         manifest.setNextOfKinName(ticketDetails.getNextOfKinName());
         manifest.setTrip(ticketDetails.getTrip());
-        //manifest.setSeatNo();
+        manifest.setSeatNo(ticketDetails.getSeatNo());
+        manifestService.save(manifest);
         return ticketDetails;
     }
 
-    public List<String> getAvailableSeats(long vehicleId) {
+    public List<String> getAvailableSeats() {
         List<String> seats = new ArrayList<>();
         for (int i = 3; i <= 18; i++) {
             seats.add(String.valueOf(i));

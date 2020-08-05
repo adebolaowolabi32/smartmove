@@ -32,4 +32,5 @@ public class APIRequestClient {
         ResponseEntity<T> responseEntity = restTemplate.exchange(requestUrl, method, requestEntity, responseClass, pathVariables);
         return responseEntity;
     }
+
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/default.html}">
-		<title th:fragment="title" th:text="${title}">Users</title>
-		<div th:fragment="content" class="card mb-4">
+<title layout:fragment="title" th:text="${title}">Users</title>
+<div layout:fragment="content" class="card mb-4">
 			<div class="card-header"><i class="fas fa-user mr-1"></i><span th:text="${title}">Users</span></div>
 			<div class="card-body">
 				<div class="table-title">

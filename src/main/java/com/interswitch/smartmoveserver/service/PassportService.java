@@ -26,8 +26,8 @@ import java.util.Map;
  */
 @Service
 public class PassportService {
-    protected final Log logger = LogFactory.getLog(getClass());
 
+    protected final Log logger = LogFactory.getLog(getClass());
     @Value("${spring.application.passport.user-url}")
     private String userUrl;
     @Value("${spring.application.passport.token-url}")

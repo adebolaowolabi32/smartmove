@@ -48,6 +48,9 @@ public class HomeController {
     private RouteService routeService;
 
     @Autowired
+    private TripService tripService;
+
+    @Autowired
     private ConfigService configService;
 
     @Autowired
@@ -79,6 +82,7 @@ public class HomeController {
         Long no_transfers = 0L;
         Long card_balance = 0L;
         Double wallet_balance = 0D;
+        Long no_trips = 0L;
 
         if(securityUtil.isOwnedEntity(role)){
             no_regulators = userService.countByRole(principal, user, Enum.Role.REGULATOR);
@@ -108,6 +112,7 @@ public class HomeController {
             no_readers = deviceService.countByType(Enum.DeviceType.READER);
             no_transactions = transactionService.countAll();
             no_cards = cardService.countAll();
+            no_trips = tripService.countAll();
         }
         model.addAttribute("no_admins", no_admins);
         model.addAttribute("no_regulators", no_regulators);
@@ -125,6 +130,7 @@ public class HomeController {
         model.addAttribute("wallet_balance", wallet_balance);
         model.addAttribute("no_transfers", no_transfers);
         model.addAttribute("no_topups", no_topups);
+        model.addAttribute("no_trips", no_trips);
 
         DateFormat format = new SimpleDateFormat("MMM dd yyyy HH:mm aa");
         Date dateobj = new Date();

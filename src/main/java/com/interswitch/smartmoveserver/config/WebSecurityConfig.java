@@ -105,8 +105,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 if (authority instanceof OidcUserAuthority) {
                     //
                 } else if (authority instanceof OAuth2UserAuthority) {
-                    OAuth2UserAuthority oauth2UserAuthority = (OAuth2UserAuthority)authority;
 
+                    OAuth2UserAuthority oauth2UserAuthority = (OAuth2UserAuthority)authority;
                     Map<String, Object> userAttributes = oauth2UserAuthority.getAttributes();
                     if (userAttributes.containsKey("username")){
                         String username = userAttributes.get("username").toString();

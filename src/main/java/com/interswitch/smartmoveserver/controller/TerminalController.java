@@ -5,6 +5,8 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.TerminalService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/terminals")
 public class TerminalController {
+
+    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     private TerminalService terminalService;
@@ -64,6 +68,8 @@ public class TerminalController {
             model.addAttribute("owners", userService.findAll());
             return "terminals/create";
         }
+
+        logger.info("POSTing Principal logged====>" + principal);
         Terminal savedTerminal = terminalService.save(terminal, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/terminals/details/" + savedTerminal.getId();
@@ -93,11 +99,13 @@ public class TerminalController {
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+
         Terminal terminal = terminalService.findById(id);
         terminalService.delete(id);
         User owner = terminal.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/terminals/get?owner=" + ownerId;
+
     }
 }

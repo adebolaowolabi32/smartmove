@@ -86,9 +86,9 @@ public class RouteService {
         route.setName(startTerminalName + " - " + stopTerminalName);
         boolean exists = routeRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route already exists");
-        if(route.getOwner() == null) {
+        if (route.getOwner() == null) {
             Optional<User> owner = userRepository.findByUsername(principal.getName());
-            if(owner.isPresent()) route.setOwner(owner.get());
+            if (owner.isPresent()) route.setOwner(owner.get());
         }
         return routeRepository.save(route);
     }
@@ -103,15 +103,18 @@ public class RouteService {
 
     public List<Route> findByOwner(long owner) {
         Optional<User> user = userRepository.findById(owner);
-        if(user.isPresent())
+        if (user.isPresent())
             return routeRepository.findAllByOwner(user.get());
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
+    public List<Route> findAll() {
+        return routeRepository.findAll();
+    }
+
     public Route update(Route route) {
         Optional<Route> existing = routeRepository.findById(route.getId());
-        if(existing.isPresent())
-        {
+        if (existing.isPresent()) {
             Terminal startTerminal = terminalService.findById(route.getStartTerminalId());
             Terminal stopTerminal = terminalService.findById(route.getStopTerminalId());
             String startTerminalName = startTerminal.getName();
@@ -126,9 +129,9 @@ public class RouteService {
 
     public void assignToVehicle(long routeId, long vehicleId) {
         Optional<Route> routeOptional = routeRepository.findById(routeId);
-        if(routeOptional.isPresent()){
+        if (routeOptional.isPresent()) {
             Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-            if(vehicleOptional.isPresent()){
+            if (vehicleOptional.isPresent()) {
                 Vehicle vehicle = vehicleOptional.get();
                 Route route = routeOptional.get();
                 Set<Vehicle> vehicles = route.getVehicles();
@@ -139,37 +142,33 @@ public class RouteService {
                 routes.add(route);
                 vehicle.setRoutes(routes);
                 vehicleRepository.save(vehicle);
-            }
-            else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Vehicle does not exist");
-        }
-        else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Route does not exist");
+            } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Vehicle does not exist");
+        } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Route does not exist");
     }
 
     public void unassignFromVehicle(long routeId, long vehicleId) {
         Optional<Route> route = routeRepository.findById(routeId);
-        if(route.isPresent()){
+        if (route.isPresent()) {
             Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleId);
-            if(vehicle.isPresent()){
+            if (vehicle.isPresent()) {
                 Set<Route> routes = vehicle.get().getRoutes();
                 routes.remove(route.get());
-            }
-            else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Vehicle does not exist");
-        }
-        else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Route does not exist");
+            } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Vehicle does not exist");
+        } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Route does not exist");
     }
 
     public void delete(long id) {
         Optional<Route> existing = routeRepository.findById(id);
-        if(existing.isPresent())
+        if (existing.isPresent())
             routeRepository.deleteById(id);
-        else{
+        else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
         }
     }
 
     public void activate(long routeId) {
         Optional<Route> routeOptional = routeRepository.findById(routeId);
-        if(routeOptional.isPresent()){
+        if (routeOptional.isPresent()) {
             Route route = routeOptional.get();
             route.setEnabled(true);
             routeRepository.save(route);
@@ -179,7 +178,7 @@ public class RouteService {
 
     public void deactivate(long routeId) {
         Optional<Route> routeOptional = routeRepository.findById(routeId);
-        if(routeOptional.isPresent()){
+        if (routeOptional.isPresent()) {
             Route route = routeOptional.get();
             route.setEnabled(false);
             routeRepository.save(route);
@@ -187,11 +186,11 @@ public class RouteService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
     }
 
-    public Long countByOwner(User user){
+    public Long countByOwner(User user) {
         return routeRepository.countByOwner(user);
     }
 
-    public Long countAll(){
+    public Long countAll() {
         return routeRepository.count();
     }
 }

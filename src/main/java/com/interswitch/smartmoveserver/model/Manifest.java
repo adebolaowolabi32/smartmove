@@ -21,7 +21,11 @@ public class Manifest implements Serializable {
     @JoinColumn(name = "seat")
     private Seat seat;
 
+    private String seatNo;
+
     private String name;
+
+    private String address;
 
     private String gender;
 
