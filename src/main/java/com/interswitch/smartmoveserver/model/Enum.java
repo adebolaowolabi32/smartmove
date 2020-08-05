@@ -25,7 +25,7 @@ public class Enum {
     }
 
     public enum Role {
-        ISW_ADMIN, REGULATOR, OPERATOR, VEHICLE_OWNER, AGENT
+        ISW_ADMIN, REGULATOR, OPERATOR, VEHICLE_OWNER, AGENT, DRIVER, COMMUTER
     }
 
     public enum CardType {
@@ -35,7 +35,15 @@ public class Enum {
     public enum ItemType {
         CARD, DEVICE, VEHICLE, USER
     }
+
     public enum ConfigList {
         TRANSACTION_UPLOAD_PERIOD, GPS_UPLOAD_PERIOD
+    }
+
+    public enum SeatClass {
+        STANDARD, PREMIUM, LUXURY
+    }
+
+    public enum IdCategory {
     }
 }

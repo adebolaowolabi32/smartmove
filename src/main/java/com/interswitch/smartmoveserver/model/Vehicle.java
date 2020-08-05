@@ -44,4 +44,10 @@ public class Vehicle {
 
     @ManyToMany(mappedBy = "vehicles")
     private Set<Route> routes;
+
+    private int noRows;
+
+    private int noColumns;
+
+    private int noSeats;
 }

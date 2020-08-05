@@ -6,7 +6,10 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.RouteService;
 import com.interswitch.smartmoveserver.service.TerminalService;
 import com.interswitch.smartmoveserver.service.UserService;
+import com.interswitch.smartmoveserver.service.VehicleService;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -26,6 +29,8 @@ import java.security.Principal;
 @RequestMapping("/routes")
 public class RouteController {
 
+    private final Log logger = LogFactory.getLog(getClass());
+
     @Autowired
     private RouteService routeService;
 
@@ -34,6 +39,9 @@ public class RouteController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private VehicleService vehicleService;
 
     @Autowired
     PageUtil pageUtil;
@@ -61,17 +69,21 @@ public class RouteController {
         model.addAttribute("route", route);
         model.addAttribute("owners", userService.findAll());
         model.addAttribute("terminals", terminalService.getAll());
+        model.addAttribute("vehicles", vehicleService.findAll());
         return "routes/create";
     }
 
     @PostMapping("/create")
     public String create(Principal principal, @Valid Route route, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
         if (result.hasErrors()) {
             model.addAttribute("route", route);
             model.addAttribute("owners", userService.findAll());
             model.addAttribute("terminals", terminalService.getAll());
+            model.addAttribute("vehicles", vehicleService.findAll());
             return "routes/create";
         }
+
         Route savedRoute = routeService.save(route, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/routes/details/" + savedRoute.getId();
@@ -83,6 +95,7 @@ public class RouteController {
         model.addAttribute("route", route);
         model.addAttribute("owners", userService.findAll());
         model.addAttribute("terminals", terminalService.getAll());
+        model.addAttribute("vehicles", vehicleService.findAll());
         return "routes/update";
     }
 
@@ -94,6 +107,7 @@ public class RouteController {
             model.addAttribute("route", route);
             model.addAttribute("owners", userService.findAll());
             model.addAttribute("terminals", terminalService.getAll());
+            model.addAttribute("vehicles", vehicleService.findAll());
             return "routes/update";
         }
         routeService.update(route);
