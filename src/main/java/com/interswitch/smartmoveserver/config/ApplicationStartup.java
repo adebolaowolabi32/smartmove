@@ -36,7 +36,7 @@ public class ApplicationStartup implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        User adminUser = new User();
+       User adminUser = new User();
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
         adminUser.setUsername("smart.move13@interswitch.com");

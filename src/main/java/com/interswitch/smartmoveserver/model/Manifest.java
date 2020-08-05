@@ -16,7 +16,6 @@ public class Manifest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @ManyToOne
     @JoinColumn(name = "seat")
     private Seat seat;
@@ -47,13 +46,8 @@ public class Manifest implements Serializable {
     @ManyToOne
     @JoinColumn(name = "trip")
     private Trip trip;
-
     private boolean boarded;
-
     private boolean completed;
-
     private LocalDateTime timeofBoarding;
-
     private LocalDateTime timeofCompletion;
-
 }

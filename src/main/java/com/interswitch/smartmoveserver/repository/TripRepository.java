@@ -29,5 +29,4 @@ public interface TripRepository extends CrudRepository<Trip, Long> {
     Page<Trip> findAll(Pageable pageable);
 
     List<Trip> findAll();
-
 }

@@ -26,6 +26,6 @@ public class Reservation implements Serializable {
     private Enum.SeatClass seatClass;
 
     @ManyToOne
-    @JoinColumn(name = "seat")
+ @JoinColumn(name = "seat")
     private Seat seat;
 }

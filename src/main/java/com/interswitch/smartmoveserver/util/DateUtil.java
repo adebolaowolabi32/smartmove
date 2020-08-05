@@ -102,5 +102,4 @@ public class DateUtil {
         date = cal.getTime();
         return date;
     }
-
 }
