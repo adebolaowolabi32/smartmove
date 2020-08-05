@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Participant;
 import com.interswitch.smartmoveserver.service.ParticipantService;
 import com.interswitch.smartmoveserver.service.SchemeService;
@@ -24,7 +23,6 @@ import java.util.Set;
  * Created by adebola.owolabi on 6/18/2020
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/participants")
 public class ParticipantController {
     @Autowired

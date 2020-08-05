@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.TerminalService;
@@ -21,7 +20,6 @@ import java.security.Principal;
  * @author adebola.owolabi
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/terminals")
 public class TerminalController {
 

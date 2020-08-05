@@ -15653,3 +15653,15 @@ body {
         font-size: 1.2rem;
         color: black;
     }
+   .btn-sized {
+        height:40px;
+        width:100%;
+    }
+   .label-small {
+       font-weight: 500;
+       font-size: 0.8rem;
+   }
+   .amt-big {
+      font-weight: 600;
+      font-size: 2rem;
+   }

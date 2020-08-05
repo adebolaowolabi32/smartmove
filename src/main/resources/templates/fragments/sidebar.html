@@ -40,6 +40,9 @@
 							<a class="nav-link" sec:authorize="hasAuthority('VIEW_CARDS')" th:href="@{/cards/get}" href="#">
 								<div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
 								Cards</a>
+							<a class="nav-link" th:href="@{/tickets/get}" href="#">
+								<div class="sb-nav-link-icon"><i class="fas fa-memory"></i></div>
+								Bookings</a>
 							<a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLES')" th:href="@{/vehicles/get}" href="#">
 								<div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
 								Vehicles</a>

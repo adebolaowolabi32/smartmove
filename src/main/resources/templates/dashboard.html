@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-	<title th:fragment="title">Dashboard</title>
-	<div th:fragment="content" class="container-fluid overflow">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default.html}">
+<title layout:fragment="title">Dashboard</title>
+<div layout:fragment="content" class="container-fluid overflow">
 		<h1 class="mt-4">Dashboard</h1>
 		<div class="row">
 			<div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')">

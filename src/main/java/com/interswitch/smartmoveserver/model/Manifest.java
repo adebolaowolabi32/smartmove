@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /*
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "manifests")
-public class Manifest {
+public class Manifest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -20,9 +21,24 @@ public class Manifest {
     @JoinColumn(name = "seat")
     private Seat seat;
 
-    @ManyToOne
-    @JoinColumn(name = "user")
-    private User user;
+    private String name;
+
+    private String gender;
+
+    private String nationality;
+
+    @Enumerated(EnumType.STRING)
+    private Enum.IdCategory idCategory;
+
+    private String idNumber;
+
+    private String contactMobile;
+
+    private String contactEmail;
+
+    private String nextOfKinName;
+
+    private String nextOfKinMobile;
 
     @ManyToOne
     @JoinColumn(name = "trip")

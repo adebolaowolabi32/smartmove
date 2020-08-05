@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.*;
@@ -56,12 +55,10 @@ public class HomeController {
 
 
     @GetMapping(value = {"/", "/index", "/home"})
-    @Layout(Layout.NONE)
     public String home(Model model) {
         return "index";
     }
 
-    @Layout(value = "layouts/default")
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());

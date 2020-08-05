@@ -33,6 +33,7 @@ import java.util.Set;
 /**
  * @author adebola.owolabi
  */
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

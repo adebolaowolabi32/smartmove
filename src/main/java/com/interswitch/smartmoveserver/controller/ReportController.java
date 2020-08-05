@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Report;
 import com.interswitch.smartmoveserver.service.SettlementService;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -19,7 +18,6 @@ import java.util.Set;
  * Created by adebola.owolabi on 6/9/2020
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/reports")
 public class ReportController {
     @Autowired

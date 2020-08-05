@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Blacklist;
 import com.interswitch.smartmoveserver.service.BlacklistService;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -20,7 +19,6 @@ import java.security.Principal;
  * Created by adebola.owolabi on 5/21/2020
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/blacklists")
 public class BlacklistController {
         @Autowired

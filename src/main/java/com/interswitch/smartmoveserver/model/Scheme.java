@@ -2,13 +2,14 @@ package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 
 /*
  * Created by adebola.owolabi on 4/21/2020
  */
 @Data
-public class Scheme {
+public class Scheme implements Serializable {
     private Integer id;
 
     private String name;

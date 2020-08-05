@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /*
  * Created by adebola.owolabi on 7/18/2020
@@ -10,14 +11,12 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "reservations")
-public class Reservation {
+public class Reservation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user")
-    private User user;
+    private String passengerName;
 
     @ManyToOne
     @JoinColumn(name = "trip")

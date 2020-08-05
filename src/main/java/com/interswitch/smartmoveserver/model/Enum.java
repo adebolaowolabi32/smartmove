@@ -43,4 +43,12 @@ public class Enum {
     public enum SeatClass {
         STANDARD, PREMIUM, LUXURY
     }
+
+    public enum PaymentMode {
+        CASH, POS, TRANSFER
+    }
+
+    public enum IdCategory {
+        NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT
+    }
 }

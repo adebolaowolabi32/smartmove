@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <view-state id="book" view="tickets/book" model="flowScope.ticketDetails">
+        <on-entry>
+            <set name="flowScope.ticketDetails"
+                 value="new com.interswitch.smartmoveserver.model.view.TicketDetails()"/>
+
+            <evaluate result="viewScope.routes" expression=
+                    "ticketService.getRoutes()"/>
+            <evaluate result="viewScope.trips" expression=
+                    "ticketService.getTrips()"/>
+        </on-entry>
+        <transition on="makeBooking" to="details">
+            <evaluate result="flowScope.ticketDetails" expression=
+                    "ticketService.makeBooking(flowScope.ticketDetails)"/>
+        </transition>
+        <on-exit>
+            <evaluate expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Out now')"/>
+        </on-exit>
+    </view-state>
+
+    <view-state id="details" view="tickets/details" model="flowScope.ticketDetails">
+        <transition on="next" to="confirmation">
+            <evaluate result="flowScope.ticketDetails" expression=
+                    "ticketService.getTickets(flowScope.ticketDetails)"/>
+        </transition>
+        <transition on="back" to="book"/>
+    </view-state>
+
+    <view-state id="confirmation" view="tickets/confirmation" model="flowScope.ticketDetails">
+        <transition on="confirmBooking" to="preview">
+            <evaluate result="flowScope.ticketDetails" expression=
+                    "ticketService.confirmTickets(currentUser.name, flowScope.ticketDetails)"/>
+        </transition>
+        <transition on="back" to="details"/>
+    </view-state>
+
+    <view-state id="preview" view="tickets/preview" model="flowScope.ticketDetails">
+    </view-state>
+
+    <end-state id="cancel"/>
+</flow>

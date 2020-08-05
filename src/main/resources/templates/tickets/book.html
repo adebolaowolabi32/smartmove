@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<title th:fragment="title">Tickets</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+        <span>Tickets</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Create New Booking</b></h2>
+                </div>
+
+            </div>
+        </div>
+        <form class="card p-3" method="post" th:action="${flowExecutionUrl}" th:object="${ticketDetails}"
+              data-parsley-validate="true">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label" for="routeId">Route</label>
+                    <div>
+                        <select class="form-control" th:field="*{routeId}" id="routeId">
+                            <option value="">Select...</option>
+                            <option th:each="route : ${routes}" th:value="${route.id}" th:text="${route.name}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label" for="tripDate">Trip Date</label>
+                    <div>
+                        <input class="form-control" type="date" th:field="*{tripDate}" id="tripDate">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label class="control-label" for="tripId">Trip</label>
+                    <div>
+                        <select class="form-control" th:field="*{tripId}" id="tripId">
+                            <option value="">Select...</option>
+                            <option th:each="trip : ${trips}" th:value="${trip.id}" th:text="${trip.name}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2">
+                    <input type="submit" class="btn btn-sized" value="Proceed"/>
+                </div>
+            </div>
+            <input type="hidden" name="_eventId" value="makeBooking"/>
+        </form>
+    </div>
+</div>
+</html>
