@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Config;
 import com.interswitch.smartmoveserver.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import javax.validation.Valid;
  * @author adebola.owolabi
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/configurations")
 public class ConfigController {
     @Autowired

@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.RouteService;
@@ -25,7 +24,6 @@ import java.security.Principal;
  * @author adebola.owolabi
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/routes")
 public class RouteController {
 

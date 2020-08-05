@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Tickets</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-memory mr-1"></i><span>Tickets</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2><b>Ticket Details</b></h2>
+                    </div>
+                    <div class="col-sm-8">
+                        <a th:href="@{/tickets/update/{id}(id=${ticket.id})}">
+                            <button type='button' class='btn btn-outline-info'><i class='fas fa-edit'></i>Edit</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{ticket.saved.message} : (${updated} ? #{ticket.updated.message} : false))"></div>
+            <div class="card p-3">
+                <div class="form-group row">
+                    <label class="col-sm-2" for="name">Name</label>
+                    <div class="col-sm-10">
+                        <span id="name" th:text="${ticket.name}"></span></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2" for="type">Transport Mode</label>
+                    <div class="col-sm-10">
+                        <span id="type" th:text="${ticket.type}"></span></div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-2" for="owner">Owner</label>
+                    <div class="col-sm-10">
+                        <span id="owner" th:text="${ticket.owner.username}"></span></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2" for="location">Location</label>
+                    <div class="col-sm-10"><span id="location" th:text="${ticket.location}"></span></div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2" for="enabled">Active</label>
+                    <div class="col-sm-10">
+                        <label class="switch">
+                            <input type="checkbox" id="enabled" name="enabled" th:checked="${ticket.enabled}" disabled>
+                            <span class="slider round"></span>
+                        </label>
+                        </span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

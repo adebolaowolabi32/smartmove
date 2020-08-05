@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.TerminalService;
@@ -23,7 +22,6 @@ import java.security.Principal;
  * @author adebola.owolabi
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/terminals")
 public class TerminalController {
 
@@ -71,7 +69,7 @@ public class TerminalController {
             return "terminals/create";
         }
 
-        logger.info("POSTing Principal logged====>"+principal);
+        logger.info("POSTing Principal logged====>" + principal);
         Terminal savedTerminal = terminalService.save(terminal, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/terminals/details/" + savedTerminal.getId();

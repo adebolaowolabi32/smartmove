@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author adebola.owolabi
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "devices")
-public class Device {
+public class Device implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

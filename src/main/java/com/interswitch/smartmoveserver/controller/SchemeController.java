@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Scheme;
 import com.interswitch.smartmoveserver.service.SchemeService;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -23,7 +22,6 @@ import java.util.Set;
  * Created by adebola.owolabi on 6/18/2020
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/schemes")
 public class SchemeController {
     @Autowired

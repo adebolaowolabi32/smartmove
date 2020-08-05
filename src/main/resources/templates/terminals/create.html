@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title">Terminals</title>
-<div th:fragment="content" class="card mb-4">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/default.html}">
+<title layout:fragment="title">Terminals</title>
+<div layout:fragment="content" class="card mb-4">
 	<div class="card-header"><i class="fas fa-memory mr-1"></i>
 		<span>Terminals</span></div>
 	<div class="card-body">

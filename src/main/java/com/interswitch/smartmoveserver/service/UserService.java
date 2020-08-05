@@ -66,7 +66,7 @@ public class UserService {
 
     public void setUp(User user) {
         Optional<User> exists = userRepository.findByUsername(user.getUsername());
-        logger.info("User Existing===>user "+user.getUsername()+" is "+exists.isPresent());
+        logger.info("User Existing===>user " + user.getUsername() + " is " + exists.isPresent());
         if (exists.isPresent()) return;
         else {
             PassportUser passportUser = passportService.findUser(user.getUsername());
@@ -78,6 +78,13 @@ public class UserService {
         }
     }
 
+    public void setUpS(User user) {
+        Optional<User> exists = userRepository.findByUsername(user.getUsername());
+        if (exists.isPresent()) return;
+        else {
+            userRepository.save(user);
+        }
+    }
     //if user role is admin, user.owner must be null
     //else must have value
     //if principal is admin user.owner must be populated

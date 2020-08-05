@@ -1,76 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<title th:fragment="title">Trips</title>
-<div th:fragment="content" class="card mb-4">
-	<div class="card-header"><i class="fas fa-memory mr-1"></i>
-		<span>Trips</span></div>
-	<div class="card-body">
-		<div class="table-title">
-			<div class="row">
-				<div class="col-sm-4">
-					<h2> <b> Create New Trip</b></h2>
-				</div>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default.html}">
+<title layout:fragment="title">Trips</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+        <span>Trips</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Create New Trip</b></h2>
+                </div>
 
-			</div>
-		</div>
+            </div>
+        </div>
 
-		<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-		<form class="card p-3" action="#" method="post"
-			  th:action="@{/trips/create}" th:object="${trip}"
-			  data-parsley-validate="true">
+        <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+        <form class="card p-3" action="#" method="post"
+              th:action="@{/trips/create}" th:object="${trip}"
+              data-parsley-validate="true">
 
-			<div class="form-group row">
-				<label class="control-label col-sm-2" for="route">Route</label>
-				<div class="col-sm-10">
-					<select class="form-control" th:field="*{route}"  id="route">
-						<option value="">Select...</option>
-						<option th:each="route : ${routes}" th:value="${route.id}" th:text="${route != null ? route.name : ''}"></option>
-					</select>
-					<p class="small text-danger" th:if="${#fields.hasErrors('route')}" th:errors="*{route}"></p>
-				</div>
-			</div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="route">Route</label>
+                <div class="col-sm-10">
+                    <select class="form-control" th:field="*{route}" id="route">
+                        <option value="">Select...</option>
+                        <option th:each="route : ${routes}" th:value="${route.id}"
+                                th:text="${route != null ? route.name : ''}"></option>
+                    </select>
+                    <p class="small text-danger" th:if="${#fields.hasErrors('route')}" th:errors="*{route}"></p>
+                </div>
+            </div>
 
-			<div class="form-group row">
-				<label class="control-label col-sm-2" for="driver">Driver</label>
-				<div class="col-sm-10">
-					<select class="form-control" th:field="*{driver}"  id="driver">
-						<option value="">Select...</option>
-						<option th:each="driver : ${drivers}" th:value="${driver.id}" th:text="${driver != null ? driver.firstName +' '+ driver.lastName : ''}"></option>
-					</select>
-					<p class="small text-danger" th:if="${#fields.hasErrors('driver')}" th:errors="*{driver}"></p>
-				</div>
-			</div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="driver">Driver</label>
+                <div class="col-sm-10">
+                    <select class="form-control" th:field="*{driver}" id="driver">
+                        <option value="">Select...</option>
+                        <option th:each="driver : ${drivers}" th:value="${driver.id}"
+                                th:text="${driver != null ? driver.firstName +' '+ driver.lastName : ''}"></option>
+                    </select>
+                    <p class="small text-danger" th:if="${#fields.hasErrors('driver')}" th:errors="*{driver}"></p>
+                </div>
+            </div>
 
 
-			<div class="form-group row">
-				<label class="control-label col-sm-2" for="vehicle">Vehicle</label>
-				<div class="col-sm-10">
-					<select class="form-control" th:field="*{vehicle}"  id="vehicle">
-						<option value="">Select...</option>
-						<option th:each="vehicle : ${vehicles}" th:value="${vehicle.id}" th:text="${vehicle != null ? vehicle.name : ''}"></option>
-					</select>
-					<p class="small text-danger" th:if="${#fields.hasErrors('vehicle')}" th:errors="*{vehicle}"></p>
-				</div>
-			</div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="vehicle">Vehicle</label>
+                <div class="col-sm-10">
+                    <select class="form-control" th:field="*{vehicle}" id="vehicle">
+                        <option value="">Select...</option>
+                        <option th:each="vehicle : ${vehicles}" th:value="${vehicle.id}"
+                                th:text="${vehicle != null ? vehicle.name : ''}"></option>
+                    </select>
+                    <p class="small text-danger" th:if="${#fields.hasErrors('vehicle')}" th:errors="*{vehicle}"></p>
+                </div>
+            </div>
 
-			<div class="form-group row">
-				<label class="control-label col-sm-2" for="departure">Departure Time</label>
-				<div class="col-sm-10">
-					<input type="datetime-local" class="form-control" th:field="*{departure}" id="departure">
-					<p class="small text-danger" th:if="${#fields.hasErrors('departure')}" th:errors="*{departure}"></p>
-				</div>
-			</div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="departure">Departure Time</label>
+                <div class="col-sm-10">
+                    <input type="datetime-local" class="form-control" th:field="*{departure}" id="departure">
+                    <p class="small text-danger" th:if="${#fields.hasErrors('departure')}" th:errors="*{departure}"></p>
+                </div>
+            </div>
 
-			<div class="form-group row">
-				<label class="control-label col-sm-2" for="arrival">Arrival Time</label>
-				<div class="col-sm-10">
-					<input type="datetime-local" class="form-control" th:field="*{arrival}" id="arrival">
-					<p class="small text-danger" th:if="${#fields.hasErrors('arrival')}" th:errors="*{arrival}"></p>
-				</div>
-			</div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="arrival">Arrival Time</label>
+                <div class="col-sm-10">
+                    <input type="datetime-local" class="form-control" th:field="*{arrival}" id="arrival">
+                    <p class="small text-danger" th:if="${#fields.hasErrors('arrival')}" th:errors="*{arrival}"></p>
+                </div>
+            </div>
 
-			<button type="submit" class="btn btn-outline-info">Submit</button>
-		</form>
-	</div>
+            <button type="submit" class="btn btn-outline-info">Submit</button>
+        </form>
+    </div>
 </div>
 </html>

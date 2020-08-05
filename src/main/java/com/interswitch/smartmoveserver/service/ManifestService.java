@@ -32,7 +32,7 @@ public class ManifestService {
 
     }
 
-    public Page<Manifest> findPaginatedManifestByTripId(int page,int size, long tripId) {
+    public Page<Manifest> findPaginatedManifestByTripId(int page, int size, long tripId) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         return manifestRepository.findByTripId(pageable, tripId);
     }
@@ -64,7 +64,7 @@ public class ManifestService {
         }
     }
 
-    public List<Manifest> findByTripId(long tripId ) {
+    public List<Manifest> findByTripId(long tripId) {
         return manifestRepository.findByTripId(tripId);
     }
 
@@ -72,7 +72,7 @@ public class ManifestService {
         return manifestRepository.count();
     }
 
-    public void deleteAll(){
+    public void deleteAll() {
         manifestRepository.deleteAll();
     }
 

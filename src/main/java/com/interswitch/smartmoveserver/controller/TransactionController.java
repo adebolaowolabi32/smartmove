@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.service.TransactionService;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -19,7 +18,6 @@ import java.security.Principal;
  * @author adebola.owolabi
  */
 @Controller
-@Layout(value = "layouts/default")
 @RequestMapping("/transactions")
 public class TransactionController {
     @Autowired

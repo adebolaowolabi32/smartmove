@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,11 +47,11 @@ public class TripService {
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Trip already exists");
 
         trip.setReferenceNo(RandomUtil.getRandomNumber());
-        trip.setArrivalDateTime(DateUtil.textToLocalDateTime(trip.getArrival()));
-        trip.setDepartureDateTime(DateUtil.textToLocalDateTime(trip.getDeparture()));
-        trip.setDeparture(DateUtil.formatDateText(trip.getDeparture()));
-        trip.setArrival(DateUtil.formatDateText(trip.getArrival()));
-        logger.info("Trip Departure String *** ==>"+trip.getDeparture());
+        trip.setArrivalObj(DateUtil.textToLocalDateTime(trip.getArrival()));
+        trip.setDepartureObj(DateUtil.textToLocalDateTime(trip.getDeparture()));
+        trip.setDeparture(DateUtil.formatDate(trip.getDepartureObj()));
+        trip.setArrival(DateUtil.formatDate(trip.getArrivalObj()));
+        trip.setName(trip.getRoute().getName() + "  " + trip.getDeparture());
         return tripRepository.save(trip);
     }
 
@@ -63,7 +62,7 @@ public class TripService {
     public Trip update(Trip trip) {
         Optional<Trip> existing = tripRepository.findById(trip.getId());
         if (existing.isPresent())
-             return tripRepository.save(trip);
+            return tripRepository.save(trip);
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist");
     }

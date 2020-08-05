@@ -1,7 +1,10 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /*
@@ -10,13 +13,16 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "trips")
-public class Trip {
+public class Trip implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(unique = true)
     private String referenceNo;
+
+    @Column(unique = true)
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "driver")
@@ -30,11 +36,13 @@ public class Trip {
     @JoinColumn(name = "vehicle")
     private Vehicle vehicle;
 
+    @DateTimeFormat(pattern = "MMM dd yyyy HH:mm aa")
+    private LocalDateTime departureObj;
+
+    @DateTimeFormat(pattern = "MMM dd yyyy HH:mm aa")
+    private LocalDateTime arrivalObj;
+
     private String departure;
 
     private String arrival;
-
-    private LocalDateTime departureDateTime;
-
-    private LocalDateTime arrivalDateTime;
 }

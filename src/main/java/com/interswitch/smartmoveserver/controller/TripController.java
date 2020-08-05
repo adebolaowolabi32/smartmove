@@ -1,12 +1,12 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.annotation.Layout;
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.Manifest;
+import com.interswitch.smartmoveserver.model.Trip;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import com.interswitch.smartmoveserver.util.RandomUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Random;
 
 @Controller
 @Layout(value = "layouts/default")
@@ -63,8 +62,8 @@ public class TripController {
 
         Trip trip = tripService.findById(id);
 
-        logger.info("Trip date===>"+ DateUtil.convertToDate(trip.getDeparture()));
-        Page<Manifest> manifestPage = manifestService.findPaginatedManifestByTripId(page, size,trip.getId());
+        logger.info("Trip date===>" + DateUtil.convertToDate(trip.getDeparture()));
+        Page<Manifest> manifestPage = manifestService.findPaginatedManifestByTripId(page, size, trip.getId());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(manifestPage));
         model.addAttribute("manifestPage", manifestPage);
         model.addAttribute("trip", trip);
@@ -78,7 +77,7 @@ public class TripController {
         Trip trip = new Trip();
         model.addAttribute("trip", trip);
         //not needed at the moment though,should be removed for performance reasons
-        model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
+        model.addAttribute("drivers", userService.findAll());
         model.addAttribute("routes", routeService.findAll());
         model.addAttribute("vehicles", vehicleService.findAll());
         return "trips/create";
@@ -94,8 +93,8 @@ public class TripController {
             return "trips/create";
         }
 
-        logger.info("Wanna Create Trip==>"+trip);
-        logger.info("Trip Departure String ==>"+trip.getDeparture());
+        logger.info("Wanna Create Trip==>" + trip);
+        logger.info("Trip Departure String ==>" + trip.getDeparture());
         Trip savedTrip = tripService.save(trip);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/trips/details/" + savedTrip.getId();
@@ -114,7 +113,7 @@ public class TripController {
     @PostMapping("/update/{id}")
     public String update(Principal principal, @PathVariable("id") long id, @Valid Trip trip,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-         trip.setId(id);
+        trip.setId(id);
 
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);

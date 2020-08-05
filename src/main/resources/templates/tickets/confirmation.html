@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<title layout:fragment="title">Tickets</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+        <span>Tickets</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Confirm New Booking</b></h2>
+                </div>
+
+            </div>
+        </div>
+        <label><b> Ticket Summary </b></label>
+        <br>
+
+        <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+            <thead class='thead-light'>
+            <tr>
+                <th>Ticket Reference</th>
+                <th>Name</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${ticketDetails.referenceNo}"></td>
+                <td th:text="${ticketDetails.name}"></td>
+                <td th:text="${ticketDetails.totalFare}"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td th:text="Total"></td>
+                <td th:text="${ticketDetails.totalFare}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="amt-big">
+            <span>Total Amount Payable: N</span>
+            <span th:text="${ticketDetails.totalFare}"></span>
+        </div>
+
+        <br><br>
+        <div><b>Disclaimer:</b> Your clicking the confirm payment button will imply that you have physically collected
+            the total sum of this booking from the customer.
+        </div>
+
+        <div class="row">
+            <div class="col-sm-9"></div>
+            <div class="btn-group col-sm-3">
+                <a class="btn" th:href="@{${flowExecutionUrl}+ '&_eventId=back'}">Back</a>
+                <a class="btn" th:href="@{${flowExecutionUrl} + '&_eventId=confirmBooking'}">Confirm Payment</a>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

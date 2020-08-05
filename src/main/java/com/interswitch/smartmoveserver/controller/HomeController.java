@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.*;
@@ -59,12 +58,10 @@ public class HomeController {
 
 
     @GetMapping(value = {"/", "/index", "/home"})
-    @Layout(Layout.NONE)
     public String home(Model model) {
         return "index";
     }
 
-    @Layout(value = "layouts/default")
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
@@ -85,7 +82,7 @@ public class HomeController {
         Long no_transfers = 0L;
         Long card_balance = 0L;
         Double wallet_balance = 0D;
-        Long no_trips =0L;
+        Long no_trips = 0L;
 
         if(securityUtil.isOwnedEntity(role)){
             no_regulators = userService.countByRole(principal, user, Enum.Role.REGULATOR);

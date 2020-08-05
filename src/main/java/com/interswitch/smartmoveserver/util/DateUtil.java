@@ -16,92 +16,90 @@ import java.util.TimeZone;
 
 public class DateUtil {
 
-	private static final Log logger = LogFactory.getLog(DateUtil.class);
+    private static final Log logger = LogFactory.getLog(DateUtil.class);
 
 
-	public static LocalDate toLocalDateFormat(Date startDate) {
-		LocalDate localDateFormat = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return localDateFormat;
-	}
+    public static LocalDate toLocalDateFormat(Date startDate) {
+        LocalDate localDateFormat = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return localDateFormat;
+    }
 
-	public static Date fromLocalDateFormat(LocalDate localDate) {
-		return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-	}
+    public static Date fromLocalDateFormat(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
 
-	public static LocalDateTime toLocalDateTimeFormat(Date startDate) {
-		LocalDateTime localDateTimeFormat = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-		return localDateTimeFormat;
-	}
+    public static LocalDateTime toLocalDateTimeFormat(Date startDate) {
+        LocalDateTime localDateTimeFormat = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return localDateTimeFormat;
+    }
 
-	public static Date fromLocalDateTimeFormat(LocalDateTime localDateTime) {
-		return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-	}
+    public static Date fromLocalDateTimeFormat(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
 
-	public static Date convertToDate(String dateString) {
+    public static Date convertToDate(String dateString) {
 
-		SimpleDateFormat formatter1 = new SimpleDateFormat("MM/dd/yyyy");
-		SimpleDateFormat formatter2 = new SimpleDateFormat("MM:dd:yyyy");
-		SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
-		Date date = null;
+        SimpleDateFormat formatter1 = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat formatter2 = new SimpleDateFormat("MM:dd:yyyy");
+        SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+        Date date = null;
 
-		try {
+        try {
 
-			if (dateString.indexOf("-") > 0) {
-				date = formatter3.parse(dateString);
-			} else if (dateString.indexOf(":") > 0) {
-				date = formatter2.parse(dateString);
-			} else {
-				date = formatter1.parse(dateString);
-			}
+            if (dateString.indexOf("-") > 0) {
+                date = formatter3.parse(dateString);
+            } else if (dateString.indexOf(":") > 0) {
+                date = formatter2.parse(dateString);
+            } else {
+                date = formatter1.parse(dateString);
+            }
 
-		} catch (ParseException e) {
-			logger.error(e);
-		}
+        } catch (ParseException e) {
+            logger.error(e);
+        }
 
-		return date;
-	}
+        return date;
+    }
 
-	public static String convertToText(Date date) {
+    public static String convertToText(Date date) {
 
-		if (date == null) {
-			return "";
-		}
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		ZoneId zoneId = ZoneId.of("Africa/Lagos");
-		dateFormat.setTimeZone(TimeZone.getTimeZone(zoneId));
-		return dateFormat.format(date);
-	}
+        if (date == null) {
+            return "";
+        }
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        ZoneId zoneId = ZoneId.of("Africa/Lagos");
+        dateFormat.setTimeZone(TimeZone.getTimeZone(zoneId));
+        return dateFormat.format(date);
+    }
 
-	public static LocalDateTime textToLocalDateTime(String text){
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-		LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
-		return dateTime;
-	}
+    public static LocalDateTime textToLocalDateTime(String text) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
+        return dateTime;
+    }
 
-	public static String formatDateText(String text){
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-		LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
-		String formattedDateText = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(dateTime);
-		return formattedDateText;
-	}
+    public static String formatDate(LocalDateTime dateTime) {
+        Date date = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
+        DateFormat format = new SimpleDateFormat("MMM dd yyyy HH:mm aa");
+        return format.format(date);
+    }
 
-	public static String toYearMonth(Date dateString) {
-		DateFormat formatter = new SimpleDateFormat("MMM yyyy");
-		return formatter.format(dateString);
-	}
+    public static String toYearMonth(Date dateString) {
+        DateFormat formatter = new SimpleDateFormat("MMM yyyy");
+        return formatter.format(dateString);
+    }
 
-	public static Date getDateInstance() {
-		Date date = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		// Set time fields to zero
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		// Put it back in the Date object
-		date = cal.getTime();
-		return date;
-	}
-
+    public static Date getDateInstance() {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        // Set time fields to zero
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        // Put it back in the Date object
+        date = cal.getTime();
+        return date;
+    }
 }

@@ -1,3 +1,4 @@
+/*
 package com.interswitch.smartmoveserver.interceptor;
 
 import com.interswitch.smartmoveserver.annotation.Layout;
@@ -8,9 +9,11 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+*/
 /**
  * @author adebola.owolabi
- */
+ *//*
+
 public class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter {
 
     private static final String DEFAULT_LAYOUT = "layouts/default";
@@ -79,3 +82,4 @@ public class ThymeleafLayoutInterceptor extends HandlerInterceptorAdapter {
         return null;
     }
 }
+*/

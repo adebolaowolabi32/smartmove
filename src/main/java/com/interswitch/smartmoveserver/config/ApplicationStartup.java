@@ -36,7 +36,7 @@ public class ApplicationStartup implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-       User adminUser = new User();
+        User adminUser = new User();
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
         adminUser.setUsername("smart.move13@interswitch.com");
@@ -57,13 +57,13 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setAddress("Lagos Nigeria");
         adminUser.setRole(Enum.Role.DRIVER);
         adminUser.setEnabled(true);
-        userService.setUp(adminUser);
+        userService.setUpS(adminUser);
         logger.info("Driver created successfully!");
         //loadManifestData(7);
 
     }
 
-    public void loadManifestData(long tripId){
+    public void loadManifestData(long tripId) {
 
         manifestService.deleteAll();
         seatRepo.deleteAll();
