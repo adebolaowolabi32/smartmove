@@ -603,8 +603,6 @@ function validatePhoneNumber(){
 
 };
 
-
-
 function validateNextOfPhone(){
 
  var val = document.getElementById("nextOfKinMobile").value

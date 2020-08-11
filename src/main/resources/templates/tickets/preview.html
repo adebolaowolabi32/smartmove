@@ -27,70 +27,70 @@
                     </div>
 
                     <div class="col-6">
-                        <div id="leftDivTopSeatClass" style=""; class="row" th:text="${'ECONOMY CLASS'}"></div>
+                        <div id="leftDivTopSeatClass" class="row" th:text="${'ECONOMY CLASS'}"></div>
                     </div>
 
                 </div>
 
-                <div style="border-bottom:2px solid grey;height:240px;" class="row">
+                <div id="travelDetailsDiv"  class="row">
 
-                    <div style="padding:30px;" class="col-4">
+                    <div id="departureDetailsDiv" class="col-4">
 
                         <div class="row">
-                            <div class="text-primary";style="font-weight:bold;font-size:15px; font-family:Arial">DEPARTURE</div>
+                            <div class="text-primary arrival_departure_text">DEPARTURE</div>
                         </div>
 
                         <div class="row">
-                            <div style="text-transform:uppercase;color:#4d2c91;font-weight:900;font-size:50px; font-family:Arial">lag</div>
+                            <div style="big_text">lag</div>
                         </div>
 
                         <div class="row">
-                            <div style="font-weight:bold;font-size:15px; font-family:Arial" th:text="${'IYANA IPAJA,LAGOS'}"></div>
+                            <div class="arrival_departure_address" th:text="${'IYANA IPAJA,LAGOS'}"></div>
                         </div>
 
                     <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:100px;" class="row"> </div>
 
                         <div class="row">
-                            <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial" th:text="${'10 AUGUST 2020'}"></div>
+                            <div class="text-muted arrival_departure_date" th:text="${'10 AUGUST 2020'}"></div>
                         </div>
 
                         <div class="row">
-                            <div  style="font-weight:bold;font-size:15px; font-family:Arial" th:text="${'08:00 AM'}"></div>
+                            <div  class="arrival_departure_time" th:text="${'08:00 AM'}"></div>
                         </div>
 
                     </div>
 
-                    <div style="margin-top:10%;" class="col-4">
+                    <div id="travelDiv"  class="col-4">
                         <div class="row">
-                            <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial"> ESTIMATED TRAVEL</div>
+                            <div class="text-muted" style=""> ESTIMATED TRAVEL</div>
                         </div>
 
                         <div class="row">
-                            <div  style="margin-left:15px;font-weight:bold;font-size:15px; text-align:center;font-family:Arial" th:text="${'12.00 H'}"></div>
+                            <div id="travelTimeDivId" th:text="${'12.00 H'}"></div>
                         </div>
                     </div>
 
                     <div style="padding:30px;" class="col-4">
                         <div class="row">
-                            <div class="text-primary";style="font-weight:bold;font-size:15px; font-family:Arial">ESTIMATED ARRIVAL</div>
+                            <div class="text-primary arrival_departure_text">ESTIMATED ARRIVAL</div>
                         </div>
 
                         <div class="row">
-                            <div style="text-transform:uppercase;color:#4d2c91;font-weight:900;font-size:50px; font-family:Arial">KAD</div>
+                            <div class="big_text">KAD</div>
                         </div>
 
                         <div class="row">
-                            <div style="font-weight:bold;font-size:15px; font-family:Arial" th:text="${'ZARIA,KADUNA'}"></div>
+                            <div class="arrival_departure_address"  th:text="${'ZARIA,KADUNA'}"></div>
                         </div>
 
                         <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:100px;" class="row"> </div>
 
                         <div class="row">
-                            <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial" th:text="${'10 AUGUST 2020'}"></div>
+                            <div class="text-muted arrival_departure_date" th:text="${'10 AUGUST 2020'}"></div>
                         </div>
 
                         <div class="row">
-                            <div  style="font-weight:bold;font-size:15px; font-family:Arial" th:text="${'08:00 PM'}"></div>
+                            <div class="arrival_departure_time" th:text="${'08:00 PM'}"></div>
                         </div>
 
                     </div>
