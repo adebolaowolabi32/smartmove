@@ -1,10 +1,8 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
-
 /**
  * @author adebola.owolabi
  */
@@ -23,6 +21,9 @@ public class Terminal implements Serializable {
     private Enum.TransportMode type;
 
     private String location;
+
+    @Embedded
+    private Address address;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")

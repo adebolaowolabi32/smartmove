@@ -33,6 +33,8 @@ public class Manifest implements Serializable {
     @Enumerated(EnumType.STRING)
     private Enum.IdCategory idCategory;
 
+    private String otherIdCategory;
+
     private String idNumber;
 
     private String contactMobile;
@@ -42,6 +44,8 @@ public class Manifest implements Serializable {
     private String nextOfKinName;
 
     private String nextOfKinMobile;
+
+    private String bvn;
 
     @ManyToOne
     @JoinColumn(name = "trip")

@@ -13,14 +13,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class TripService {
-
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -31,6 +31,7 @@ public class TripService {
     PageUtil pageUtil;
 
     public List<Trip> getAll() {
+
         return tripRepository.findAll();
     }
 

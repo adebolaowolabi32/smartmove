@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<title layout:fragment="title">Tickets</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+        <span>Tickets</span>
+        <a style="float:right;">
+            <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
+                ticket
+            </button>
+        </a>
+    </div>
+    <div class="card-body">
+        <img src="" alt="Operator Logo">
+        <br>
+        <h3><b>Booking Information</b></h3>
+
+        <div class="row">
+            <label class="col-sm-1">Booking Date:</label>
+            <div class="col-sm-11" th:text="${ticketDetails.bookingDate}"></div>
+        </div>
+        <div class="row">
+            <label class="col-sm-1">Ticket Reference ID:</label>
+            <div class="col-sm-11" th:text="${ticketDetails.referenceNo}"></div>
+        </div>
+        <div class="row">
+            <label class="col-sm-1">Passenger:</label>
+            <div class="col-sm-11" th:text="${ticketDetails.name}"></div>
+        </div>
+
+        <br>
+        <h4><b> Trip Details</b></h4>
+        <hr>
+
+        <div class="row">
+            <div class="col">
+                <label><b>Route</b></label>
+                <div th:text="${ticketDetails.route.name}"></div>
+            </div>
+            <div class="col">
+                <label><b>Departure</b></label>
+                <div th:text="${ticketDetails.trip.departure}"></div>
+            </div>
+            <div class="col">
+                <label><b>Estimated Arrival</b></label>
+                <div th:text="${ticketDetails.trip.arrival}"></div>
+            </div>
+        </div>
+        <br>
+        <hr>
+
+        <div class="row">
+            <div class="col">
+                <label><b>Vehicle</b></label>
+                <div th:text="${ticketDetails.trip.vehicle.name}"></div>
+            </div>
+            <div class="col">
+                <label><b>Seat Class</b></label>
+                <div th:text="${ticketDetails.seatClass}"></div>
+            </div>
+            <div class="col">
+                <label><b>Seat</b></label>
+                <div th:text="${ticketDetails.seatNo}"></div>
+            </div>
+            <div class="col">
+                <label><b>Fare</b></label>
+                <div th:text="${ticketDetails.route.price}"></div>
+            </div>
+        </div>
+        <br>
+        <hr>
+
+        <h4><b> Contact Information</b></h4>
+        <hr>
+
+        <p>If you have any questions or concerns about your booking, please email <b>bookings@company.com</b> or call
+            <b>1800-BOOKING</b>.</p>
+    </div>
+</div>
+</html>

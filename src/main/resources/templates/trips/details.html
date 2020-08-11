@@ -3,11 +3,11 @@
       layout:decorate="~{layouts/default.html}">
 <title layout:fragment="title">Trips</title>
 <div layout:fragment="content" class="card mb-4" style="padding:0">
-    <div class="card-header"><i class="fas fas fa-road"></i>
+    <div  style="padding-left:20px;" class="card-header"><i class="fas fas fa-road"></i>
         <span>Trip & Passenger Manifest details</span>
 
-        <a style="float:right;">
-            <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
+        <a style="position:absolute; right:40px; top:5px; bottom:5px;">
+            <button type='button' style="" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
                 manifest
             </button>
         </a>
@@ -16,6 +16,7 @@
     <div class="card-body">
         <div class="table-wrapper">
             <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{trip.saved.message} : (${updated} ? #{trip.updated.message} : false))"></div>
+
             <div class="card p-3">
 
                 <div class="form-group row">

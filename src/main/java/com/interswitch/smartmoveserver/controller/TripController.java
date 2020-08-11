@@ -68,7 +68,6 @@ public class TripController {
         model.addAttribute("manifestPage", manifestPage);
         model.addAttribute("trip", trip);
         model.addAttribute("count", 0);
-
         return "trips/details";
     }
 

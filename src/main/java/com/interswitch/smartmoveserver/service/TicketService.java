@@ -5,11 +5,14 @@ import com.interswitch.smartmoveserver.model.view.TicketDetails;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
@@ -20,7 +23,11 @@ import java.util.*;
  * Created by adebola.owolabi on 7/27/2020
  */
 @Service
+@Transactional
 public class TicketService {
+
+    private final Log logger = LogFactory.getLog(getClass());
+
     @Autowired
     private TicketRepository ticketRepository;
 
@@ -75,6 +82,7 @@ public class TicketService {
         trip.setVehicle(vehicle);
         trip.setName(route.getName() + trip.getDeparture());
         trips.add(trip);*/
+        logger.info("Trips====>"+tripService.getAll());
         return tripService.getAll();
     }
 
@@ -83,7 +91,6 @@ public class TicketService {
         ticketDetails.setRoute(route);
         Trip trip = tripService.findById(Long.valueOf(ticketDetails.getTripId()));
         ticketDetails.setTrip(trip);
-
         ticketDetails.setSeats(getAvailableSeats());
         ticketDetails.setCountries(getAllCountries());
         return ticketDetails;
@@ -136,20 +143,27 @@ public class TicketService {
     }
 
     public List<String> getAvailableSeats() {
+
         List<String> seats = new ArrayList<>();
+
         for (int i = 3; i <= 18; i++) {
             seats.add(String.valueOf(i));
         }
+
         return seats;
     }
 
     private List<String> getAllCountries() {
+
         List<String> countries = new ArrayList<>();
+
         String[] locales = Locale.getISOCountries();
+
         for (String countryCode : locales) {
             Locale obj = new Locale("en", countryCode);
             countries.add(obj.getDisplayCountry());
         }
+
         return countries;
     }
 

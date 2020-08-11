@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
+
 <title layout:fragment="title">Tickets</title>
+
+actions
+
 <div layout:fragment="content" class="card mb-4">
     <div class="card-header"><i class="fas fa-memory mr-1"></i>
         <span>Tickets</span></div>
@@ -61,16 +65,32 @@
                     </span>-->
                 </div>
             </div>
-            <br>
 
+            <br>
             <label><b>Passenger Details</b></label>
+
             <div class="row">
+
+                <div class="col">
+
+                    <label class="control-label" for="name">BVN</label>
+
+                    <div>
+                        <input onkeyup="validateBvn()" class="form-control" th:field="*{name}" id="bvn">
+                    </div>
+
+                    <div id="bvnDiv">
+                    </div>
+
+                </div>
+
                 <div class="form-group col">
                     <label class="control-label" for="name">Name</label>
                     <div>
                         <input class="form-control" th:field="*{name}" id="name">
                     </div>
                 </div>
+
                 <div class="form-group col">
                     <label class="control-label" for="gender">Gender</label>
                     <div>
@@ -85,7 +105,7 @@
                     <div class="row">
                         <div class="col">
                             <label class="control-label" for="seatClass">Seat Class</label>
-                            <select class="form-control" th:field="*{seatClass}" id="seatClass">
+                            <select  class="form-control" th:field="*{seatClass}" id="seatClass">
                                 <option value="">Select...</option>
                                 <option value="STANDARD">Standard</option>
                                 <option value="PREMIUM">Premium</option>
@@ -116,20 +136,37 @@
                     </div>
                 </div>
                 <div class="form-group col">
-                    <label class="control-label" for="idCategory">ID Category</label>
-                    <div>
-                        <select class="form-control" th:field="*{idCategory}" id="idCategory">
-                            <option value="">Select...</option>
-                            <option value="NATIONAL_ID">National ID</option>
-                            <option value="DRIVERS_LICENSE">Driver's License</option>
-                            <option value="INTERNATIONAL_PASSPORT">International Passport</option>
-                        </select>
+
+
+
+                    <div class="row">
+
+                        <div class="col">
+                            <label class="control-label" for="idCategory">ID Category</label>
+                            <select onchange="checkSelection()"  class="form-control" th:field="*{idCategory}" id="idCategory">
+                                <option value="">Select...</option>
+                                <option value="NATIONAL_ID">National ID</option>
+                                <option value="DRIVERS_LICENSE">Driver's License</option>
+                                <option value="INTERNATIONAL_PASSPORT">International Passport</option>
+                                <option value="OTHERS">Others</option>
+                            </select>
+                        </div>
+
+                        <div  id="otherIdCategoryDiv" style="display:none">
+                            <label class="control-label" for="otherIdCategory">Specify category</label>
+                            <div>
+                                <input  class="form-control" th:field="*{otherIdCategory}" id="otherIdCategory">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="form-group col">
                     <label class="control-label" for="idNumber">Id Number</label>
                     <div>
-                        <input class="form-control" th:field="*{idNumber}" id="idNumber">
+                        <input onkeyup="validateIdByNIMC()" class="form-control" th:field="*{idNumber}" id="idNumber">
+                    </div>
+                    <div id="idNumberDiv">
                     </div>
                 </div>
             </div>
@@ -138,12 +175,16 @@
             <div class="row">
                 <div class="col">
                     <label><b>Contact Details</b></label>
+
                     <div class="form-group">
                         <label class="control-label" for="contactMobile">Contact Mobile</label>
                         <div>
-                            <input class="form-control" th:field="*{contactMobile}" id="contactMobile">
+                            <input onkeyup="validatePhoneNumber()" class="form-control" th:field="*{contactMobile}" id="contactMobile">
+                        </div>
+                        <div id="contactMobileDiv">
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label class="control-label" for="contactEmail">Contact Email</label>
                         <div>
@@ -162,7 +203,9 @@
                     <div class="form-group">
                         <label class="control-label" for="nextOfKinMobile">Next Of Kin Mobile</label>
                         <div>
-                            <input class="form-control" th:field="*{nextOfKinMobile}" id="nextOfKinMobile">
+                            <input onkeyup="validateNextOfPhone()" class="form-control" th:field="*{nextOfKinMobile}" id="nextOfKinMobile">
+                        </div>
+                        <div id="nextOfKinMobileDiv">
                         </div>
                     </div>
                 </div>

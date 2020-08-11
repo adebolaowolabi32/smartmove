@@ -5,7 +5,6 @@ import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.model.Ticket;
 import com.interswitch.smartmoveserver.model.Trip;
 import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,7 +25,6 @@ public class TicketDetails implements Serializable {
     private String nextOfKinName;
 
     private String nextOfKinMobile;
-
     //
     private Enum.PaymentMode paymentMode;
 
@@ -46,12 +44,15 @@ public class TicketDetails implements Serializable {
 
     private String name;
 
+    private String bvn;
+
     private String gender;
 
     private String nationality;
 
-    //
     private Enum.IdCategory idCategory;
+
+    private String otherIdCategory;
 
     private String idNumber;
 
