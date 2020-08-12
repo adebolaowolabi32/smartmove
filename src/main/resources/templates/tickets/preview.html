@@ -7,75 +7,327 @@
         <span>Tickets</span>
         <a style="float:right;">
             <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
-                ticket
+                ticket(s)
             </button>
         </a>
     </div>
-    <div class="card-body">
-        <img src="" alt="Operator Logo">
-        <br>
-        <h3><b>Booking Information</b></h3>
+        <!--<div th:each="ticket : ${ticketDetails.tickets}">-->
+            <br>
+            <div style="" class="card-body boarding-pass-body">
 
-        <div class="row">
-            <label class="col-sm-1">Booking Date:</label>
-            <div class="col-sm-11" th:text="${ticketDetails.bookingDate}"></div>
+                <div class="row">
+
+                    <div id="leftDiv"  class="col-8">
+
+                        <div id="leftDivTop"  class="row">
+
+                            <div class="col-6">
+                                <img id="imgLogo" src="/img/logos/envato.jpg" alt="Operator Logo">
+                                <span>AK Transport</span>
+                            </div>
+
+                            <div class="col-6">
+                                <div id="leftDivTopSeatClass" class="row" th:text="${ticketDetails.seatClass + ' CLASS'}"></div>
+                            </div>
+
+                        </div>
+
+                        <div id="travelDetailsDiv"  class="row">
+
+                            <div id="departureDetailsDiv" class="col-4">
+
+                                <div class="row">
+                                    <div class="text-primary arrival_departure_text">DEPARTURE</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="big_text">lag</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="arrival_departure_address" th:text="${'IYANA IPAJA,LAGOS'}"></div>
+                                </div>
+
+                                <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:100px;" class="row"> </div>
+
+                                <div class="row">
+                                    <div class="text-muted arrival_departure_date" th:text="${'13 AUGUST 2020'}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div  class="arrival_departure_time" th:text="${'08:00 AM'}"></div>
+                                </div>
+
+                            </div>
+
+                            <div id="travelDiv"  class="col-4">
+                                <div class="row">
+                                    <div class="text-muted" style=""> ESTIMATED TRAVEL</div>
+                                </div>
+
+                                <div class="row">
+                                    <div id="travelTimeDivId" th:text="${'11.00 H'}"></div>
+                                </div>
+                            </div>
+
+                            <div style="padding:30px;" class="col-4">
+                                <div class="row">
+                                    <div class="text-primary arrival_departure_text">ESTIMATED ARRIVAL</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="big_text">KAD</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="arrival_departure_address"  th:text="${'ZARIA,KADUNA'}"></div>
+                                </div>
+
+                                <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:100px;" class="row"> </div>
+
+                                <div class="row">
+                                    <div class="text-muted arrival_departure_date" th:text="${'13 AUGUST 2020'}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="arrival_departure_time" th:text="${'07:00 PM'}"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom:4%;padding-top:2%;padding-bottom:4%;padding-left:4%;border-bottom:2px solid grey;height:70px;" class="row">
+                            <div class="col-4">
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">NAME OF PASSENGER</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="text-transform:uppercase;font-weight:bold;font-size:15px; font-family:Arial" th:text="${ticketDetails.name}"></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">VEHICLE</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="text-transform:uppercase;;font-weight:bold;font-size:10px; font-family:Arial" th:text="${'Toyota Coaster'}"></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">START TERMINAL</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="text-transform:uppercase;font-weight:bold;font-size:15px; font-family:Arial" th:text="${'LAG'}"></div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">STOP TERMINAL</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="text-transform:uppercase;font-weight:bold;font-size:15px; font-family:Arial" th:text="${'ZARIA'}"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-2">
+
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">SEAT</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="text-transform:uppercase;font-weight:bold;font-size:15px; font-family:Arial" th:text="${ticketDetails.seatNo}"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div style="margin-left:2%;">
+
+                            <div class="row">
+                                <div class="" style="font-weight:bold;font-size:10px; font-family:Arial">CONTACT INFORMATION</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="text-muted" style="font-style:italic;font-size:15px; font-family:Arial">
+                                    For concerns about your booking, please email <b>bookings@company.com</b> or call
+                                    <b>1800-BOOKING</b>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div id="rightDiv"  class="col-4">
+
+                        <div style="height:70px;" class="row">
+
+                            <div class="col-6">
+                                <div style="color:#311b92;margin-top:6px;margin-left:15px;font-weight:bold;"; class="row" th:text="${'TICKET/BOARDING PASS'}"></div>
+                            </div>
+
+<!--                            <div  class="col-6">
+                                <div style="position:absolute;right:10px;" class="row">
+                                    <img style="width:50px;height:50px;" src="/img/logos/envato.jpg" alt="Operator Logo">
+                                </div>
+
+                            </div>-->
+
+                        </div>
+
+                        <div style="margin:5px;height:375px;" class="row">
+
+                            <div style="height:100px;" class="col-6">
+
+                                <div style="padding:20px;" ;class="row">
+                                    <div style="text-transform:uppercase;color:#4d2c91;font-weight:800;font-size:20px; font-family:Arial">lag</div>
+
+                                    <div class="row">
+                                        <div  style="margin-left:5px;text-transform:uppercase;font-weight:bold;font-size:10px; font-family:Arial" th:text="${'ECONOMY CLASS'}"></div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div style="height:100px;" class="col-6">
+                                <div style="padding:20px;" class="row">
+                                    <div style="text-transform:uppercase;color:#4d2c91;font-weight:800;font-size:20px; font-family:Arial">kad</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:80px;" class="col-12"> </div>
+
+                            <div style="padding:25px; height:100px;" class="col-4">
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">TICKET REF</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="font-weight:bold;font-size:12px; font-family:Arial" th:text="${'AKT-412682'}"></div>
+                                </div>
+                            </div>
+
+                            <div style=" padding:25px;height:100px;" class="col-6">
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial" >FARE</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="font-weight:bold;font-size:15px; font-family:Arial" >&#8358; <span th:text="${ticketDetails.schedule.fare}"></span></div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:80px;" class="col-12"> </div>
+
+                            <div style="padding:25px;height:100px;" class="col-6">
+
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial"> DATE</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="font-weight:bold;font-size:15px; font-family:Arial" th:text="${'10 AUGUST 2020'}"></div>
+                                </div>cece
+
+                            </div>
+
+
+                            <div style="padding:25px;height:100px;" class="col-8">
+                                <div class="row">
+                                    <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">STOP TERMINAL</div>
+                                </div>
+
+                                <div class="row">
+                                    <div  style="font-weight:bold;font-size:15px; font-family:Arial" th:text="${'ZARIA,KADUNA'}"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+    <!--        <img src="" alt="Operator Logo">
+            <br>
+            <h3><b>Booking Information</b></h3>
+
+            <div class="row">
+                <label class="col-sm-2">Booking Date:</label>
+                <div class="col-sm-10" th:text="${ticketDetails.bookingDate}"></div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2">Ticket Reference ID:</label>
+                <div class="col-sm-10" th:text="${ticketDetails.referenceNo}"></div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2">Passenger:</label>
+                <div class="col-sm-10" th:text="${ticketDetails.name}"></div>
+            </div>
+
+            <br>
+            <h4><b> Trip Details</b></h4>
+            <hr>
+
+            <div class="row">
+                <div class="col">
+                    <label><b>Departure</b></label>
+                    <div th:text="${ticketDetails.schedule.startTerminal.name}"></div>
+                </div>
+                <div class="col">
+                    <label><b>Destination</b></label>
+                    <div th:text="${ticketDetails.schedule.stopTerminal.name}"></div>
+                </div>
+                <div class="col">
+                    <label><b>Departing</b></label>
+                    <div th:text="${ticketDetails.schedule.departureString}"></div>
+                </div>
+                <div class="col">
+                    <label><b>Estimated Arrival</b></label>
+                    <div th:text="${ticketDetails.schedule.arrivalString}"></div>
+                </div>
+            </div>
+            <br>
+            <hr>
+
+            <div class="row">
+                <div class="col">
+                    <label><b>Vehicle</b></label>
+                    <div th:text="${ticketDetails.schedule.vehicle.name}"></div>
+                </div>
+                <div class="col">
+                    <label><b>Seat Class</b></label>
+                    <div th:text="${ticketDetails.seatClass}"></div>
+                </div>
+                <div class="col">
+                    <label><b>Seat</b></label>
+                    <div th:text="${ticketDetails.seatNo}"></div>
+                </div>
+                <div class="col">
+                    <label><b>Price</b></label>
+                    <div th:text="${ticketDetails.schedule.fare}"></div>
+                </div>
+            </div>
+            <br>
+            <hr>
+
+            <h4><b> Contact Information</b></h4>
+            <hr>
+
+            <p>If you have any questions or concerns about your booking, please email <b>bookings@company.com</b> or call
+                <b>1800-BOOKING</b>.</p>-->
+            <br>
+<!--
+            <hr class="dotted">
+-->
         </div>
-        <div class="row">
-            <label class="col-sm-1">Ticket Reference ID:</label>
-            <div class="col-sm-11" th:text="${ticketDetails.referenceNo}"></div>
-        </div>
-        <div class="row">
-            <label class="col-sm-1">Passenger:</label>
-            <div class="col-sm-11" th:text="${ticketDetails.name}"></div>
-        </div>
-
-        <br>
-        <h4><b> Trip Details</b></h4>
-        <hr>
-
-        <div class="row">
-            <div class="col">
-                <label><b>Route</b></label>
-                <div th:text="${ticketDetails.route.name}"></div>
-            </div>
-            <div class="col">
-                <label><b>Departure</b></label>
-                <div th:text="${ticketDetails.trip.departure}"></div>
-            </div>
-            <div class="col">
-                <label><b>Estimated Arrival</b></label>
-                <div th:text="${ticketDetails.trip.arrival}"></div>
-            </div>
-        </div>
-        <br>
-        <hr>
-
-        <div class="row">
-            <div class="col">
-                <label><b>Vehicle</b></label>
-                <div th:text="${ticketDetails.trip.vehicle.name}"></div>
-            </div>
-            <div class="col">
-                <label><b>Seat Class</b></label>
-                <div th:text="${ticketDetails.seatClass}"></div>
-            </div>
-            <div class="col">
-                <label><b>Seat</b></label>
-                <div th:text="${ticketDetails.seatNo}"></div>
-            </div>
-            <div class="col">
-                <label><b>Fare</b></label>
-                <div th:text="${ticketDetails.route.price}"></div>
-            </div>
-        </div>
-        <br>
-        <hr>
-
-        <h4><b> Contact Information</b></h4>
-        <hr>
-
-        <p>If you have any questions or concerns about your booking, please email <b>bookings@company.com</b> or call
-            <b>1800-BOOKING</b>.</p>
     </div>
-</div>
 </html>

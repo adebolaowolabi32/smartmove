@@ -21,7 +21,7 @@ public class Enum {
     }
 
     public enum TransactionType {
-        CREDIT, DEBIT, TAP_IN, TAP_OUT, LOAD_CARD, DISABLE_CARD, CHECK_BALANCE
+        CREDIT, DEBIT, TAP_IN, TAP_OUT, LOAD_CARD, DISABLE_CARD, CHECK_BALANCE, TICKET_SALE
     }
 
     public enum Role {
@@ -49,6 +49,6 @@ public class Enum {
     }
 
     public enum IdCategory {
-        NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT
+        NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT, VOTERS_CARD, SCHOOL_ID, OTHER
     }
 }

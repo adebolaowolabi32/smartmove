@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.repository.UserRepository;
@@ -63,10 +62,6 @@ public class VehicleService {
 
     public Vehicle findById(Principal principal, long id) {
         return vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist"));
-    }
-
-    public List<Vehicle> find(Enum.TransportMode type) {
-        return vehicleRepository.findAllByType(type);
     }
 
     public List<Vehicle> findAllByOwner(User owner) {

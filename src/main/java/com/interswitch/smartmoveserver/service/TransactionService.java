@@ -35,7 +35,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public List<Transaction> getAll() {
+    public List<Transaction> findAll() {
         return transactionRepository.findAll();
     }
 
@@ -50,10 +50,6 @@ public class TransactionService {
 
     public List<Transaction> find(Enum.TransactionType type) {
         return transactionRepository.findAllByType(type);
-    }
-
-    public List<Transaction> findByAgent(String agentId) {
-        return transactionRepository.findAllByAgentId(agentId);
     }
 
     public List<Transaction> findByOperator(String operatorId) {

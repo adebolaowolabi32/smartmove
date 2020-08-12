@@ -74,8 +74,8 @@ public class CardApiTests {
     }
 
     @Test
-    public void testGetAll() throws Exception {
-        when(cardService.getAll()).thenReturn(Arrays.asList(card, new Card()));
+    public void testfindAll() throws Exception {
+        when(cardService.findAll()).thenReturn(Arrays.asList(card, new Card()));
         mvc.perform(get("/cards")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

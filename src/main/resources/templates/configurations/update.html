@@ -38,7 +38,12 @@
 					<p class="small text-danger" th:if="${#fields.hasErrors('value')}" th:errors="*{value}"></p>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-outline-info">Submit</button>
+			<div class="row">
+				<div class="col-sm-10"></div>
+				<div class="col-sm-2">
+					<button type="submit" class="btn btn-outline-primary btn-sized">Submit</button>
+				</div>
+			</div>
 		</form>
 	</div>
 </div>

@@ -33,7 +33,7 @@ public class DeviceController {
     PageUtil pageUtil;
 
     @GetMapping("/get")
-    public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
+    public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         Page<Device> devicePage = deviceService.findAllPaginated(principal, owner, page, size);

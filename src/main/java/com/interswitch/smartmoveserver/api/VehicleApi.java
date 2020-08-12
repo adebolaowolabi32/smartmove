@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +37,6 @@ public class VehicleApi {
     @GetMapping(value = "/findByOwner/{owner}", produces = "application/json")
     private List<Vehicle> getByOwner(@Validated @PathVariable long owner) {
         return vehicleService.findAllByOwner(owner);
-    }
-    @GetMapping(value = "/findByType/{type}", produces = "application/json")
-    private List<Vehicle> find(@Validated @PathVariable Enum.TransportMode type) {
-        return vehicleService.find(type);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")

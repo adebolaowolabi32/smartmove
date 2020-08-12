@@ -17,8 +17,8 @@ public class TripApi {
     TripService tripService;
 
     @GetMapping(produces = "application/json")
-    private List<Trip> getAll() {
-        return tripService.getAll();
+    private List<Trip> findAll() {
+        return tripService.findAll();
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
@@ -32,16 +32,11 @@ public class TripApi {
         return tripService.findById(id);
     }
 
-    @GetMapping(value = "/route/{id}", produces = "application/json")
-    private List<Trip> findByRoute(@Validated @PathVariable long id) {
-        return tripService.findByRouteId(id);
-    }
 
-
-    @GetMapping(value = "/vehicle/{regNo}", produces = "application/json")
+/*    @GetMapping(value = "/vehicle/{regNo}", produces = "application/json")
     private List<Trip> findByVehicleRegNo(@Validated @PathVariable String regNo) {
         return tripService.findByVehicleRegNo(regNo);
-    }
+    }*/
 
     @DeleteMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.ACCEPTED)

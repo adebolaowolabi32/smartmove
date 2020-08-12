@@ -74,8 +74,8 @@ public class RouteApiTests {
     }
 
     @Test
-    public void testGetAll() throws Exception {
-        when(routeService.getAll()).thenReturn(Arrays.asList(route, new Route()));
+    public void testfindAll() throws Exception {
+        when(routeService.findAll()).thenReturn(Arrays.asList(route, new Route()));
         mvc.perform(get("/routes")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

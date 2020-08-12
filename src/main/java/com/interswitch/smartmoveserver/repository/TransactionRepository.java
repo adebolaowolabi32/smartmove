@@ -13,7 +13,6 @@ import java.util.List;
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
 
     List<Transaction> findAllByType(Enum.TransactionType type);
-    List<Transaction> findAllByAgentId(String agentId);
     List<Transaction> findAllByOperatorId(String operatorId);
     Page<Transaction> findAll(Pageable pageable);
     List<Transaction> findAll();

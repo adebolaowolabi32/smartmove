@@ -66,8 +66,8 @@ public class ConfigApiTests {
     }
 
     @Test
-    public void testGetAll() throws Exception {
-        when(configService.getAll()).thenReturn(Arrays.asList(config, new Config()));
+    public void testfindAll() throws Exception {
+        when(configService.findAll()).thenReturn(Arrays.asList(config, new Config()));
         mvc.perform(get("/configurations")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

@@ -68,7 +68,7 @@ public class VehicleApiTests {
     }
 
    /* @Test
-    public void testGetAll() throws Exception {
+    public void testfindAll() throws Exception {
         when(vehicleService.findAll()).thenReturn(Arrays.asList(vehicle, new Vehicle()));
         mvc.perform(get("/vehicles")
                 .characterEncoding("utf-8")

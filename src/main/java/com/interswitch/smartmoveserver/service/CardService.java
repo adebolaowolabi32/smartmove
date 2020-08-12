@@ -36,7 +36,7 @@ public class CardService {
     @Autowired
     PageUtil pageUtil;
 
-    public List<Card> getAll() {
+    public List<Card> findAll() {
         return cardRepository.findAll();
     }
 

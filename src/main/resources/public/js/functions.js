@@ -534,3 +534,101 @@ function loadTransactionDetails() {
 			retrieveTransaction(id);
 		});		
 };
+
+
+function validateBvn(){
+
+    var val = document.getElementById("bvn").value;
+    console.log(val);
+
+   if(val.trim().length<10){
+    //show typing
+    document.getElementById('bvnDiv').innerHTML = "<em class='blink' style='color:green;'>Checking...</em>";
+    //document.getElementById("name").value = "";
+    //document.getElementById("gender").selectedIndex = "0";
+    return;
+   }
+   else if(val.trim()==="1002002345"){
+      //set name field
+      //document.getElementById("name").value = "Earnest Erihbra Suru";
+      //set male as gender
+      //document.getElementById("gender").selectedIndex = "1";
+      //show div message
+      document.getElementById('bvnDiv').innerHTML = "<em class='blink' style='color:green;'>BVN Validated successfully.</em>";
+      return;
+   }else{
+    document.getElementById('bvnDiv').innerHTML = "<em class='blink' style='color:red;'>BVN could not be validated.</em>";
+    return;
+   }
+};
+
+function validateIdByNIMC(){
+
+    var val = document.getElementById("idNumber").value;
+
+   if(val.trim().length<10){
+    //show typing
+    document.getElementById('idNumberDiv').innerHTML = "<em class='blink' style='color:green;'>Checking...</em>";
+    return;
+   }
+   else if(val.trim()==="4005006789"){
+      //show div message
+      document.getElementById('idNumberDiv').innerHTML = "<em class='blink' style='color:green;'>ID number validated successfully.</em>";
+      return;
+   }else{
+    document.getElementById('idNumberDiv').innerHTML = "<em class='blink' style='color:red;'>ID number could not be validated.</em>";
+    return;
+}
+
+};
+
+function validatePhoneNumber(){
+ var val = document.getElementById("contactMobile").value
+    console.log(val)
+
+   if(val.trim().length<11){
+    //show typing
+    document.getElementById('contactMobileDiv').innerHTML = "<em class='blink' style='color:green;'>Checking...</em>";
+    return;
+   }
+   else if(val.trim()==="09021711733"){
+      //show div message
+      document.getElementById('contactMobileDiv').innerHTML = "<em class='blink' style='color:green;'>Mobile phone number validated successfully.</em>";
+      return;
+   }else{
+    document.getElementById('contactMobileDiv').innerHTML = "<em class='blink' style='color:red;'>Mobile phone number could not be validated.</em>";
+    return;
+}
+
+};
+
+function validateNextOfPhone(){
+
+ var val = document.getElementById("nextOfKinMobile").value
+    console.log(val)
+   if(val.trim().length<11){
+    //show typing
+    document.getElementById('nextOfKinMobileDiv').innerHTML = "<em class='blink' style='color:green;'>Checking...</em>";
+    return;
+   }
+   else if(val.trim()==="08028594179"){
+      //show div message
+      document.getElementById('nextOfKinMobileDiv').innerHTML = "<em class='blink' style='color:green;'>Mobile phone number validated successfully.</em>";
+      return;
+   }else{
+    document.getElementById('nextOfKinMobileDiv').innerHTML = "<em class='blink' style='color:red;'>Mobile phone number could not be validated.</em>";
+    return;
+}
+};
+
+function checkSelection(){
+var selectedCategory = document.getElementById("idCategory").selectedIndex;
+
+if(selectedCategory===6){
+  document.getElementById("otherIdCategoryDiv").style.display = "block";
+}
+else{
+ document.getElementById("otherIdCategoryDiv").style.display = "none";
+}
+}
+

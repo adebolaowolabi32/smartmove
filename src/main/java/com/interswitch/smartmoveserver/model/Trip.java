@@ -21,28 +21,33 @@ public class Trip implements Serializable {
     @Column(unique = true)
     private String referenceNo;
 
-    @Column(unique = true)
-    private String name;
+    private double fare;
+
+    @Enumerated(EnumType.STRING)
+    private Enum.TransportMode transportMode;
 
     @ManyToOne
     @JoinColumn(name = "driver")
     private User driver;
 
     @ManyToOne
-    @JoinColumn(name = "route")
-    private Route route;
+    @JoinColumn(name = "schedule")
+    private Schedule schedule;
 
     @ManyToOne
-    @JoinColumn(name = "vehicle")
-    private Vehicle vehicle;
+    private VehicleCategory vehicle;
 
-    @DateTimeFormat(pattern = "MMM dd yyyy HH:mm aa")
-    private LocalDateTime departureObj;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime departure;
 
-    @DateTimeFormat(pattern = "MMM dd yyyy HH:mm aa")
-    private LocalDateTime arrivalObj;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime arrival;
 
-    private String departure;
+    private String departureString;
 
-    private String arrival;
+    private String arrivalString;
+
+    @ManyToOne
+    @JoinColumn(name = "owner")
+    private User owner;
 }

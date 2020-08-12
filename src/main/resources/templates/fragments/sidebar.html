@@ -24,6 +24,9 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_OPERATORS')" th:href="@{/users/get?role=OPERATOR}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             Operators</a>
+                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_DRIVERS')" th:href="@{/users/get?role=DRIVER}" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                            Drivers</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_AGENTS')" th:href="@{/users/get?role=AGENT}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             Agents</a>
@@ -40,9 +43,12 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_CARDS')" th:href="@{/cards/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-credit-card"></i></div>
                             Cards</a>
-                        <a class="nav-link" th:href="@{/tickets/get}" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-memory"></i></div>
-                            Bookings</a>
+                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_DEVICES')" th:href="@{/devices/get}" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
+                            Devices</a>
+                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLE_CATEGORIES')" th:href="@{/vehicleCategories/get}" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
+                            Vehicle Categories</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLES')" th:href="@{/vehicles/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-bus-alt"></i></div>
                             Vehicles</a>
@@ -52,19 +58,21 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_ROUTES')" th:href="@{/routes/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
                             Routes</a>
-
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRIPS')" th:href="@{/trips/get}"
                            href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-road"></i></div>
                             Trips</a>
-
-                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_DEVICES')" th:href="@{/devices/get}" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tablet-alt"></i></div>
-                            Devices</a>
+                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_SCHEDULES')" th:href="@{/schedules/get}"
+                           href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
+                            Schedules</a>
+                        <a class="nav-link" th:href="@{/tickets/get}" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-memory"></i></div>
+                            Bookings</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')" th:href="@{/transactions/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                             Transactions</a>
-                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')" th:href="@{/settlements/get}" href="#">
+                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')" th:href="@{/reports/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Settlements</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_CONFIGURATIONS')" th:href="@{/configurations/get}" href="#">

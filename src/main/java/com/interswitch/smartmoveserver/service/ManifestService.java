@@ -22,7 +22,7 @@ public class ManifestService {
     @Autowired
     PageUtil pageUtil;
 
-    public List<Manifest> getAll() {
+    public List<Manifest> findAll() {
         return manifestRepository.findAll();
     }
 
@@ -35,6 +35,11 @@ public class ManifestService {
     public Page<Manifest> findPaginatedManifestByTripId(int page, int size, long tripId) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         return manifestRepository.findByTripId(pageable, tripId);
+    }
+
+    public Page<Manifest> findPaginatedManifestByScheduleId(int page, int size, long scheduleId) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        return manifestRepository.findByScheduleId(pageable, scheduleId);
     }
 
     public Manifest save(Manifest manifest) {

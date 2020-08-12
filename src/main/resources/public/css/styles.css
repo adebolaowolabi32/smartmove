@@ -5150,8 +5150,8 @@ body.m-content--skin-light2 {
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 25px;
 }
 
 .switch input {
@@ -5200,7 +5200,7 @@ input:checked + .slider:before {
 }
 
 .slider.round {
-  border-radius: 34px;
+  border-radius: 25px;
 }
 
 .slider.round:before {
@@ -15598,6 +15598,13 @@ body {
         font-size: 16px;
         padding-top: 6px
     }
+    .select2-container .select2-selection--single{
+        height:34px !important;
+    }
+    .select2-container--default .select2-selection--single{
+             border: 1px solid #ccc !important;
+         border-radius: 0px !important;
+    }
     .hint-text {
         float: left;
         margin-top: 10px;
@@ -15611,7 +15618,7 @@ body {
         font-size: 1rem;
 	}
 	.table-title .btn{
-		  margin: 2%;
+		  margin: 1%;
 /*
 		  margin-top: -1%;
 */
@@ -15661,7 +15668,110 @@ body {
        font-weight: 500;
        font-size: 0.8rem;
    }
+   .text-small {
+          font-weight: 300;
+          font-size: 0.6rem;
+      }
    .amt-big {
-      font-weight: 600;
-      font-size: 2rem;
+        font-weight: 600;
+        font-size: 2rem;
    }
+   .list-group-item {
+        padding: 20px 20px 50px 20px;
+   }
+   .spaced {
+        padding: 50px;
+   }
+   .dotted {
+        border-style: dotted
+   }
+
+
+   .boarding-pass-body{
+     border:2px inset grey;
+     border-radius: 30px 30px 30px 30px;
+     margin:4%;
+   }
+
+
+   #leftDiv{
+   border-right:2px dotted grey;
+   height:445px;
+   }
+
+   #rightDiv{
+     height:445px;
+   }
+
+   #leftDivTop{
+   border-bottom:2px solid grey;
+   height:70px;
+   }
+
+   #imgLogo{
+       width:50px;height:50px;
+    }
+
+    #leftDivTopSeatClass{
+    color:#311b92;
+    margin-top:6px;
+    position:absolute;
+    right:50%;
+    font-weight:bold;
+    }
+
+    #travelDetailsDiv{
+    border-bottom:2px solid grey;
+    height:240px;
+    }
+
+    #departureDetailsDiv{
+    padding:30px;
+    }
+
+    .arrival_departure_text{
+    font-weight:bold;
+    font-size:10px;
+    font-family:Arial;
+    }
+
+    .arrival_departure_date{
+     font-weight:normal;
+     font-size:10px;
+     font-family:Arial;
+    }
+
+    .arrival_departure_time{
+    font-weight:bold;
+    font-size:15px;
+    font-family:Arial;
+    }
+
+    .big_text{
+    text-transform:uppercase;
+    color:#4d2c91;
+    font-weight:900;
+    font-size:50px;
+    font-family:Arial;
+    }
+
+    #travelTimeDiv{
+    margin-left:15px;
+    font-weight:bold;
+    font-size:15px;
+    text-align:center;
+    font-family:Arial;
+    }
+
+    #travelDiv{
+    margin-top:10%;
+    }
+
+    .arrival_departure_address{
+    font-weight:bold;
+    font-size:15px;
+    font-family:Arial;
+    }
+    .right-handed {
+        float:right;
+    }

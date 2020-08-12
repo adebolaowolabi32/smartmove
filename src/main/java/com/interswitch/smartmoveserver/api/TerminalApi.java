@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.service.TerminalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ public class TerminalApi {
     TerminalService terminalService;
 
     @GetMapping(produces = "application/json")
-    private List<Terminal> getAll() {
-        return terminalService.getAll();
+    private List<Terminal> findAll() {
+        return terminalService.findAll();
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
@@ -33,11 +32,6 @@ public class TerminalApi {
     @GetMapping(value = "/{id}", produces = "application/json")
     private Terminal findById(@Validated @PathVariable long id) {
         return terminalService.findById(id);
-    }
-
-    @GetMapping(value = "/findByType/{type}", produces = "application/json")
-    private List<Terminal> find(@Validated @PathVariable Enum.TransportMode type) {
-        return terminalService.find(type);
     }
 
     @GetMapping(value = "/findByOwner/{owner}", produces = "application/json")

@@ -66,7 +66,7 @@ public class RouteController {
         Route route = new Route();
         model.addAttribute("route", route);
         model.addAttribute("owners", userService.findAll());
-        model.addAttribute("terminals", terminalService.getAll());
+        model.addAttribute("terminals", terminalService.findAll());
         model.addAttribute("vehicles", vehicleService.findAll());
         return "routes/create";
     }
@@ -77,7 +77,7 @@ public class RouteController {
         if (result.hasErrors()) {
             model.addAttribute("route", route);
             model.addAttribute("owners", userService.findAll());
-            model.addAttribute("terminals", terminalService.getAll());
+            model.addAttribute("terminals", terminalService.findAll());
             model.addAttribute("vehicles", vehicleService.findAll());
             return "routes/create";
         }
@@ -92,7 +92,7 @@ public class RouteController {
         Route route = routeService.findById(id);
         model.addAttribute("route", route);
         model.addAttribute("owners", userService.findAll());
-        model.addAttribute("terminals", terminalService.getAll());
+        model.addAttribute("terminals", terminalService.findAll());
         model.addAttribute("vehicles", vehicleService.findAll());
         return "routes/update";
     }
@@ -104,7 +104,7 @@ public class RouteController {
         if (result.hasErrors()) {
             model.addAttribute("route", route);
             model.addAttribute("owners", userService.findAll());
-            model.addAttribute("terminals", terminalService.getAll());
+            model.addAttribute("terminals", terminalService.findAll());
             model.addAttribute("vehicles", vehicleService.findAll());
             return "routes/update";
         }

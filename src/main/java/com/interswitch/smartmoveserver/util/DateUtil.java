@@ -4,22 +4,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class DateUtil {
 
     private static final Log logger = LogFactory.getLog(DateUtil.class);
 
 
-    public static LocalDate toLocalDateFormat(Date startDate) {
+    /*public static LocalDate toLocalDateFormat(Date startDate) {
         LocalDate localDateFormat = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return localDateFormat;
     }
@@ -70,10 +67,10 @@ public class DateUtil {
         ZoneId zoneId = ZoneId.of("Africa/Lagos");
         dateFormat.setTimeZone(TimeZone.getTimeZone(zoneId));
         return dateFormat.format(date);
-    }
+    }*/
 
     public static LocalDateTime textToLocalDateTime(String text) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm");
         LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
         return dateTime;
     }
@@ -84,6 +81,16 @@ public class DateUtil {
         return format.format(date);
     }
 
+    public static String formatDate(LocalDate date) {
+        DateFormat format = new SimpleDateFormat("MMM dd yyyy");
+        return format.format(date);
+    }
+
+    public static String getTodayDate() {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(new Date());
+    }
+/*
     public static String toYearMonth(Date dateString) {
         DateFormat formatter = new SimpleDateFormat("MMM yyyy");
         return formatter.format(dateString);
@@ -101,5 +108,5 @@ public class DateUtil {
         // Put it back in the Date object
         date = cal.getTime();
         return date;
-    }
+    }*/
 }
