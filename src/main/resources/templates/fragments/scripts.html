@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <div th:fragment="scripts">
-        <!-- Bootstrap core JavaScript -->
+
         <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+        <script th:src="@{/vendor/jquery-ui/jquery-ui.min.js}"></script>
         <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/vendor/bootstrap-spinner/bootstrap-spinner.js}"></script>
+        <script th:src="@{/vendor/jquery-seat-charts/jquery.seat-charts.min.js}"></script>
+        <script th:src="@{/js/theme.js}"></script>
 
-        <!-- Plugin JavaScript -->
-        <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
-
-        <!-- Contact form JavaScript -->
+        <script th:src="@{/js/functions.js}"></script>
+        <script th:src="@{/js/scripts.js}"></script>
         <script th:src="@{/js/jqBootstrapValidation.js}"></script>
+        <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
 
     </div>

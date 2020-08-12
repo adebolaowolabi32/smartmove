@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default.html}">
+<title layout:fragment="title">Schedules</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fas fa-calendar"></i>
+        <span>Schedule & Passenger Details</span>
+        <a style="float:right;">
+            <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
+                manifest
+            </button>
+        </a>
+    </div>
+    <div>
+        <div class="table-wrapper">
+            <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{schedule.saved.message} : (${updated} ? #{schedule.updated.message} : false))"></div>
+            <div class="p-3">
+                <div class="card-header"><span><b> Trip & Passenger Details</b></span></div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="mode">Transport Mode</label>
+                        <div class="col-sm-10">
+                            <span id="mode" th:text="${schedule.mode}"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="startTerminal">Departure Terminal</label>
+                        <div class="col-sm-10">
+                        <span id="startTerminal"
+                              th:text="${schedule.startTerminal!=null ? schedule.startTerminal.name : ''}"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="stopTerminal">Destination Terminal</label>
+                        <div class="col-sm-10">
+                        <span id="stopTerminal"
+                              th:text="${schedule.stopTerminal!=null ? schedule.stopTerminal.name : '' }"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="arrival">Vehicle</label>
+                        <div class="col-sm-10"><span id="vehicle"
+                                                     th:text="${schedule.vehicle!=null ? schedule.vehicle.name : '' }"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="departure">Departure</label>
+                        <div class="col-sm-10"><span id="departure" th:text="${schedule.departureString}"></span></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="arrival">Arrival</label>
+                        <div class="col-sm-10"><span id="arrival" th:text="${schedule.arrivalString}"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="fare">Price</label>
+                        <div class="col-sm-10">&#8358; <span id="fare" th:text="${schedule.fare}"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-sm-2" for="owner">Owner</label>
+                        <div class="col-sm-10">
+                            <span id="owner" th:text="${schedule.owner != null ? schedule.owner.username : ''}"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="enabled">Active</label>
+                        <div class="col-sm-10">
+                            <label class="switch">
+                                <input type="checkbox" id="enabled" name="enabled" th:checked="${schedule.enabled}" disabled>
+                                <span class="slider round"></span>
+                            </label>
+                            </span></div>
+                    </div>
+                </div>
+                <br><br>
+                <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+                    <thead class='thead-light'>
+                    <tr>
+                        <th>SN</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Nationality</th>
+                        <th>ID Number</th>
+                        <th>BVN</th>
+                        <th>Seat</th>
+                        <th>Contact Mobile</th>
+                        <th>Contact Email</th>
+                        <th>Address</th>
+                        <th>Next of Kin Name</th>
+                        <th>Next of Kin Mobile</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="manifest:${manifestPage.content}">
+                        <td th:text="${manifest.id}"></td>
+                        <td th:text="${manifest.name}"></td>
+                        <td th:text="${manifest.gender}"></td>
+                        <td th:text="${manifest.nationality}"></td>
+                        <td th:text="${manifest.idNumber}"></td>
+                        <td th:text="${manifest.bvn}"></td>
+                        <td th:text="${manifest.seatNo}"></td>
+                        <td th:text="${manifest.contactMobile}"></td>
+                        <td th:text="${manifest.contactEmail}"></td>
+                        <td th:text="${manifest.address}"></td>
+                        <td th:text="${manifest.nextOfKinName}"></td>
+                        <td th:text="${manifest.nextOfKinMobile}"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="btn-group" style="margin-top:10px;">
+
+                <a th:href="@{/schedules/get}">
+                    <button type='button' style="margin:5px" class='btn btn-outline-info'><i
+                            class='fas fa-arrow-left'></i> View all schedules
+                    </button>
+                </a>
+
+                <a th:href="@{/schedules/update/{id}(id=${schedule.id})}">
+                    <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-edit'></i> Edit
+                        Schedule
+                    </button>
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+</html>

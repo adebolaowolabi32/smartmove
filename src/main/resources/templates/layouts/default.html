@@ -10,7 +10,14 @@
         <!--
             <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
         -->
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" href="#" rel="stylesheet" crossorigin="anonymous" />
+        <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+<!--
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"/>
+-->
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
         <link th:href="@{/css/styles.css}" href="#" rel="stylesheet" crossorigin="anonymous" />
     </head>
     <body class="sb-nav-fixed">
@@ -25,5 +32,13 @@
             </div>
         </div>
         <div th:replace="fragments/scripts :: scripts"></div>
+        <script type="text/javascript">
+             var gearPage = document.getElementById('GearPage');
+             if(null != gearPage)
+             {
+                 gearPage.parentNode.removeChild(gearPage);
+                 document.title = "Error";
+             }
+        </script>
     </body>
 </html>

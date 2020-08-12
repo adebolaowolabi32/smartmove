@@ -26,8 +26,8 @@ public class TransactionApi {
     }
 
     @GetMapping(produces = "application/json")
-    public List<Transaction> getAll() {
-        return transactionService.getAll();
+    public List<Transaction> findAll() {
+        return transactionService.findAll();
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
@@ -38,11 +38,6 @@ public class TransactionApi {
     @GetMapping(value = "/findByType/{type}", produces = "application/json")
     public List<Transaction> find(@Validated @PathVariable Enum.TransactionType type) {
         return transactionService.find(type);
-    }
-
-    @GetMapping(value = "/findByAgent/{agentId}", produces = "application/json")
-    public List<Transaction> findBySender(@Validated @PathVariable String agentId) {
-        return transactionService.findByAgent(agentId);
     }
 
     @GetMapping(value = "/findByOperator/{operatorId}", produces = "application/json")

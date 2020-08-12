@@ -2,7 +2,9 @@ package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
+import com.interswitch.smartmoveserver.model.VehicleCategory;
 import com.interswitch.smartmoveserver.service.UserService;
+import com.interswitch.smartmoveserver.service.VehicleCategoryService;
 import com.interswitch.smartmoveserver.service.VehicleService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -24,6 +27,9 @@ import java.security.Principal;
 public class VehicleController {
     @Autowired
     VehicleService vehicleService;
+
+    @Autowired
+    VehicleCategoryService vehicleCategoryService;
 
     @Autowired
     UserService userService;
@@ -36,8 +42,10 @@ public class VehicleController {
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
         Page<Vehicle> vehiclePage = vehicleService.findAllPaginated(principal, owner, page, size);
+        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehiclePage));
         model.addAttribute("vehiclePage", vehiclePage);
+        model.addAttribute("categories", vehicleCategories);
         return "vehicles/get";
     }
 
@@ -53,6 +61,8 @@ public class VehicleController {
         Vehicle vehicle = new Vehicle();
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
+        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
+        model.addAttribute("categories", vehicleCategories);
         model.addAttribute("owners", userService.findAll());
         return "vehicles/create";
     }
@@ -62,6 +72,8 @@ public class VehicleController {
         if (result.hasErrors()) {
             model.addAttribute("vehicle", vehicle);
             //TODO change findAll to findAllEligible
+            List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
+            model.addAttribute("categories", vehicleCategories);
             model.addAttribute("owners", userService.findAll());
             return "vehicles/create";
         }
@@ -75,6 +87,8 @@ public class VehicleController {
         Vehicle vehicle = vehicleService.findById(principal, id);
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
+        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
+        model.addAttribute("categories", vehicleCategories);
         model.addAttribute("owners", userService.findAll());
         return "vehicles/update";
     }
@@ -86,6 +100,8 @@ public class VehicleController {
         if (result.hasErrors()) {
             //TODO change findAll to findAllEligible
             model.addAttribute("vehicle", vehicle);
+            List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
+            model.addAttribute("categories", vehicleCategories);
             model.addAttribute("owners", userService.findAll());
             return "vehicles/update";
         }

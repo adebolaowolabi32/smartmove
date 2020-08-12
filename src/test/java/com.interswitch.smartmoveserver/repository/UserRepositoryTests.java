@@ -56,7 +56,7 @@ public class UserRepositoryTests {
 
 
     @Test
-    public void testGetAll(){
+    public void testfindAll(){
         List<User> users = userRepository.findAll();
         assertEquals(users.size(), 2);
     }

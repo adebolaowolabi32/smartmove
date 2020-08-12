@@ -49,6 +49,9 @@ public class PageUtil {
             case AGENT:
                 title = "Agent";
                 break;
+            case DRIVER:
+                title = "Driver";
+                break;
             default:
                 title = "No Title";
                 break;

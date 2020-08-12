@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /*
  * Created by adebola.owolabi on 7/25/2020
@@ -32,6 +31,10 @@ public class Ticket implements Serializable {
     @JoinColumn(name = "trip")
     private Trip trip;
 
+    @ManyToOne
+    @JoinColumn(name = "schedule")
+    private Schedule schedule;
+
     private double fare;
 
     @Enumerated(EnumType.STRING)
@@ -43,5 +46,5 @@ public class Ticket implements Serializable {
 
     private String seatNo;
 
-    private LocalDateTime bookingDate;
+    private String bookingDate;
 }

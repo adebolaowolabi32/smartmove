@@ -1,10 +1,17 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.view.Passenger;
+import com.interswitch.smartmoveserver.model.view.ScheduleBooking;
 import com.interswitch.smartmoveserver.model.view.TicketDetails;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
+import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.RandomUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,13 +21,18 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /*
  * Created by adebola.owolabi on 7/27/2020
  */
 @Service
 public class TicketService {
+    private final Log logger = LogFactory.getLog(getClass());
+
     @Autowired
     private TicketRepository ticketRepository;
 
@@ -31,107 +43,128 @@ public class TicketService {
     private ManifestService manifestService;
 
     @Autowired
-    private RouteService routeService;
+    private TransactionService transactionService;
+
+    @Autowired
+    private TerminalService terminalService;
 
     @Autowired
     private TripService tripService;
 
     @Autowired
+    private ScheduleService scheduleService;
+
+    @Autowired
+    private StateService stateService;
+
+    @Autowired
     PageUtil pageUtil;
 
-    public List<Route> getRoutes() {
-        /*List<Route> routes = new ArrayList<>();
-        Route route = new Route();
-        route.setId(1);
-        route.setName("Ojota - Oshodi");
-        route.setStartTerminalId(2L);
-        route.setStopTerminalId(1L);
-        route.setPrice(200);
-        routes.add(route);*/
-        return routeService.getAll();
+    public List<Terminal> getTerminals() {
+        return terminalService.findAll();
     }
 
-    public List<Trip> getTrips() {
-        /*List<Trip> trips = new ArrayList<>();
-        Route route = new Route();
-        route.setId(1);
-        route.setName("Ojota - Oshodi");
-        route.setStartTerminalId(2L);
-        route.setStopTerminalId(1L);
-        route.setPrice(200);
-
-        Vehicle vehicle = new Vehicle();
-        vehicle.setName("Vehicle One");
-
-        Trip trip = new Trip();
-        trip.setId(1);
-        trip.setReferenceNo(UUID.randomUUID().toString());
-        DateFormat format = new SimpleDateFormat("MMM dd yyyy HH:mm aa");
-        Date dateobj = new Date();
-        trip.setArrival(format.format(dateobj));
-        trip.setDeparture(format.format(dateobj));
-        trip.setDriver(new User());
-        trip.setRoute(route);
-        trip.setVehicle(vehicle);
-        trip.setName(route.getName() + trip.getDeparture());
-        trips.add(trip);*/
-        return tripService.getAll();
+    public List<Schedule> getSchedules() {
+        return scheduleService.findAll();
     }
 
-    public TicketDetails makeBooking(TicketDetails ticketDetails) {
-        Route route = routeService.findById(Long.valueOf(ticketDetails.getRouteId()));
-        ticketDetails.setRoute(route);
-        Trip trip = tripService.findById(Long.valueOf(ticketDetails.getTripId()));
-        ticketDetails.setTrip(trip);
+    public ScheduleBooking findBooking(String username, ScheduleBooking scheduleBooking) {
+        User operator = new User();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) //and if user is operator
+            operator = user.get();
+        //List<Schedule> schedules = scheduleService.findByOwner);
+        List<Schedule> schedules = scheduleService.findAll();
+        List<Schedule> scheduleResults = schedules.stream()
+                .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName().equals(scheduleBooking.getStopTerminal()) && s.getDeparture().toLocalDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
+        scheduleBooking.setSchedules(scheduleResults);
+        return scheduleBooking;
+    }
 
+    public TicketDetails makeBooking(String scheduleId, int noOfPassengers) {
+        TicketDetails ticketDetails = new TicketDetails();
+        Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
+        ticketDetails.setSchedule(schedule);
+        ticketDetails.setNoOfPassengers(noOfPassengers);
         ticketDetails.setSeats(getAvailableSeats());
-        ticketDetails.setCountries(getAllCountries());
+        ticketDetails.setCountries(stateService.findAllCountries());
         return ticketDetails;
     }
 
-
-    public TicketDetails getTickets(TicketDetails ticketDetails) {
+    public TicketDetails getTickets(String username, TicketDetails ticketDetails) {
         //generate tickets from details
-        String ref = UUID.randomUUID().toString().toUpperCase();
-        ref = "TKT-" + ref.replace("-", "");
-        ticketDetails.setReferenceNo(ref);
-        ticketDetails.setTotalFare(ticketDetails.getRoute().getPrice());
+        double fare = ticketDetails.getSchedule().getFare();
+        String bookingDate = DateUtil.formatDate(LocalDateTime.now());
+        ticketDetails.setBookingDate(bookingDate);
+
+        User operator = new User();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) //and if user is operator
+            operator = user.get();
+        List<Ticket> tickets = new ArrayList<>();
+        Passenger passenger = new Passenger();
+        passenger.setGender(ticketDetails.getGender());
+        passenger.setIdCategory(ticketDetails.getIdCategory());
+        passenger.setIdNumber(ticketDetails.getIdNumber());
+        passenger.setName(ticketDetails.getName());
+        passenger.setNationality(ticketDetails.getNationality());
+        passenger.setSeatClass(ticketDetails.getSeatClass());
+        passenger.setSeatNo(ticketDetails.getSeatNo());
+        ticketDetails.setPassenger(passenger);
+        List<Passenger> passengers = new ArrayList<>(); //ticketDetails.getPassengers();
+        passengers.add(passenger);
+        for (Passenger pass : passengers) {
+            Ticket ticket = new Ticket();
+            ticket.setOperator(operator);
+            ticket.setBookingDate(bookingDate);
+            ticket.setPassengerName(pass.getName());
+            ticket.setReferenceNo(getTicketReference());
+            ticket.setSeatClass(pass.getSeatClass());
+            ticket.setSeatNo(pass.getSeatNo());
+            //ticket.setTrip(ticketDetails.getTrip());
+            ticket.setSchedule(ticketDetails.getSchedule());
+            ticket.setFare(fare);
+            tickets.add(ticket);
+        }
+        ticketDetails.setTickets(tickets);
+        ticketDetails.setTotalFare(fare * ticketDetails.getNoOfPassengers());
+
         return ticketDetails;
     }
 
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
-        //confirm purchase, add details to manifest
-        LocalDateTime bookingDate = LocalDateTime.now();
-        ticketDetails.setBookingDate(bookingDate);
-        User operator = new User();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) operator = user.get();
-        Ticket ticket = new Ticket();
-        ticket.setOperator(operator);
-        ticket.setBookingDate(ticketDetails.getBookingDate());
-        ticket.setPassengerName(ticketDetails.getName());
-        ticket.setReferenceNo(ticketDetails.getReferenceNo());
-        ticket.setSeatClass(ticketDetails.getSeatClass());
-        ticket.setSeatNo(ticketDetails.getSeatNo());
-        ticket.setTrip(ticketDetails.getTrip());
-        ticket.setFare(ticketDetails.getTotalFare());
+        ticketRepository.saveAll(ticketDetails.getTickets());
+        Passenger passenger = ticketDetails.getPassenger();
+        List<Passenger> passengers = ticketDetails.getPassengers();
+      //  for (Passenger passenger : passengers) {
+            Manifest manifest = new Manifest();
+            manifest.setName(passenger.getName());
+            manifest.setGender(passenger.getGender());
+            manifest.setContactEmail(ticketDetails.getContactEmail());
+            manifest.setContactMobile(ticketDetails.getContactMobile());
+            manifest.setIdCategory(passenger.getIdCategory());
+            manifest.setIdNumber(passenger.getIdNumber());
+            manifest.setNationality(passenger.getNationality());
+            //add address to data capture
+            manifest.setAddress(passenger.getNationality());
+            manifest.setSeatNo(passenger.getSeatNo());
+            manifest.setNextOfKinMobile(ticketDetails.getNextOfKinMobile());
+            manifest.setNextOfKinName(ticketDetails.getNextOfKinName());
+            manifest.setBvn(ticketDetails.getBvn());
+            manifest.setTrip(ticketDetails.getTrip());
+            manifest.setSchedule(ticketDetails.getSchedule());
+            manifestService.save(manifest);
+       // }
 
-        ticketRepository.save(ticket);
-
-        Manifest manifest = new Manifest();
-        manifest.setName(ticketDetails.getName());
-        manifest.setGender(ticketDetails.getGender());
-        manifest.setContactEmail(ticketDetails.getContactEmail());
-        manifest.setContactMobile(ticketDetails.getContactMobile());
-        manifest.setIdCategory(ticketDetails.getIdCategory());
-        manifest.setIdNumber(ticketDetails.getIdNumber());
-        manifest.setNationality(ticketDetails.getNationality());
-        manifest.setAddress(ticketDetails.getNationality());
-        manifest.setNextOfKinMobile(ticketDetails.getNextOfKinMobile());
-        manifest.setNextOfKinName(ticketDetails.getNextOfKinName());
-        manifest.setTrip(ticketDetails.getTrip());
-        manifest.setSeatNo(ticketDetails.getSeatNo());
-        manifestService.save(manifest);
+        Transaction transaction = new Transaction();
+        transaction.setVehicleId(ticketDetails.getSchedule().getVehicle().getName());
+        transaction.setTerminalId(String.valueOf(ticketDetails.getSchedule().getId()));
+        transaction.setOperatorId(username);
+        transaction.setType(Enum.TransactionType.TICKET_SALE);
+        transaction.setMode(ticketDetails.getSchedule().getMode());
+        transaction.setAmount(ticketDetails.getTotalFare());
+        transaction.setTransactionDateTime(LocalDateTime.now());
+        transactionService.saveTransaction(transaction);
         return ticketDetails;
     }
 
@@ -143,14 +176,9 @@ public class TicketService {
         return seats;
     }
 
-    private List<String> getAllCountries() {
-        List<String> countries = new ArrayList<>();
-        String[] locales = Locale.getISOCountries();
-        for (String countryCode : locales) {
-            Locale obj = new Locale("en", countryCode);
-            countries.add(obj.getDisplayCountry());
-        }
-        return countries;
+    public String getTicketReference() {
+        //get operator prefix
+        return "AKT-" + RandomUtil.getRandomNumber();
     }
 
     public Ticket save(Principal principal, Ticket ticket) {

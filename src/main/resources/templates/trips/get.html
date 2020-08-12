@@ -3,7 +3,7 @@
       layout:decorate="~{layouts/default.html}">
 <title layout:fragment="title">Trips</title>
 <div layout:fragment="content" class="card mb-4">
-    <div class="card-header"><i class="fas fa-memory mr-1"></i><span>Trips</span></div>
+    <div class="card-header"><i class="fas fa-road mr-1"></i><span>Trips</span></div>
     <div class="card-body">
         <div class="table-wrapper">
             <div class="table-title">
@@ -30,9 +30,10 @@
                 <thead class='thead-light'>
                 <tr>
                     <th>Trip Reference ID</th>
-                    <th>Route</th>
                     <th>Driver</th>
                     <th>Vehicle</th>
+                    <th>Departure Terminal</th>
+                    <th>Destination Terminal</th>
                     <th>Departure time</th>
                     <th>Arrival time</th>
                     <th>View details</th>
@@ -42,21 +43,22 @@
                 <tbody>
                 <tr th:each="trip : ${tripPage.content}">
                     <td th:text="${trip.referenceNo}"></td>
-                    <td th:text="${trip.route!=null ? trip.route.name : ''}"></td>
                     <td th:text="${trip.driver!=null ? trip.driver.firstName+' '+trip.driver.lastName : ''}"></td>
                     <td th:text="${trip.vehicle!=null ? trip.vehicle.name+'-'+trip.vehicle.regNo : '' }"></td>
-                    <td th:text="${trip.departure}"></td>
-                    <td th:text="${trip.arrival}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.startTerminal.name  : ''}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.stopTerminal.name  : ''}"></td>
+                    <td th:text="${trip.departureString}"></td>
+                    <td th:text="${trip.arrivalString}"></td>
 
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/details/{id}(id=${trip.id})}">
-                            <i class='far fa-eye'></i>
+                            <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
 
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/delete/{id}(id=${trip.id})}">
-                            <i style="color:red;" class='far fa-trash-alt'></i>
+                            <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
                         </a>
                     </td>
 

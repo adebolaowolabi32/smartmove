@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.TerminalRepository;
@@ -35,7 +34,7 @@ public class TerminalService {
     @Autowired
     PageUtil pageUtil;
 
-    public List<Terminal> getAll() {
+    public List<Terminal> findAll() {
         return terminalRepository.findAll();
     }
 
@@ -81,10 +80,6 @@ public class TerminalService {
     
     public Terminal findById(long id) {
         return terminalRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist"));
-    }
-
-    public List<Terminal> find(Enum.TransportMode type) {
-        return terminalRepository.findAllByType(type);
     }
 
     public List<Terminal> findByOwner(long owner) {

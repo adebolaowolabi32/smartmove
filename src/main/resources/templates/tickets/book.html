@@ -14,47 +14,53 @@
 
             </div>
         </div>
-        <form class="card p-3" method="post" th:action="${flowExecutionUrl}" th:object="${ticketDetails}"
+        <form class="card p-3" method="post" th:action="${flowExecutionUrl}" th:object="${scheduleBooking}"
               data-parsley-validate="true">
             <div class="row">
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="routeId">Route</label>
+                <div class="form-group col">
+                    <label class="control-label" for="startTerminal">Leaving from</label>
                     <div>
-                        <select class="form-control" th:field="*{routeId}" id="routeId">
+                        <select class="form-control" th:field="*{startTerminal}" id="startTerminal">
                             <option value="">Select...</option>
-                            <option th:each="route : ${routes}" th:value="${route.id}" th:text="${route.name}"></option>
+                            <option th:each="terminal : ${terminals}" th:value="${terminal.name}" th:text="${terminal.name}"></option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group col-sm-6">
-                    <label class="control-label" for="tripDate">Trip Date</label>
+                <div class="form-group col">
+                    <label class="control-label" for="stopTerminal">Going to</label>
                     <div>
-                        <input class="form-control" type="date" th:field="*{tripDate}" id="tripDate">
+                        <select class="form-control" th:field="*{stopTerminal}" id="stopTerminal">
+                            <option value="">Select...</option>
+                            <option th:each="terminal : ${terminals}" th:value="${terminal.name}" th:text="${terminal.name}"></option>
+                        </select>
                     </div>
                 </div>
-            </div>
-            <div>
-                <div class="form-group">
-                    <label class="control-label" for="tripId">Trip</label>
+                <div class="form-group col">
+                    <label class="control-label" for="departure">Departure Date</label>
                     <div>
-                        <select class="form-control" th:field="*{tripId}" id="tripId">
-                            <option value="">Select...</option>
-                            <option th:each="trip : ${trips}" th:value="${trip.id}" th:text="${trip.name}"></option>
-                        </select>
+                        <input class="form-control" type="date" th:field="*{departure}" th:value="${today}" id="departure">
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label class="control-label" for="returnDate">Return Date (Optional)</label>
+                    <div>
+                        <input class="form-control" type="date" th:field="*{returnDate}" id="returnDate">
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label class="control-label" for="noOfPassengers">Seats</label>
+                    <div>
+                        <input class="form-control" type="number" value="1" th:field="*{noOfPassengers}" id="noOfPassengers">
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-2"></div>
-                <div class="col-sm-2"></div>
-                <div class="col-sm-2"></div>
-                <div class="col-sm-2"></div>
+                <div class="col-sm-10"></div>
                 <div class="col-sm-2">
-                    <input type="submit" class="btn btn-sized" value="Proceed"/>
+                    <input type="submit" class="btn btn-outline-primary btn-sized" value="Proceed"/>
                 </div>
             </div>
-            <input type="hidden" name="_eventId" value="makeBooking"/>
+            <input type="hidden" name="_eventId" value="findBooking"/>
         </form>
     </div>
 </div>

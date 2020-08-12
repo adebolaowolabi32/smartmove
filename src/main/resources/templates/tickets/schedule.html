@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<title layout:fragment="title">Tickets</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+        <span>Tickets</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Select New Booking</b></h2>
+                </div>
+
+            </div>
+        </div>
+        <div>
+            <div class="list-group-item list-group-item-action" th:each="schedule : ${scheduleBooking.schedules}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="booking-item-flight-details">
+                            <h5 class="booking-item-title" th:text="${schedule.vehicle.name}"> Executive Coach</h5>
+                            <p>
+                                <span th:text="${schedule.vehicle.capacity}"> 59</span> Seat(s)
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <i class="fas fa-fan"></i><div class="text-small"> Air Conditioner</div>
+                            </div>
+                            <div class="col">
+                                <i class="fa fa-film"></i><div class="text-small"> Media</div>
+                            </div>
+                            <div class="col">
+                                <i class="fa fa-plug"></i><div class="text-small"> Power</div>
+                            </div>
+                            <div class="col">
+                                <i class="fas fa-toilet"></i><div class="text-small"> Toilet</div>
+                            </div>
+                            <div class="col">
+                                <i class="fa fa-suitcase"></i><div class="text-small"> Excess Luggage</div>
+                            </div>
+                            <div class="col">
+                                <i class="fa fa-briefcase"></i><div class="text-small"> Extra Leg Room</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-2">
+                        <div class="booking-item-arrival">
+                            <p class="text-color"><b>Departure</b></p>
+                            <p class="booking-item-address" th:text="${schedule.startTerminal.name}"><i class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
+                            <p class="booking-item-address" th:text="${schedule.departureString}"><i class="fa fa-clock-o"></i> 17-Aug-2020 4:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="booking-item-arrival">
+                            <p class="text-color"><b>Destination</b></p>
+                            <p class="booking-item-address" th:text="${schedule.stopTerminal.name}"><i class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
+                            <p class="booking-item-address" th:text="${schedule.arrivalString}"><i class="fa fa-clock-o"></i> 17-Aug-2020 4:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <span class="amt-big">&#8358; <span th:text="${schedule.fare}">14,000.00/seat</span></span>
+                        <br>
+                        <a class="btn btn-outline-primary btn-sized"  id="expander" th:href="@{${flowExecutionUrl} + '&_eventId=makeBooking&scheduleId=' + ${schedule.id} + '&noOfPassengers=' + ${scheduleBooking.noOfPassengers}}">Select</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="col-md-2">
+            <div class="booking-item-img-wrap">
+                <img src="/img/luxury-coach.png" alt="Chisco Executive Coach (59 Seats)" title="Chisco Executive Coach (59 Seats)">
+            </div>
+        </div>-->
+        <div th:if="${scheduleBooking.schedules.empty}">  No schedule was found for the selected route and/or date . Please try again. </div>
+    </div>
+</div>
+</html>

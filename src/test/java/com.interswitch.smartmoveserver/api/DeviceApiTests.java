@@ -93,8 +93,8 @@ public class DeviceApiTests {
     }
 
     @Test
-    public void testGetAll() throws Exception {
-        when(deviceService.getAll()).thenReturn(Arrays.asList(device, new Device()));
+    public void testfindAll() throws Exception {
+        when(deviceService.findAll()).thenReturn(Arrays.asList(device, new Device()));
         mvc.perform(get("/devices")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

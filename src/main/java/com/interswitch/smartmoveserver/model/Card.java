@@ -19,7 +19,7 @@ public class Card implements Serializable {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner")
     private User owner;
 
     @Column(unique=true)

@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.service.StateService;
 import com.interswitch.smartmoveserver.service.TerminalService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -29,6 +31,9 @@ public class TerminalController {
 
     @Autowired
     private TerminalService terminalService;
+
+    @Autowired
+    private StateService stateService;
 
     @Autowired
     private UserService userService;
@@ -46,6 +51,12 @@ public class TerminalController {
         return "terminals/get";
     }
 
+    @GetMapping("/getlgas")
+    @ResponseBody
+    public List<String> getAll(@RequestParam String state) {
+        return stateService.findByName(state).getLocalGovts();
+    }
+
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
         Terminal terminal = terminalService.findById(id);
@@ -57,6 +68,8 @@ public class TerminalController {
     public String showCreate(Principal principal, Model model) {
         Terminal terminal = new Terminal();
         model.addAttribute("terminal", terminal);
+        model.addAttribute("countries", stateService.findAllCountries());
+        model.addAttribute("states", stateService.findAll());
         model.addAttribute("owners", userService.findAll());
         return "terminals/create";
     }
@@ -65,11 +78,12 @@ public class TerminalController {
     public String create(Principal principal, @Valid Terminal terminal, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("terminal", terminal);
+            model.addAttribute("countries", stateService.findAllCountries());
+            model.addAttribute("states", stateService.findAll());
             model.addAttribute("owners", userService.findAll());
             return "terminals/create";
         }
 
-        logger.info("POSTing Principal logged====>" + principal);
         Terminal savedTerminal = terminalService.save(terminal, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/terminals/details/" + savedTerminal.getId();
@@ -79,6 +93,8 @@ public class TerminalController {
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
         Terminal terminal = terminalService.findById(id);
         model.addAttribute("terminal", terminal);
+        model.addAttribute("countries", stateService.findAllCountries());
+        model.addAttribute("states", stateService.findAll());
         model.addAttribute("owners", userService.findAll());
         return "terminals/update";
     }
@@ -89,6 +105,8 @@ public class TerminalController {
         terminal.setId(id);
         if (result.hasErrors()) {
             model.addAttribute("terminal", terminal);
+            model.addAttribute("countries", stateService.findAllCountries());
+            model.addAttribute("states", stateService.findAll());
             model.addAttribute("owners", userService.findAll());
             return "terminals/update";
         }

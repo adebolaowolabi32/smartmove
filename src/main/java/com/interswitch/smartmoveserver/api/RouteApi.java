@@ -20,9 +20,9 @@ public class RouteApi {
     RouteService routeService;
 
     @GetMapping(produces = "application/json")
-    private List<Route> getAll() {
+    private List<Route> findAll() {
 
-        return routeService.getAll();
+        return routeService.findAll();
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
@@ -46,7 +46,7 @@ public class RouteApi {
         return routeService.findByOwner(owner);
     }
 
-    @PostMapping(value = "/{routeId}/assignToVehicle/{vehicleId}", produces = "application/json", consumes = "application/json")
+   /* @PostMapping(value = "/{routeId}/assignToVehicle/{vehicleId}", produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     private void assignToVehicle(@Validated @PathVariable long routeId, @Validated @PathVariable long vehicleId) {
         routeService.assignToVehicle(routeId, vehicleId);
@@ -56,7 +56,7 @@ public class RouteApi {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     private void unassignFromVehicle(@Validated @PathVariable long routeId, @Validated @PathVariable long vehicleId) {
         routeService.unassignFromVehicle(routeId, vehicleId);
-    }
+    }*/
 
     @PutMapping(produces = "application/json", consumes = "application/json")
     private Route update(@Validated @RequestBody Route route) {

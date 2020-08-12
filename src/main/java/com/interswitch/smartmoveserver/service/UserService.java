@@ -66,7 +66,6 @@ public class UserService {
 
     public void setUp(User user) {
         Optional<User> exists = userRepository.findByUsername(user.getUsername());
-        logger.info("User Existing===>user " + user.getUsername() + " is " + exists.isPresent());
         if (exists.isPresent()) return;
         else {
             PassportUser passportUser = passportService.findUser(user.getUsername());

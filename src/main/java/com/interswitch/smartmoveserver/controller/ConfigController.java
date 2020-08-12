@@ -24,7 +24,7 @@ public class ConfigController {
     private ConfigService configService;
     @GetMapping("/get")
     public String getAll(Model model) {
-        model.addAttribute("configurations", configService.getAll());
+        model.addAttribute("configurations", configService.findAll());
         return "configurations/get";
     }
 

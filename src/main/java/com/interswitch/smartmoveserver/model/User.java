@@ -39,7 +39,7 @@ public class User implements Serializable {
     private Enum.Role role;
 
     @ManyToOne
-    @JoinColumn(name="owner_id")
+    @JoinColumn(name="owner")
     private User owner;
 
     private boolean enabled;

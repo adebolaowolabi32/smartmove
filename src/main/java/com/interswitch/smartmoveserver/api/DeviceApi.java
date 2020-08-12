@@ -37,8 +37,8 @@ public class DeviceApi {
 */
 
     @GetMapping(produces = "application/json")
-    private List<Device> getAll() {
-        return deviceService.getAll();
+    private List<Device> findAll() {
+        return deviceService.findAll();
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

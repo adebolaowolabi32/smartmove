@@ -1,7 +1,9 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.Route;
+import com.interswitch.smartmoveserver.model.Terminal;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.RouteRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
@@ -17,7 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author adebola.owolabi
@@ -42,7 +43,7 @@ public class RouteService {
     @Autowired
     PageUtil pageUtil;
 
-    public List<Route> getAll() {
+    public List<Route> findAll() {
         return routeRepository.findAll();
     }
 
@@ -108,10 +109,6 @@ public class RouteService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
-    public List<Route> findAll() {
-        return routeRepository.findAll();
-    }
-
     public Route update(Route route) {
         Optional<Route> existing = routeRepository.findById(route.getId());
         if (existing.isPresent()) {
@@ -127,7 +124,7 @@ public class RouteService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
     }
 
-    public void assignToVehicle(long routeId, long vehicleId) {
+   /* public void assignToVehicle(long routeId, long vehicleId) {
         Optional<Route> routeOptional = routeRepository.findById(routeId);
         if (routeOptional.isPresent()) {
             Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
@@ -155,7 +152,7 @@ public class RouteService {
                 routes.remove(route.get());
             } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Vehicle does not exist");
         } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Route does not exist");
-    }
+    }*/
 
     public void delete(long id) {
         Optional<Route> existing = routeRepository.findById(id);

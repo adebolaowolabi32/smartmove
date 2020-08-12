@@ -43,7 +43,7 @@ public class TerminalApiTests {
         long id = 10000023;
         terminal.setId(id);
         terminal.setName("my_terminal");
-        terminal.setType(Enum.TransportMode.RAIL);
+        terminal.setMode(Enum.TransportMode.RAIL);
         terminal.setOwner(new User());
         terminal.setLocation("my_location_one");
         terminal.setEnabled(true);
@@ -72,8 +72,8 @@ public class TerminalApiTests {
     }
 
     @Test
-    public void testGetAll() throws Exception {
-        when(terminalService.getAll()).thenReturn(Arrays.asList(terminal, new Terminal()));
+    public void testfindAll() throws Exception {
+        when(terminalService.findAll()).thenReturn(Arrays.asList(terminal, new Terminal()));
         mvc.perform(get("/terminals")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

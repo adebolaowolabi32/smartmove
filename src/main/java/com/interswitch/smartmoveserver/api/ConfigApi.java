@@ -20,8 +20,8 @@ public class ConfigApi {
     private ConfigService configService;
     
     @GetMapping(produces = "application/json")
-    private List<Config> getAll() {
-        return configService.getAll();
+    private List<Config> findAll() {
+        return configService.findAll();
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

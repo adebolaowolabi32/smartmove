@@ -54,7 +54,6 @@ public class TransactionApiTests {
         transaction.setCardId("12345556");
         transaction.setType(Enum.TransactionType.CREDIT);
         transaction.setAmount(200.00);
-        transaction.setAgentId("peace.miracle");
         transaction.setOperatorId("OP4564");
         transaction.setTerminalId("647593");
         transaction.setMode(Enum.TransportMode.RAIL);
@@ -73,8 +72,8 @@ public class TransactionApiTests {
     }
 
     @Test
-    public void testGetAll() throws Exception {
-        when(transactionService.getAll()).thenReturn(Arrays.asList(transaction, transaction));
+    public void testfindAll() throws Exception {
+        when(transactionService.findAll()).thenReturn(Arrays.asList(transaction, transaction));
         mvc.perform(get("/transactions")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
