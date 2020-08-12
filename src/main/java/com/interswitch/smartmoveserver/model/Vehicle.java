@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -46,9 +45,17 @@ public class Vehicle implements Serializable {
     @ManyToMany(mappedBy = "vehicles")
     private Set<Route> routes;
 
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "document_id")
+    private Document vehiclePicture;
+
     private int noRows;
 
     private int noColumns;
 
     private int noSeats;
+
+    @Column(name="facilities")
+    @ElementCollection(targetClass=String.class)
+    private Set<String> facilities;
 }

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 /**
@@ -123,7 +122,7 @@ public class ApplicationStartup implements CommandLineRunner {
 
         List<State> stateList = stateRepo.findAll();
 
-        if (stateList.isEmpty() || stateList.size() <= 36) {
+        if (stateList==null ||  stateList.isEmpty()) {
             // save
             Map<String, List<String>> stateToLocalGovtMap = new HashMap<>();
 

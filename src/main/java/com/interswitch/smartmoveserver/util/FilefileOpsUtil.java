@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
-public class FileUtil {
+public class FilefileOpsUtil {
 
     public static String convertFileToBase64String(File file) throws IOException {
 
