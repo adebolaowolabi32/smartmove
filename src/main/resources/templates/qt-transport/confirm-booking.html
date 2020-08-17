@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no" name="viewport">
+    <link href="https://mufasa.interswitchng.com/p/favicons/favicon_isw.png" rel="icon" type="image/x-icon">
+    <title>Quickteller Transport | Find the Cheapest Bus Tickets</title>
+    <meta content="The best way to book bus tickets online" name="description">
+    <!-- Stylesheet ============================================= -->
+    <link href="#" rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/font-awesome/css/all.min.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/owl.carousel/assets/owl.carousel.min.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/owl.carousel/assets/owl.theme.default.min.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/jquery-ui/jquery-ui.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/daterangepicker/daterangepicker.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/css/stylesheet.css}" type="text/css">
+</head>
+<body>
+<!-- Document Wrapper
+============================================= -->
+<div id="main-wrapper">
+    <!-- Header
+============================================= -->
+    <header id="header">
+        <div class="container">
+            <div class="header-row">
+                <div class="header-column justify-content-start">
+                    <!-- Logo
+      ============================================= -->
+                    <div class="logo">
+                        <a th:href="@{/qt-transport}" title="Quickteller Transport"><img alt="Quickteller"
+                                                                                         th:src="@{/images/logo.svg}"
+                                                                                         width="170"></a>
+                    </div><!-- Logo end -->
+                </div>
+                <div class="header-column justify-content-end">
+                    <!-- Primary Navigation
+      ============================================= -->
+                    <nav class="primary-menu navbar navbar-expand-lg">
+                        <div class="collapse navbar-collapse" id="header-nav">
+                            <ul class="navbar-nav">
+                                <li class="">
+                                    <a href="#">Partner with us</a>
+                                </li>
+                                <li class="">
+                                    <a href="#">Help</a>
+                                </li>
+                                <li class="login-signup ml-lg-2">
+                                    <a class="pl-lg-4 pr-0" data-target="#login-signup" data-toggle="modal" href="#"
+                                       title="Login / Sign up">Login / Sign up <span class="d-none d-lg-inline-block"><i
+                                            class="fas fa-user"></i></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav><!-- Primary Navigation end -->
+                </div><!-- Collapse Button
+        ============================================= -->
+                <button class="navbar-toggler" data-target="#header-nav" data-toggle="collapse" type="button">
+                    <span></span> <span></span> <span></span></button>
+            </div>
+        </div>
+    </header><!-- Header end -->
+    <!-- Page Header
+============================================= -->
+    <section class="page-header page-header-text-light bg-secondary">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1>Bus Route: Lagos - Ibadan</h1>
+                </div>
+                <div class="col-md-4">
+                    <ul class="breadcrumb justify-content-start justify-content-md-end mb-0">
+                        <li>
+                            <a th:href="@{/qt-transport}">Home</a>
+                        </li>
+                        <li class="active">Bus Route</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section><!-- Page Header end -->
+
+    <!-- Content
+    ============================================= -->
+    <div id="content">
+        <section class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="bg-light shadow-md rounded p-3 p-sm-4 confirm-details">
+                        <h2 class="text-6 mb-3">Confirm Booking Details</h2>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center trip-title">
+                                    <div class="col-5 col-sm-auto text-center text-sm-left">
+                                        <h5 class="m-0 trip-place">Lagos</h5>
+                                    </div>
+                                    <div class="col-2 col-sm-auto text-8 text-black-50 text-center trip-arrow">➝</div>
+                                    <div class="col-5 col-sm-auto text-center text-sm-left">
+                                        <h5 class="m-0 trip-place">Ibadan</h5>
+                                    </div>
+                                    <div class="col-12 mt-1 d-block d-md-none"></div>
+                                    <div class="col-6 col-sm col-md-auto text-3 date">01 July 18, Sun</div>
+                                    <div class="col-6 col-sm col-md-auto text-right order-sm-1"><a class="text-1"
+                                                                                                   data-target="#fare-rules"
+                                                                                                   data-toggle="modal"
+                                                                                                   href="">Fare
+                                        Rules</a></div>
+                                    <div class="col col-md-auto text-center ml-auto order-sm-0"><span
+                                            class="badge badge-success py-1 px-2 font-weight-normal text-1">Refundable</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row align-items-sm-center flex-row">
+                                    <div class="col-12 col-sm-3 mb-3 mb-sm-0"><span
+                                            class="text-3 text-dark operator-name">AK Tour &amp; Travels</span> <span
+                                            class="text-muted d-block">AC Sleeper</span></div>
+                                    <div class="col col-sm-3 text-center time-info"><span
+                                            class="text-5 text-dark">12:00</span>
+                                        <small class="text-muted d-block">Lagos</small>
+                                    </div>
+                                    <div class="col col-sm-3 text-center d-none d-sm-block time-info"><span
+                                            class="text-3 duration">18h 55m</span>
+                                        <small class="text-muted d-block">12 Stops</small>
+                                    </div>
+                                    <div class="col col-sm-3 text-center time-info"><span
+                                            class="text-5 text-dark">05:15</span>
+                                        <small class="text-muted d-block">Ibadan</small>
+                                    </div>
+                                    <div class="col-12 mt-3 text-dark">Seat No(s): <span
+                                            class="bg-success text-light rounded px-2">12</span> <span
+                                            class="bg-success text-light rounded px-2">13</span></div>
+                                </div>
+
+                                <!-- Fare Rules (Modal Dialog)
+                                ============================================= -->
+                                <div aria-hidden="true" class="modal fade" id="fare-rules" role="dialog">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Fare Rules</h5>
+                                                <button aria-label="Close" class="close" data-dismiss="modal"
+                                                        type="button"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                    <li class="nav-item"><a aria-controls="first" aria-selected="false"
+                                                                            class="nav-link active" data-toggle="tab"
+                                                                            href="#first" id="first-tab" role="tab">Cancellation
+                                                        Fee</a></li>
+                                                    <li class="nav-item"><a aria-controls="second" aria-selected="false"
+                                                                            class="nav-link" data-toggle="tab"
+                                                                            href="#second" id="second-tab" role="tab">Baggage
+                                                        Details</a></li>
+                                                </ul>
+                                                <div class="tab-content my-3" id="myTabContent">
+                                                    <div aria-labelledby="first-tab" class="tab-pane fade show active"
+                                                         id="first" role="tabpanel">
+                                                        <div class="table-responsive-md">
+                                                            <table class="table table-hover table-bordered bg-light">
+                                                                <thead>
+                                                                <tr>
+                                                                    <td>Hours before Departure</td>
+                                                                    <td class="text-center">Refund Percentage</td>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>Before 0 Hrs.</td>
+                                                                    <td class="text-center">0%</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Before 24 Hrs.</td>
+                                                                    <td class="text-center">30%</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Before 48 Hrs.</td>
+                                                                    <td class="text-center">60%</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Before 60 Hrs.</td>
+                                                                    <td class="text-center">75%</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Above 60 Hrs.</td>
+                                                                    <td class="text-center">80%</td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <p class="font-weight-bold">Terms &amp; Conditions</p>
+                                                            <ul>
+                                                                <li>The penalty is subject to 24 hrs before departure.
+                                                                    No Changes are allowed after that.
+                                                                </li>
+                                                                <li>The charges are per seat.</li>
+                                                                <li>Partial cancellation is not allowed on tickets
+                                                                    booked under special discounted fares.
+                                                                </li>
+                                                                <li>In case of no-show or ticket not cancelled within
+                                                                    the stipulated time, only statutory taxes are
+                                                                    refundable subject to Service Fee.
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div aria-labelledby="second-tab" class="tab-pane fade" id="second"
+                                                         role="tabpanel">
+                                                        <table class="table table-hover table-bordered bg-light">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>&nbsp;</th>
+                                                                <td class="text-center">Per Seat</td>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>Adult</td>
+                                                                <td class="text-center">5 Kg</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Child</td>
+                                                                <td class="text-center">5 Kg</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- Fare Rules end -->
+
+                            </div>
+                        </div>
+                        <div class="alert alert-info mt-4"><span class="badge badge-info">NOTE:</span> This is a special
+                            fare given by Interswitch Group. Operator cancellation charges do apply.
+                        </div>
+                        <h2 class="text-6 mb-3 mt-5">Traveller Details - <span class="text-3"><a
+                                data-target="#login-signup" data-toggle="modal" href="#"
+                                title="Login / Sign up">Login</a> to book faster</span></h2>
+                        <p class="font-weight-600">Contact Details</p>
+                        <div class="form-row">
+                            <div class="col-sm-6 form-group">
+                                <input class="form-control" id="email" placeholder="Enter Email" required type="text">
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <input class="form-control" data-bv-field="number" id="mobileNumber"
+                                       placeholder="Enter Mobile Number" required type="text">
+                            </div>
+                        </div>
+                        <p class="text-info">Your booking details will be sent to this email address and mobile
+                            number.</p>
+                        <p class="font-weight-600">Adult 1</p>
+                        <div class="form-row">
+                            <div class="col-sm-2 form-group">
+                                <select class="custom-select" id="title" required="">
+                                    <option value="">Title</option>
+                                    <option>Mr</option>
+                                    <option>Ms</option>
+                                    <option>Mrs</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <input class="form-control" id="firstName" placeholder="Enter First Name" required
+                                       type="text">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <input class="form-control" id="lastName" placeholder="Enter Last Name" required
+                                       type="text">
+                            </div>
+                            <div class="col-sm-2 form-group">
+                                <input class="form-control" id="age" placeholder="Age" required type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Panel (Fare Details)
+                ============================================= -->
+                <aside class="col-lg-4 mt-4 mt-lg-0">
+                    <div class="bg-light shadow-md rounded p-3">
+                        <h3 class="text-5 mb-3">Fare Details</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">Base Fare <span
+                                    class="float-right text-4 font-weight-500 text-dark">₦250</span></li>
+                            <li class="mb-2">Taxes & Fees <span
+                                    class="float-right text-4 font-weight-500 text-dark">₦30</span></li>
+                            <li class="mb-2">Insurance <span
+                                    class="float-right text-4 font-weight-500 text-dark">₦70</span></li>
+                        </ul>
+                        <div class="text-dark bg-light-4 text-4 font-weight-600 p-3"> Total Amount <span
+                                class="float-right text-6">₦350</span></div>
+                        <h3 class="text-4 mb-3 mt-4">Promo Code</h3>
+                        <div class="input-group form-group">
+                            <input aria-label="Promo Code" class="form-control" placeholder="Promo Code" type="text">
+                            <span class="input-group-append">
+                <button class="btn btn-secondary" type="submit">APPLY</button>
+                </span></div>
+                        <ul class="promo-code pre-scrollable">
+                            <li><span class="d-block text-3 font-weight-600">FLTOFFER</span>Up to ₦500 Off on your
+                                booking. Hurry! Limited period offer. <a class="text-1" href="">Terms & Conditions</a>
+                            </li>
+                            <li><span class="d-block text-3 font-weight-600">HOTOFFER</span>Up to ₦500 Off on your
+                                booking. Hurry! Limited period offer. <a class="text-1" href="">Terms & Conditions</a>
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary btn-block"
+                                th:onclick="|window.location.href='@{/qt-transport/payment}'|" type="submit">Proceed To
+                            Payment
+                        </button>
+                    </div>
+                </aside><!-- Side Panel -->
+            </div>
+        </section>
+    </div><!-- Content end -->
+
+    <!-- Footer
+    ============================================= -->
+    <footer id="footer">
+        <section class="section bg-light shadow-md pt-4 pb-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="featured-box text-center">
+                            <div class="featured-box-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h4>100% Secured</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="featured-box text-center">
+                            <div class="featured-box-icon">
+                                <i class="fas fa-thumbs-up"></i>
+                            </div>
+                            <h4>Instant Payment</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="featured-box text-center">
+                            <div class="featured-box-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <h4>Refer & Earn</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="featured-box text-center">
+                            <div class="featured-box-icon">
+                                <i class="far fa-life-ring"></i>
+                            </div>
+                            <h4>24/7 Support</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <p>Payment</p>
+                    <ul class="payments-types">
+                        <li><a href="#" target="_blank"> <img alt="visa" data-toggle="tooltip"
+                                                              th:src="@{/images/payment/visa.png}" title="Visa"></a>
+                        </li>
+                        <li><a href="#" target="_blank"> <img alt="verve" data-toggle="tooltip"
+                                                              th:src="@{/images/payment/verve.png}" title="Verve"></a>
+                        </li>
+                        <li><a href="#" target="_blank"> <img alt="discover" data-toggle="tooltip"
+                                                              th:src="@{/images/payment/mastercard.png}"
+                                                              title="Discover"></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <p>Subscribe</p>
+                    <div class="input-group newsletter">
+                        <input class="form-control" id="newsletterEmail" name="newsletterEmail"
+                               placeholder="Your Email Address" type="text">
+                        <span class="input-group-append">
+            <button class="btn btn-secondary" type="submit">Subscribe</button>
+            </span></div>
+                </div>
+                <div class="col-md-4 d-flex align-items-md-end flex-column">
+                    <p>Keep in touch</p>
+                    <ul class="social-icons">
+                        <li class="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/"
+                                                             target="_blank" title="Facebook"><i
+                                class="fab fa-facebook-f"></i></a></li>
+                        <li class="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/"
+                                                            target="_blank" title="Twitter"><i
+                                class="fab fa-twitter"></i></a></li>
+                        <li class="social-icons-instagram"><a data-toggle="tooltip" href="http://www.instagram.com/"
+                                                              target="_blank" title="Instagram"><i
+                                class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="footer-copyright">
+                <ul class="nav justify-content-center">
+                    <li class="nav-item"><a class="nav-link active" href="#">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Faq</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Terms of Use</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Privacy Policy</a></li>
+                </ul>
+                <p class="copyright-text">Copyright © 2021 <a href="#">Interswitch Group</a>. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer><!-- Footer end -->
+
+</div><!-- Document Wrapper end -->
+
+<!-- Back to Top
+============================================= -->
+<a data-toggle="tooltip" href="javascript:void(0)" id="back-to-top" title="Back to Top"><i class="fa fa-chevron-up"></i></a>
+
+<!-- Modal Dialog - Login/Signup
+============================================= -->
+<div aria-hidden="true" class="modal fade" id="login-signup" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content p-sm-3">
+            <div class="modal-body">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span>
+                </button>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item"><a aria-controls="login" aria-selected="true" class="nav-link active text-4"
+                                            data-toggle="tab" href="#login" id="login-tab" role="tab">Login</a></li>
+                    <li class="nav-item"><a aria-controls="signup" aria-selected="false" class="nav-link text-4"
+                                            data-toggle="tab" href="#signup" id="signup-tab" role="tab">Sign Up</a></li>
+                </ul>
+                <div class="tab-content pt-4">
+                    <div aria-labelledby="login-tab" class="tab-pane fade show active" id="login" role="tabpanel">
+                        <form id="loginForm" method="post">
+                            <div class="form-group">
+                                <input class="form-control" id="loginMobile" placeholder="Mobile or Email ID" required
+                                       type="email">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="loginPassword" placeholder="Password" required
+                                       type="password">
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-sm">
+                                    <div class="form-check custom-control custom-checkbox">
+                                        <input class="custom-control-input" id="remember-me" name="remember"
+                                               type="checkbox">
+                                        <label class="custom-control-label" for="remember-me">Remember Me</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm text-right"><a class="justify-content-end" href="#">Forgot Password
+                                    ?</a></div>
+                            </div>
+                            <button class="btn btn-primary btn-block" type="submit">Login</button>
+                        </form>
+                    </div>
+                    <div aria-labelledby="signup-tab" class="tab-pane fade" id="signup" role="tabpanel">
+                        <form id="signupForm" method="post">
+                            <div class="form-group">
+                                <input class="form-control" data-bv-field="number" id="signupEmail"
+                                       placeholder="Email ID" required type="text">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="signupMobile" placeholder="Mobile Number" required
+                                       type="text">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="signuploginPassword" placeholder="Password" required
+                                       type="password">
+                            </div>
+                            <button class="btn btn-primary btn-block" type="submit">Signup</button>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center my-4">
+                        <hr class="flex-grow-1">
+                        <span class="mx-2">OR</span>
+                        <hr class="flex-grow-1">
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <button class="btn btn-block btn-outline-primary" type="button">Login with Facebook</button>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-block btn-outline-danger" type="button">Login with Google</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- Modal Dialog - Login/Signup end -->
+
+<!-- Script -->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/owl.carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/js/theme.js}"></script>
+
+</body>
+</html>
