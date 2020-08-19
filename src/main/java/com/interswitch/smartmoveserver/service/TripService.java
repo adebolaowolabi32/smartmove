@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Trip;
 import com.interswitch.smartmoveserver.repository.TripRepository;
-import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import org.apache.commons.logging.Log;
@@ -47,8 +46,6 @@ public class TripService {
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Trip already exists");
 
         trip.setReferenceNo(RandomUtil.getRandomNumber());
-        trip.setArrivalString(DateUtil.formatDate(trip.getArrival()));
-        trip.setDepartureString(DateUtil.formatDate(trip.getDeparture()));
         return tripRepository.save(trip);
     }
 

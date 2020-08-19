@@ -40,7 +40,7 @@ public class TransactionController {
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
         Transaction transaction = transactionService.findById(id);
         model.addAttribute( "transaction", transaction);
-        return "transactions/details/" + id;
+        return "transactions/details";
     }
 }
 

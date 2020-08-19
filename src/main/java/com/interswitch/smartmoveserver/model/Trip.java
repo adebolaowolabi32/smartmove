@@ -1,11 +1,9 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /*
  * Created by adebola.owolabi on 7/17/2020
@@ -24,7 +22,7 @@ public class Trip implements Serializable {
     private double fare;
 
     @Enumerated(EnumType.STRING)
-    private Enum.TransportMode transportMode;
+    private Enum.TransportMode mode;
 
     @ManyToOne
     @JoinColumn(name = "driver")
@@ -35,17 +33,7 @@ public class Trip implements Serializable {
     private Schedule schedule;
 
     @ManyToOne
-    private VehicleCategory vehicle;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime departure;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime arrival;
-
-    private String departureString;
-
-    private String arrivalString;
+    private Vehicle vehicle;
 
     @ManyToOne
     @JoinColumn(name = "owner")

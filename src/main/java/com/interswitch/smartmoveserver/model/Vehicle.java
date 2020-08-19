@@ -22,6 +22,9 @@ public class Vehicle implements Serializable {
     @Column(unique=true)
     private String regNo;
 
+    @Enumerated(EnumType.STRING)
+    private Enum.TransportMode mode;
+
     @ManyToOne
     private VehicleCategory category;
 
