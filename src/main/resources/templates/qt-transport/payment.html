@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no" name="viewport">
+    <link href="https://mufasa.interswitchng.com/p/favicons/favicon_isw.png" rel="icon" type="image/x-icon">
+    <title>Quickteller Transport | Find the Cheapest Bus Tickets</title>
+    <meta content="The best way to book bus tickets online" name="description">
+    <!-- Stylesheet ============================================= -->
+    <link href="#" rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/font-awesome/css/all.min.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/owl.carousel/assets/owl.carousel.min.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/owl.carousel/assets/owl.theme.default.min.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/jquery-ui/jquery-ui.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/daterangepicker/daterangepicker.css}" type="text/css">
+    <link href="#" rel="stylesheet" th:href="@{/css/stylesheet.css}" type="text/css">
+</head>
+<body>
+<!-- Document Wrapper
+============================================= -->
+<div id="main-wrapper">
+    <!-- Header
+============================================= -->
+    <header id="header">
+        <div class="container">
+            <div class="header-row">
+                <div class="header-column justify-content-start">
+                    <!-- Logo
+      ============================================= -->
+                    <div class="logo">
+                        <a th:href="@{/qt-transport}" title="Quickteller Transport"><img alt="Quickteller"
+                                                                                         th:src="@{/images/logo.svg}"
+                                                                                         width="170"></a>
+                    </div><!-- Logo end -->
+                </div>
+                <div class="header-column justify-content-end">
+                    <!-- Primary Navigation
+      ============================================= -->
+                    <nav class="primary-menu navbar navbar-expand-lg">
+                        <div class="collapse navbar-collapse" id="header-nav">
+                            <ul class="navbar-nav">
+                                <li class="">
+                                    <a href="#">Partner with us</a>
+                                </li>
+                                <li class="">
+                                    <a href="#">Help</a>
+                                </li>
+                                <li class="login-signup ml-lg-2">
+                                    <a class="pl-lg-4 pr-0" data-target="#login-signup" data-toggle="modal" href="#"
+                                       title="Login / Sign up">Login / Sign up <span class="d-none d-lg-inline-block"><i
+                                            class="fas fa-user"></i></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav><!-- Primary Navigation end -->
+                </div><!-- Collapse Button
+        ============================================= -->
+                <button class="navbar-toggler" data-target="#header-nav" data-toggle="collapse" type="button">
+                    <span></span> <span></span> <span></span></button>
+            </div>
+        </div>
+    </header><!-- Header end -->
+    <!-- Page Header
+============================================= -->
+    <section class="page-header page-header-text-light bg-secondary">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1>Bus Route: Lagos - Ibadan</h1>
+                </div>
+                <div class="col-md-4">
+                    <ul class="breadcrumb justify-content-start justify-content-md-end mb-0">
+                        <li>
+                            <a th:href="@{/qt-transport}">Home</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/qt-transport/confirm-booking}">Booking Confirmation</a>
+                        </li>
+                        <li class="active">Payment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section><!-- Page Header end -->
+
+    <!-- Content
+    ============================================= -->
+    <div id="content">
+        <div class="container">
+            <div class="bg-light shadow-md rounded p-4">
+                <h3 class="text-6 mb-4">Select a Payment Mode</h3>
+                <div class="row">
+                    <div class="col-md-7 col-lg-8 order-1 order-md-0">
+                        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                            <li class="nav-item"><a aria-controls="firstTab" aria-selected="true"
+                                                    class="nav-link active" data-toggle="tab" href="#firstTab"
+                                                    id="first-tab" role="tab">Credit/Debit Cards</a></li>
+                            <li class="nav-item"><a aria-controls="secondTab" aria-selected="false" class="nav-link"
+                                                    data-toggle="tab" href="#secondTab" id="second-tab" role="tab">Quickteller</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content my-3" id="myTabContent">
+                            <!-- Cards Details
+                            ============================================= -->
+                            <div aria-labelledby="first-tab" class="tab-pane fade show active" id="firstTab"
+                                 role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-9">
+                                        <h3 class="text-4 mb-4">Enter Card Details</h3>
+                                        <form id="payment" method="post" th:action="@{/qt-transport/receipt}">
+                                            <div class="form-group">
+                                                <label for="cardNumber">Enter Debit / Credit Card Number</label>
+                                                <input class="form-control" data-bv-field="cardnumber" id="cardNumber"
+                                                       placeholder="Card Number" required type="text">
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="expiryMonth">Expiry Month</label>
+                                                        <select class="custom-select" id="expiryMonth" required="">
+                                                            <option value="">Expiry Month</option>
+                                                            <option>January</option>
+                                                            <option>February</option>
+                                                            <option>March</option>
+                                                            <option>April</option>
+                                                            <option>May</option>
+                                                            <option>June</option>
+                                                            <option>July</option>
+                                                            <option>August</option>
+                                                            <option>September</option>
+                                                            <option>October</option>
+                                                            <option>November</option>
+                                                            <option>December</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="expiryYear">Expiry Year</label>
+                                                        <select class="custom-select" id="expiryYear" required="">
+                                                            <option value="">Expiry Year</option>
+                                                            <option>2018</option>
+                                                            <option>2019</option>
+                                                            <option>2020</option>
+                                                            <option>2021</option>
+                                                            <option>2022</option>
+                                                            <option>2023</option>
+                                                            <option>2024</option>
+                                                            <option>2025</option>
+                                                            <option>2026</option>
+                                                            <option>2027</option>
+                                                            <option>2028</option>
+                                                            <option>2029</option>
+                                                            <option>2030</option>
+                                                            <option>2031</option>
+                                                            <option>2032</option>
+                                                            <option>2033</option>
+                                                            <option>2034</option>
+                                                            <option>2035</option>
+                                                            <option>2036</option>
+                                                            <option>2037</option>
+                                                            <option>2038</option>
+                                                            <option>2039</option>
+                                                            <option>2040</option>
+                                                            <option>2041</option>
+                                                            <option>2042</option>
+                                                            <option>2043</option>
+                                                            <option>2044</option>
+                                                            <option>2045</option>
+                                                            <option>2046</option>
+                                                            <option>2047</option>
+                                                            <option>2048</option>
+                                                            <option>2049</option>
+                                                            <option>2050</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="cvvNumber">CVV</label>
+                                                        <input class="form-control" data-bv-field="cvvnumber"
+                                                               id="cvvNumber" placeholder="CVV Number" required
+                                                               type="text">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cardHolderName">Card Holder Name</label>
+                                                <input class="form-control" data-bv-field="cardholdername"
+                                                       id="cardHolderName" placeholder="Card Holder Name" required
+                                                       type="text">
+                                            </div>
+                                            <div class="form-group custom-control custom-checkbox">
+                                                <input class="custom-control-input" id="save-card" name="savecard"
+                                                       type="checkbox">
+                                                <label class="custom-control-label" for="save-card">Save my card
+                                                    Details.</label>
+                                            </div>
+                                            <a th:href="@{/qt-transport/receipt}">
+                                                <button class="btn btn-primary btn-block" type="submit">Proceed to Pay
+                                                    ₦135
+                                                </button>
+                                            </a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Cards Details end -->
+                            <!-- Pay via Quickteller
+                          ============================================= -->
+                            <div aria-labelledby="second-tab" class="tab-pane fade" id="secondTab" role="tabpanel"><img
+                                    alt="Quickteller Logo" class="img-fluid"
+                                    src="https://i1.wp.com/www.brandcrunch.com.ng/wp-content/uploads/2015/11/Quickteller-New.png?resize=432%2C142&ssl=1"
+                                    title="Pay easily, fast and secure with PayPal.">
+                                <p class="lead">Pay easily, fast and secure with Quickteller.</p>
+                                <p class="text-info mb-4"><i class="fas fa-info-circle"></i> You will be redirected to
+                                    Quickteller to complete your payment securely.</p>
+                                <button class="btn btn-primary d-flex align-items-center" type="submit"><i
+                                        class="fab fa-2x mr-2"></i> Pay via Quickteller
+                                </button>
+                            </div>
+                            <!-- Pay via Paypal end -->
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-lg-4 order-0 order-md-1">
+
+                        <!-- Payable Amount
+                      ============================================= -->
+                        <div class="bg-light-2 rounded p-4 mb-4">
+                            <h3 class="text-4 mb-4">Payable Amount</h3>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">Amount <span
+                                        class="float-right text-4 font-weight-500 text-dark">₦150</span></li>
+                                <li class="mb-2">Discount <span class="text-success">(10% Off!)</span> <span
+                                        class="float-right text-4 font-weight-500 text-dark">-₦15</span></li>
+                            </ul>
+                            <hr>
+                            <div class="text-dark text-4 font-weight-500 py-1"> Total Amount<span
+                                    class="float-right text-7">₦135</span></div>
+                        </div>
+                        <!-- Payable Amount end -->
+
+                        <!-- Privacy Information
+                      ============================================= -->
+                        <div class="bg-light-2 rounded p-4 d-none d-md-block">
+                            <p class="mb-2">We value your Privacy.</p>
+                            <p class="text-1 mb-0">We will not sell or distribute your contact information. Read our <a
+                                    href="#">Privacy Policy</a>.</p>
+                            <hr>
+                            <p class="mb-2">Billing Enquiries</p>
+                            <p class="text-1 mb-0">Do not hesitate to reach our <a href="#">support team</a> if you have
+                                any queries.</p>
+                        </div>
+                        <!-- Privacy Information end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content end -->
+
+    <!-- Footer
+     ============================================= -->
+    <footer id="footer">
+        <section class="section bg-light shadow-md pt-4 pb-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="featured-box text-center">
+                            <div class="featured-box-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h4>100% Secured</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="featured-box text-center">
+                            <div class="featured-box-icon">
+                                <i class="fas fa-thumbs-up"></i>
+                            </div>
+                            <h4>Instant Payment</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="featured-box text-center">
+                            <div class="featured-box-icon">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <h4>Refer & Earn</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="featured-box text-center">
+                            <div class="featured-box-icon">
+                                <i class="far fa-life-ring"></i>
+                            </div>
+                            <h4>24/7 Support</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <p>Payment</p>
+                    <ul class="payments-types">
+                        <li><a href="#" target="_blank"> <img alt="visa" data-toggle="tooltip"
+                                                              th:src="@{/images/payment/visa.png}" title="Visa"></a>
+                        </li>
+                        <li><a href="#" target="_blank"> <img alt="verve" data-toggle="tooltip"
+                                                              th:src="@{/images/payment/verve.png}" title="Verve"></a>
+                        </li>
+                        <li><a href="#" target="_blank"> <img alt="discover" data-toggle="tooltip"
+                                                              th:src="@{/images/payment/mastercard.png}"
+                                                              title="Discover"></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <p>Subscribe</p>
+                    <div class="input-group newsletter">
+                        <input class="form-control" id="newsletterEmail" name="newsletterEmail"
+                               placeholder="Your Email Address" type="text">
+                        <span class="input-group-append">
+            <button class="btn btn-secondary" type="submit">Subscribe</button>
+            </span></div>
+                </div>
+                <div class="col-md-4 d-flex align-items-md-end flex-column">
+                    <p>Keep in touch</p>
+                    <ul class="social-icons">
+                        <li class="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/"
+                                                             target="_blank" title="Facebook"><i
+                                class="fab fa-facebook-f"></i></a></li>
+                        <li class="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/"
+                                                            target="_blank" title="Twitter"><i
+                                class="fab fa-twitter"></i></a></li>
+                        <li class="social-icons-instagram"><a data-toggle="tooltip" href="http://www.instagram.com/"
+                                                              target="_blank" title="Instagram"><i
+                                class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="footer-copyright">
+                <ul class="nav justify-content-center">
+                    <li class="nav-item"><a class="nav-link active" href="#">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Faq</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Terms of Use</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Privacy Policy</a></li>
+                </ul>
+                <p class="copyright-text">Copyright © 2021 <a href="#">Interswitch Group</a>. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer><!-- Footer end -->
+
+</div>
+<!-- Document Wrapper end -->
+
+<!-- Back to Top
+============================================= -->
+<a data-toggle="tooltip" href="javascript:void(0)" id="back-to-top" title="Back to Top"><i class="fa fa-chevron-up"></i></a>
+
+<!-- Modal Dialog - Login/Signup
+============================================= -->
+<div aria-hidden="true" class="modal fade" id="login-signup" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content p-sm-3">
+            <div class="modal-body">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span>
+                </button>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item"><a aria-controls="login" aria-selected="true" class="nav-link active text-4"
+                                            data-toggle="tab" href="#login" id="login-tab" role="tab">Login</a></li>
+                    <li class="nav-item"><a aria-controls="signup" aria-selected="false" class="nav-link text-4"
+                                            data-toggle="tab" href="#signup" id="signup-tab" role="tab">Sign Up</a></li>
+                </ul>
+                <div class="tab-content pt-4">
+                    <div aria-labelledby="login-tab" class="tab-pane fade show active" id="login" role="tabpanel">
+                        <form id="loginForm" method="post">
+                            <div class="form-group">
+                                <input class="form-control" id="loginMobile" placeholder="Mobile or Email ID" required
+                                       type="email">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="loginPassword" placeholder="Password" required
+                                       type="password">
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-sm">
+                                    <div class="form-check custom-control custom-checkbox">
+                                        <input class="custom-control-input" id="remember-me" name="remember"
+                                               type="checkbox">
+                                        <label class="custom-control-label" for="remember-me">Remember Me</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm text-right"><a class="justify-content-end" href="#">Forgot Password
+                                    ?</a></div>
+                            </div>
+                            <button class="btn btn-primary btn-block" type="submit">Login</button>
+                        </form>
+                    </div>
+                    <div aria-labelledby="signup-tab" class="tab-pane fade" id="signup" role="tabpanel">
+                        <form id="signupForm" method="post">
+                            <div class="form-group">
+                                <input class="form-control" data-bv-field="number" id="signupEmail"
+                                       placeholder="Email ID" required type="text">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="signupMobile" placeholder="Mobile Number" required
+                                       type="text">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="signuploginPassword" placeholder="Password" required
+                                       type="password">
+                            </div>
+                            <button class="btn btn-primary btn-block" type="submit">Signup</button>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-center my-4">
+                        <hr class="flex-grow-1">
+                        <span class="mx-2">OR</span>
+                        <hr class="flex-grow-1">
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <button class="btn btn-block btn-outline-primary" type="button">Login with Facebook</button>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-block btn-outline-danger" type="button">Login with Google</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Dialog - Login/Signup end -->
+
+<!-- Script -->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/owl.carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/js/theme.js}"></script>
+</body>
+</html>

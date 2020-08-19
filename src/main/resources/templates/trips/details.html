@@ -26,6 +26,12 @@
                     </div>
 
                     <div class="form-group row">
+                        <label class="col-sm-2" for="mode">Transport Mode</label>
+                        <div class="col-sm-10">
+                            <span id="mode" th:text="${trip.mode}"></span></div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-2" for="driver">Driver</label>
                         <div class="col-sm-10">
                             <span id="driver"
@@ -54,12 +60,16 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2" for="departure">Departure</label>
-                        <div class="col-sm-10"><span id="departure" th:text="${trip.departureString}"></span></div>
+                        <div class="col-sm-10"><span id="departure"
+                                                     th:text="${trip.schedule!=null ? trip.schedule.departureString : '' }"></span>
+                        </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2" for="arrival">Arrival</label>
-                        <div class="col-sm-10"><span id="arrival" th:text="${trip.arrivalString}"></span></div>
+                        <div class="col-sm-10"><span id="arrival"
+                                                     th:text="${trip.schedule!=null ? trip.schedule.arrivalString : '' }"></span>
+                        </div>
                     </div>
                 </div>
                 <br><br>
@@ -105,12 +115,13 @@
 
                 <a th:href="@{/trips/get}">
                     <button type='button' style="margin:5px" class='btn btn-outline-info'><i
-                            class='fas fa-arrow-left'></i>View all trips
+                            class='fas fa-arrow-left'></i> View all trips
                     </button>
                 </a>
 
                 <a th:href="@{/trips/update/{id}(id=${trip.id})}">
-                    <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-edit'></i>Edit
+                    <button class='btn btn-outline-info' style="margin:5px" type='button'><i class='fas fa-edit'></i>
+                        Edit
                         Trip
                     </button>
                 </a>
