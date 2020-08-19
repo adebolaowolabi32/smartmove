@@ -27,7 +27,7 @@ public class TransactionController {
     PageUtil pageUtil;
 
     @GetMapping("/get")
-    public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
+    public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         Page<Transaction> transactionPage = transactionService.findAllPaginated(page, size);

@@ -28,6 +28,9 @@
 					<th>Id</th>
 					<th>Name</th>
 					<th>Transport Mode</th>
+					<th>Country</th>
+					<th>State</th>
+					<th>Lga</th>
 					<th>Owner</th>
 					<th>Active</th>
 					<th>View Details</th>
@@ -38,7 +41,10 @@
 				<tr th:each="terminal : ${terminalPage.content}">
 					<td th:text="${terminal.id}"></td>
 					<td th:text="${terminal.name}"></td>
-					<td th:text="${terminal.type}"></td>
+					<td th:text="${terminal.mode}"></td>
+					<td th:text="${terminal.country}"></td>
+					<td th:text="${terminal.state}"></td>
+					<td th:text="${terminal.lga}"></td>
 					<td th:text="${terminal.owner != null ? terminal.owner.username : ''}"></td>
 					<td>
 						<label class="switch">
@@ -48,12 +54,12 @@
 					</td>
 					<td>
 						<a class="justify-content-center" th:href="@{/terminals/details/{id}(id=${terminal.id})}">
-							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
+							<button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
 						</a>
 					</td>
 					<td>
 						<a class="justify-content-center" th:href="@{/terminals/delete/{id}(id=${terminal.id})}">
-							<button type='button' class='btn btn-danger'><i class='far fa-trash-alt'></i></button>
+							<button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
 						</a>
 					</td>
 				</tr>

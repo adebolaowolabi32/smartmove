@@ -1,20 +1,5 @@
 (function($) {
     "use strict";
-		var urlParams = new URLSearchParams(window.location.search);
-		var role = urlParams.get('role');
-		if(role == 'operator'){
-			$('#layoutSidenav_nav').load('../operators/sidebar.html');
-		}
-		else if(role == 'regulator'){
-			$('#layoutSidenav_nav').load('../regulators/sidebar.html');
-		}
-		else if(role == 'agent'){
-			$('#layoutSidenav_nav').load('../agents/sidebar.html');
-		}
-
-		$('#dash').attr('href','../dashboards/index.html?role=' + role);
-		$('#header').load('../../header.html');
-		$('#footer').load('../../footer.html');
 		// Add active state to sidbar nav links
 		var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
 			$("#layoutSidenav_nav .sb-sidenav a.nav-link").each(function() {
@@ -28,12 +13,56 @@
 			e.preventDefault();
 			$("body").toggleClass("sb-sidenav-toggled");
 		});
-		
-		$.ajaxSetup({
-			   headers:{
-				  'Authorization': Cookies.get('auth')
-			   }
-		});
 })(jQuery);
 
 
+$(document).ready(function() {
+    $('#dataTable').DataTable();
+
+    $("#state").change(function() {
+        sendAjaxStateRequest();
+    });
+    $("#make").change(function() {
+        sendAjaxMakeRequest();
+    });
+});
+
+function sendAjaxStateRequest() {
+    var state = $("#state").val();
+    $.get( "/terminals/getlgas?state=" + state, function( data ) {
+        $("#lga").empty();
+        data.forEach(function(item, i) {
+            var option = "<option value = " + item + ">" + item +  "</option>";
+            $("#lga").append(option);
+        });
+    });
+};
+
+function sendAjaxMakeRequest() {
+    var make = $("#make").val();
+    $.get( "/vehicleCategories/getmodels?make=" + make, function( data ) {
+        $("#model").empty();
+        data.forEach(function(item, i) {
+            var option = "<option value = " + item.id + ">" + item.name +  "</option>";
+            $("#model").append(option);
+        });
+    });
+};
+
+/*
+$(function() {
+ 'use strict';
+  // Autocomplete
+  $('#location').autocomplete({
+	  minLength: 1,
+	  delay: 50,
+	  source: function (request, response) {
+		$.getJSON(
+		 'http://gd.geobytes.com/AutoCompleteCity?callback=?&q='+request.term,
+		  function (data) {
+			 response(data);
+		}
+	);
+	},
+  });
+});*/

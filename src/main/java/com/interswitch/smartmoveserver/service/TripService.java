@@ -10,11 +10,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +30,7 @@ public class TripService {
     @Autowired
     PageUtil pageUtil;
 
-    public List<Trip> getAll() {
-
+    public List<Trip> findAll() {
         return tripRepository.findAll();
     }
 
@@ -48,11 +47,8 @@ public class TripService {
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Trip already exists");
 
         trip.setReferenceNo(RandomUtil.getRandomNumber());
-        trip.setArrivalObj(DateUtil.textToLocalDateTime(trip.getArrival()));
-        trip.setDepartureObj(DateUtil.textToLocalDateTime(trip.getDeparture()));
-        trip.setDeparture(DateUtil.formatDate(trip.getDepartureObj()));
-        trip.setArrival(DateUtil.formatDate(trip.getArrivalObj()));
-        trip.setName(trip.getRoute().getName() + "  " + trip.getDeparture());
+        trip.setArrivalString(DateUtil.formatDate(trip.getArrival()));
+        trip.setDepartureString(DateUtil.formatDate(trip.getDeparture()));
         return tripRepository.save(trip);
     }
 
@@ -81,26 +77,10 @@ public class TripService {
         return tripRepository.findByDriverUsername(username);
     }
 
-    public List<Trip> findByRouteName(String routeName) {
-        return tripRepository.findByRouteName(routeName);
-    }
 
-    public List<Trip> findByRouteId(long id) {
-        return tripRepository.findByRouteId(id);
-    }
-
-    public Page<Trip> findByRouteName(Pageable pageable, String routeName) {
-        return tripRepository.findByRouteName(pageable, routeName);
-    }
-
-    public Page<Trip> findByRouteId(Pageable pageable, long id) {
-        return tripRepository.findByRouteId(pageable, id);
-    }
-
-
-    public List<Trip> findByVehicleRegNo(String vehicleRegNo) {
+/*    public List<Trip> findByVehicleRegNo(String vehicleRegNo) {
         return tripRepository.findByVehicleRegNo(vehicleRegNo);
-    }
+    }*/
 
     public Long countAll() {
         return tripRepository.count();

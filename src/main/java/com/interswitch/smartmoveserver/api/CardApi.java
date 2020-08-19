@@ -19,8 +19,8 @@ public class CardApi {
     CardService cardService;
 
     @GetMapping(produces = "application/json")
-    private List<Card> getAll() {
-        return cardService.getAll();
+    private List<Card> findAll() {
+        return cardService.findAll();
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

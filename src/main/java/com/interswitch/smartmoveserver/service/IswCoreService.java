@@ -94,6 +94,7 @@ public class IswCoreService {
                 permissions.add("VIEW_READERS");
                 permissions.add("VIEW_VALIDATORS");
                 permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_DRIVERS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_REGULATORS");
                 permissions.add("VIEW_VEHICLE_OWNERS");
@@ -101,10 +102,13 @@ public class IswCoreService {
                 permissions.add("VIEW_TRANSACTIONS");
                 permissions.add("VIEW_SETTLEMENTS");
                 permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLE_CATEGORIES");
                 permissions.add("VIEW_VEHICLES");
                 permissions.add("VIEW_CONFIGURATIONS");
                 permissions.add("VIEW_BLACKLISTS");
                 permissions.add("VIEW_TRIPS");
+                permissions.add("VIEW_SCHEDULES");
+
 
                 permissions.add("CREATE_CARD");
                 permissions.add("CREATE_AGENT");
@@ -112,6 +116,7 @@ public class IswCoreService {
                 permissions.add("CREATE_READER");
                 permissions.add("CREATE_VALIDATOR");
                 permissions.add("CREATE_TERMINAL");
+                permissions.add("CREATE_DRIVER");
                 permissions.add("CREATE_OPERATOR");
                 permissions.add("CREATE_REGULATOR");
                 permissions.add("CREATE_VEHICLE_OWNER");
@@ -120,10 +125,12 @@ public class IswCoreService {
                 permissions.add("CREATE_TRANSACTION");
                 permissions.add("CREATE_SETTLEMENT");
                 permissions.add("CREATE_ROUTE");
+                permissions.add("CREATE_VEHICLE_CATEGORY");
                 permissions.add("CREATE_VEHICLE");
                 permissions.add("CREATE_CONFIGURATION");
                 permissions.add("CREATE_BLACKLIST");
                 permissions.add("CREATE_TRIP");
+                permissions.add("CREATE_SCHEDULE");
 
 
                 permissions.add("VIEW_AGENT_DETAILS");
@@ -131,6 +138,7 @@ public class IswCoreService {
                 permissions.add("VIEW_READER_DETAILS");
                 permissions.add("VIEW_VALIDATOR_DETAILS");
                 permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_DRIVER_DETAILS");
                 permissions.add("VIEW_OPERATOR_DETAILS");
                 permissions.add("VIEW_REGULATOR_DETAILS");
                 permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
@@ -138,9 +146,12 @@ public class IswCoreService {
                 permissions.add("VIEW_TRANSACTION_DETAILS");
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
                 permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_VEHICLE_CATEGORY_DETAILS");
+                permissions.add("VIEW_VEHICLE_DETAILS");
                 permissions.add("VIEW_CONFIGURATION_DETAILS");
                 permissions.add("VIEW_BLACKLIST_DETAILS");
-                permissions.add("CREATE_TRIP_DETAILS");
+                permissions.add("VIEW_TRIP_DETAILS");
+                permissions.add("VIEW_SCHEDULE_DETAILS");
 
 
                 permissions.add("UPDATE_CARD");
@@ -149,15 +160,19 @@ public class IswCoreService {
                 permissions.add("UPDATE_READER");
                 permissions.add("UPDATE_VALIDATOR");
                 permissions.add("UPDATE_TERMINAL");
+                permissions.add("UPDATE_DRIVER");
                 permissions.add("UPDATE_OPERATOR");
                 permissions.add("UPDATE_REGULATOR");
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ADMINISTRATOR");
                 permissions.add("UPDATE_WALLET");
                 permissions.add("UPDATE_ROUTE");
+                permissions.add("UPDATE_VEHICLE_CATEGORY");
                 permissions.add("UPDATE_VEHICLE");
                 permissions.add("UPDATE_CONFIGURATION");
                 permissions.add("UPDATE_TRIP");
+                permissions.add("UPDATE_SCHEDULE");
+
 
                 permissions.add("DELETE_CARD");
                 permissions.add("DELETE_AGENT");
@@ -165,16 +180,19 @@ public class IswCoreService {
                 permissions.add("DELETE_READER");
                 permissions.add("DELETE_VALIDATOR");
                 permissions.add("DELETE_TERMINAL");
+                permissions.add("DELETE_DRIVER");
                 permissions.add("DELETE_OPERATOR");
                 permissions.add("DELETE_REGULATOR");
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ADMINISTRATOR");
                 permissions.add("DELETE_WALLET");
                 permissions.add("DELETE_ROUTE");
+                permissions.add("DELETE_VEHICLE_CATEGORY");
                 permissions.add("DELETE_VEHICLE");
                 permissions.add("DELETE_CONFIGURATION");
                 permissions.add("DELETE_BLACKLIST");
                 permissions.add("DELETE_TRIP");
+                permissions.add("DELETE_SCHEDULE");
 
                 return permissions;
             }
@@ -185,64 +203,81 @@ public class IswCoreService {
                 permissions.add("VIEW_READERS");
                 permissions.add("VIEW_VALIDATORS");
                 permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_DRIVERS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_REGULATORS");
                 permissions.add("VIEW_VEHICLE_OWNERS");
                 permissions.add("VIEW_TRANSACTIONS");
                 permissions.add("VIEW_SETTLEMENTS");
                 permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLE_CATEGORIES");
                 permissions.add("VIEW_VEHICLES");
                 permissions.add("VIEW_TRIPS");
+                permissions.add("VIEW_SCHEDULES");
+
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
                 permissions.add("CREATE_READER");
                 permissions.add("CREATE_VALIDATOR");
                 permissions.add("CREATE_TERMINAL");
+                permissions.add("CREATE_DRIVER");
                 permissions.add("CREATE_OPERATOR");
                 permissions.add("CREATE_REGULATOR");
                 permissions.add("CREATE_VEHICLE_OWNER");
                 permissions.add("CREATE_ROUTE");
+                permissions.add("CREATE_VEHICLE_CATEGORY");
                 permissions.add("CREATE_VEHICLE");
                 permissions.add("CREATE_TRIP");
+                permissions.add("CREATE_SCHEDULE");
 
                 permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_DEVICE_DETAILS");
                 permissions.add("VIEW_READER_DETAILS");
                 permissions.add("VIEW_VALIDATOR_DETAILS");
                 permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_DRIVER_DETAILS");
                 permissions.add("VIEW_OPERATOR_DETAILS");
                 permissions.add("VIEW_REGULATOR_DETAILS");
                 permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
                 permissions.add("VIEW_TRANSACTION_DETAILS");
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
                 permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_VEHICLE_CATEGORY_DETAILS");
                 permissions.add("VIEW_VEHICLE_DETAILS");
                 permissions.add("VIEW_TRIP_DETAILS");
+                permissions.add("VIEW_SCHEDULE_DETAILS");
+
 
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");
                 permissions.add("UPDATE_READER");
                 permissions.add("UPDATE_VALIDATOR");
                 permissions.add("UPDATE_TERMINAL");
+                permissions.add("UPDATE_DRIVER");
                 permissions.add("UPDATE_OPERATOR");
                 permissions.add("UPDATE_REGULATOR");
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ROUTE");
+                permissions.add("UPDATE_VEHICLE_CATEGORY");
                 permissions.add("UPDATE_VEHICLE");
                 permissions.add("UPDATE_TRIP");
+                permissions.add("UPDATE_SCHEDULE");
 
                 permissions.add("DELETE_AGENT");
                 permissions.add("DELETE_DEVICE");
                 permissions.add("DELETE_READER");
                 permissions.add("DELETE_VALIDATOR");
                 permissions.add("DELETE_TERMINAL");
+                permissions.add("DELETE_DRIVER");
                 permissions.add("DELETE_OPERATOR");
                 permissions.add("DELETE_REGULATOR");
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ROUTE");
+                permissions.add("DELETE_VEHICLE_CATEGORY");
                 permissions.add("DELETE_VEHICLE");
                 permissions.add("DELETE_TRIP");
+                permissions.add("DELETE_SCHEDULE");
                 return permissions;
             }
             case OPERATOR: {
@@ -253,24 +288,30 @@ public class IswCoreService {
                 permissions.add("VIEW_VALIDATORS");
                 permissions.add("VIEW_TERMINALS");
                 permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_DRIVERS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_VEHICLE_OWNERS");
                 permissions.add("VIEW_TRANSACTIONS");
                 permissions.add("VIEW_SETTLEMENTS");
                 permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLE_CATEGORIES");
                 permissions.add("VIEW_VEHICLES");
                 permissions.add("VIEW_TRIPS");
+                permissions.add("VIEW_SCHEDULES");
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
                 permissions.add("CREATE_READER");
                 permissions.add("CREATE_VALIDATOR");
                 permissions.add("CREATE_TERMINAL");
+                permissions.add("CREATE_DRIVER");
                 permissions.add("CREATE_OPERATOR");
                 permissions.add("CREATE_VEHICLE_OWNER");
                 permissions.add("CREATE_ROUTE");
+                permissions.add("CREATE_VEHICLE_CATEGORY");
                 permissions.add("CREATE_VEHICLE");
                 permissions.add("CREATE_TRIP");
+                permissions.add("CREATE_SCHEDULE");
 
                 permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_DEVICE_DETAILS");
@@ -278,52 +319,67 @@ public class IswCoreService {
                 permissions.add("VIEW_VALIDATOR_DETAILS");
                 permissions.add("VIEW_TERMINAL_DETAILS");
                 permissions.add("VIEW_REGULATOR_DETAILS");
+                permissions.add("VIEW_DRIVER_DETAILS");
                 permissions.add("VIEW_OPERATOR_DETAILS");
                 permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
                 permissions.add("VIEW_TRANSACTION_DETAILS");
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
                 permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_VEHICLE_CATEGORY_DETAILS");
                 permissions.add("VIEW_VEHICLE_DETAILS");
                 permissions.add("VIEW_TRIP_DETAILS");
+                permissions.add("VIEW_SCHEDULE_DETAILS");
 
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");
                 permissions.add("UPDATE_READER");
                 permissions.add("UPDATE_VALIDATOR");
                 permissions.add("UPDATE_TERMINAL");
+                permissions.add("UPDATE_DRIVER");
                 permissions.add("UPDATE_OPERATOR");
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ROUTE");
+                permissions.add("UPDATE_VEHICLE_CATEGORY");
                 permissions.add("UPDATE_VEHICLE");
                 permissions.add("UPDATE_TRIP");
+                permissions.add("UPDATE_SCHEDULE");
 
                 permissions.add("DELETE_AGENT");
                 permissions.add("DELETE_DEVICE");
                 permissions.add("DELETE_READER");
                 permissions.add("DELETE_VALIDATOR");
                 permissions.add("DELETE_TERMINAL");
+                permissions.add("DELETE_DRIVER");
                 permissions.add("DELETE_OPERATOR");
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ROUTE");
+                permissions.add("DELETE_VEHICLE_CATEGORY");
                 permissions.add("DELETE_VEHICLE");
                 permissions.add("DELETE_TRIP");
+                permissions.add("DELETE_SCHEDULE");
                 return permissions;
             }
             case VEHICLE_OWNER: {
                 permissions = new ArrayList<>();
                 permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_DRIVERS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_SETTLEMENTS");
                 permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLE_CATEGORIES");
                 permissions.add("VIEW_VEHICLES");
                 permissions.add("VIEW_TRIPS");
+                permissions.add("VIEW_SCHEDULES");
 
                 permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_DRIVER_DETAILS");
                 permissions.add("VIEW_OPERATOR_DETAILS");
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
                 permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_VEHICLE_CATEGORY_DETAILS");
                 permissions.add("VIEW_VEHICLE_DETAILS");
                 permissions.add("VIEW_TRIP_DETAILS");
+                permissions.add("VIEW_SCHEDULE_DETAILS");
                 return permissions;
             }
             case AGENT: {

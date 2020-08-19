@@ -1,7 +1,5 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
 import com.interswitch.smartmoveserver.model.Report;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 /*
@@ -34,6 +33,41 @@ public class SettlementService {
     PassportService passportService;
 
     public Set<Report> getReports(String username) {
+        Set<Report> reports = new HashSet<>();
+        Report report = new Report();
+        report.setFileName("Settlements " + LocalDate.now().minusDays(22));
+        report.setSchemeName("Transco");
+        report.setParticipantName("AKZ Travels");
+        report.setCreatedDate(LocalDateTime.now().minusDays(22));
+        reports.add(report);
+        Report report1 = new Report();
+        report1.setFileName("Settlements " + LocalDate.now().minusDays(21));
+        report1.setSchemeName("Transco");
+        report1.setParticipantName("AKZ Travels");
+        report1.setCreatedDate(LocalDateTime.now().minusDays(21));
+        reports.add(report1);
+        Report report2 = new Report();
+        report2.setFileName("Settlements " + LocalDate.now().minusDays(20));
+        report2.setSchemeName("Transco");
+        report2.setParticipantName("AKZ Travels");
+        report2.setCreatedDate(LocalDateTime.now().minusDays(20));
+        reports.add(report2);
+        Report report3 = new Report();
+        report3.setFileName("Settlements " + LocalDate.now().minusDays(19));
+        report3.setSchemeName("Transco");
+        report3.setParticipantName("AKZ Travels");
+        report3.setCreatedDate(LocalDateTime.now().minusDays(19));
+        reports.add(report3);
+        Report report4 = new Report();
+        report4.setFileName("Settlements " + LocalDate.now().minusDays(18));
+        report4.setSchemeName("Transco");
+        report4.setParticipantName("AKZ Travels");
+        report4.setCreatedDate(LocalDateTime.now().minusDays(18));
+        reports.add(report4);
+        return reports;
+    }
+
+/*    public Set<Report> getReports(String username) {
         Map<String, String> variables = new HashMap<>();
         variables.put("name", username);
         HttpHeaders headers = new HttpHeaders();
@@ -41,6 +75,15 @@ public class SettlementService {
         ResponseEntity response = apiRequestClient.Process(null, headers, variables, reportsUrl + "/{name}", HttpMethod.GET, Object.class);
         return retrieveReports(response.getBody());
     }
+
+
+
+    private Set<Report> retrieveReports(Object response) {
+        ObjectMapper mapper = new ObjectMapper();
+        Set<Report> reports = mapper.convertValue(response, new TypeReference<Set<Report>>() {
+        });
+        return reports;
+    }*/
 
     public Resource downloadReport(String fileName, String username) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(downloadUrl)
@@ -50,12 +93,5 @@ public class SettlementService {
         headers.add(HttpHeaders.AUTHORIZATION, passportService.getAccessToken());
         ResponseEntity response = apiRequestClient.Process(null, headers, null, builder.toUriString(), HttpMethod.GET, Object.class);
         return (Resource) response.getBody();
-    }
-
-    private Set<Report> retrieveReports(Object response) {
-        ObjectMapper mapper = new ObjectMapper();
-        Set<Report> reports = mapper.convertValue(response, new TypeReference<Set<Report>>() {
-        });
-        return reports;
     }
 }

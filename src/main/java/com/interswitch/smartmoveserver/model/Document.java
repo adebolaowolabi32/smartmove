@@ -32,8 +32,10 @@ public class Document {
     @Lob
     private byte [] data;
 
-    @Column(name = "base64Data",columnDefinition = "")
+    @Column(name = "base64Data")
     private String base64Data;
+
+    private String url;
 
     public Document(MultipartFile file) throws IOException {
         this.data = file.getBytes();

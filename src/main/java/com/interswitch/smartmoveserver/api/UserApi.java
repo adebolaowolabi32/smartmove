@@ -27,7 +27,7 @@ public class UserApi {
     }*/
     
     @GetMapping(produces = "application/json")
-    public List<User> getAll() {
+    public List<User> findAll() {
       return userService.findAll();
     }
 

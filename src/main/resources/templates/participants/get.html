@@ -47,12 +47,12 @@
                     <td th:text="${participant.schemeId}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/participants/details/{id}(id=${participant.id})}">
-                            <button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
+                            <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
                     <td>
                         <a class="justify-content-center" th:href="@{/participants/delete/{id}(id=${participant.id})}">
-                            <button type='button' class='btn btn-danger'><i class='far fa-trash-alt'></i></button>
+                            <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
                         </a>
                     </td>
                 </tr>

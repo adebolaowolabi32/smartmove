@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/default.html}">
+<title layout:fragment="title">Facilities</title>
+<div layout:fragment="content" class="card mb-4">
+	<div class="card-header"><i class="fas fa-memory mr-1"></i><span>Facilities</span></div>
+	<div class="card-body">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-8">
+						<h2><b><span>Facilities</span></b></h2>
+					</div>
+					<div class="col-sm-4">
+						<div class="row">
+							<a href="#" th:href="@{/facilities/create}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New</a>
+							<a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
+							<a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{facility.deleted.message} : false)"></div>
+			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+				<thead class='thead-light'>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Transport Mode</th>
+					<th>Country</th>
+					<th>State</th>
+					<th>Lga</th>
+					<th>Owner</th>
+					<th>Active</th>
+					<th>View Details</th>
+					<th>Remove</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="facility : ${facilityPage.content}">
+					<td th:text="${facility.id}"></td>
+					<td th:text="${facility.name}"></td>
+					<td th:text="${facility.mode}"></td>
+					<td th:text="${facility.country}"></td>
+					<td th:text="${facility.state}"></td>
+					<td th:text="${facility.lga}"></td>
+					<td th:text="${facility.owner != null ? facility.owner.username : ''}"></td>
+					<td>
+						<label class="switch">
+							<input type="checkbox" id="enabled" name="enabled" th:checked="${facility.enabled}" disabled>
+							<span class="slider round"></span>
+						</label>
+					</td>
+					<td>
+						<a class="justify-content-center" th:href="@{/facilities/details/{id}(id=${facility.id})}">
+							<button type='button' class='btn btn-primary'><i class='far fa-eye'></i></button>
+						</a>
+					</td>
+					<td>
+						<a class="justify-content-center" th:href="@{/facilities/delete/{id}(id=${facility.id})}">
+							<button type='button' class='btn btn-danger'><i class='far fa-trash-alt'></i></button>
+						</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<div th:if="${facilityPage.totalPages > 0}" class="pagination"
+				 th:each="pageNumber : ${pageNumbers}">
+				<a th:href="@{/get(size=${facilityPage.size}, page=${pageNumber})}"
+				   th:class="${pageNumber==facilityPage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

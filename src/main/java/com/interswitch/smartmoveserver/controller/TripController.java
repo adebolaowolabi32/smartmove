@@ -5,7 +5,6 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Manifest;
 import com.interswitch.smartmoveserver.model.Trip;
 import com.interswitch.smartmoveserver.service.*;
-import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +31,7 @@ public class TripController {
     private UserService userService;
 
     @Autowired
-    private RouteService routeService;
+    private ScheduleService scheduleService;
 
     @Autowired
     private ManifestService manifestService;
@@ -62,7 +61,6 @@ public class TripController {
 
         Trip trip = tripService.findById(id);
 
-        logger.info("Trip date===>" + DateUtil.convertToDate(trip.getDeparture()));
         Page<Manifest> manifestPage = manifestService.findPaginatedManifestByTripId(page, size, trip.getId());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(manifestPage));
         model.addAttribute("manifestPage", manifestPage);
@@ -76,8 +74,8 @@ public class TripController {
         Trip trip = new Trip();
         model.addAttribute("trip", trip);
         //not needed at the moment though,should be removed for performance reasons
-        model.addAttribute("drivers", userService.findAll());
-        model.addAttribute("routes", routeService.findAll());
+        model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
+        model.addAttribute("schedules", scheduleService.findAll());
         model.addAttribute("vehicles", vehicleService.findAll());
         return "trips/create";
     }
@@ -87,7 +85,7 @@ public class TripController {
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
             model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
-            model.addAttribute("routes", routeService.findAll());
+            model.addAttribute("schedules", scheduleService.findAll());
             model.addAttribute("vehicles", vehicleService.findAll());
             return "trips/create";
         }
@@ -104,7 +102,7 @@ public class TripController {
         Trip trip = tripService.findById(id);
         model.addAttribute("trip", trip);
         model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
-        model.addAttribute("routes", routeService.findAll());
+        model.addAttribute("schedules", scheduleService.findAll());
         model.addAttribute("vehicles", vehicleService.findAll());
         return "trips/update";
     }
@@ -117,7 +115,7 @@ public class TripController {
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
             model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
-            model.addAttribute("routes", routeService.findAll());
+            model.addAttribute("schedules", scheduleService.findAll());
             model.addAttribute("vehicles", vehicleService.findAll());
             return "trips/update";
         }

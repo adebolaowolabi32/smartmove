@@ -40,7 +40,6 @@ public class TransactionRepositoryTests {
         transaction.setCardId("12345556");
         transaction.setType(Enum.TransactionType.TAP_IN);
         transaction.setAmount(200.00);
-        transaction.setAgentId("peace.miracle");
         transaction.setOperatorId("OP4564");
         transaction.setTerminalId("647593");
         transaction.setMode(Enum.TransportMode.RAIL);
@@ -53,7 +52,6 @@ public class TransactionRepositoryTests {
         transaction1.setCardId("12345556");
         transaction1.setType(Enum.TransactionType.TAP_OUT);
         transaction1.setAmount(200.00);
-        transaction1.setAgentId("peace.miracle");
         transaction1.setOperatorId("OP4564");
         transaction1.setTerminalId("647593");
         transaction1.setMode(Enum.TransportMode.RAIL);
@@ -80,12 +78,6 @@ public class TransactionRepositoryTests {
     @Test
     public void testFindByOperator() {
         List<Transaction> transactions = transactionRepository.findAllByOperatorId(savedTransaction.getOperatorId());
-        assertThat(transactions.size()).isGreaterThanOrEqualTo(1);
-    }
-
-    @Test
-    public void testFindByAgent() {
-        List<Transaction> transactions = transactionRepository.findAllByAgentId(savedTransaction.getAgentId());
         assertThat(transactions.size()).isGreaterThanOrEqualTo(1);
     }
 

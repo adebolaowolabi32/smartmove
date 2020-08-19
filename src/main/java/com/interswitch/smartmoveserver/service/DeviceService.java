@@ -114,7 +114,7 @@ public class DeviceService {
         }
     }
 
-    public List<Device> getAll() {
+    public List<Device> findAll() {
         return deviceRepository.findAll();
     }
 

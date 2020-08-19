@@ -21,6 +21,11 @@
 			<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{vehicle.saved.message} : (${updated} ? #{vehicle.updated.message} : false))"></div>
 			<div class="card p-3">
 				<div class="form-group row">
+					<label class="control-label col-sm-2" for="category">Category</label>
+					<div class="col-sm-10">
+						<span id="category" th:text="${vehicle.category.name}"></span></div>
+				</div>
+				<div class="form-group row">
 					<label class="col-sm-2" for="name">Name</label>
 					<div class="col-sm-10">
 						<span id="name" th:text="${vehicle.name}"></span></div>
@@ -29,18 +34,6 @@
 					<label class="col-sm-2" for="regNo">Registration Number</label>
 					<div class="col-sm-10">
 						<span id="regNo" th:text="${vehicle.regNo}"></span></div>
-				</div>
-
-				<div class="form-group row">
-					<label class="col-sm-2" for="noSeats">Capacity</label>
-					<div class="col-sm-10">
-						<span id="noSeats" th:text="${vehicle.noSeats}"></span></div>
-				</div>
-
-				<div class="form-group row">
-					<label class="col-sm-2" for="type">Transport Mode</label>
-					<div class="col-sm-10">
-						<span id="type" th:text="${vehicle.type}"></span></div>
 				</div>
 				<div class="form-group row">
 					<label class="control-label col-sm-2" for="owner">Owner</label>
@@ -64,33 +57,8 @@
 						</span></div>
 				</div>
 
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="ulistId">Facilities</label>
-					<ul id="ulistId">
-						<li th:each="facility: ${allFacilities}">
-							<input  type="checkbox"
-									th:field="*{vehicle.facilities}"
-									th:value="${facility}" disabled/>
-							<label
-									th:for="${#ids.prev('facilities')}"
-									th:text="${facility}"></label>
-						</li>
-					</ul>
-				</div>
-
-
-				<!--<div class="form-group row">
-					<label class="control-label col-sm-2" for="device">Device</label>
-					<div class="col-sm-10">
-						<span id="device" th:text="${vehicle.device.name}"></span></div>
-				</div>-->
-			<!--	<div class="form-group row">
-					<label class="control-label col-sm-2" for="route">Route</label>
-					<div class="col-sm-10">
-						<span id="route" th:text="${vehicle.route.name}"></span></div>
-				</div>-->
-				<a href="https://smartmove-gps-tracker.k22.isw.la/">
-					<button type='button' class='btn btn-outline-info'><i class='fas fa-map-marker'></i> View on Map </button>
+				<a href="http://demo4.traccar.org/modern/#/">
+					<button type='button' class='btn btn-outline-primary'><i class='fas fa-map-marker'></i> View on Map </button>
 				</a>
 			</div>
 		</div>

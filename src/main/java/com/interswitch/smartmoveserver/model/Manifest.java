@@ -16,6 +16,7 @@ public class Manifest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne
     @JoinColumn(name = "seat")
     private Seat seat;
@@ -27,6 +28,8 @@ public class Manifest implements Serializable {
     private String address;
 
     private String gender;
+
+    private String bvn;
 
     private String nationality;
 
@@ -45,11 +48,14 @@ public class Manifest implements Serializable {
 
     private String nextOfKinMobile;
 
-    private String bvn;
-
     @ManyToOne
     @JoinColumn(name = "trip")
     private Trip trip;
+
+    @ManyToOne
+    @JoinColumn(name = "schedule")
+    private Schedule schedule;
+
     private boolean boarded;
     private boolean completed;
     private LocalDateTime timeofBoarding;

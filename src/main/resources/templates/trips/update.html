@@ -3,7 +3,7 @@
       layout:decorate="~{layouts/default.html}">
 <title layout:fragment="title">Trips</title>
 <div layout:fragment="content" class="card mb-4">
-    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+    <div class="card-header"><i class="fas fa-road mr-1"></i>
         <span>Trips</span></div>
     <div class="card-body">
         <div class="table-title">
@@ -18,16 +18,15 @@
         <form class="card p-3" action="#" method="post"
               th:action="@{/trips/update/{id}(id=${trip.id})}" th:object="${trip}"
               data-parsley-validate="true">
-
             <div class="form-group row">
-                <label class="control-label col-sm-2" for="route">Route</label>
+                <label class="control-label col-sm-2" for="schedule">Schedule</label>
                 <div class="col-sm-10">
-                    <select class="form-control" th:field="*{route}" id="route">
+                    <select class="form-control" th:field="*{schedule}" id="schedule">
                         <option value="">Select...</option>
-                        <option th:each="route : ${routes}" th:value="${route.id}"
-                                th:text="${route != null ? route.name : ''}"></option>
+                        <option th:each="schedule : ${schedules}" th:value="${schedule.id}"
+                                th:text="${schedule != null ? schedule.id : ''}"></option>
                     </select>
-                    <p class="small text-danger" th:if="${#fields.hasErrors('route')}" th:errors="*{route}"></p>
+                    <p class="small text-danger" th:if="${#fields.hasErrors('schedule')}" th:errors="*{schedule}"></p>
                 </div>
             </div>
 
@@ -43,7 +42,6 @@
                 </div>
             </div>
 
-
             <div class="form-group row">
                 <label class="control-label col-sm-2" for="vehicle">Vehicle</label>
                 <div class="col-sm-10">
@@ -55,27 +53,12 @@
                     <p class="small text-danger" th:if="${#fields.hasErrors('vehicle')}" th:errors="*{vehicle}"></p>
                 </div>
             </div>
-
-            <div class="form-group row">
-                <label class="control-label col-sm-2" for="departure">Departure Time</label>
-                <div class="col-sm-10">
-                    <input type="datetime-local" class="form-control" th:field="*{departure}" id="departure">
-                    <p class="small text-danger" th:if="${#fields.hasErrors('departure')}" th:errors="*{departure}"></p>
+            <div class="row">
+                <div class="col-sm-10"></div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-outline-info btn-sized">Submit</button>
                 </div>
             </div>
-
-            <div class="form-group row">
-                <label class="control-label col-sm-2" for="arrival">Arrival Time</label>
-                <div class="col-sm-10">
-                    <input type="datetime-local" class="form-control" th:field="*{arrival}" id="arrival">
-                    <p class="small text-danger" th:if="${#fields.hasErrors('arrival')}" th:errors="*{arrival}"></p>
-                </div>
-            </div>
-
-            <div style="padding-left:200px;">
-                <button style="width:200px;" type="submit" class="btn btn-outline-info">Submit</button>
-            </div>
-
         </form>
     </div>
 </div>

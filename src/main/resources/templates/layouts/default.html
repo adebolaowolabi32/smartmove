@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -9,27 +10,35 @@
         <!--
             <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
         -->
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" href="#" rel="stylesheet" crossorigin="anonymous" />
+        <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+<!--
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"/>
+-->
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
         <link th:href="@{/css/styles.css}" href="#" rel="stylesheet" crossorigin="anonymous" />
-        <script type="text/javascript" th:src="@{/js/functions.js}"> </script>
-
-     </head>
-     <body class="sb-nav-fixed">
-
-         <div th:replace="fragments/topbar :: topbar"></div>
-
-         <div id="layoutSidenav">
-
-             <div id="layoutSidenav_nav">
-                 <div th:replace="fragments/sidebar :: sidebar"></div>
-             </div>
-
-             <div id="layoutSidenav_content">
-                 <div layout:fragment="content"></div>
-                 <div th:replace="fragments/footer :: footer"></div>
-             </div>
-
-         </div>
-         <div th:replace="fragments/scripts :: scripts"></div>
-     </body>
- </html>
+    </head>
+    <body class="sb-nav-fixed">
+        <div th:replace="fragments/topbar :: topbar"></div>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <div th:replace="fragments/sidebar :: sidebar"></div>
+            </div>
+            <div id="layoutSidenav_content">
+                <div layout:fragment="content"></div>
+                <div th:replace="fragments/footer :: footer"></div>
+            </div>
+        </div>
+        <div th:replace="fragments/scripts :: scripts"></div>
+        <script type="text/javascript">
+             var gearPage = document.getElementById('GearPage');
+             if(null != gearPage)
+             {
+                 gearPage.parentNode.removeChild(gearPage);
+                 document.title = "Error";
+             }
+        </script>
+    </body>
+</html>

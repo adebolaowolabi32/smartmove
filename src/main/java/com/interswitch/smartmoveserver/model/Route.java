@@ -3,7 +3,6 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * @author adebola.owolabi
@@ -33,12 +32,8 @@ public class Route implements Serializable {
     private long price;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner")
     private User owner;
 
     private boolean enabled;
-
-    @ManyToMany
-    @JoinColumn(name = "vehicle_id")
-    private Set<Vehicle> vehicles;
 }

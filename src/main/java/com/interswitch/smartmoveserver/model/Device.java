@@ -26,7 +26,7 @@ public class Device implements Serializable {
     private Enum.DeviceType type;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner")
     private User owner;
 
     private String imeiNo;

@@ -29,4 +29,8 @@ public class SecurityUtil {
     public boolean isOwnedEntity(Enum.Role role) {
         return role != Enum.Role.ISW_ADMIN;
     }
+
+    public boolean isOperator(User user) {
+        return user.getRole() == Enum.Role.OPERATOR;
+    }
 }

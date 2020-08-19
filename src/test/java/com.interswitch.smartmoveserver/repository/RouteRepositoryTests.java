@@ -38,11 +38,11 @@ public class RouteRepositoryTests {
     public void setUp() {
         Terminal terminal = new Terminal();
         terminal.setName("my_terminal");
-        terminal.setType(Enum.TransportMode.RAIL);
+        terminal.setMode(Enum.TransportMode.RAIL);
         long startId = terminalRepository.save(terminal).getId();
         Terminal terminal1 = new Terminal();
         terminal1.setName("my_terminal_1");
-        terminal1.setType(Enum.TransportMode.RAIL);
+        terminal1.setMode(Enum.TransportMode.RAIL);
         long stopId = terminalRepository.save(terminal1).getId();
         route = new Route();
         route.setName("my_route");

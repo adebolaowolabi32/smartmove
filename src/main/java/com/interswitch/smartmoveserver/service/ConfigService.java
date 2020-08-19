@@ -21,7 +21,7 @@ public class ConfigService {
     @Autowired
     private ConfigRepository configRepository;
 
-    public List<Config> getAll() {
+    public List<Config> findAll() {
         return configRepository.findAll();
     }
 

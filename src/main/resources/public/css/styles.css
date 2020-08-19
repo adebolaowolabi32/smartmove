@@ -5150,8 +5150,8 @@ body.m-content--skin-light2 {
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 25px;
 }
 
 .switch input {
@@ -5200,7 +5200,7 @@ input:checked + .slider:before {
 }
 
 .slider.round {
-  border-radius: 34px;
+  border-radius: 25px;
 }
 
 .slider.round:before {
@@ -15598,6 +15598,13 @@ body {
         font-size: 16px;
         padding-top: 6px
     }
+    .select2-container .select2-selection--single{
+        height:34px !important;
+    }
+    .select2-container--default .select2-selection--single{
+             border: 1px solid #ccc !important;
+         border-radius: 0px !important;
+    }
     .hint-text {
         float: left;
         margin-top: 10px;
@@ -15611,7 +15618,7 @@ body {
         font-size: 1rem;
 	}
 	.table-title .btn{
-		  margin: 2%;
+		  margin: 1%;
 /*
 		  margin-top: -1%;
 */
@@ -15661,10 +15668,24 @@ body {
        font-weight: 500;
        font-size: 0.8rem;
    }
+   .text-small {
+          font-weight: 300;
+          font-size: 0.6rem;
+      }
    .amt-big {
-      font-weight: 600;
-      font-size: 2rem;
+        font-weight: 600;
+        font-size: 2rem;
    }
+   .list-group-item {
+        padding: 20px 20px 50px 20px;
+   }
+   .spaced {
+        padding: 50px;
+   }
+   .dotted {
+        border-style: dotted
+   }
+
 
    .boarding-pass-body{
      border:2px inset grey;
@@ -15751,9 +15772,6 @@ body {
     font-size:15px;
     font-family:Arial;
     }
-
-
-
-
-
-
+    .right-handed {
+        float:right;
+    }

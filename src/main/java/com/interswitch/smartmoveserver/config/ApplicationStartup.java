@@ -1,12 +1,10 @@
 package com.interswitch.smartmoveserver.config;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.StateRepository;
-import com.interswitch.smartmoveserver.service.ManifestService;
-import com.interswitch.smartmoveserver.service.TripService;
-import com.interswitch.smartmoveserver.service.UserService;
+import com.interswitch.smartmoveserver.service.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,12 @@ public class ApplicationStartup implements CommandLineRunner {
     TripService tripService;
 
     @Autowired
+    VehicleMakeService vehicleMakeService;
+
+    @Autowired
+    VehicleModelService vehicleModelService;
+
+    @Autowired
     SeatRepository seatRepo;
 
     @Autowired
@@ -40,7 +44,6 @@ public class ApplicationStartup implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
         User adminUser = new User();
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
@@ -66,10 +69,8 @@ public class ApplicationStartup implements CommandLineRunner {
         logger.info("Driver created successfully!");
         //loadManifestData(7);
         loadStatesAndLocalGovt();
-        logger.info("State===>"+ stateRepo.findById(2));
-
+        loadVehicleMakesAndModels();
     }
-
 
     public void loadManifestData(long tripId) {
 
@@ -117,13 +118,30 @@ public class ApplicationStartup implements CommandLineRunner {
         manifestService.save(manifest);
     }
 
+    public void loadVehicleMakesAndModels(){
+        Map<String, List<String>> vehicles = new HashMap<>();
+        vehicles.put("Toyota", parseToList("Coaster, Hiace, Grand Hiace, Quantum"));
+        vehicles.put("Innoson", parseToList("5000, 6601, 6857, 6730, 6850, 6751"));
+        vehicles.put("Marco Polo", parseToList("Paradiso 1350, Ideale, Torino Express, Torino Low Entry, Torino (Rear Engine)"));
+
+        for (Map.Entry<String, List<String>> entry : vehicles.entrySet()) {
+            VehicleMake vehicleMake = new VehicleMake();
+            vehicleMake.setName(entry.getKey());
+            if (!vehicleMakeService.existsByNameIgnoreCase(vehicleMake.getName())){
+                VehicleMake vehicleMake1 = vehicleMakeService.save(vehicleMake);
+                for (String model : new ArrayList<>(entry.getValue())) {
+                    VehicleModel vehicleModel = new VehicleModel();
+                    vehicleModel.setName(model);
+                    vehicleModel.setMake(vehicleMake1);
+                    vehicleModelService.save(vehicleModel);
+                }
+            }
+        }
+    }
 
     public void loadStatesAndLocalGovt() {
-
         List<State> stateList = stateRepo.findAll();
-
-        if (stateList==null ||  stateList.isEmpty()) {
-            // save
+        if (stateList.isEmpty() || stateList.size() <= 36) {
             Map<String, List<String>> stateToLocalGovtMap = new HashMap<>();
 
             stateToLocalGovtMap.put("Abia", parseToList(
@@ -198,41 +216,19 @@ public class ApplicationStartup implements CommandLineRunner {
                     "Anka, Bakura, Birnin Magaji/Kiyaw, Bukkuyum, Bungudu, Chafe (Tsafe), Gummi, Gusau, Kaura Namoda, Maradun, Maru, Shinkafi, Talata Mafara, Zurmi"));
             stateToLocalGovtMap.put("FCT", parseToList("Abaji, Abuja, Bwari, Gwagwalada, Kuje, Kwali"));
 
-            System.out.println("SIZE of states map==>" + stateToLocalGovtMap.size());
-
             for (Map.Entry<String, List<String>> entry : stateToLocalGovtMap.entrySet()) {
-
-                System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
                 State stateDto = new State();
                 stateDto.setName(entry.getKey());
                 stateDto.setCode(entry.getKey().substring(0,3).toUpperCase());
-                stateDto.setLocalGovts(new HashSet<>(entry.getValue()));
-
-                try {
-
-                    if (!stateRepo.existsByNameIgnoreCase(stateDto.getName())) {
-                        stateRepo.save(stateDto);
-                    } else {
-                        System.out.println("state already exist mehn!");
-                    }
-
-                } catch (Exception ex) {
-                    System.out.println("exception===>" + ex.getMessage());
-                }
-
+                stateDto.setLocalGovts(new ArrayList<>(entry.getValue()));
+                if (!stateRepo.existsByNameIgnoreCase(stateDto.getName()))
+                    stateRepo.save(stateDto);
             }
-
         }
     }
 
-
     private List<String> parseToList(String categories) {
-
-        List<String> arrayOfCategories = new ArrayList<>();
         String[] categoryArray = categories.split(",");
-        arrayOfCategories = Arrays.asList(categoryArray);
-
-        return arrayOfCategories;
+        return Arrays.asList(categoryArray);
     }
-
 }

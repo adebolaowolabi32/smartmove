@@ -14,19 +14,23 @@ public class Terminal implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique=true)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private Enum.TransportMode type;
+    private Enum.TransportMode mode;
+
+    private String country;
+
+    private String state;
+
+    private String code;
+
+    private String lga;
 
     private String location;
 
-    @Embedded
-    private Address address;
-
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner")
     private User owner;
 
     private boolean enabled;

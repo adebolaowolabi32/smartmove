@@ -73,7 +73,7 @@ public class UserApiTests {
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void testfindAll() throws Exception {
         when(userService.findAll()).thenReturn(Arrays.asList(user, new User()));
         mvc.perform(get("/users")
                 .characterEncoding("utf-8")

@@ -29,10 +29,6 @@ public class Transaction implements Serializable {
 
     private String vehicleId;
 
-    private String routeId;
-
-    private String agentId;
-
     private String operatorId;
 
     private double amount;
