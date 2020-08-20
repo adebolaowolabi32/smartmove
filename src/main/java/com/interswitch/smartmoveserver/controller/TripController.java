@@ -90,8 +90,6 @@ public class TripController {
             return "trips/create";
         }
 
-        logger.info("Wanna Create Trip==>" + trip);
-        logger.info("Trip Departure String ==>" + trip.getDeparture());
         Trip savedTrip = tripService.save(trip);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/trips/details/" + savedTrip.getId();
@@ -111,7 +109,6 @@ public class TripController {
     public String update(Principal principal, @PathVariable("id") long id, @Valid Trip trip,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         trip.setId(id);
-
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
             model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));

@@ -30,6 +30,7 @@
                 <thead class='thead-light'>
                 <tr>
                     <th>Trip Reference ID</th>
+                    <th>Transport Mode</th>
                     <th>Driver</th>
                     <th>Vehicle</th>
                     <th>Departure Terminal</th>
@@ -43,12 +44,13 @@
                 <tbody>
                 <tr th:each="trip : ${tripPage.content}">
                     <td th:text="${trip.referenceNo}"></td>
+                    <td th:text="${trip.mode}"></td>
                     <td th:text="${trip.driver!=null ? trip.driver.firstName+' '+trip.driver.lastName : ''}"></td>
                     <td th:text="${trip.vehicle!=null ? trip.vehicle.name+'-'+trip.vehicle.regNo : '' }"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.startTerminal.name  : ''}"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.stopTerminal.name  : ''}"></td>
-                    <td th:text="${trip.departureString}"></td>
-                    <td th:text="${trip.arrivalString}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.departureString  : ''}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.arrivalString  : ''}"></td>
 
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/details/{id}(id=${trip.id})}">
