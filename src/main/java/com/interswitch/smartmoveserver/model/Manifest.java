@@ -36,8 +36,6 @@ public class Manifest implements Serializable {
     @Enumerated(EnumType.STRING)
     private Enum.IdCategory idCategory;
 
-    private String otherIdCategory;
-
     private String idNumber;
 
     private String contactMobile;
