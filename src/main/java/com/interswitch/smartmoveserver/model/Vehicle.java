@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,6 +35,10 @@ public class Vehicle implements Serializable {
 
     @OneToOne
     private Device device;
+
+    private String pictureUrl;
+
+    private transient MultipartFile picture;
 
     private boolean enabled;
 }

@@ -19,47 +19,61 @@
 				</div>
 			</div>
 			<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{vehicle.saved.message} : (${updated} ? #{vehicle.updated.message} : false))"></div>
+
 			<div class="card p-3">
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="category">Category</label>
-					<div class="col-sm-10">
-						<span id="category" th:text="${vehicle.category.name}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="name">Name</label>
-					<div class="col-sm-10">
-						<span id="name" th:text="${vehicle.name}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="regNo">Registration Number</label>
-					<div class="col-sm-10">
-						<span id="regNo" th:text="${vehicle.regNo}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="owner">Owner</label>
-					<div class="col-sm-10">
-						<span id="owner" th:text="${vehicle.owner.username}"></span></div>
-				</div>
-				<div class="form-group row" th:if="${vehicle.device}">
-					<label class="control-label col-sm-2" for="device">Device</label>
-					<div class="col-sm-10">
-						<span id="device" th:text="${vehicle.device.name}"></span>
-						<a href="#" th:href="@{/devices/details/{id}(id=${vehicle.device.id})}" class="btn btn-info"><i class='far fa-eye'></i></a>
+				<div class="row">
+					<div id="formContainerDiv" class="col-8">
+						<div class="form-group row">
+							<label class="control-label col-sm-2" for="category">Category</label>
+							<div class="col-sm-10">
+								<span id="category" th:text="${vehicle.category.name}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2" for="name">Name</label>
+							<div class="col-sm-10">
+								<span id="name" th:text="${vehicle.name}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2" for="regNo">Registration Number</label>
+							<div class="col-sm-10">
+								<span id="regNo" th:text="${vehicle.regNo}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="control-label col-sm-2" for="owner">Owner</label>
+							<div class="col-sm-10">
+								<span id="owner" th:text="${vehicle.owner.username}"></span></div>
+						</div>
+						<div class="form-group row" th:if="${vehicle.device}">
+							<label class="control-label col-sm-2" for="device">Device</label>
+							<div class="col-sm-10">
+								<span id="device" th:text="${vehicle.device.name}"></span>
+								<a href="#" th:href="@{/devices/details/{id}(id=${vehicle.device.id})}" class="btn btn-info"><i class='far fa-eye'></i></a>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2" for="enabled">Active</label>
+							<div class="col-sm-10">
+								<label class="switch">
+									<input type="checkbox" id="enabled" name="enabled" th:checked="${vehicle.enabled}" disabled>
+									<span class="slider round"></span>
+								</label>
+								</span></div>
+						</div>
+
+						<a href="http://demo4.traccar.org/modern/#/">
+							<button type='button' class='btn btn-outline-primary'><i class='fas fa-map-marker'></i> View on Map </button>
+						</a>
+					</div>
+
+					<div id="pictureContainerDiv"  class="col-4">
+
+						<div>
+							<img style="width:100%;height:100%;" id="imgLogo" th:src="@{vehicle.pictureUrl}" alt="Vehicle Picture">
+						</div>
+
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="enabled">Active</label>
-					<div class="col-sm-10">
-						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${vehicle.enabled}" disabled>
-							<span class="slider round"></span>
-						</label>
-						</span></div>
-				</div>
 
-				<a href="http://demo4.traccar.org/modern/#/">
-					<button type='button' class='btn btn-outline-primary'><i class='fas fa-map-marker'></i> View on Map </button>
-				</a>
 			</div>
 		</div>
 	</div>

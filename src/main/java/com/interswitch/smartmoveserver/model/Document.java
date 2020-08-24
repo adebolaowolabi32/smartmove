@@ -29,18 +29,16 @@ public class Document {
     @Column(name = "type")
     private String docType;
 
-    @Lob
-    private byte [] data;
-
-    @Column(name = "base64Data")
-    private String base64Data;
+    @Column(name = "path")
+    private String docPath;
 
     private String url;
 
-    public Document(MultipartFile file) throws IOException {
-        this.data = file.getBytes();
+    private transient MultipartFile file;
+
+    public Document(MultipartFile file) {
+        this.file = file;
         this.name = file.getOriginalFilename();
         this.docType=file.getContentType();
-        this.base64Data = FilefileOpsUtil.convertFileToBase64String(FilefileOpsUtil.convertMultiPartToFile(file));
     }
 }

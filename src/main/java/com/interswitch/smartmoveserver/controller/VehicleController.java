@@ -1,20 +1,28 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.Document;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
+import com.interswitch.smartmoveserver.model.VehicleCategory;
 import com.interswitch.smartmoveserver.service.UserService;
+import com.interswitch.smartmoveserver.service.VehicleCategoryService;
 import com.interswitch.smartmoveserver.service.VehicleService;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -26,18 +34,25 @@ public class VehicleController {
     VehicleService vehicleService;
 
     @Autowired
+    VehicleCategoryService vehicleCategoryService;
+
+    @Autowired
     UserService userService;
 
     @Autowired
     PageUtil pageUtil;
+
+    private final Log logger = LogFactory.getLog(getClass());
 
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
         Page<Vehicle> vehiclePage = vehicleService.findAllPaginated(principal, owner, page, size);
+        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehiclePage));
         model.addAttribute("vehiclePage", vehiclePage);
+        model.addAttribute("categories", vehicleCategories);
         return "vehicles/get";
     }
 
@@ -53,18 +68,24 @@ public class VehicleController {
         Vehicle vehicle = new Vehicle();
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
+        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
+        model.addAttribute("categories", vehicleCategories);
         model.addAttribute("owners", userService.findAll());
         return "vehicles/create";
     }
 
     @PostMapping("/create")
-    public String create(Principal principal, @Valid Vehicle vehicle, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String create(Principal principal, @Valid Vehicle vehicle,BindingResult result, Model model, RedirectAttributes redirectAttributes)  {
+
         if (result.hasErrors()) {
             model.addAttribute("vehicle", vehicle);
             //TODO change findAll to findAllEligible
+            List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
+            model.addAttribute("categories", vehicleCategories);
             model.addAttribute("owners", userService.findAll());
             return "vehicles/create";
         }
+
         Vehicle savedVehicle = vehicleService.save(vehicle);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/vehicles/details/" + savedVehicle.getId();
@@ -75,6 +96,8 @@ public class VehicleController {
         Vehicle vehicle = vehicleService.findById(principal, id);
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
+        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
+        model.addAttribute("categories", vehicleCategories);
         model.addAttribute("owners", userService.findAll());
         return "vehicles/update";
     }
@@ -83,9 +106,12 @@ public class VehicleController {
     public String update(Principal principal, @PathVariable("id") long id, @Valid Vehicle vehicle,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         vehicle.setId(id);
+
         if (result.hasErrors()) {
             //TODO change findAll to findAllEligible
             model.addAttribute("vehicle", vehicle);
+            List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
+            model.addAttribute("categories", vehicleCategories);
             model.addAttribute("owners", userService.findAll());
             return "vehicles/update";
         }

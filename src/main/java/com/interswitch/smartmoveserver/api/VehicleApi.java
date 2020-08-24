@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class VehicleApi {
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private Vehicle save(@Validated @RequestBody Vehicle vehicle) {
+    private Vehicle save(@Validated @RequestBody Vehicle vehicle) throws IOException {
         return vehicleService.save(vehicle);
     }
 
