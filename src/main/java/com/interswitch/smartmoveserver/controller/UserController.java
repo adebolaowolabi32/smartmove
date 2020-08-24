@@ -50,8 +50,6 @@ public class UserController {
     @Autowired
     private RouteService routeService;
 
-
-
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam("role") Enum.Role role,
                          @RequestParam(required = false, defaultValue = "0") Long owner,
