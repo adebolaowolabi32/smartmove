@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.model;
 
-import com.interswitch.smartmoveserver.util.FilefileOpsUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.io.IOException;
+
 
 @Data
 @NoArgsConstructor

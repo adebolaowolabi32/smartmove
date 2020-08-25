@@ -19,9 +19,6 @@ public class Facility implements Serializable {
     private String name;
 
     private String image;
-/*
-    @ManyToMany
-    private List<VehicleCategory> vehicleCategories;*/
 
     @ManyToOne
     @JoinColumn(name = "owner")
