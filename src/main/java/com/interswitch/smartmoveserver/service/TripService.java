@@ -45,7 +45,7 @@ public class TripService {
 
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Trip already exists");
 
-        trip.setReferenceNo(RandomUtil.getRandomNumber());
+        trip.setReferenceNo(RandomUtil.getRandomNumber(6));
         return tripRepository.save(trip);
     }
 

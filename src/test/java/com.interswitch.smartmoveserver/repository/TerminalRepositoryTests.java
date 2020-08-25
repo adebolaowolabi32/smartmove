@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TerminalRepositoryTests {
+
     @Autowired
     private TerminalRepository terminalRepository;
 
@@ -28,6 +29,7 @@ public class TerminalRepositoryTests {
     private UserRepository userRepository;
 
     private Terminal terminal;
+
     private Terminal savedTerminal;
 
     @Before

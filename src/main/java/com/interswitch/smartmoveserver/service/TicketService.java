@@ -178,7 +178,7 @@ public class TicketService {
 
     public String getTicketReference() {
         //get operator prefix
-        return "AKT-" + RandomUtil.getRandomNumber();
+        return "AKT-" + RandomUtil.getRandomNumber(6);
     }
 
     public Ticket save(Principal principal, Ticket ticket) {
