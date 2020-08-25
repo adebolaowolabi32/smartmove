@@ -15,9 +15,9 @@ public interface TripRepository extends CrudRepository<Trip, Long> {
     Trip findByReferenceNo(String referenceNo);
 
     List<Trip> findByDriverUsername(String username);
-/*
+
     List<Trip> findByVehicleRegNo(String vehicleRegNo);
-*/
+
     Page<Trip> findAll(Pageable pageable);
 
     List<Trip> findAll();
