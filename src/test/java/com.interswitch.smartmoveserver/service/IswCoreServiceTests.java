@@ -4,19 +4,21 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.request.IswRole;
 import com.interswitch.smartmoveserver.model.request.IswUser;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IswCoreServiceTests {
     User user;
@@ -31,7 +33,7 @@ public class IswCoreServiceTests {
     private IswUser iswUser;
     private IswRole iswRole;
 
-    @Before
+    @BeforeAll
     public void  setup(){
         user = new  User();
 
@@ -65,15 +67,13 @@ public class IswCoreServiceTests {
     @Test
     public void testCreateUser(){
         IswUser savedUser = iswCoreService.createUser(user);
-        assertThat(savedUser).isEqualToComparingFieldByField(iswUser);
+        assertEquals(savedUser, iswUser);
     }
 
     @Test
     public void testBuildUser(){
         IswUser response = iswCoreService.buildUser(user);
-        assertThat(response).isEqualTo(iswUser);
-        assertThat(response).isEqualToIgnoringGivenFields(iswUser);
-
+        assertEquals(response, iswUser);
     }
 /*
     @Test
@@ -86,7 +86,7 @@ public class IswCoreServiceTests {
     @Test
     public void testGetUsersPermission() throws NoSuchFieldException, IllegalAccessException{
         Object response =  iswCoreService.getUserPermissions(iswUser.getUsername(),iswUser.getDomainCode(),iswUser.getAppCode());
-        assertThat(response).isEqualToComparingFieldByField(iswUser);
+        assertEquals(response, iswUser);
     }
 }
 

@@ -40,6 +40,8 @@ public class Schedule implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime arrival;
 
+    private String duration;
+
     private String departureString;
 
     private String arrivalString;

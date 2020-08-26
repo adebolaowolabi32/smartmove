@@ -5,7 +5,6 @@ import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.model.Ticket;
 import com.interswitch.smartmoveserver.model.Trip;
 import lombok.Data;
-import org.springframework.util.AutoPopulatingList;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -68,7 +67,7 @@ public class TicketDetails implements Serializable {
 
     private Passenger passenger;
 
-    private AutoPopulatingList<Passenger> passengers;
+    private List<Passenger> passengers;
 
     private List<Ticket> tickets;
 

@@ -5,16 +5,17 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.TerminalService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -25,7 +26,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest(excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @ContextConfiguration(classes = TerminalApi.class)
 public class TerminalApiTests {
@@ -37,7 +40,7 @@ public class TerminalApiTests {
 
     private Terminal terminal;
 
-    @Before
+    @BeforeAll
     public void setup() {
         terminal = new Terminal();
         long id = 10000023;
@@ -52,7 +55,7 @@ public class TerminalApiTests {
     @Test
     public void testSave() throws Exception {
         when(terminalService.save(terminal)).thenReturn(terminal);
-        mvc.perform(post("/terminals")
+        mvc.perform(post("/api/terminals")
                 .content(new ObjectMapper().writeValueAsString(terminal))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

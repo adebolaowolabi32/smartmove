@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default.html}">
-<title layout:fragment="title">Trips</title>
+<title layout:fragment="title">Schedules</title>
 <div layout:fragment="content" class="card mb-4">
     <div class="card-header"><i class="fas fa-calendar mr-1"></i>
-        <span>Trips</span></div>
+        <span>Schedules</span></div>
     <div class="card-body">
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-4">
-                    <h2><b> Update Trip</b></h2>
+                    <h2><b> Update Schedule</b></h2>
                 </div>
 
             </div>
         </div>
+
         <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
         <form class="card p-3" action="#" method="post"
-              th:action="@{/trips/update/{id}(id=${trip.id})}" th:object="${trip}"
+              th:action="@{/schedules/update/{id}(id=${schedule.id})}" th:object="${schedule}"
               data-parsley-validate="true">
             <div class="form-group row">
                 <label class="control-label col-sm-2" for="mode">Transport Mode</label>

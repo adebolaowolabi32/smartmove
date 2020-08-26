@@ -4,22 +4,22 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class RouteRepositoryTests {
     @Autowired
@@ -34,7 +34,7 @@ public class RouteRepositoryTests {
     private Route route;
     private Route savedRoute;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         Terminal terminal = new Terminal();
         terminal.setName("my_terminal");
@@ -74,30 +74,30 @@ public class RouteRepositoryTests {
     @Test
     public void testFindById() {
         routeRepository.findById(savedRoute.getId()).ifPresent(route1 -> {
-            assertThat(route1.getName()).isEqualTo(route.getName());
-            assertThat(route1.getOwner()).isEqualTo(route.getOwner());
-            assertThat(route1.getType()).isEqualTo(route.getType());
-            assertThat(route1.getStartTerminalId()).isEqualTo(route.getStartTerminalId());
-            assertThat(route1.getStopTerminalId()).isEqualTo(route.getStopTerminalId());
-            assertThat(route1.getPrice()).isEqualTo(route.getPrice());
-            assertThat(route1.isEnabled()).isEqualTo(route.isEnabled());
+            assertEquals(route1.getName(), route.getName());
+            assertEquals(route1.getOwner(), route.getOwner());
+            assertEquals(route1.getType(), route.getType());
+            assertEquals(route1.getStartTerminalId(), route.getStartTerminalId());
+            assertEquals(route1.getStopTerminalId(), route.getStopTerminalId());
+            assertEquals(route1.getPrice(), route.getPrice());
+            assertEquals(route1.isEnabled(), route.isEnabled());
         });
     }
 
     @Test
     public void testFindAll() {
         List<Route> routes = routeRepository.findAll();
-        assertThat(routes.size()).isGreaterThanOrEqualTo(2);
+        assertTrue(routes.size() >= 2);
     }
 
     @Test
     public void testFindByOwner() {
         List<Route> routes = routeRepository.findAllByOwner(savedRoute.getOwner());
-        assertThat(routes.size()).isGreaterThanOrEqualTo(1);
+        assertTrue(routes.size() >= 1);
     }
 
 
-    @After
+    @AfterAll
     public void testDelete() {
         routeRepository.deleteAll();
         assertEquals(routeRepository.findAll().iterator().hasNext(), false);

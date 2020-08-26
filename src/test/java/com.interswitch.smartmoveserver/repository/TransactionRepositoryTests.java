@@ -3,21 +3,22 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.model.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class TransactionRepositoryTests {
     @Autowired
@@ -30,7 +31,7 @@ public class TransactionRepositoryTests {
 
     private Transaction savedTransaction;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         transaction = new Transaction();
         User user = buildTestUser();
@@ -62,28 +63,28 @@ public class TransactionRepositoryTests {
     @Test
     public void testFind() {
         List<Transaction> transactions = transactionRepository.findAllByType(savedTransaction.getType());
-        assertThat(transactions.size()).isGreaterThanOrEqualTo(2);
+        assertTrue(transactions.size() >= 2);
     }
 
     @Test
     public void testFindById() {
         transactionRepository.findById(savedTransaction.getId()).ifPresent(transaction1 -> {
-            assertThat(transaction1.getDeviceId()).isEqualTo(transaction.getDeviceId());
-            assertThat(transaction1.getType()).isEqualTo(transaction.getType());
-            assertThat(transaction1.getAmount()).isEqualTo(transaction.getAmount());
-            assertThat(transaction1.getCardId()).isEqualTo(transaction.getCardId());
+            assertEquals(transaction1.getDeviceId(), transaction.getDeviceId());
+            assertEquals(transaction1.getType(), transaction.getType());
+            assertEquals(transaction1.getAmount(), transaction.getAmount());
+            assertEquals(transaction1.getCardId(), transaction.getCardId());
         });
     }
 
     @Test
     public void testFindByOperator() {
         List<Transaction> transactions = transactionRepository.findAllByOperatorId(savedTransaction.getOperatorId());
-        assertThat(transactions.size()).isGreaterThanOrEqualTo(1);
+        assertTrue(transactions.size() >= 1);
     }
 
     @Test
     public void testFindAll() {
         List<Transaction> transactions = transactionRepository.findAll();
-        assertThat(transactions.size()).isGreaterThanOrEqualTo(2);
+        assertTrue(transactions.size() >= 2);
     }
 }

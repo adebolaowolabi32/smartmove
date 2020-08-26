@@ -15,269 +15,203 @@
             </div>
         </div>
 
-        <form class="card p-3" method="post" th:action="${flowExecutionUrl}" th:object="${ticketDetails}"
+        <form class="p-3" method="post" th:action="${flowExecutionUrl}" th:object="${ticketDetails}"
               data-parsley-validate="true">
-            <div class="card-header">
-                <span><b>Trip details</b></span></div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="label-small">Departure</div>
-                        <div th:text="${ticketDetails.schedule.startTerminal.name}"></div>
-                    </div>
-                    <div class="col">
-                        <div class="label-small">Destination</div>
-                        <div th:text="${ticketDetails.schedule.stopTerminal.name}"></div>
-                    </div>
-                    <div class="col">
-                        <div class="label-small">Departure Date</div>
-                        <div th:text="${ticketDetails.schedule.departureString}"></div>
-                    </div>
-                    <div class="col">
-                        <div class="label-small">Estimated Arrival</div>
-                        <div th:text="${ticketDetails.schedule.arrivalString}"></div>
-                    </div>
-                    <div class="col">
-                        <div class="label-small">Vehicle</div>
-                        <div th:text="${ticketDetails.schedule.vehicle.name}"></div>
-                    </div>
-                    <div class="col">
-                        <div class="label-small">Price</div>
-                        <div><span>&#8358; <span th:text="${ticketDetails.schedule.fare}"></span></span></div>
-                    </div>
-                </div>
-            </div>
-
-            <br><br>
-
-            <div class="row">
-                <div class="form-group col">
-                    <label class="control-label" for="paymentMode">Payment Mode *</label>
-                    <div>
-                        <select class="form-control" th:field="*{paymentMode}" id="paymentMode" required>
-                            <option value="">Select...</option>
-                            <option value="CASH">Cash</option>
-                            <option value="POS">POS</option>
-                            <option value="TRANSFER">Transfer</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="bvn">BVN</label>
-
-                    <div>
-                        <input onkeyup="validateBvn()" class="form-control" th:field="*{bvn}" id="bvn">
-                    </div>
-                    <div id="bvnDiv">
-                    </div>
-                    <!--<label class="control-label" for="return">Return</label>
-                    <span>
-                        <input type="checkbox" id="return">
-                    </span>-->
-                </div>
-            </div>
-            <br><br>
-
-            <div class="row">
-                <div class="col">
-                    <label><b>Contact Details</b></label>
-
-                    <div class="form-group">
-                        <label class="control-label" for="contactMobile">Contact Mobile *</label>
-                        <div>
-                            <input onkeyup="validatePhoneNumber()" class="form-control" th:field="*{contactMobile}" id="contactMobile" required>
+            <div class="card">
+                <div class="card-header">
+                    <span><b>Trip details</b></span></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure</div>
+                            <div th:text="${ticketDetails.schedule.startTerminal.name}"></div>
                         </div>
-                        <div id="contactMobileDiv">
+                        <div class="col">
+                            <div class="label-small">Destination</div>
+                            <div th:text="${ticketDetails.schedule.stopTerminal.name}"></div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label class="control-label" for="contactEmail">Contact Email</label>
-                        <div>
-                            <input class="form-control" th:field="*{contactEmail}" id="contactEmail">
+                        <div class="col">
+                            <div class="label-small">Departure Date</div>
+                            <div th:text="${ticketDetails.schedule.departureString}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Estimated Arrival</div>
+                            <div th:text="${ticketDetails.schedule.arrivalString}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Vehicle</div>
+                            <div th:text="${ticketDetails.schedule.vehicle.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Price</div>
+                            <div><span>&#8358; <span th:text="${ticketDetails.schedule.fare}"></span></span></div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <label><b>Next of Kin Details</b></label>
-                    <div class="form-group">
-                        <label class="control-label" for="nextOfKinName">Next Of Kin Name *</label>
-                        <div>
-                            <input class="form-control" th:field="*{nextOfKinName}" id="nextOfKinName" required>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label class="control-label" for="nextOfKinMobile">Next Of Kin Mobile *</label>
-                        <div>
-                            <input onkeyup="validateNextOfPhone()" class="form-control" th:field="*{nextOfKinMobile}" id="nextOfKinMobile" required>
-                        </div>
-                        <div id="nextOfKinMobileDiv">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br><br>
-
-            <label><b>Passenger #<span th:text="1"></span></b></label>
-            <div class="row">
-                <div class="form-group col">
-                    <label class="control-label" for="name">Name *</label>
-                    <div>
-                        <input class="form-control" th:field="*{name}" id="name" required>
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="gender">Gender *</label>
-                    <div>
-                        <select class="form-control" th:field="*{gender}" id="gender" required>
-                            <option value="">Select...</option>
-                            <option value="MALE">Male</option>
-                            <option value="FEMALE">Female</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="nationality">Nationality *</label>
-                    <div>
-                        <select class="form-control" th:field="*{nationality}" id="nationality" required>
-                            <option value="">Select...</option>
-                            <option th:each="country : ${ticketDetails.countries}" th:value="${country}"
-                                    th:text="${country}"></option>
-                        </select>
-                    </div>
-                </div>
+                <br>
             </div>
             <br>
-
-            <div class="row">
-
-                <div class="form-group col">
-                        <label class="control-label" for="idCategory">ID Category *</label>
-                        <select onchange="checkSelection()"  class="form-control" th:field="*{idCategory}" id="idCategory" required>
-                            <option value="">Select...</option>
-                            <option value="NATIONAL_ID">National ID</option>
-                            <option value="DRIVERS_LICENSE">Driver's License</option>
-                            <option value="INTERNATIONAL_PASSPORT">International Passport</option>
-                            <option value="VOTERS_CARD">Voters Card</option>
-                            <option value="SCHOOL_ID">School ID</option>
-                            <option value="NO_ID">No ID</option>
-                            <option value="OTHER">Other</option>
-                        </select>
-
-                    <div  id="otherIdCategoryDiv" style="display:none">
-                        <label class="control-label" for="otherIdCategory">Specify category</label>
-                        <div>
-                            <input class="form-control" id="otherIdCategory">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="idNumber">Id Number</label>
-                    <div>
-                        <input onkeyup="validateIdByNIMC()" class="form-control" th:field="*{idNumber}" id="idNumber">
-                    </div>
-                    <div id="idNumberDiv">
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="seatClass">Seat Class *</label>
-                    <select class="form-control" th:field="*{seatClass}" id="seatClass" required>
-                        <option value="">Select...</option>
-                        <option value="STANDARD">Standard</option>
-                        <option value="PREMIUM">Premium</option>
-                        <option value="LUXURY">Luxury</option>
-                    </select>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="seatNo">Seat *</label>
-                    <select class="form-control" th:field="*{seatNo}" id="seatNo" required>
-                        <option value="">Select...</option>
-                        <option th:each="seat : ${ticketDetails.seats}" th:value="${seat}"
-                                th:text="${seat}"></option>
-                    </select>
-                </div>
-            </div>
-
-            <br>
-<!--
-            <div th:each="i :  ${#numbers.sequence( 1, ticketDetails.noOfPassengers)}">
-                <label><b>Passenger # <span th:text="${i}"></span></b></label>
-                <div class="row">
+            <div class="card">
+                <div class="row card-body">
                     <div class="form-group col">
-                        <label class="control-label" for="name">Name</label>
+                        <label class="control-label" for="paymentMode">Payment Mode *</label>
                         <div>
-                            <input class="form-control" th:field="*{passengers[__${i}__].name}" id="name">
-                        </div>
-                    </div>
-                    <div class="form-group col">
-                        <label class="control-label" for="gender">Gender</label>
-                        <div>
-                            <select class="form-control" th:field="*{passengers[__${i}__].gender}" id="gender">
+                            <select class="form-control" id="paymentMode" required th:field="*{paymentMode}">
                                 <option value="">Select...</option>
-                                <option value="MALE">Male</option>
-                                <option value="FEMALE">Female</option>
+                                <option value="CASH">Cash</option>
+                                <option value="POS">POS</option>
+                                <option value="TRANSFER">Transfer</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group col">
-                        <div class="row">
-                            <div class="col">
-                                <label class="control-label" for="seatClass">Seat Class</label>
-                                <select class="form-control" th:field="*{passengers[__${i}__].seatClass}" id="seatClass">
-                                    <option value="">Select...</option>
-                                    <option value="STANDARD">Standard</option>
-                                    <option value="PREMIUM">Premium</option>
-                                    <option value="LUXURY">Luxury</option>
-                                </select>
+                        <label class="control-label" for="bvn">BVN</label>
+
+                        <div>
+                            <input class="form-control" id="bvn" onkeyup="validateBvn()" th:field="*{bvn}">
+                        </div>
+                        <div id="bvnDiv">
+                        </div>
+                        <!--<label class="control-label" for="return">Return</label>
+                        <span>
+                            <input type="checkbox" id="return">
+                        </span>-->
+                    </div>
+                </div>
+
+                <div class="row card-body">
+                    <div class="col">
+                        <label><b>Contact Details</b></label>
+
+                        <div class="form-group">
+                            <label class="control-label" for="contactMobile">Contact Mobile *</label>
+                            <div>
+                                <input class="form-control" id="contactMobile" onkeyup="validatePhoneNumber()" required
+                                       th:field="*{contactMobile}">
                             </div>
-                            <div class="col">
-                                <label class="control-label" for="seatNo">Seat</label>
-                                <select class="form-control" th:field="*{passengers[__${i}__].seatNo}" id="seatNo">
-                                    <option value="">Select...</option>
-                                    <option th:each="seat : ${ticketDetails.seats}" th:value="${seat}"
-                                            th:text="${seat}"></option>
-                                </select>
+                            <div id="contactMobileDiv">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label class="control-label" for="contactEmail">Contact Email</label>
+                            <div>
+                                <input class="form-control" id="contactEmail" th:field="*{contactEmail}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label><b>Next of Kin Details</b></label>
+                        <div class="form-group">
+                            <label class="control-label" for="nextOfKinName">Next Of Kin Name *</label>
+                            <div>
+                                <input class="form-control" id="nextOfKinName" required th:field="*{nextOfKinName}">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label class="control-label" for="nextOfKinMobile">Next Of Kin Mobile *</label>
+                            <div>
+                                <input class="form-control" id="nextOfKinMobile" onkeyup="validateNextOfPhone()"
+                                       required th:field="*{nextOfKinMobile}">
+                            </div>
+                            <div id="nextOfKinMobileDiv">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="form-group col">
-                        <label class="control-label" for="nationality">Nationality</label>
-                        <div>
-                            <select class="form-control" th:field="*{passengers[__${i}__].nationality}" id="nationality">
-                                <option value="">Select...</option>
-                                <option th:each="country : ${ticketDetails.countries}" th:value="${country}"
-                                        th:text="${country}"></option>
-                            </select>
+                <div class="card-body" th:each="i :  ${#numbers.sequence( 1, ticketDetails.noOfPassengers)}">
+                    <hr>
+                    <br>
+                    <label><b>Passenger #<span th:text="${i}"></span></b></label>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label class="control-label" for="name">Name *</label>
+                            <div>
+                                <input class="form-control" id="name" required
+                                       th:field="*{passengers[__${i-1}__].name}">
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="gender">Gender *</label>
+                            <div>
+                                <select class="form-control" id="gender" required
+                                        th:field="*{passengers[__${i-1}__].gender}">
+                                    <option value="">Select...</option>
+                                    <option value="MALE">Male</option>
+                                    <option value="FEMALE">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="nationality">Nationality *</label>
+                            <div>
+                                <select class="form-control" id="nationality" required
+                                        th:field="*{passengers[__${i-1}__].nationality}">
+                                    <option value="">Select...</option>
+                                    <option th:each="country : ${ticketDetails.countries}" th:text="${country}"
+                                            th:value="${country}"></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col">
-                        <label class="control-label" for="idCategory">ID Category</label>
-                        <div>
-                            <select class="form-control" th:field="*{passengers[__${i}__].idCategory}" id="idCategory">
+                    <br>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label class="control-label" for="idCategory">ID Category *</label>
+                            <select class="form-control" id="idCategory" onchange="checkSelection()" required
+                                    th:field="*{passengers[__${i-1}__].idCategory}">
                                 <option value="">Select...</option>
                                 <option value="NATIONAL_ID">National ID</option>
                                 <option value="DRIVERS_LICENSE">Driver's License</option>
                                 <option value="INTERNATIONAL_PASSPORT">International Passport</option>
                                 <option value="VOTERS_CARD">Voters Card</option>
                                 <option value="SCHOOL_ID">School ID</option>
+                                <option value="NO_ID">No ID</option>
                                 <option value="OTHER">Other</option>
+                            </select>
+
+                            <div id="otherIdCategoryDiv" style="display:none">
+                                <label class="control-label" for="otherIdCategory">Specify category</label>
+                                <div>
+                                    <input class="form-control" id="otherIdCategory">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="idNumber">Id Number</label>
+                            <div>
+                                <input class="form-control" id="idNumber" onkeyup="validateIdByNIMC()"
+                                       th:field="*{passengers[__${i-1}__].idNumber}">
+                            </div>
+                            <div id="idNumberDiv">
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="seatClass">Seat Class *</label>
+                            <select class="form-control" id="seatClass" required
+                                    th:field="*{passengers[__${i-1}__].seatClass}">
+                                <option value="">Select...</option>
+                                <option value="STANDARD">Standard</option>
+                                <option value="PREMIUM">Premium</option>
+                                <option value="LUXURY">Luxury</option>
+                            </select>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="seatNo">Seat *</label>
+                            <select class="form-control" id="seatNo" required
+                                    th:field="*{passengers[__${i-1}__].seatNo}">
+                                <option value="">Select...</option>
+                                <option th:each="seat : ${ticketDetails.seats}" th:text="${seat}"
+                                        th:value="${seat}"></option>
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col">
-                        <label class="control-label" for="idNumber">Id Number</label>
-                        <div>
-                            <input class="form-control" th:field="*{passengers[__${i}__].idNumber}" id="idNumber">
-                        </div>
-                    </div>
                 </div>
-                <br>
             </div>
--->
+
             <br><br>
             <div class="row">
                 <div class="col-sm-6"></div>

@@ -50,7 +50,8 @@
                 <div class="form-group col">
                     <label class="control-label" for="noOfPassengers">Seats</label>
                     <div>
-                        <input class="form-control" type="number" value="1" th:field="*{noOfPassengers}" id="noOfPassengers">
+                        <input class="form-control" id="noOfPassengers" th:field="*{noOfPassengers}" th:value="1"
+                               type="number">
                     </div>
                 </div>
             </div>
