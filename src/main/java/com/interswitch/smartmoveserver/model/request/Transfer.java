@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Transfer {
-    private long to;
+    private String to;
     private double amount;
 }

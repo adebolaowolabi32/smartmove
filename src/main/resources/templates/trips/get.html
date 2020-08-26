@@ -35,8 +35,10 @@
                     <th>Vehicle</th>
                     <th>Departure Terminal</th>
                     <th>Destination Terminal</th>
-                    <th>Departure time</th>
-                    <th>Arrival time</th>
+                    <th>Departure Date</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Date</th>
+                    <th>Arrival Time</th>
                     <th>View details</th>
                     <th>Remove</th>
                 </tr>
@@ -49,9 +51,10 @@
                     <td th:text="${trip.vehicle!=null ? trip.vehicle.name+'-'+trip.vehicle.regNo : '' }"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.startTerminal.name  : ''}"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.stopTerminal.name  : ''}"></td>
-                    <td th:text="${trip.schedule!=null ? trip.schedule.departureString  : ''}"></td>
-                    <td th:text="${trip.schedule!=null ? trip.schedule.arrivalString  : ''}"></td>
-
+                    <td th:text="${trip.schedule!=null ? trip.schedule.departureDate  : ''}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.departureTime  : ''}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.arrivalDate  : ''}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.arrivalTime  : ''}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/details/{id}(id=${trip.id})}">
                             <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>

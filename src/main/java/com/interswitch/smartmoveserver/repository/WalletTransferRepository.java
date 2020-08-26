@@ -13,5 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WalletTransferRepository extends CrudRepository<WalletTransfer, Long> {
     Page<WalletTransfer> findByWallet(Pageable pageable, Wallet wallet);
+
+    Page<WalletTransfer> findAll(Pageable pageable);
     Long countByWallet(Wallet wallet);
 }

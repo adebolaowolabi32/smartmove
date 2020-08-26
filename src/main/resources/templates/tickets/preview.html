@@ -33,7 +33,7 @@
                                     <div class="text-primary arrival_departure_text">DEPARTURE</div>
                                 </div>
                                 <div class="row">
-                                    <div class="big_text">lag</div>
+                                    <div class="big_text">lagos</div>
                                 </div>
                                 <div class="row">
                                     <div class="arrival_departure_address"
@@ -41,16 +41,17 @@
                                     </div>
                                 </div>
                                 <!--
-                                                                <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:100px;" class="row"> </div>
+                                   <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:100px;" class="row"> </div>
                                 -->
                                 <hr>
                                 <div class="row">
                                     <div class="text-muted arrival_departure_date"
-                                         th:text="${ticket.schedule.departureString}">13 AUGUST 2020
+                                         th:text="${ticket.schedule.departureDateString}">13 AUGUST 2020
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="arrival_departure_time" th:text="${ticket.schedule.departureString}">
+                                    <div class="arrival_departure_time"
+                                         th:text="${ticket.schedule.departureTimeString}">
                                         08:00 AM
                                     </div>
                                 </div>
@@ -62,7 +63,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div id="travelTimeDivId" th:text="${ticket.schedule.duration}">11.00 H</div>
+                                    <div id="travelTimeDivId" th:text="${ticket.schedule.duration + ' H'}">11.00 H</div>
                                 </div>
                             </div>
 
@@ -72,7 +73,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="big_text">KAD</div>
+                                    <div class="big_text">kaduna</div>
                                 </div>
 
                                 <div class="row">
@@ -82,19 +83,19 @@
                                 </div>
 
                                 <!--
-                                                                <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:100px;" class="row"> </div>
+                                    <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:100px;" class="row"> </div>
                                 -->
                                 <hr>
 
                                 <div class="row">
                                     <div class="text-muted arrival_departure_date"
-                                         th:text="${ticket.schedule.arrivalString}">13 AUGUST 2020
+                                         th:text="${ticket.schedule.arrivalDateString}">13 AUGUST 2020
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="arrival_departure_time" th:text="${ticket.schedule.arrivalString}">07:00
-                                        PM
+                                    <div class="arrival_departure_time" th:text="${ticket.schedule.arrivalTimeString}">
+                                        07:00 PM
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +192,7 @@
                                     </div>
                                     <div class="row">
                                         <div style="font-weight:bold;font-size:15px; font-family:Arial"
-                                             th:text="${ticket.referenceNo}">AKT-412682
+                                             th:text="${ticket.referenceNo}">AKT412682
                                         </div>
                                     </div>
                                 </div>
@@ -229,7 +230,8 @@
                                 <div class="col-6" style="padding:25px;height:100px;">
                                     <div class="row">
                                         <div class="text-muted"
-                                             style="font-weight:normal;font-size:10px; font-family:Arial">STOP TERMINAL
+                                             style="font-weight:normal;font-size:10px; font-family:Arial">ARRIVAL
+                                            TERMINAL
                                         </div>
                                     </div>
 

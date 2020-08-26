@@ -37,16 +37,26 @@
                                 <div th:text="${schedule.vehicle.name}"></div>
                             </div>
                             <div class="col">
-                                <div><b>Departure Date</b></div>
-                                <div th:text="${schedule.departureString}"></div>
-                            </div>
-                            <div class="col">
-                                <div><b>Estimated Arrival</b></div>
-                                <div th:text="${schedule.arrivalString}"></div>
-                            </div>
-                            <div class="col">
                                 <div><b>Price</b></div>
                                 <div><span>&#8358; <span th:text="${schedule.fare}"></span></span></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div><b>Departure Date</b></div>
+                                <div th:text="${schedule.departureDate}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Departure Time</b></div>
+                                <div th:text="${schedule.departureTime}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Arrival Date</b></div>
+                                <div th:text="${schedule.arrivalDate}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Estimated Arrival Time</b></div>
+                                <div th:text="${schedule.arrivalTime}"></div>
                             </div>
                             <div class="col">
                                 <div><b>Owner</b></div>

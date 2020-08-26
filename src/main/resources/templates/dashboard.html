@@ -116,29 +116,31 @@
             </div>
         </div>
 
-        <div class="col-xl-4" sec:authorize="hasAuthority('VIEW_CARD_DETAILS')">
-            <div class="card bg-light mb-4">
-                <div class="card-body heavy">My Card
-                    <span class="card-status"><i class="fas fa-check"></i><span>ACTIVE</span></span>
-                    <br>
-                    <div class="dark-text">
-                        <span>₦<span th:text="${card_balance}">2,050.00</span></span>
-                        <a href="#"><i class="fas fa-sync"></i></a>
-                    </div>
-                    <div class="balance-time">
-                        <span>@ <span th:text="${time_date}">@ Jun 10 2020 3:06 PM </span></span>
-                    </div>
-                    <br>
-                    <div class="dark-text">
-                        <span>**** **** **** **** 3325</span>
+        <!--
+                <div class="col-xl-4" sec:authorize="hasAuthority('VIEW_CARD_DETAILS')">
+                    <div class="card bg-light mb-4">
+                        <div class="card-body heavy">My Card
+                            <span class="card-status"><i class="fas fa-check"></i><span>ACTIVE</span></span>
+                            <br>
+                            <div class="dark-text">
+                                <span>₦<span th:text="${card_balance}">2,050.00</span></span>
+                                <a href="#"><i class="fas fa-sync"></i></a>
+                            </div>
+                            <div class="balance-time">
+                                <span>@ <span th:text="${time_date}">@ Jun 10 2020 3:06 PM </span></span>
+                            </div>
+                            <br>
+                            <div class="dark-text">
+                                <span>**** **** **** **** 3325</span>
+                            </div>
+                        </div>
+                        <div class="card-footer dark-text d-flex align-items-center justify-content-between">
+                            <a href="#"><i class="fas fa-coins"></i> Fund my Card</a>
+                            <a href="#"><i class="fas fa-history"></i> Card History</a>
+                        </div>
                     </div>
                 </div>
-                <div class="card-footer dark-text d-flex align-items-center justify-content-between">
-                    <a href="#"><i class="fas fa-coins"></i> Fund my Card</a>
-                    <a href="#"><i class="fas fa-history"></i> Card History</a>
-                </div>
-            </div>
-        </div>
+        -->
 
         <div class="col-xl-4" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')">
             <div class="card bg-light mb-4">
@@ -156,8 +158,8 @@
                     <br>
                 </div>
                 <div class=" card-footer dark-text d-flex align-items-center justify-content-between">
-                    <a href="#"><i class="fas fa-coins"></i> <span th:text="${no_topups}"></span> Top-ups</a>
-                    <a href="#"><i class="fas fa-exchange-alt"> </i><span th:text="${no_transfers}"></span> Transfers</a>
+                    <a href="#" th:href="@{/topups/get}"><i class="fas fa-coins"></i> Top-ups</a>
+                    <a href="#" th:href="@{/transfers/get}"><i class="fas fa-exchange-alt"> </i> Transfers</a>
                 </div>
             </div>
         </div>

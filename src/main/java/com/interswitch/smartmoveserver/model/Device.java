@@ -37,6 +37,8 @@ public class Device implements Serializable {
 
     private int batteryPercentage;
 
+    private double balance = 0;
+
     @Enumerated(EnumType.STRING)
     private Enum.FareType fareType;
 

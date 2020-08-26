@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
 import com.interswitch.smartmoveserver.model.request.Transfer;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -49,9 +48,8 @@ public class WalletController {
             model.addAttribute("transfer", new Transfer());
             return "wallets/transfer";
         }
-        User user = userService.findByUsername(principal.getName());
-        walletService.transfer(transfer, user);
+        walletService.transfer(principal, transfer);
         model.addAttribute("success", true);
-        return "wallets/transfer";
+        return "redirect:/wallets/details";
     }
 }

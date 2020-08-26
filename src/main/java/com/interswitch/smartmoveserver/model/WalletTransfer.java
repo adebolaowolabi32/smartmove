@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /*
  * Created by adebola.owolabi on 5/19/2020
@@ -18,8 +19,9 @@ public class WalletTransfer {
     @ManyToOne
     private Wallet wallet;
 
-    @OneToOne
-    private User recipient;
+    private String recipient;
 
     private double amount;
+
+    private LocalDateTime transferDateTime;
 }

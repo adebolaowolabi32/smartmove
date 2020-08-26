@@ -76,7 +76,8 @@ public class TicketService {
         //List<Schedule> schedules = scheduleService.findByOwner);
         List<Schedule> schedules = scheduleService.findAll();
         List<Schedule> scheduleResults = schedules.stream()
-                .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName().equals(scheduleBooking.getStopTerminal()) && s.getDeparture().toLocalDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
+                .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName()
+                        .equals(scheduleBooking.getStopTerminal()) && s.getDepartureDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
         scheduleBooking.setSchedules(scheduleResults);
         return scheduleBooking;
     }

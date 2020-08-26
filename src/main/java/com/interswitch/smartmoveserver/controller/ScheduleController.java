@@ -88,7 +88,6 @@ public class ScheduleController {
             return "schedules/create";
         }
 
-        logger.info("Schedule Departure String ==>" + schedule.getDeparture());
         Schedule savedSchedule = scheduleService.save(schedule);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/schedules/details/" + savedSchedule.getId();

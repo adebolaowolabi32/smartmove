@@ -51,8 +51,10 @@ public class ScheduleService {
 
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Schedule already exists");
 
-        schedule.setArrivalString(DateUtil.formatDate(schedule.getArrival()));
-        schedule.setDepartureString(DateUtil.formatDate(schedule.getDeparture()));
+        schedule.setArrivalDateString(DateUtil.formatDate(schedule.getArrivalDate()));
+        schedule.setDepartureDateString(DateUtil.formatDate(schedule.getDepartureDate()));
+        schedule.setArrivalTimeString(DateUtil.formatTime(schedule.getArrivalTime()));
+        schedule.setDepartureTimeString(DateUtil.formatTime(schedule.getDepartureTime()));
         //schedule.setName(schedule.getStartTerminal().getName() + " - " + schedule.getStopTerminal().getName() + " " + schedule.getDepartureString());
         return scheduleRepository.save(schedule);
     }

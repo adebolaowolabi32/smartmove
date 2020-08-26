@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -24,13 +25,19 @@ import java.util.Optional;
 @Service
 public class WalletService {
     @Autowired
-    WalletRepository walletRepository;
+    private WalletRepository walletRepository;
 
     @Autowired
-    WalletTransferRepository transferRepository;
+    private WalletTransferRepository transferRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private TransferService transferService;
 
     @Autowired
     PageUtil pageUtil;
@@ -100,26 +107,30 @@ public class WalletService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
     }
 
-    public void transfer(Transfer transfer, User authenticatedUser) {
+    public String transfer(Principal principal, Transfer transfer) {
+        User user = userService.findByUsername(principal.getName());
+
         double amount = transfer.getAmount();
-        Optional<Wallet> fromOptional = walletRepository.findById(authenticatedUser.getId());
-        if(fromOptional.isPresent()){
-            Optional<Wallet> toOptional = walletRepository.findById(transfer.getTo());
-            if(toOptional.isPresent()) {
-                Wallet from = fromOptional.get();
-                Wallet to = toOptional.get();
-                double fromBalance = from.getBalance();
-                double toBalance = to.getBalance();
-                fromBalance = fromBalance - amount;
-                toBalance = toBalance + amount;
-                from.setBalance(fromBalance);
-                to.setBalance(toBalance);
-                walletRepository.save(from);
-                walletRepository.save(to);
-            }
-            else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipient wallet does not exist");
+        Wallet from = findById(user.getId());
+        Wallet to = findById(Long.parseLong(transfer.getTo()));
+        double fromBalance = from.getBalance();
+        double toBalance = to.getBalance();
+        if (fromBalance >= amount) {
+            fromBalance = fromBalance - amount;
+            toBalance = toBalance + amount;
+            from.setBalance(fromBalance);
+            to.setBalance(toBalance);
+            walletRepository.save(from);
+            walletRepository.save(to);
+            WalletTransfer transfer1 = new WalletTransfer();
+            transfer1.setAmount(amount);
+            transfer1.setRecipient(to.getOwner().getUsername());
+            transfer1.setWallet(from);
+            transfer1.setTransferDateTime(LocalDateTime.now());
+            transferService.save(transfer1);
         }
-        else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sender wallet does not exist");
+        return "Insufficient funds";
+        //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Insufficient funds");
     }
 
     public void activate(long walletId) {

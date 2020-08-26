@@ -50,20 +50,27 @@
                         <div class="booking-item-arrival">
                             <p class="text-color"><b>Departure</b></p>
                             <p class="booking-item-address" th:text="${schedule.startTerminal.name}"><i class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
-                            <p class="booking-item-address" th:text="${schedule.departureString}"><i class="fa fa-clock-o"></i> 17-Aug-2020 4:00 PM</p>
+                            <p class="booking-item-address" th:text="${schedule.departureDateString}"><i
+                                    class="fa fa-calender"></i> 17-Aug-2020</p>
+                            <p class="booking-item-address" th:text="${schedule.departureTimeString}"><i
+                                    class="fa fa-clock-o"></i> 4:00 PM</p>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="booking-item-arrival">
                             <p class="text-color"><b>Destination</b></p>
                             <p class="booking-item-address" th:text="${schedule.stopTerminal.name}"><i class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
-                            <p class="booking-item-address" th:text="${schedule.arrivalString}"><i class="fa fa-clock-o"></i> 17-Aug-2020 4:00 PM</p>
+                            <p class="booking-item-address" th:text="${schedule.arrivalDateString}"><i
+                                    class="fa fa-calender"></i> 17-Aug-2020</p>
+                            <p class="booking-item-address" th:text="${schedule.arrivalTimeString}"><i
+                                    class="fa fa-clock-o"></i> 4:00 PM</p>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <span class="amt-big">&#8358; <span th:text="${schedule.fare}">14,000.00/seat</span></span>
                         <br>
-                        <a class="btn btn-outline-primary btn-sized"  id="expander" th:href="@{${flowExecutionUrl} + '&_eventId=makeBooking&scheduleId=' + ${schedule.id} + '&noOfPassengers=' + ${scheduleBooking.noOfPassengers}}">Select</a>
+                        <a class="btn btn-lg btn-outline-primary btn-sized" id="expander"
+                           th:href="@{${flowExecutionUrl} + '&_eventId=makeBooking&scheduleId=' + ${schedule.id} + '&noOfPassengers=' + ${scheduleBooking.noOfPassengers}}">Select</a>
 
                     </div>
                 </div>
