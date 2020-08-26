@@ -13,6 +13,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *  Passenger manifest management service
+ */
 @Service
 public class ManifestService {
 

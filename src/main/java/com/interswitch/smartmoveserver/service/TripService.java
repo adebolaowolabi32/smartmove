@@ -17,6 +17,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Trips management service
+ */
 @Service
 @Transactional
 public class TripService {

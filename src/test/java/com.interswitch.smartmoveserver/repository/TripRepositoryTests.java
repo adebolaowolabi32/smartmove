@@ -60,7 +60,6 @@ public class TripRepositoryTests {
         vehicle.setOwner(owner);
         vehicle.setEnabled(true);
 
-
         trip = new Trip();
         trip.setReferenceNo(new RandomUtil(5).nextString());
         trip.setDriver(userRepository.save(buildTestUser(Enum.Role.DRIVER)));
@@ -119,7 +118,6 @@ public class TripRepositoryTests {
         scheduleRepository.deleteAll();
         tripRepository.deleteAll();
     }
-
     @Test
     public void testFindById() {
         tripRepository.findById(savedTrip.getId())
@@ -134,7 +132,6 @@ public class TripRepositoryTests {
 
                 });
     }
-
     @Test
     public void testFindByReferenceNo() {
         Trip tripFrmDb = tripRepository.findByReferenceNo(savedTrip.getReferenceNo());
@@ -147,19 +144,16 @@ public class TripRepositoryTests {
         assertThat(tripFrmDb.getVehicle()).isEqualTo(trip.getVehicle());
         assertThat(tripFrmDb.getSchedule()).isEqualTo(trip.getSchedule());
     }
-
     @Test
     public void testFindByDriverUsername() {
         List<Trip> trips = tripRepository.findByDriverUsername(savedTrip.getDriver().getUsername());
         assertTrue(trips.size()>0);
     }
-
     @Test
     public void testfindAll() {
         List<Trip> trips = tripRepository.findAll();
         assertTrue(trips.size()>0);
     }
-
     @Test
     public void testDelete() {
         tripRepository.deleteById(savedTrip.getId());
