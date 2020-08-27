@@ -209,10 +209,6 @@ public class IswCoreService {
                 permissions.add("DELETE_TRIP");
                 permissions.add("DELETE_SCHEDULE");
 
-
-                permissions.add("VIEW_CARD_DETAILS");
-                permissions.add("VIEW_WALLET_DETAILS");
-
                 return permissions;
             }
             case REGULATOR: {
