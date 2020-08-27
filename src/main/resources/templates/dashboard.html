@@ -175,7 +175,6 @@
                     <div class="balance-time">
                         <span>@ <span th:text="${time_date}">@ Jun 10 2020 3:06 PM </span></span>
                     </div>
-                    <br>
                 </div>
                 <div class=" card-footer dark-text d-flex align-items-center justify-content-between">
                     <a class="link-black" href="#" th:href="@{/topups/get}"><i class="fas fa-coins"></i> Fund my Wallet</a>
@@ -188,14 +187,22 @@
         <div class="col-xl-4" sec:authorize="hasAuthority('VIEW_CARD_DETAILS')">
             <div class="card bg-light mb-4 wallet-body">
                 <div class="card-body heavy">
+                    Wallet Details
+                    <br>
                     <div class="row">
-                        <div class="col wallet-bg" style="margin:20px;">
-                            <i class="fas fa-credit-card fa-4x" style="margin:10px;"></i>
-                            <p class="dark-text" th:text="${no_cards + ' Cards'}"></p>
+                        <div class="col wallet-bg" style="margin:5px;">
+                            <a class="link-black" href="#" th:href="@{/cards/get}">
+                                <i class="fas fa-credit-card fa-4x" style="margin:10px;"></i>
+                                <p class="dark-text link-black" style="margin:10px;"
+                                   th:text="${no_cards + ' Cards'}"></p>
+                            </a>
                         </div>
-                        <div class="col wallet-bg" style="margin:20px;">
-                            <i class="fas fa-user-friends fa-4x" style="margin:10px;"></i>
-                            <p class="dark-text" th:text="${no_transfers + ' Transfers'}"></p>
+                        <div class="col wallet-bg" style="margin:5px;">
+                            <a class="link-black" href="#" th:href="@{/transfers/get}">
+                                <i class="fas fa-user-friends fa-4x" style="margin:10px;"></i>
+                                <p class="dark-text link-black" style="margin:10px;"
+                                   th:text="${no_transfers + ' Transfers'}"></p>
+                            </a>
                         </div>
                     </div>
                 </div>

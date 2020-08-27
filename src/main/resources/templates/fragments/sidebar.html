@@ -27,11 +27,11 @@
                         <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_SERVICE_PROVIDERS')"
                            th:href="@{/users/get?role=SERVICE_PROVIDER}">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                            Operators</a>
+                            Service Providers</a>
                         <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_INSPECTORS')"
                            th:href="@{/users/get?role=INSPECTOR}">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                            Operators</a>
+                            Inspectors</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_DRIVERS')" th:href="@{/users/get?role=DRIVER}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             Drivers</a>
@@ -41,7 +41,7 @@
                         <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETERS')"
                            th:href="@{/users/get?role=TICKETER}">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                            Operators</a>
+                            Ticketers</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLE_OWNERS')" th:href="@{/users/get?role=VEHICLE_OWNER}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             Vehicle Owners</a>
