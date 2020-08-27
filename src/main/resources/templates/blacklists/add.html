@@ -18,7 +18,7 @@
               th:action="@{/blacklists/add}" th:object="${blacklist}"
               data-parsley-validate="true">
             <div class="form-group row">
-                <label class="control-label col-sm-2" for="identifier">Identifier</label>
+                <label class="control-label col-sm-2" for="identifier"><b>Identifier</b></label>
                 <div class="col-sm-10">
                     <input class="form-control"
                            id="identifier" name="identifier" th:field="*{identifier}"
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="control-label col-sm-2" for="type">Type</label>
+                <label class="control-label col-sm-2" for="type"><b>Type</b></label>
                 <div class="col-sm-10">
                     <select class="form-control" th:field="*{type}"  id="type" required>
                         <option value="" >Select...</option>

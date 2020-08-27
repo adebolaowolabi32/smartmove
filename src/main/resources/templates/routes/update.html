@@ -19,7 +19,7 @@
 			  th:action="@{/routes/update/{id}(id=${route.id})}" th:object="${route}"
 			  data-parsley-validate="true">
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="type">Transport Mode</label>
+				<label class="control-label col-sm-2" for="type"><b>Transport Mode</b></label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{type}"  id="type">
 						<option value="" disabled>Select...</option>
@@ -30,7 +30,7 @@
 					</select></div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="startTerminalId">Start Terminal</label>
+				<label class="control-label col-sm-2" for="startTerminalId"><b>Start Terminal</b></label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{startTerminalId}" id="startTerminalId" required>
 						<option value="">Select...</option>
@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="stopTerminalId">Stop Terminal</label>
+				<label class="control-label col-sm-2" for="stopTerminalId"><b>Stop Terminal</b></label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{stopTerminalId}" id="stopTerminalId" required>
 						<option value="">Select...</option>
@@ -50,14 +50,14 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="price">Price</label>
+				<label class="control-label col-sm-2" for="price"><b>Price</b></label>
 				<div class="col-sm-10">
 					<input class="form-control" th:field="*{price}" id="price">
 					<p class="small text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="owner">Owner</label>
+				<label class="control-label col-sm-2" for="owner"><b>Owner</b></label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{owner}"  id="owner">
 						<option value="">Select...</option>
@@ -67,7 +67,7 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="enabled">Active</label>
+				<label class="control-label col-sm-2" for="enabled"><b>Active</b></label>
 				<div class="col-sm-10">
 					<label class="switch">
 						<input type="checkbox" name="enabled" id="enabled" th:checked="${route.enabled}">
