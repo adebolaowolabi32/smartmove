@@ -111,14 +111,14 @@ public class DeviceController {
     }
 
     @PostMapping("/fund/{id}")
-    public String transfer(Principal principal, @PathVariable("id") long id, @Valid FundDevice fundDevice, BindingResult result, Model model) {
+    public String transfer(Principal principal, @PathVariable("id") long id, @Valid FundDevice fundDevice, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        fundDevice.setDeviceId(id);
         if (result.hasErrors()) {
-            fundDevice.setDeviceId(id);
             model.addAttribute("fundDevice", new FundDevice());
             return "devices/fund";
         }
         deviceService.fundDevice(principal, fundDevice);
-        model.addAttribute("funded", true);
+        redirectAttributes.addFlashAttribute("funded", true);
         return "redirect:/devices/details/" + fundDevice.getDeviceId();
     }
 }

@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,8 +11,8 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
-@Table(name = "wallet_transfers")
-public class WalletTransfer {
+@Table(name = "transfers")
+public class Transfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -23,5 +24,6 @@ public class WalletTransfer {
 
     private double amount;
 
+    @DateTimeFormat(pattern = "MMM dd yyyy HH:mm aa")
     private LocalDateTime transferDateTime;
 }

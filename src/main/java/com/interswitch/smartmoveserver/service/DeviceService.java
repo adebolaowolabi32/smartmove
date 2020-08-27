@@ -126,9 +126,6 @@ public class DeviceService {
     }
 
     public Device save(Device device) {
-        long id = device.getId();
-        boolean exists = deviceRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Device already exists");
         return deviceRepository.save(device);
     }
 
@@ -204,9 +201,8 @@ public class DeviceService {
     }
 
     public String fundDevice(Principal principal, FundDevice fundDevice) {
-        User user = userService.findByUsername(principal.getName());
         double amount = fundDevice.getAmount();
-        Wallet wallet = walletService.findById(user.getId());
+        Wallet wallet = walletService.findByOwner(principal.getName());
         Device device = findById(fundDevice.getDeviceId());
         double deviceBalance = device.getBalance();
         double walletBalance = wallet.getBalance();
@@ -217,7 +213,7 @@ public class DeviceService {
             device.setBalance(deviceBalance);
             walletService.save(wallet);
             save(device);
-            WalletTransfer transfer1 = new WalletTransfer();
+            Transfer transfer1 = new Transfer();
             transfer1.setAmount(amount);
             transfer1.setRecipient("Device - " + fundDevice.getDeviceId());
             transfer1.setWallet(wallet);

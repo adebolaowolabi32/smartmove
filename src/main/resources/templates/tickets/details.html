@@ -39,22 +39,23 @@
                             <div><span>&#8358; <span th:text="${ticketDetails.schedule.fare}"></span></span></div>
                         </div>
                     </div>
+                    <br>
                     <div class="row">
                         <div class="col">
                             <div class="label-small">Departure Date</div>
-                            <div th:text="${ticketDetails.schedule.departureDateString}"></div>
+                            <div th:text="${ticketDetails.schedule.departureDate}"></div>
                         </div>
                         <div class="col">
                             <div class="label-small">Departure Time</div>
-                            <div th:text="${ticketDetails.schedule.departureTimeString}"></div>
+                            <div th:text="${ticketDetails.schedule.departureTime}"></div>
                         </div>
                         <div class="col">
                             <div class="label-small">Arrival Date</div>
-                            <div th:text="${ticketDetails.schedule.arrivalDateString}"></div>
+                            <div th:text="${ticketDetails.schedule.arrivalDate}"></div>
                         </div>
                         <div class="col">
                             <div class="label-small">Estimated Arrival Time</div>
-                            <div th:text="${ticketDetails.schedule.arrivalTimeString}"></div>
+                            <div th:text="${ticketDetails.schedule.arrivalTime}"></div>
                         </div>
                     </div>
                 </div>
@@ -92,7 +93,13 @@
                 <div class="row card-body">
                     <div class="col">
                         <label><b>Contact Details</b></label>
-
+                        <div class="form-group">
+                            <label class="control-label" for="contactEmail">Contact Email</label>
+                            <div>
+                                <input class="form-control" id="contactEmail" th:field="*{contactEmail}">
+                            </div>
+                        </div>
+                        <br>
                         <div class="form-group">
                             <label class="control-label" for="contactMobile">Contact Mobile *</label>
                             <div>
@@ -100,13 +107,6 @@
                                        th:field="*{contactMobile}">
                             </div>
                             <div id="contactMobileDiv">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <label class="control-label" for="contactEmail">Contact Email</label>
-                            <div>
-                                <input class="form-control" id="contactEmail" th:field="*{contactEmail}">
                             </div>
                         </div>
                     </div>

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
-<title layout:fragment="title">Transfers</title>
+<title layout:fragment="title">Topups</title>
 <div class="card mb-4" layout:fragment="content">
-    <div class="card-header"><i class="fas fa-list mr-1"></i><span>Transfers</span></div>
+    <div class="card-header"><i class="fas fa-list mr-1"></i><span>Topups</span></div>
     <div class="card-body">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-8">
-                        <h2><b><span>Transfers</span></b></h2>
+                        <h2><b><span>Topups</span></b></h2>
                     </div>
                     <div class="col-sm-4">
                         <div class="row">
@@ -24,21 +24,21 @@
             <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
-                    <th>Transfer ID</th>
-                    <th>Recipient</th>
-                    <th>Amount(₦)</th>
-                    <th>Transfer Date & Time</th>
+                    <th>Topup ID</th>
+                    <th>Topup Method</th>
+                    <th>Amount (&#8358;)</th>
+                    <th>Topup Date</th>
                     <th>View Details</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="transfer : ${transferPage.content}">
-                    <td th:text="${transfer.id}"></td>
-                    <td th:text="${transfer.recipient}"></td>
-                    <td th:text="${transfer.amount}"></td>
-                    <td th:text="${transfer.transferDateTime}"></td>
+                <tr th:each="topup : ${topupPage.content}">
+                    <td th:text="${topup.id}"></td>
+                    <td th:text="${topup.mode}"></td>
+                    <td th:text="${topup.amount}"></td>
+                    <td th:text="${topup.topupDateTime}"></td>
                     <td>
-                        <a class="justify-content-center" th:href="@{/transfers/details/{id}(id=${transfer.id})}">
+                        <a class="justify-content-center" th:href="@{/topups/details/{id}(id=${topup.id})}">
                             <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
@@ -46,9 +46,9 @@
                 </tbody>
             </table>
             <div class="pagination" th:each="pageNumber : ${pageNumbers}"
-                 th:if="${transferPage.totalPages > 0}">
-                <a th:class="${pageNumber==transferPage.number + 1} ? active"
-                   th:href="@{/get(size=${transferPage.size}, page=${pageNumber})}">
+                 th:if="${topupPage.totalPages > 0}">
+                <a th:class="${pageNumber==topupPage.number + 1} ? active"
+                   th:href="@{/get(size=${topupPage.size}, page=${pageNumber})}">
                     <button class='btn btn-outline-default' th:text=${pageNumber}></button>
                 </a>
             </div>

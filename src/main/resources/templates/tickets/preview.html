@@ -17,13 +17,14 @@
                 <div class="row">
                     <div id="leftDiv"  class="col-8">
                         <div id="leftDivTop"  class="row">
-                            <div class="col-8">
+                            <div class="col-7">
                                 <img id="imgLogo" src="/img/logos/envato.jpg" alt="Operator Logo">
                                 <span th:text="${ticket.operator.firstName + ' ' + ticket.operator.lastName}">AK Transport</span>
                             </div>
-                            <div class="col-4">
-                                <div class="row" id="leftDivTopSeatClass"
-                                     th:text="${ticket.seatClass + ' CLASS'}"></div>
+                            <div class="col-5">
+                                <div ;class="row"
+                                     style="color:#311b92;margin-top:6px;margin-left:15px;font-weight:bold;"
+                                     th:text="${'TICKET/BOARDING PASS'}"></div>
                             </div>
                         </div>
 
@@ -33,7 +34,7 @@
                                     <div class="text-primary arrival_departure_text">DEPARTURE</div>
                                 </div>
                                 <div class="row">
-                                    <div class="big_text">lagos</div>
+                                    <div class="big_text" th:text="${ticket.schedule.startTerminal.state}">lagos</div>
                                 </div>
                                 <div class="row">
                                     <div class="arrival_departure_address"
@@ -45,13 +46,13 @@
                                 -->
                                 <hr>
                                 <div class="row">
-                                    <div class="text-muted arrival_departure_date"
-                                         th:text="${ticket.schedule.departureDateString}">13 AUGUST 2020
+                                    <div class="arrival_departure_time"
+                                         th:text="${ticket.schedule.departureDate}">13 AUGUST 2020
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="arrival_departure_time"
-                                         th:text="${ticket.schedule.departureTimeString}">
+                                         th:text="${ticket.schedule.departureTime}">
                                         08:00 AM
                                     </div>
                                 </div>
@@ -63,7 +64,9 @@
                                 </div>
 
                                 <div class="row">
-                                    <div id="travelTimeDivId" th:text="${ticket.schedule.duration + ' H'}">11.00 H</div>
+                                    <div id="travelTimeDivId" th:text="${ticket.schedule.duration + ' HOUR(S)'}">11.00
+                                        H
+                                    </div>
                                 </div>
                             </div>
 
@@ -73,7 +76,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="big_text">kaduna</div>
+                                    <div class="big_text" th:text="${ticket.schedule.stopTerminal.state}">kaduna</div>
                                 </div>
 
                                 <div class="row">
@@ -88,13 +91,13 @@
                                 <hr>
 
                                 <div class="row">
-                                    <div class="text-muted arrival_departure_date"
-                                         th:text="${ticket.schedule.arrivalDateString}">13 AUGUST 2020
+                                    <div class="arrival_departure_time"
+                                         th:text="${ticket.schedule.arrivalDate}">13 AUGUST 2020
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="arrival_departure_time" th:text="${ticket.schedule.arrivalTimeString}">
+                                    <div class="arrival_departure_time" th:text="${ticket.schedule.arrivalTime}">
                                         07:00 PM
                                     </div>
                                 </div>
@@ -159,29 +162,24 @@
 
                     <div id="rightDiv"  class="col-4">
                         <div style="height:70px;" class="row">
-                            <div class="col-6">
-                                <div style="color:#311b92;margin-top:6px;margin-left:15px;font-weight:bold;"; class="row" th:text="${'TICKET/BOARDING PASS'}"></div>
-                            </div>
-<!--                            <div  class="col-6">
-                                <div style="position:absolute;right:10px;" class="row">
-                                    <img style="width:50px;height:50px;" src="/img/logos/envato.jpg" alt="Operator Logo">
-                                </div>
-                            </div>-->
+                            <div class="row" id="leftDivTopSeatClass"
+                                 th:text="${ticket.seatClass + ' CLASS'}"></div>
                         </div>
 
                         <div style="margin:5px;padding:25px;height:375px;">
-                            <div class="row">
-                                <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">
-                                    NAME OF PASSENGER
+                            <div style="padding-left:25px;">
+                                <div class="row">
+                                    <div class="text-muted"
+                                         style="font-weight:normal;font-size:10px; font-family:Arial">
+                                        NAME OF PASSENGER
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div style="text-transform:uppercase;font-weight:bold;font-size:14px; font-family:Arial"
+                                         th:text="${ticket.passengerName}"></div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div style="text-transform:uppercase;font-weight:bold;font-size:14px; font-family:Arial"
-                                     th:text="${ticket.passengerName}"></div>
-                            </div>
-
-                            <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:80px;" class="col-12"> </div>
-
+                            <hr>
                             <div class="row">
                                 <div class="col-6" style="padding:25px; height:100px;">
                                     <div class="row">
@@ -209,9 +207,7 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div style="margin-top:10px;margin-bottom:10px;border-bottom:1px solid grey;width:80px;" class="col-12"> </div>
-
+                            <hr>
                             <div class="row">
                                 <div class="col-6" style="padding:25px;height:100px;">
                                     <div class="row">
@@ -227,19 +223,8 @@
                                     </div>
                                 </div>
 
-                                <div class="col-6" style="padding:25px;height:100px;">
-                                    <div class="row">
-                                        <div class="text-muted"
-                                             style="font-weight:normal;font-size:10px; font-family:Arial">ARRIVAL
-                                            TERMINAL
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div style="font-weight:bold;font-size:15px; font-family:Arial"
-                                             th:text="${ticket.schedule.stopTerminal.name}">ZARIA,KADUNA
-                                        </div>
-                                    </div>
+                                <div class="col-6" style="padding:25px;">
+                                    <img alt="QR Code" id="qrCode" src="/img/qr-code.png">
                                 </div>
                             </div>
                         </div>
@@ -247,8 +232,7 @@
                 </div>
             </div>
             <br>
-            <hr class="dotted">
-
+        <hr class="dotted-line">
     </div>
     </div>
 </html>

@@ -35,16 +35,16 @@ public class Schedule implements Serializable {
     @ManyToOne
     private VehicleCategory vehicle;
 
-    @DateTimeFormat(pattern = "MMMM dd, yyyy")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate departureDate;
 
-    @DateTimeFormat(pattern = "HH:mm aa")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime departureTime;
 
-    @DateTimeFormat(pattern = "MMMM dd, yyyy")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate arrivalDate;
 
-    @DateTimeFormat(pattern = "HH:mm aa")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime arrivalTime;
 
     private String duration;

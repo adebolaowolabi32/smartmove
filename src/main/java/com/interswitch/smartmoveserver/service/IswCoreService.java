@@ -97,6 +97,9 @@ public class IswCoreService {
                 permissions.add("VIEW_DRIVERS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_SERVICE_PROVIDERS");
+                permissions.add("VIEW_INSPECTORS");
+                permissions.add("VIEW_TICKETERS");
                 permissions.add("VIEW_VEHICLE_OWNERS");
                 permissions.add("VIEW_ADMINISTRATORS");
                 permissions.add("VIEW_TRANSACTIONS");
@@ -119,6 +122,9 @@ public class IswCoreService {
                 permissions.add("CREATE_DRIVER");
                 permissions.add("CREATE_OPERATOR");
                 permissions.add("CREATE_REGULATOR");
+                permissions.add("CREATE_SERVICE_PROVIDER");
+                permissions.add("CREATE_INSPECTOR");
+                permissions.add("CREATE_TICKETER");
                 permissions.add("CREATE_VEHICLE_OWNER");
                 permissions.add("CREATE_ADMINISTRATOR");
                 permissions.add("CREATE_WALLET");
@@ -141,6 +147,9 @@ public class IswCoreService {
                 permissions.add("VIEW_DRIVER_DETAILS");
                 permissions.add("VIEW_OPERATOR_DETAILS");
                 permissions.add("VIEW_REGULATOR_DETAILS");
+                permissions.add("VIEW_SERVICE_PROVIDER_DETAILS");
+                permissions.add("VIEW_INSPECTOR_DETAILS");
+                permissions.add("VIEW_TICKETER_DETAILS");
                 permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
                 permissions.add("VIEW_ADMINISTRATOR_DETAILS");
                 permissions.add("VIEW_TRANSACTION_DETAILS");
@@ -163,6 +172,9 @@ public class IswCoreService {
                 permissions.add("UPDATE_DRIVER");
                 permissions.add("UPDATE_OPERATOR");
                 permissions.add("UPDATE_REGULATOR");
+                permissions.add("UPDATE_SERVICE_PROVIDER");
+                permissions.add("UPDATE_INSPECTOR");
+                permissions.add("UPDATE_TICKETER");
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ADMINISTRATOR");
                 permissions.add("UPDATE_WALLET");
@@ -183,6 +195,9 @@ public class IswCoreService {
                 permissions.add("DELETE_DRIVER");
                 permissions.add("DELETE_OPERATOR");
                 permissions.add("DELETE_REGULATOR");
+                permissions.add("DELETE_SERVICE_PROVIDER");
+                permissions.add("DELETE_INSPECTOR");
+                permissions.add("DELETE_TICKETER");
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ADMINISTRATOR");
                 permissions.add("DELETE_WALLET");
@@ -196,14 +211,7 @@ public class IswCoreService {
 
 
                 permissions.add("VIEW_CARD_DETAILS");
-                permissions.add("VIEW_READER_DETAILS");
-                permissions.add("VIEW_TERMINAL_DETAILS");
-                permissions.add("VIEW_REGULATOR_DETAILS");
                 permissions.add("VIEW_WALLET_DETAILS");
-                permissions.add("VIEW_TRANSACTION_DETAILS");
-
-                permissions.add("UPDATE_READER");
-                permissions.add("UPDATE_WALLET");
 
                 return permissions;
             }
@@ -217,6 +225,8 @@ public class IswCoreService {
                 permissions.add("VIEW_DRIVERS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_INSPECTORS");
+                permissions.add("VIEW_TICKETERS");
                 permissions.add("VIEW_VEHICLE_OWNERS");
                 permissions.add("VIEW_TRANSACTIONS");
                 permissions.add("VIEW_SETTLEMENTS");
@@ -235,6 +245,8 @@ public class IswCoreService {
                 permissions.add("CREATE_DRIVER");
                 permissions.add("CREATE_OPERATOR");
                 permissions.add("CREATE_REGULATOR");
+                permissions.add("CREATE_INSPECTOR");
+                permissions.add("CREATE_TICKETER");
                 permissions.add("CREATE_VEHICLE_OWNER");
                 permissions.add("CREATE_ROUTE");
                 permissions.add("CREATE_VEHICLE_CATEGORY");
@@ -250,6 +262,8 @@ public class IswCoreService {
                 permissions.add("VIEW_DRIVER_DETAILS");
                 permissions.add("VIEW_OPERATOR_DETAILS");
                 permissions.add("VIEW_REGULATOR_DETAILS");
+                permissions.add("VIEW_INSPECTOR_DETAILS");
+                permissions.add("VIEW_TICKETER_DETAILS");
                 permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
                 permissions.add("VIEW_TRANSACTION_DETAILS");
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
@@ -268,6 +282,8 @@ public class IswCoreService {
                 permissions.add("UPDATE_DRIVER");
                 permissions.add("UPDATE_OPERATOR");
                 permissions.add("UPDATE_REGULATOR");
+                permissions.add("UPDATE_INSPECTOR");
+                permissions.add("UPDATE_TICKETER");
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ROUTE");
                 permissions.add("UPDATE_VEHICLE_CATEGORY");
@@ -283,6 +299,8 @@ public class IswCoreService {
                 permissions.add("DELETE_DRIVER");
                 permissions.add("DELETE_OPERATOR");
                 permissions.add("DELETE_REGULATOR");
+                permissions.add("DELETE_INSPECTOR");
+                permissions.add("DELETE_TICKETER");
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ROUTE");
                 permissions.add("DELETE_VEHICLE_CATEGORY");
@@ -299,6 +317,8 @@ public class IswCoreService {
                 permissions.add("VIEW_VALIDATORS");
                 permissions.add("VIEW_TERMINALS");
                 permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_INSPECTORS");
+                permissions.add("VIEW_TICKETERS");
                 permissions.add("VIEW_DRIVERS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_VEHICLE_OWNERS");
@@ -315,6 +335,8 @@ public class IswCoreService {
                 permissions.add("CREATE_READER");
                 permissions.add("CREATE_VALIDATOR");
                 permissions.add("CREATE_TERMINAL");
+                permissions.add("CREATE_INSPECTOR");
+                permissions.add("CREATE_TICKETER");
                 permissions.add("CREATE_DRIVER");
                 permissions.add("CREATE_OPERATOR");
                 permissions.add("CREATE_VEHICLE_OWNER");
@@ -331,6 +353,8 @@ public class IswCoreService {
                 permissions.add("VIEW_TERMINAL_DETAILS");
                 permissions.add("VIEW_REGULATOR_DETAILS");
                 permissions.add("VIEW_DRIVER_DETAILS");
+                permissions.add("VIEW_INSPECTOR_DETAILS");
+                permissions.add("VIEW_TICKETER_DETAILS");
                 permissions.add("VIEW_OPERATOR_DETAILS");
                 permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
                 permissions.add("VIEW_TRANSACTION_DETAILS");
@@ -347,6 +371,8 @@ public class IswCoreService {
                 permissions.add("UPDATE_VALIDATOR");
                 permissions.add("UPDATE_TERMINAL");
                 permissions.add("UPDATE_DRIVER");
+                permissions.add("UPDATE_INSPECTOR");
+                permissions.add("UPDATE_TICKETER");
                 permissions.add("UPDATE_OPERATOR");
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ROUTE");
@@ -361,6 +387,8 @@ public class IswCoreService {
                 permissions.add("DELETE_VALIDATOR");
                 permissions.add("DELETE_TERMINAL");
                 permissions.add("DELETE_DRIVER");
+                permissions.add("DELETE_INSPECTOR");
+                permissions.add("DELETE_TICKETER");
                 permissions.add("DELETE_OPERATOR");
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ROUTE");
@@ -395,14 +423,20 @@ public class IswCoreService {
             }
             case AGENT: {
                 permissions = new ArrayList<>();
+                permissions.add("VIEW_AGENTS");
                 permissions.add("VIEW_READERS");
                 permissions.add("VIEW_TERMINALS");
                 permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_TRANSACTIONS");
 
 
                 permissions.add("CREATE_READER");
+                permissions.add("CREATE_AGENT");
 
+                permissions.add("UPDATE_AGENT");
+
+                permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_CARD_DETAILS");
                 permissions.add("VIEW_READER_DETAILS");
                 permissions.add("VIEW_TERMINAL_DETAILS");
@@ -412,6 +446,9 @@ public class IswCoreService {
 
                 permissions.add("UPDATE_READER");
                 permissions.add("UPDATE_WALLET");
+
+                permissions.add("DELETE_AGENT");
+
                 return permissions;
             }
            default:
