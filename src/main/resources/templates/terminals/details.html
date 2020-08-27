@@ -20,48 +20,55 @@
 			</div>
 			<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{terminal.saved.message} : (${updated} ? #{terminal.updated.message} : false))"></div>
 			<div class="card p-3">
-				<div class="form-group row">
-					<label class="col-sm-2" for="name">Name</label>
-					<div class="col-sm-10">
-						<span id="name" th:text="${terminal.name}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="mode">Transport Mode</label>
-					<div class="col-sm-10">
-						<span id="mode" th:text="${terminal.mode}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="country">Country</label>
-					<div class="col-sm-10">
-						<span id="country" th:text="${terminal.country}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="state">State</label>
-					<div class="col-sm-10">
-						<span id="state" th:text="${terminal.state}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="lga">L.G.A.</label>
-					<div class="col-sm-10">
-						<span id="lga" th:text="${terminal.lga}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="owner">Owner</label>
-					<div class="col-sm-10">
-						<span id="owner" th:text="${terminal.owner.username}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="location">Location</label>
-					<div class="col-sm-10"><span id="location" th:text="${terminal.location}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="enabled">Active</label>
-					<div class="col-sm-10">
-						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${terminal.enabled}" disabled>
-							<span class="slider round"></span>
-						</label>
-						</span></div>
+				<div class="row">
+					<div class="col">
+						<div class="form-group row">
+							<label class="col-sm-4" for="name"><b>Name</b></label>
+							<div class="col-sm-8">
+								<span id="name" th:text="${terminal.name}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="mode"><b>Transport Mode</b></label>
+							<div class="col-sm-8">
+								<span id="mode" th:text="${terminal.mode}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="country"><b>Country</b></label>
+							<div class="col-sm-8">
+								<span id="country" th:text="${terminal.country}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="state"><b>State</b></label>
+							<div class="col-sm-8">
+								<span id="state" th:text="${terminal.state}"></span></div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group row">
+							<label class="col-sm-4" for="lga"><b>L.G.A.</b></label>
+							<div class="col-sm-8">
+								<span id="lga" th:text="${terminal.lga}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="control-label col-sm-4" for="owner"><b>Owner</b></label>
+							<div class="col-sm-8">
+								<span id="owner" th:text="${terminal.owner.username}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="location"><b>Location</b></label>
+							<div class="col-sm-8"><span id="location" th:text="${terminal.location}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="enabled"><b>Active</b></label>
+							<div class="col-sm-8">
+								<label class="switch">
+									<input disabled id="enabled" name="enabled" th:checked="${terminal.enabled}"
+										   type="checkbox">
+									<span class="slider round"></span>
+								</label>
+								</span></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
