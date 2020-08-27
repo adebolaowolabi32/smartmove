@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -64,7 +63,8 @@ public class DocumentService {
     public Document saveDocument(Document doc) {
         try {
             MultipartFile file = doc.getFile();
-            if (file == null || file.getSize()<=0) throw new ResponseStatusException(HttpStatus.PARTIAL_CONTENT, "file part not specified");
+            if (file == null || file.getSize() <= 0)
+                throw new ResponseStatusException(HttpStatus.PARTIAL_CONTENT, "file part not specified");
             String fileName = generateFileName(file);
             Path filePath = uploadDir.resolve(fileName);
             file.transferTo(filePath);

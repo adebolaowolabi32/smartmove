@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 

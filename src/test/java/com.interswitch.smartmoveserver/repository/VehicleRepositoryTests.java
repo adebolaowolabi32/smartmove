@@ -3,20 +3,21 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class VehicleRepositoryTests {
     @Autowired
@@ -28,7 +29,7 @@ public class VehicleRepositoryTests {
     private Vehicle vehicle;
     private Vehicle savedVehicle;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         vehicle = new Vehicle();
         vehicle.setName("vehicle_A");
@@ -50,9 +51,9 @@ public class VehicleRepositoryTests {
     @Test
     public void testFindById() {
         vehicleRepository.findById(savedVehicle.getId()).ifPresent(vehicle1 -> {
-            assertThat(vehicle1.getDevice()).isEqualTo(vehicle1.getDevice());
-            assertThat(vehicle1.getOwner()).isEqualTo(vehicle1.getOwner());
-            assertThat(vehicle1.getRegNo()).isEqualTo(vehicle1.getRegNo());
+            assertEquals(vehicle1.getDevice(), vehicle1.getDevice());
+            assertEquals(vehicle1.getOwner(), vehicle1.getOwner());
+            assertEquals(vehicle1.getRegNo(), vehicle1.getRegNo());
         });
     }
 
@@ -71,7 +72,7 @@ public class VehicleRepositoryTests {
 */
 
 
-    @After
+    @AfterAll
     public void testDelete() {
         vehicleRepository.deleteAll();
         assertEquals(vehicleRepository.findAll().iterator().hasNext(), false);

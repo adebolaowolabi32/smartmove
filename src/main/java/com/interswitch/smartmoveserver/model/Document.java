@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.model;
 
-import com.interswitch.smartmoveserver.util.FilefileOpsUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,14 +7,13 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.io.IOException;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="documents")
+@Table(name = "documents")
 public class Document {
 
     @Id
@@ -39,6 +37,6 @@ public class Document {
     public Document(MultipartFile file) {
         this.file = file;
         this.name = file.getOriginalFilename();
-        this.docType=file.getContentType();
+        this.docType = file.getContentType();
     }
 }

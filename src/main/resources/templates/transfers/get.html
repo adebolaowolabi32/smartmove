@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Transfers</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-list mr-1"></i><span>Transfers</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2><b><span>E-Wallet History</span></b></h2>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fas fa-sync-alt"></i> Refresh
+                                List</a>
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fa fa-file-export"></i> Export
+                                to Excel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="title-text"><b>OUTGOING</b></span>
+                    <a style="float:right;" th:href="@{/transfers/transfer}">
+                        <button class='btn btn-outline-dark' style="margin:5px" type='button'><i
+                                class="fas fa-upload"></i>
+                            Transfer Funds
+                        </button>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div th:replace="fragments/alert-success :: alert-success (message=${success} ? #{wallet.transfer.message} : false)"></div>
+                    <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
+                        <thead class='thead-light'>
+                        <tr>
+                            <th>Transfer ID</th>
+                            <th>Recipient</th>
+                            <th>Amount (&#8358;)</th>
+                            <th>Transfer Date Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="transfer : ${transferPage.content}">
+                            <td th:text="${transfer.id}"></td>
+                            <td th:text="${transfer.recipient}"></td>
+                            <td th:text="${transfer.amount}"></td>
+                            <td th:text="${transfer.transferDateTime}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    <span class="title-text"><b>INCOMING</b></span>
+                    <a style="float:right;" th:href="@{/transfers/transfer}">
+                        <button class='btn btn-outline-dark' style="margin:5px" type='button'><i
+                                class="fas fa-download"></i>
+                            Fund Wallet
+                        </button>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table cellspacing="0" class="table table-bordered table-responsive-sm" width="100%">
+                        <thead class='thead-light'>
+                        <tr>
+                            <th>Transfer ID</th>
+                            <th>Sender</th>
+                            <th>Amount (&#8358;)</th>
+                            <th>Transfer Date Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>QUICKTELLER_TOKEN_RECHARGE</td>
+                            <td>20000</td>
+                            <td>Aug 26 2020 04:30 PM</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--<div class="pagination" th:each="pageNumber : ${pageNumbers}"
+                 th:if="${transferPage.totalPages > 0}">
+                <a th:class="${pageNumber==transferPage.number + 1} ? active"
+                   th:href="@{/get(size=${transferPage.size}, page=${pageNumber})}">
+                    <button class='btn btn-outline-default' th:text=${pageNumber}></button>
+                </a>
+            </div>-->
+        </div>
+    </div>
+</div>
+</html>

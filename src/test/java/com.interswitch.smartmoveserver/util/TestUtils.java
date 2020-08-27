@@ -13,6 +13,7 @@ public final class TestUtils {
         user.setRole(Enum.Role.VEHICLE_OWNER);
         user.setEmail("alice@example.com");
         user.setMobileNo("123456789");
+        user.setEnabled(true);
         return user;
     }
 }

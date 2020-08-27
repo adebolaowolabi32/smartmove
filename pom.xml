@@ -19,11 +19,14 @@
         <bootstrap.version>4.4.1-1</bootstrap.version>
         <parsleyjs.version>2.8.1</parsleyjs.version>
         <json-path.version>2.4.0</json-path.version>
+        <json-smart.version>2.3</json-smart.version>
         <spring-security-oauth-boot.version>2.2.5.RELEASE</spring-security-oauth-boot.version>
         <thymeleaf-security.version>3.0.4.RELEASE</thymeleaf-security.version>
         <spring-security.version>5.3.0.RELEASE</spring-security.version>
-    	<fortify-plugin.version>1.0-SNAPSHOT</fortify-plugin.version>
-        <junit.jupiter.version>5.6.0</junit.jupiter.version>
+        <thymeleaf-layout.version>2.3.0</thymeleaf-layout.version>
+        <spring-webflow.version>2.5.1.RELEASE</spring-webflow.version>
+        <spring-webflow-js.version>2.4.8.RELEASE</spring-webflow-js.version>
+        <fortify-plugin.version>1.0-SNAPSHOT</fortify-plugin.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
 	</properties>
   <build>
@@ -44,7 +47,7 @@
             <version>${sonar-maven-plugin.version}</version>
         </plugin>
     </plugins>
-</build>
+  </build>
 
     <dependencies>
         <dependency>
@@ -98,17 +101,17 @@
         <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
-            <version>2.3.0</version>
+            <version>${thymeleaf-layout.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.webflow</groupId>
             <artifactId>spring-webflow</artifactId>
-            <version>2.5.1.RELEASE</version>
+            <version>${spring-webflow.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.webflow</groupId>
             <artifactId>spring-js</artifactId>
-            <version>2.4.8.RELEASE</version>
+            <version>${spring-webflow-js.version}</version>
         </dependency>
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
@@ -147,11 +150,19 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${json-path.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>${json-smart.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-java8time</artifactId>
         </dependency>
-
     </dependencies>
 </project>

@@ -5,16 +5,18 @@ import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.CardService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -26,7 +28,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest(excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @ContextConfiguration(classes = CardApi.class)
 public class CardApiTests {
@@ -38,7 +41,7 @@ public class CardApiTests {
 
     private Card card;
 
-    @Before
+    @BeforeAll
     public void setup() {
         card = new Card();
         long id = 1000013;
@@ -54,7 +57,7 @@ public class CardApiTests {
     @Test
     public void testSave() throws Exception {
         when(cardService.save(card)).thenReturn(card);
-        mvc.perform(post("/cards")
+        mvc.perform(post("/api/cards")
                 .content(new ObjectMapper().writeValueAsString(card))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -65,7 +68,7 @@ public class CardApiTests {
     @Test
     public void testUpdate() throws Exception {
         when(cardService.update(card)).thenReturn(card);
-        mvc.perform(put("/cards")
+        mvc.perform(put("/api/cards")
                 .content(new ObjectMapper().writeValueAsString(card))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -76,7 +79,7 @@ public class CardApiTests {
     @Test
     public void testfindAll() throws Exception {
         when(cardService.findAll()).thenReturn(Arrays.asList(card, new Card()));
-        mvc.perform(get("/cards")
+        mvc.perform(get("/api/cards")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -88,7 +91,7 @@ public class CardApiTests {
     @Test
     public void testGetFindById() throws Exception {
         when(cardService.findById(card.getId())).thenReturn(card);
-        mvc.perform(get("/cards/{id}", card.getId())
+        mvc.perform(get("/api/cards/{id}", card.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -105,9 +108,9 @@ public class CardApiTests {
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(card)));
     }*/
 
-    @Test
+    @AfterAll
     public void testDelete() throws Exception {
-        mvc.perform(delete("/cards/{id}", card.getId())
+        mvc.perform(delete("/api/cards/{id}", card.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

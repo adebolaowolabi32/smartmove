@@ -3,22 +3,22 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class DeviceRepositoryTests {
     @Autowired
@@ -30,7 +30,7 @@ public class DeviceRepositoryTests {
     private Device device;
     private Device savedDevice;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         device = new Device();
         device.setName("agent_device_A");
@@ -60,12 +60,12 @@ public class DeviceRepositoryTests {
     @Test
     public void testFindById() {
         deviceRepository.findById(savedDevice.getId()).ifPresent(device1 -> {
-            assertThat(device1.getOwner()).isEqualTo(device.getOwner());
-            assertThat(device1.getType()).isEqualTo(device.getType());
-            assertThat(device1.getDeviceStatus()).isEqualTo(device.getDeviceStatus());
-            assertThat(device1.getHardwareVersion()).isEqualTo(device.getHardwareVersion());
-            assertThat(device1.getSoftwareVersion()).isEqualTo(device.getSoftwareVersion());
-            assertThat(device1.getFareType()).isEqualTo(device.getFareType());
+            assertEquals(device1.getOwner(), device.getOwner());
+            assertEquals(device1.getType(), device.getType());
+            assertEquals(device1.getDeviceStatus(), device.getDeviceStatus());
+            assertEquals(device1.getHardwareVersion(), device.getHardwareVersion());
+            assertEquals(device1.getSoftwareVersion(), device.getSoftwareVersion());
+            assertEquals(device1.getFareType(), device.getFareType());
 
         });
     }
@@ -73,16 +73,16 @@ public class DeviceRepositoryTests {
     @Test
     public void testFindAll() {
         List<Device> devices = deviceRepository.findAll();
-        assertThat(devices.size()).isGreaterThanOrEqualTo(2);
+        assertTrue(devices.size() >= 2);
     }
 
     @Test
     public void testFindByOwner() {
         List<Device> devices = deviceRepository.findAllByOwner(device.getOwner());
-        assertThat(devices.size()).isGreaterThanOrEqualTo(1);
+        assertTrue(devices.size() >= 1);
     }
 
-    @After
+    @AfterAll
     public void testDelete() {
         deviceRepository.deleteAll();
         assertEquals(deviceRepository.findAll().iterator().hasNext(), false);

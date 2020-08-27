@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Device;
+import com.interswitch.smartmoveserver.model.FundDevice;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.DeviceService;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -99,5 +100,25 @@ public class DeviceController {
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/devices/get?owner=" + ownerId;
+    }
+
+    @GetMapping("/fund/{id}")
+    public String transfer(Principal principal, @PathVariable("id") long id, Model model) {
+        FundDevice fundDevice = new FundDevice();
+        fundDevice.setDeviceId(id);
+        model.addAttribute("fundDevice", fundDevice);
+        return "devices/fund";
+    }
+
+    @PostMapping("/fund/{id}")
+    public String transfer(Principal principal, @PathVariable("id") long id, @Valid FundDevice fundDevice, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        fundDevice.setDeviceId(id);
+        if (result.hasErrors()) {
+            model.addAttribute("fundDevice", new FundDevice());
+            return "devices/fund";
+        }
+        deviceService.fundDevice(principal, fundDevice);
+        redirectAttributes.addFlashAttribute("funded", true);
+        return "redirect:/devices/details/" + fundDevice.getDeviceId();
     }
 }

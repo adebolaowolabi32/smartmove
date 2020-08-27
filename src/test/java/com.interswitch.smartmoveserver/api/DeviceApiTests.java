@@ -11,16 +11,17 @@ import com.interswitch.smartmoveserver.model.response.DeviceConnectionResponse;
 import com.interswitch.smartmoveserver.model.response.GetDeviceIdResponse;
 import com.interswitch.smartmoveserver.model.response.GetOwnerIdResponse;
 import com.interswitch.smartmoveserver.service.DeviceService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -31,7 +32,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest(excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @ContextConfiguration(classes = DeviceApi.class)
 public class DeviceApiTests {
@@ -50,7 +52,7 @@ public class DeviceApiTests {
     private DeviceConnection deviceConnection;
     private DeviceConnectionResponse deviceConnectionResponse;
 
-    @Before
+    @BeforeAll
     public void setup() {
         device = new Device();
         long id = 10000023;
@@ -73,7 +75,7 @@ public class DeviceApiTests {
     @Test
     public void testSave() throws Exception {
         when(deviceService.save(device)).thenReturn(device);
-        mvc.perform(post("/devices")
+        mvc.perform(post("/api/devices")
                 .content(new ObjectMapper().writeValueAsString(device))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -84,7 +86,7 @@ public class DeviceApiTests {
     @Test
     public void testUpdate() throws Exception {
         when(deviceService.update(device)).thenReturn(device);
-        mvc.perform(put("/devices")
+        mvc.perform(put("/api/devices")
                 .content(new ObjectMapper().writeValueAsString(device))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -95,7 +97,7 @@ public class DeviceApiTests {
     @Test
     public void testfindAll() throws Exception {
         when(deviceService.findAll()).thenReturn(Arrays.asList(device, new Device()));
-        mvc.perform(get("/devices")
+        mvc.perform(get("/api/devices")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -107,7 +109,7 @@ public class DeviceApiTests {
     @Test
     public void testGetFindById() throws Exception {
         when(deviceService.findById(device.getId())).thenReturn(device);
-        mvc.perform(get("/devices/{id}", device.getId())
+        mvc.perform(get("/api/devices/{id}", device.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -116,7 +118,7 @@ public class DeviceApiTests {
 
     @Test
     public void testDelete() throws Exception {
-        mvc.perform(delete("/devices/{id}", device.getId())
+        mvc.perform(delete("/api/devices/{id}", device.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -125,7 +127,7 @@ public class DeviceApiTests {
     public void testConnectDevice() throws Exception {
         when(deviceService.connectDevice(deviceConnection)).thenReturn(deviceConnectionResponse);
 
-        mvc.perform(post("/devices/connect")
+        mvc.perform(post("/api/devices/connect")
                 .content(new ObjectMapper().writeValueAsString(deviceConnection))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

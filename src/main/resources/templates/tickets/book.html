@@ -50,14 +50,15 @@
                 <div class="form-group col">
                     <label class="control-label" for="noOfPassengers">Seats</label>
                     <div>
-                        <input class="form-control" type="number" value="1" th:field="*{noOfPassengers}" id="noOfPassengers">
+                        <input class="form-control" id="noOfPassengers" th:field="*{noOfPassengers}" th:value="1"
+                               type="number">
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-10"></div>
                 <div class="col-sm-2">
-                    <input type="submit" class="btn btn-outline-primary btn-sized" value="Proceed"/>
+                    <input class="btn btn-outline-info btn-sized" type="submit" value="Proceed"/>
                 </div>
             </div>
             <input type="hidden" name="_eventId" value="findBooking"/>

@@ -3,22 +3,22 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class TerminalRepositoryTests {
     @Autowired
@@ -30,7 +30,7 @@ public class TerminalRepositoryTests {
     private Terminal terminal;
     private Terminal savedTerminal;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         terminal = new Terminal();
         terminal.setName("my_terminal");
@@ -54,28 +54,28 @@ public class TerminalRepositoryTests {
     @Test
     public void testFindById() {
         terminalRepository.findById(savedTerminal.getId()).ifPresent(terminal1 -> {
-            assertThat(terminal1.getName()).isEqualTo(terminal.getName());
-            assertThat(terminal1.getOwner()).isEqualTo(terminal.getOwner());
-            assertThat(terminal1.getMode()).isEqualTo(terminal.getMode());
-            assertThat(terminal1.getLocation()).isEqualTo(terminal.getLocation());
-            assertThat(terminal1.isEnabled()).isEqualTo(terminal.isEnabled());
+            assertEquals(terminal1.getName(), terminal.getName());
+            assertEquals(terminal1.getOwner(), terminal.getOwner());
+            assertEquals(terminal1.getMode(), terminal.getMode());
+            assertEquals(terminal1.getLocation(), terminal.getLocation());
+            assertEquals(terminal1.isEnabled(), terminal.isEnabled());
         });
     }
 
     @Test
     public void testFindAll() {
         List<Terminal> terminals = terminalRepository.findAll();
-        assertThat(terminals.size()).isGreaterThanOrEqualTo(2);
+        assertTrue(terminals.size() >= 2);
     }
 
     @Test
     public void testFindByOwner() {
         List<Terminal> terminals = terminalRepository.findAllByOwner(savedTerminal.getOwner());
-        assertThat(terminals.size()).isGreaterThanOrEqualTo(1);
+        assertTrue(terminals.size() >= 1);
     }
 
 
-    @After
+    @AfterAll
     public void testDelete() {
         terminalRepository.deleteAll();
         assertEquals(terminalRepository.findAll().iterator().hasNext(), false);
