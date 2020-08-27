@@ -15438,7 +15438,7 @@ body {
 
 	.table-title {
 		color: #fff;
-		background: #03567c;	
+		background: #03567c;
 		padding: 15px 15px;
 		margin: 0px 0px 20px 0px;
 		border-radius: 3px 3px 0 0;
@@ -15447,7 +15447,7 @@ body {
 		margin: 5px 0 0;
 		font-size: 24px;
 	}
-	
+
     table.table tr th, table.table tr td {
         border-color: #e9e9e9;
 		padding: 12px 15px;
@@ -15469,7 +15469,7 @@ body {
         font-size: 13px;
         margin: 0 5px;
         cursor: pointer;
-    }	
+    }
 	table.table td a {
 		font-weight: bold;
 		color: #566787;
@@ -15479,7 +15479,7 @@ body {
 	table.table td a:hover {
 		color: #2196F3;
 	}
-	table.table td a.view {        
+	table.table td a.view {
 		width: 30px;
 		height: 30px;
 		color: #2196F3;
@@ -15490,7 +15490,7 @@ body {
     table.table td a.view i {
         font-size: 22px;
 		margin: 2px 0 0 1px;
-    }   
+    }
 	table.table .avatar {
 		border-radius: 50%;
 		vertical-align: middle;
@@ -15533,11 +15533,11 @@ body {
     }
     .pagination li a:hover {
         color: #666;
-    }	
+    }
     .pagination li.active a {
         background: #03A9F4;
     }
-    .pagination li.active a:hover {        
+    .pagination li.active a:hover {
         background: #0397d6;
     }
 	.pagination li.disabled i {
@@ -15558,7 +15558,7 @@ body {
         float: left;
         margin-top: 10px;
         font-size: 13px;
-    }  
+    }
 	.padded {
 		  padding: 0px 20px 50px 20px;
 	}

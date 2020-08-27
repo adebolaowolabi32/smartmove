@@ -1,97 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layouts/default.html}">
+      layout:decorate="~{layouts/default.html}">
 <title layout:fragment="title" th:text="${title}">Users</title>
 
 <div layout:fragment="content" class="card mb-4">
-		<div class="card-header"><i class="fas fa-user mr-1"></i><span th:text="${title}">Users</span></div>
-		<div class="card-body">
-			<div class="table-title">
-				<div class="row">
-					<div class="col-sm-4">
-						<h2><b>Update <span th:text="${title}">User</span></b></h2>
-					</div>
-				</div>
-			</div>
-			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<form class="card p-3" action="#" method="post"
-				  th:action="@{/users/update/{id}(id=${user.id})}" th:object="${user}"
-				  data-parsley-validate="true" autocomplete="off">
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="firstName"><b>First Name</b></label>
-					<div class="col-sm-10">
-						<input disabled class="form-control"
-							   id="firstName" name="firstName" th:field="*{firstName}"
-							   required
-							   data-parsley-required-message="Please provide your first name"
-							   data-parsley-length="[3, 40]"
-							   data-parsley-length-message="Please provide a name between 3 and 40 characters long">
-						<p class="small text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="email"><b>Last Name</b></label>
-					<div class="col-sm-10">
-						<input disabled type="text" class="form-control"
-							   id="lastName" name="lastName" th:field="*{lastName}"
-							   required
-							   data-parsley-required-message="Please provide your last name"
-							   data-parsley-length="[3, 40]"
-							   data-parsley-length-message="Please provide a name between 3 and 40 characters long" >
-						<p class="small text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="email"><b>Email Address</b></label>
-					<div class="col-sm-10">
-						<input disabled class="form-control"
-							   type="email"
-							   id="email" name="email" th:field="*{email}"
-							   required
-							   data-parsley-required-message="Please provide your email address"
-							   data-parsley-maxlength="70"
-							   data-parsley-maxlength-message="Please provide an email no more than 70 characters long">
-						<p class="small text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="mobileNo"><b>Mobile Number</b></label>
-					<div class="col-sm-10">
-						<input disabled class="form-control"
-							   id="mobileNo" name="mobileNo" th:field="*{mobileNo}"
-							   data-parsley-pattern="^((\+|00)?[1-9]|0)\d{1,14}$"
-							   data-parsley-error-message="Please provide a valid mobile number">
-						<p class="small text-danger" th:if="${#fields.hasErrors('mobileNo')}" th:errors="*{mobileNo}"></p>
-					</div>
-				</div>
+    <div class="card-header"><i class="fas fa-user mr-1"></i><span th:text="${title}">Users</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b>Update <span th:text="${title}">User</span></b></h2>
+                </div>
+            </div>
+        </div>
+        <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+        <form action="#" autocomplete="off" class="card p-3"
+              data-parsley-validate="true" method="post"
+              th:action="@{/users/update/{id}(id=${user.id})}" th:object="${user}">
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="firstName"><b>First Name</b></label>
+                <div class="col-sm-10">
+                    <input class="form-control" data-parsley-length="[3, 40]"
+                           data-parsley-length-message="Please provide a name between 3 and 40 characters long"
+                           data-parsley-required-message="Please provide your first name" disabled
+                           id="firstName"
+                           name="firstName"
+                           required
+                           th:field="*{firstName}">
+                    <p class="small text-danger" th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}"></p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="email"><b>Last Name</b></label>
+                <div class="col-sm-10">
+                    <input class="form-control" data-parsley-length="[3, 40]"
+                           data-parsley-length-message="Please provide a name between 3 and 40 characters long"
+                           data-parsley-required-message="Please provide your last name" disabled id="lastName"
+                           name="lastName"
+                           required
+                           th:field="*{lastName}"
+                           type="text">
+                    <p class="small text-danger" th:errors="*{lastName}" th:if="${#fields.hasErrors('lastName')}"></p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="email"><b>Email Address</b></label>
+                <div class="col-sm-10">
+                    <input class="form-control" data-parsley-maxlength="70"
+                           data-parsley-maxlength-message="Please provide an email no more than 70 characters long"
+                           data-parsley-required-message="Please provide your email address" disabled id="email"
+                           name="email"
+                           required
+                           th:field="*{email}"
+                           type="email">
+                    <p class="small text-danger" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="mobileNo"><b>Mobile Number</b></label>
+                <div class="col-sm-10">
+                    <input class="form-control" data-parsley-error-message="Please provide a valid mobile number"
+                           data-parsley-pattern="^((\+|00)?[1-9]|0)\d{1,14}$" disabled id="mobileNo"
+                           name="mobileNo"
+                           th:field="*{mobileNo}">
+                    <p class="small text-danger" th:errors="*{mobileNo}" th:if="${#fields.hasErrors('mobileNo')}"></p>
+                </div>
+            </div>
 
-				<div class="form-group row" th:if="${isOwned}">
-					<label class="control-label col-sm-2" for="owner"><b>Owner</b></label>
-					<div class="col-sm-10">
-						<select disabled class="form-control" th:field="*{owner}"  id="owner">
-							<option value="">Select...</option>
-							<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
-						</select>
-						<p class="small text-danger" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></p>
-					</div>
-				</div>
+            <div class="form-group row" th:if="${isOwned}">
+                <label class="control-label col-sm-2" for="owner"><b>Owner</b></label>
+                <div class="col-sm-10">
+                    <select class="form-control" disabled id="owner" th:field="*{owner}">
+                        <option value="">Select...</option>
+                        <option th:each="owner : ${owners}" th:text="${owner != null ? owner.username : ''}"
+                                th:value="${owner.id}"></option>
+                    </select>
+                    <p class="small text-danger" th:errors="*{owner}" th:if="${#fields.hasErrors('owner')}"></p>
+                </div>
+            </div>
 
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="enabled"><b>Active</b></label>
-					<div class="col-sm-10">
-						<label class="switch">
-							<input type="checkbox" name="enabled" id="enabled" th:checked="${user.enabled}">
-							<span class="slider round"></span>
-						</label>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-8"></div>
-					<div class="col-sm-2">
-						<button type="submit" class="btn btn-outline-primary btn-sized">Submit</button>
-					</div>
-					<div class="col-sm-2"></div>
-				</div>
-			</form>
-		</div>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="enabled"><b>Active</b></label>
+                <div class="col-sm-10">
+                    <label class="switch">
+                        <input id="enabled" name="enabled" th:checked="${user.enabled}" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-2">
+                    <button class="btn btn-outline-primary btn-sized" type="submit">Submit</button>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </form>
+    </div>
+</div>
 </html>

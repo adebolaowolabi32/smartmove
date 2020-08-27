@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -43,4 +44,8 @@ public class User implements Serializable {
     private User owner;
 
     private boolean enabled;
+
+    private String pictureUrl;
+
+    private transient MultipartFile picture;
 }

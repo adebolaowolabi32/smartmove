@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /*
- * Created by adebola.owolabi on 8/10/2020
+ * Created by earnest.suru on 8/10/2020
  */
 @Data
 @Entity
@@ -24,4 +24,5 @@ public class State implements Serializable {
 
     @ElementCollection(targetClass=String.class)
     private List<String> localGovts;
+
 }
