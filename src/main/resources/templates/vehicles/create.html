@@ -19,7 +19,7 @@
 			  th:action="@{/vehicles/create}" th:object="${vehicle}"
 			  data-parsley-validate="true" enctype="multipart/form-data">
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="category">Category</label>
+				<label class="control-label col-sm-2" for="category"><b>Category</b></label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{category}"  id="category" required>
 						<option value="">Select...</option>
@@ -29,7 +29,7 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="name">Name</label>
+				<label class="control-label col-sm-2" for="name"><b>Name</b></label>
 				<div class="col-sm-10">
 					<input class="form-control"
 						   id="name" name="name" th:field="*{name}"
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="regNo">Registration Number</label>
+				<label class="control-label col-sm-2" for="regNo"><b>Registration Number</b></label>
 				<div class="col-sm-10">
 					<input class="form-control"
 						   id="regNo" name="regNo" th:field="*{regNo}"
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="owner">Owner</label>
+				<label class="control-label col-sm-2" for="owner"><b>Owner</b></label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{owner}"  id="owner" required>
 						<option value="">Select...</option>
@@ -66,13 +66,14 @@
 			<div class="form-group row">
 				<label class="control-label col-sm-2" for="pic">Picture</label>
 				<div class="col-sm-10">
-					<input type="file" name="picture" th:field="*{picture}"  class="form-control-file">
-					<p id="pic" class="small text-danger" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></p>
+					<input class="form-control-file" name="picture" th:field="*{picture}" type="file">
+					<p class="small text-danger" id="pic" th:errors="*{owner}"
+					   th:if="${#fields.hasErrors('owner')}"></p>
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="device">Device</label>
+				<label class="control-label col-sm-2" for="device"><b>Device</b></label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{device}" id="device">
 						<option value="">Select...</option>
@@ -82,7 +83,7 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="enabled">Active</label>
+				<label class="control-label col-sm-2" for="enabled"><b>Active</b></label>
 				<div class="col-sm-10">
 					<label class="switch">
 						<input type="checkbox" name="enabled" id="enabled">
@@ -92,10 +93,11 @@
 			</div>
 
 			<div class="row">
-				<div class="col-sm-10"></div>
+				<div class="col-sm-8"></div>
 				<div class="col-sm-2">
 					<button type="submit" class="btn btn-outline-primary btn-sized">Submit</button>
 				</div>
+				<div class="col-sm-2"></div>
 			</div>
 		</form>
 	</div>

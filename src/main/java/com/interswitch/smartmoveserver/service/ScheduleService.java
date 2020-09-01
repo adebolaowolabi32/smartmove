@@ -3,7 +3,6 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
-import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,8 +51,12 @@ public class ScheduleService {
 
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Schedule already exists");
 
-        schedule.setArrivalString(DateUtil.formatDate(schedule.getArrival()));
-        schedule.setDepartureString(DateUtil.formatDate(schedule.getDeparture()));
+        Duration duration = Duration.between(schedule.getDepartureTime(), schedule.getArrivalTime());
+        schedule.setDuration(String.valueOf(duration.getSeconds() / 60 / 60));
+        /*schedule.setArrivalDateString(DateUtil.formatDate(schedule.getArrivalDate()));
+        schedule.setDepartureDateString(DateUtil.formatDate(schedule.getDepartureDate()));
+        schedule.setArrivalTimeString(DateUtil.formatTime(schedule.getArrivalTime()));
+        schedule.setDepartureTimeString(DateUtil.formatTime(schedule.getDepartureTime()));*/
         //schedule.setName(schedule.getStartTerminal().getName() + " - " + schedule.getStopTerminal().getName() + " " + schedule.getDepartureString());
         return scheduleRepository.save(schedule);
     }

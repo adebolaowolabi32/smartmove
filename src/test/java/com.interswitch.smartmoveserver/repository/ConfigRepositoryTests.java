@@ -2,21 +2,21 @@ package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Config;
 import com.interswitch.smartmoveserver.model.Enum;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class ConfigRepositoryTests {
     @Autowired
@@ -25,7 +25,7 @@ public class ConfigRepositoryTests {
     private Config config;
     private Config savedConfig;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         config = new Config();
         config.setName(Enum.ConfigList.TRANSACTION_UPLOAD_PERIOD);
@@ -41,25 +41,26 @@ public class ConfigRepositoryTests {
     @Test
     public void testFindById() {
         configRepository.findById(savedConfig.getId()).ifPresent(config1 -> {
-            assertThat(config1.getName()).isEqualTo(config.getName());
-            assertThat(config1.getValue()).isEqualTo(config.getValue());
+            assertEquals(config1.getName(), config.getName());
+            assertEquals(config1.getValue(), config.getValue());
         });
     }
 
     @Test
     public void testFindByName() {
         configRepository.findByName(savedConfig.getName()).ifPresent(config1 -> {
-            assertThat(config1.getId()).isEqualTo(config.getId());
-            assertThat(config1.getValue()).isEqualTo(config.getValue());
+            assertEquals(config1.getId(), config.getId());
+            assertEquals(config1.getValue(), config.getValue());
         });
     }
 
     @Test
     public void testFindAll() {
         List<Config> configs = configRepository.findAll();
-        assertThat(configs.size()).isGreaterThanOrEqualTo(2);    }
+        assertTrue(configs.size() >= 2);
+    }
 
-    @After
+    @AfterAll
     public void testDelete() {
         configRepository.deleteAll();
         assertEquals(configRepository.findAll().iterator().hasNext(), false);

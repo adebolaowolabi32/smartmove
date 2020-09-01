@@ -1,9 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.Vehicle;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.request.DeviceConnection;
 import com.interswitch.smartmoveserver.model.request.GetDeviceId;
 import com.interswitch.smartmoveserver.model.response.DeviceConnectionResponse;
@@ -39,6 +37,15 @@ public class DeviceService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private WalletService walletService;
+
+    @Autowired
+    private TransferService transferService;
 
     @Autowired
     SecurityUtil securityUtil;
@@ -119,9 +126,6 @@ public class DeviceService {
     }
 
     public Device save(Device device) {
-        long id = device.getId();
-        boolean exists = deviceRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Device already exists");
         return deviceRepository.save(device);
     }
 
@@ -194,6 +198,30 @@ public class DeviceService {
         else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist");
         }
+    }
+
+    public String fundDevice(Principal principal, FundDevice fundDevice) {
+        double amount = fundDevice.getAmount();
+        Wallet wallet = walletService.findByOwner(principal.getName());
+        Device device = findById(fundDevice.getDeviceId());
+        double deviceBalance = device.getBalance();
+        double walletBalance = wallet.getBalance();
+        if (walletBalance >= amount) {
+            walletBalance = walletBalance - amount;
+            deviceBalance = deviceBalance + amount;
+            wallet.setBalance(walletBalance);
+            device.setBalance(deviceBalance);
+            walletService.save(wallet);
+            save(device);
+            Transfer transfer1 = new Transfer();
+            transfer1.setAmount(amount);
+            transfer1.setRecipient("Device - " + fundDevice.getDeviceId());
+            transfer1.setWallet(wallet);
+            transfer1.setTransferDateTime(LocalDateTime.now());
+            transferService.save(transfer1);
+        }
+        return "Insufficient funds";
+        //throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Insufficient funds");
     }
 
     public void activate(long deviceId) {

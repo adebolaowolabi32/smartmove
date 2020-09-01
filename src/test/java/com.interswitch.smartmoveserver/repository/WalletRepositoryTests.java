@@ -2,20 +2,21 @@ package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class WalletRepositoryTests {
     @Autowired
@@ -25,7 +26,7 @@ public class WalletRepositoryTests {
     private Wallet wallet;
     private Wallet savedWallet;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         wallet = new Wallet();
         User user = buildTestUser();
@@ -45,13 +46,13 @@ public class WalletRepositoryTests {
     @Test
     public void testFindById() {
         walletRepository.findById(savedWallet.getId()).ifPresent(wallet1 -> {
-            assertThat(wallet1.getBalance()).isEqualTo(wallet1.getBalance());
-            assertThat(wallet1.getOwner()).isEqualTo(wallet1.getOwner());
-            assertThat(wallet1.isEnabled()).isEqualTo(wallet1.isEnabled());
+            assertEquals(wallet1.getBalance(), wallet1.getBalance());
+            assertEquals(wallet1.getOwner(), wallet1.getOwner());
+            assertEquals(wallet1.isEnabled(), wallet1.isEnabled());
         });
     }
 
-    @After
+    @AfterAll
     public void testDelete() {
         walletRepository.deleteAll();
         assertEquals(walletRepository.findAll().iterator().hasNext(), false);

@@ -21,17 +21,17 @@
             <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{blacklist.saved.message} : false)"></div>
             <div class="card p-3">
                 <div class="form-group row">
-                    <label class="col-sm-2" for="id">ID</label>
+                    <label class="col-sm-2" for="id"><b>ID</b></label>
                     <div class="col-sm-10">
                         <span id="id" th:text="${blacklist.id}"></span></div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2" for="identifier">Identifier</label>
+                    <label class="col-sm-2" for="identifier"><b>Identifier</b></label>
                     <div class="col-sm-10">
                         <span id="identifier" th:text="${blacklist.identifier}"></span></div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2" for="type">Type</label>
+                    <label class="col-sm-2" for="type"><b>Type</b></label>
                     <div class="col-sm-10">
                         <span id="type" th:text="${blacklist.type}"></span></div>
                 </div>

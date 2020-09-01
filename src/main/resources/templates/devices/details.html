@@ -12,53 +12,73 @@
 						<h2><b>Device Details</b></h2>
 					</div>
 					<div class="col-sm-8">
+                        <a th:href="@{/devices/fund/{id}(id=${device.id})}">
+							<button class='btn btn-outline-info' type='button'><i class="far fa-share-square"></i> Fund
+								Device
+                            </button>
+                        </a>
 						<a th:href="@{/devices/update/{id}(id=${device.id})}">
-							<button type='button' class='btn btn-outline-info'><i class='fas fa-edit'></i>Edit </button>
+							<button class='btn btn-outline-info' type='button'><i class='fas fa-edit'></i> Edit</button>
 						</a>
 					</div>
 				</div>
 			</div>
+            <div th:replace="fragments/alert-success :: alert-success (message=${funded} ? #{device.funded.message} : false)"></div>
 			<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{device.saved.message} : (${updated} ? #{device.updated.message} : false))"></div>
 			<div class="card p-3">
-				<div class="form-group row">
-					<label class="col-sm-2" for="name">Name</label>
-					<div class="col-sm-10">
-						<span id="name" th:text="${device.name}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="deviceId">Serial ID</label>
-					<div class="col-sm-10">
-						<span id="deviceId" th:text="${device.deviceId}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="type">Type</label>
-					<div class="col-sm-10">
-						<span id="type" th:text="${device.type}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="owner">Owner</label>
-					<div class="col-sm-10">
-						<span id="owner" th:text="${device.owner.username}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="hardwareVersion">Hardware Version</label>
-					<div class="col-sm-10"><span id="hardwareVersion" th:text="${device.hardwareVersion}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="softwareVersion">Software Version</label>
-					<div class="col-sm-10"><span id="softwareVersion" th:text="${device.softwareVersion}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="fareType">Fare Type</label>
-					<div class="col-sm-10"><span id="fareType" th:text="${device.fareType}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="enabled">Active</label>
-					<div class="col-sm-10">
-						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${device.enabled}" disabled>
-							<span class="slider round"></span>
-						</label>
+				<div class="row">
+					<div class="col">
+						<div class="form-group row">
+							<label class="col-sm-4" for="name"><b>Name</b></label>
+							<div class="col-sm-8">
+								<span id="name" th:text="${device.name}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="deviceId"><b>Serial ID</b></label>
+							<div class="col-sm-8">
+								<span id="deviceId" th:text="${device.deviceId}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="type"><b>Type</b></label>
+							<div class="col-sm-4">
+								<span id="type" th:text="${device.type}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="type"><b>Balance</b></label>
+							<div class="col-sm-8">
+								&#8358; <span id="balance" th:text="${device.balance}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="control-label col-sm-4" for="owner"><b>Owner</b></label>
+							<div class="col-sm-8">
+								<span id="owner" th:text="${device.owner.username}"></span></div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group row">
+							<label class="col-sm-4" for="hardwareVersion"><b>Hardware Version</b></label>
+							<div class="col-sm-8"><span id="hardwareVersion" th:text="${device.hardwareVersion}"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="softwareVersion"><b>Software Version</b></label>
+							<div class="col-sm-8"><span id="softwareVersion" th:text="${device.softwareVersion}"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="fareType"><b>Fare Type</b></label>
+							<div class="col-sm-8"><span id="fareType" th:text="${device.fareType}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="enabled"><b>Active</b></label>
+							<div class="col-sm-8">
+								<label class="switch">
+									<input disabled id="enabled" name="enabled" th:checked="${device.enabled}"
+										   type="checkbox">
+									<span class="slider round"></span>
+								</label>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

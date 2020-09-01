@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.Document;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.model.VehicleCategory;
@@ -16,11 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -75,7 +72,7 @@ public class VehicleController {
     }
 
     @PostMapping("/create")
-    public String create(Principal principal, @Valid Vehicle vehicle,BindingResult result, Model model, RedirectAttributes redirectAttributes)  {
+    public String create(Principal principal, @Valid Vehicle vehicle, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             model.addAttribute("vehicle", vehicle);

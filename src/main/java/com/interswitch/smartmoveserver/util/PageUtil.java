@@ -52,6 +52,18 @@ public class PageUtil {
             case DRIVER:
                 title = "Driver";
                 break;
+            case SERVICE_PROVIDER:
+                title = "Service Provider";
+                break;
+            case INSPECTOR:
+                title = "Inspector";
+                break;
+            case TICKETER:
+                title = "Ticketer";
+                break;
+            case COMMUTER:
+                title = "Commuter";
+                break;
             default:
                 title = "No Title";
                 break;
@@ -77,6 +89,18 @@ public class PageUtil {
                 break;
             case AGENT:
                 message = "agent.saved.message";
+                break;
+            case SERVICE_PROVIDER:
+                message = "service-provider.saved.message";
+                break;
+            case INSPECTOR:
+                message = "inspector.saved.message";
+                break;
+            case TICKETER:
+                message = "ticketer.saved.message";
+                break;
+            case DRIVER:
+                message = "driver.saved.message";
                 break;
             default:
                 message = "No Message";
@@ -104,6 +128,18 @@ public class PageUtil {
             case AGENT:
                 message = "agent.updated.message";
                 break;
+            case SERVICE_PROVIDER:
+                message = "service-provider.updated.message";
+                break;
+            case INSPECTOR:
+                message = "inspector.updated.message";
+                break;
+            case TICKETER:
+                message = "ticketer.updated.message";
+                break;
+            case DRIVER:
+                message = "driver.updated.message";
+                break;
             default:
                 message = "No Message";
                 break;
@@ -129,6 +165,18 @@ public class PageUtil {
                 break;
             case AGENT:
                 message = "agent.deleted.message";
+                break;
+            case SERVICE_PROVIDER:
+                message = "service-provider.deleted.message";
+                break;
+            case INSPECTOR:
+                message = "inspector.deleted.message";
+                break;
+            case TICKETER:
+                message = "ticketer.deleted.message";
+                break;
+            case DRIVER:
+                message = "driver.deleted.message";
                 break;
             default:
                 message = "No Message";

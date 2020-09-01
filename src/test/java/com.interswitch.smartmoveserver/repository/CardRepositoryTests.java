@@ -3,23 +3,23 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class CardRepositoryTests {
     @Autowired
@@ -32,7 +32,9 @@ public class CardRepositoryTests {
 
     private Card savedCard;
 
-    @Before
+    private long id;
+
+    @BeforeAll
     public void setUp() {
         card = new Card();
         card.setPan("0123456789012345");
@@ -52,39 +54,39 @@ public class CardRepositoryTests {
         card1.setEnabled(true);
         assertNotNull(cardRepository.save(card1));
         savedCard = cardRepository.save(card);
+        id = savedCard.getId();
         assertNotNull(savedCard);
     }
 
     @Test
     public void testFindById() {
         cardRepository.findById(savedCard.getId()).ifPresent(card1 -> {
-            assertThat(card1.getOwner()).isEqualTo(card.getOwner());
-            assertThat(card1.getType()).isEqualTo(card.getType());
-            assertThat(card1.getBalance()).isEqualTo(card.getBalance());
-            assertThat(card1.isEnabled()).isEqualTo(card.isEnabled());
+            assertEquals(card1.getOwner(), card.getOwner());
+            assertEquals(card1.getType(), card.getType());
+            assertEquals(card1.getBalance(), card.getBalance());
+            assertEquals(card1.isEnabled(), card.isEnabled());
         });
     }
 
     @Test
     public void testFindByPan() {
         cardRepository.findByPan(savedCard.getPan()).ifPresent(card1 -> {
-            assertThat(card1.getOwner()).isEqualTo(card.getOwner());
-            assertThat(card1.getType()).isEqualTo(card.getType());
-            assertThat(card1.getBalance()).isEqualTo(card.getBalance());
-            assertThat(card1.isEnabled()).isEqualTo(card.isEnabled());
+            assertEquals(card1.getOwner(), card.getOwner());
+            assertEquals(card1.getType(), card.getType());
+            assertEquals(card1.getBalance(), card.getBalance());
+            assertEquals(card1.isEnabled(), card.isEnabled());
         });
     }
 
     @Test
     public void testFindAll() {
         List<Card> cards = cardRepository.findAll();
-        assertThat(cards.size()).isEqualTo(2);
+        assertEquals(cards.size(), 2);
     }
 
-    @After
+    @AfterAll
     public void testDelete() {
-        cardRepository.deleteAll();
-        assertEquals(cardRepository.findAll().iterator().hasNext(), false);
-        userRepository.deleteAll();
+        cardRepository.deleteById(id);
+        assertNull(cardRepository.findById(id));
     }
 }

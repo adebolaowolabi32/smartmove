@@ -14,54 +14,55 @@
 				</div>
 			</div>
 			<div class="card p-3">
-				<div class="form-group row">
-					<label class="col-sm-2" for="name">Transaction ID</label>
-					<div class="col-sm-10">
-						<span id="name" th:text="${transaction.transactionId}"></span></div>
-				</div>
-				<!--<div class="form-group row">
-					<label class="control-label col-sm-2" for="scheme">Scheme ID</label>
-					<div class="col-sm-10">
-						<span id="scheme" th:text="${transaction.schemeId}"></span></div>
-				</div>-->
-				<div class="form-group row">
-					<label class="col-sm-2" for="type">Transaction Type</label>
-					<div class="col-sm-10">
-						<span id="type" th:text="${transaction.type}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="mode">Transport Mode</label>
-					<div class="col-sm-10">
-						<span id="mode" th:text="${transaction.mode}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-2" for="amount">Amount</label>
-					<div class="col-sm-10"><span id="amount" th:text="${transaction.amount}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="terminal">Terminal ID</label>
-					<div class="col-sm-10">
-						<span id="terminal" th:text="${transaction.terminalId}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="device">Device ID</label>
-					<div class="col-sm-10">
-						<span id="device" th:text="${transaction.deviceId}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="vehicle">Vehicle ID</label>
-					<div class="col-sm-10">
-						<span id="vehicle" th:text="${transaction.vehicleId}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="operatorId">Operator ID</label>
-					<div class="col-sm-10">
-						<span id="operatorId" th:text="${transaction.operatorId}"></span></div>
-				</div>
-				<div class="form-group row">
-					<label class="control-label col-sm-2" for="transactiondate">Transaction Date</label>
-					<div class="col-sm-10">
-						<span id="transactiondate" th:text="${transaction.transactionDateTime}"></span></div>
+				<div class="row">
+					<div class="col">
+						<div class="form-group row">
+							<label class="col-sm-4" for="name"><b>Transaction ID</b></label>
+							<div class="col-sm-8">
+								<span id="name" th:text="${transaction.transactionId}"></span></div>
+						</div>
+						<!--<div class="form-group row">
+                            <label class="control-label col-sm-4" for="scheme">Scheme ID</label>
+                            <div class="col-sm-8">
+                                <span id="scheme" th:text="${transaction.schemeId}"></span></div>
+                        </div>-->
+						<div class="form-group row">
+							<label class="col-sm-4" for="type"><b>Transaction Type</b></label>
+							<div class="col-sm-8">
+								<span id="type" th:text="${transaction.type}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="mode"><b>Transport Mode</b></label>
+							<div class="col-sm-8">
+								<span id="mode" th:text="${transaction.mode}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="amount"><b>Amount (&#8358;)</b></label>
+							<div class="col-sm-8"><span id="amount" th:text="${transaction.amount}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="control-label col-sm-4" for="terminal"><b>Terminal ID</b></label>
+							<div class="col-sm-8">
+								<span id="terminal" th:text="${transaction.terminalId}"></span></div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group row">
+							<label class="control-label col-sm-4" for="device"><b>Device ID</b></label>
+							<div class="col-sm-8">
+								<span id="device" th:text="${transaction.deviceId}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="control-label col-sm-4" for="operatorId"><b>Operator ID</b></label>
+							<div class="col-sm-8">
+								<span id="operatorId" th:text="${transaction.operatorId}"></span></div>
+						</div>
+						<div class="form-group row">
+							<label class="control-label col-sm-4" for="transactiondate"><b>Transaction Date</b></label>
+							<div class="col-sm-8">
+								<span id="transactiondate" th:text="${transaction.transactionDateTime}"></span></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -72,7 +73,7 @@
 <th>Transaction ID</th>
 <th>Type</th>
 <th>Mode</th>
-<th>Amount</th>
+<th>Amount (&#8358;)</th>
 <th>Terminal </th>
 <th>Device</th>
 <th>Operator </th>

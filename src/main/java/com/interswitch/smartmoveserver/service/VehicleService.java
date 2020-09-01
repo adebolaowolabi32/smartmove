@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -38,10 +37,10 @@ public class VehicleService {
     @Autowired
     PageUtil pageUtil;
 
+    private final Log logger = LogFactory.getLog(getClass());
+
     @Autowired
     DocumentService documentService;
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     public List<Vehicle> findAll() {
         return vehicleRepository.findAll();
@@ -91,7 +90,7 @@ public class VehicleService {
 
     public Vehicle update(Vehicle vehicle) {
 
-        logger.info("Vehicle Picture===>"+vehicle.getPicture());
+        logger.info("Vehicle Picture===>" + vehicle.getPicture());
 
         Optional<Vehicle> existing = vehicleRepository.findById(vehicle.getId());
 

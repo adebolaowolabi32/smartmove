@@ -33,8 +33,10 @@
                     <th>Departure Terminal</th>
                     <th>Destination Terminal</th>
                     <th>Vehicle</th>
-                    <th>Departure</th>
-                    <th>Arrival</th>
+                    <th>Departure Date</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Date</th>
+                    <th>Arrival Time</th>
                     <th>Price</th>
                     <th>Owner</th>
                     <th>Active</th>
@@ -48,8 +50,10 @@
                     <td th:text="${schedule.startTerminal!=null ? schedule.startTerminal.name : ''}"></td>
                     <td th:text="${schedule.stopTerminal!=null ? schedule.stopTerminal.name : ''}"></td>
                     <td th:text="${schedule.vehicle!=null ? schedule.vehicle.name : '' }"></td>
-                    <td th:text="${schedule.departureString}"></td>
-                    <td th:text="${schedule.arrivalString}"></td>
+                    <td th:text="${schedule.departureDate}"></td>
+                    <td th:text="${schedule.departureTime}"></td>
+                    <td th:text="${schedule.arrivalDate}"></td>
+                    <td th:text="${schedule.arrivalTime}"></td>
                     <td th:text="${schedule.fare}"></td>
                     <td th:text="${schedule.owner!=null ? schedule.owner.username : ''}"></td>
                     <td>

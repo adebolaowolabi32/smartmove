@@ -3,23 +3,26 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.util.RandomUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.time.LocalDateTime;
-import java.time.Month;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class TripRepositoryTests {
 
@@ -49,10 +52,20 @@ public class TripRepositoryTests {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+    private final Log logger = LogFactory.getLog(getClass());
+
     @Before
     public void setUp() {
-
-        User owner = userRepository.save(buildTestUser());
+        logger.info("Wanna setup tripRepository test");
+        //User testUser = buildTestUser();
+        User testUser = new User();
+        testUser.setFirstName("Alice");
+        testUser.setLastName("Com");
+        testUser.setRole(Enum.Role.VEHICLE_OWNER);
+        testUser.setEmail(new RandomUtil().nextString().concat("@example.com"));
+        testUser.setMobileNo(RandomUtil.getRandomNumber(11));
+        logger.info("Test user===>"+testUser);
+        User owner = userRepository.save(testUser);
         vehicle = new Vehicle();
         vehicle.setName("vehicle_A");
         vehicle.setDevice(new Device());
@@ -85,10 +98,13 @@ public class TripRepositoryTests {
         vehicleCategory = vehicleCategoryRepository.save(vehicleCategory);
 
         schedule.setVehicle(vehicleCategory);
-        schedule.setArrival(LocalDateTime.of(2020, Month.AUGUST, 26, 8, 30));
-        schedule.setDeparture(LocalDateTime.of(2020, Month.AUGUST, 26, 10, 30));
-        schedule.setArrivalString(schedule.getArrival().toString());
-        schedule.setDepartureString(schedule.getDeparture().toString());
+        schedule.setArrivalDate(LocalDate.now());
+        schedule.setDepartureDate(LocalDate.now());
+        schedule.setDepartureDateString(schedule.getDepartureDate().toString());
+        schedule.setArrivalDateString(schedule.getArrivalDate().toString());
+        schedule.setDepartureTime(LocalTime.now());
+        schedule.setArrivalTime(schedule.getDepartureTime().plusHours(5));
+        schedule.setArrivalTimeString(schedule.getArrivalTime().toString());
 
 
         schedule.setStartTerminal(Terminal.builder()
@@ -110,6 +126,7 @@ public class TripRepositoryTests {
 
     @After
     public void tearDown() {
+        logger.info("wanna tear down...");
         //delete all composite entities
         userRepository.deleteAll();
         vehicleRepository.deleteAll();
@@ -117,6 +134,8 @@ public class TripRepositoryTests {
         vehicleCategoryRepository.deleteAll();
         scheduleRepository.deleteAll();
         tripRepository.deleteAll();
+        logger.info("done with tear down...");
+
     }
     @Test
     public void testFindById() {
