@@ -9,8 +9,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.HashSet;
@@ -20,11 +19,10 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest
+@AutoConfigureTestDatabase
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@AutoConfigureDataJpa
-@AutoConfigureTestDatabase
-@DataJpaTest
 public class UserRepositoryTests {
 
     @Autowired
@@ -39,9 +37,9 @@ public class UserRepositoryTests {
         user = new User();
         user.setFirstName("Alice");
         user.setLastName("Com");
-        
+
         Set<Integer> b = new HashSet<Integer>();
-        
+
         user.setRole(Enum.Role.VEHICLE_OWNER);
         user.setEmail("alice@example.com");
         user.setMobileNo("123456789");

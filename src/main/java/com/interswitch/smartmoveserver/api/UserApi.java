@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -20,22 +21,17 @@ public class UserApi {
 
     @Autowired
     private UserService userService;
-
-/*    @PostMapping(value = "/{type}/{id}", consumes = "application/json", produces = "application/json")
-    public User save(@Validated @PathVariable Enum.Role type, @Validated @PathVariable long id){
-          return userService.save(type, id);
-    }*/
     
     @GetMapping(produces = "application/json")
     public List<User> findAll() {
       return userService.findAll();
     }
 
-    /*@PostMapping(produces = "application/json", consumes = "application/json")
+    @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private void save(@Validated @RequestBody User user) {
-        userService.save(user);
-    }*/
+    private User save(Principal principal, @Validated @RequestBody User user) {
+        return userService.save(user, principal);
+    }
     @GetMapping(value = "/{id}", produces = "application/json")
     private User findById(@Validated @PathVariable long id) {
         return userService.findById(id);
@@ -55,30 +51,6 @@ public class UserApi {
     private void delete(@Validated @PathVariable long id) {
         userService.delete(id);
     }
-
-   /* @GetMapping(value = "/{id}", produces = "application/json")
-    public List<User> getByType(@Validated @PathVariable long id) {
-        String email = jwtHelper.getClaim("email");
-        User user = userRepository.findByEmail(email);
-        User.Role ownerType = user != null ? user.getType() : null;
-
-        if(ownerType != null && ownerType.equals(User.Role.ISW_ADMIN)){
-            return userRepository.findAllByType(User.Role.AGENT);
-        }
-        return Collections.emptyList();
-    }*/
-
-   /* @GetMapping(value = "/{type}", produces = "application/json")
-    public List<User> getDetails(@Validated @PathVariable User.Role type, @Validated @PathVariable long id) {
-        String email = jwtHelper.getClaim("email");
-        User user = userRepository.findByEmail(email);
-        long ownerId = user != null ? user.getId() : 0;
-
-        if(!ownerId.isEmpty()){
-            return userRepository.findAllByTypeAndOwner(type, ownerId);
-        }
-        return Collections.emptyList();
-    }*/
 
     @PostMapping(value = "/activate/{id}", produces = "application/json")
     @ResponseStatus(value = HttpStatus.ACCEPTED)

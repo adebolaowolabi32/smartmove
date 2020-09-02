@@ -37,11 +37,6 @@ public class WalletApi {
         return walletService.update(wallet);
     }
 
-    @DeleteMapping("/{id}")
-    private void delete(@Validated @PathVariable long id) {
-        walletService.delete(id);
-    }
-
     @PostMapping(value = "/activate/{id}", produces = "application/json")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     private void activate(@Validated @PathVariable long id) {

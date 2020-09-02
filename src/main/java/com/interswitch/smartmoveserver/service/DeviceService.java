@@ -3,9 +3,7 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.request.DeviceConnection;
-import com.interswitch.smartmoveserver.model.request.GetDeviceId;
 import com.interswitch.smartmoveserver.model.response.DeviceConnectionResponse;
-import com.interswitch.smartmoveserver.model.response.GetDeviceIdResponse;
 import com.interswitch.smartmoveserver.repository.DeviceRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
@@ -22,7 +20,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * @author adebola.owolabi
@@ -67,14 +64,6 @@ public class DeviceService {
         deviceConnectionResponse.setTimeDate(LocalDateTime.now().toString());
         deviceConnectionResponse.setResponseCode("00");
         return deviceConnectionResponse;
-    }
-    
-    public GetDeviceIdResponse getDeviceId(GetDeviceId getDeviceId){
-        GetDeviceIdResponse getDeviceIdResponse = new GetDeviceIdResponse();
-        getDeviceIdResponse.setDeviceId(UUID.randomUUID().toString());
-        getDeviceIdResponse.setMessageId(getDeviceId.getMessageId());
-        getDeviceIdResponse.setResponseCode("00");
-        return getDeviceIdResponse;
     }
 
     public Page<Device> findAllPaginatedByType(Principal principal, Long owner, Enum.DeviceType type, int page, int size) {

@@ -30,7 +30,7 @@ public class TransactionService {
     @Autowired
     DeviceRepository deviceRepository;
 
-    public Transaction saveTransaction(Transaction transaction) {
+    public Transaction save(Transaction transaction) {
         transaction.setTransactionId(UUID.randomUUID().toString());
         return transactionRepository.save(transaction);
     }

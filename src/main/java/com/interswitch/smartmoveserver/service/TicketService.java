@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,11 +75,17 @@ public class TicketService {
         if (user.isPresent()) //and if user is operator
             operator = user.get();
         //List<Schedule> schedules = scheduleService.findByOwner);
+        LocalDate returnDate = scheduleBooking.getReturnDate();
+        if (returnDate != null) scheduleBooking.setRoundTrip(true);
         List<Schedule> schedules = scheduleService.findAll();
         List<Schedule> scheduleResults = schedules.stream()
                 .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName()
                         .equals(scheduleBooking.getStopTerminal()) && s.getDepartureDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
+        List<Schedule> returnScheduleResults = schedules.stream()
+                .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStopTerminal()) && s.getStopTerminal().getName()
+                        .equals(scheduleBooking.getStartTerminal()) && s.getDepartureDate().equals(scheduleBooking.getReturnDate())).collect(Collectors.toList());
         scheduleBooking.setSchedules(scheduleResults);
+        scheduleBooking.setReturnSchedules(returnScheduleResults);
         return scheduleBooking;
     }
 
@@ -90,6 +97,13 @@ public class TicketService {
         ticketDetails.setSeats(getAvailableSeats());
         ticketDetails.setCountries(stateService.findAllCountries());
         ticketDetails.setPassengers(initializePassengerList(noOfPassengers));
+
+        return ticketDetails;
+    }
+
+    public TicketDetails makeReturnBooking(TicketDetails ticketDetails, String scheduleId) {
+        Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
+        ticketDetails.setReturnSchedule(schedule);
         return ticketDetails;
     }
 
@@ -104,15 +118,6 @@ public class TicketService {
         if (user.isPresent()) //and if user is operator
             operator = user.get();
         List<Ticket> tickets = new ArrayList<>();
-        /*Passenger passenger = new Passenger();
-        passenger.setGender(ticketDetails.getGender());
-        passenger.setIdCategory(ticketDetails.getIdCategory());
-        passenger.setIdNumber(ticketDetails.getIdNumber());
-        passenger.setName(ticketDetails.getName());
-        passenger.setNationality(ticketDetails.getNationality());
-        passenger.setSeatClass(ticketDetails.getSeatClass());
-        passenger.setSeatNo(ticketDetails.getSeatNo());
-        ticketDetails.setPassenger(passenger);*/
         List<Passenger> passengers = ticketDetails.getPassengers();
         logger.info("Passengers:");
         logger.info(passengers);
@@ -166,7 +171,7 @@ public class TicketService {
         transaction.setMode(ticketDetails.getSchedule().getMode());
         transaction.setAmount(ticketDetails.getTotalFare());
         transaction.setTransactionDateTime(LocalDateTime.now());
-        transactionService.saveTransaction(transaction);
+        transactionService.save(transaction);
         return ticketDetails;
     }
 

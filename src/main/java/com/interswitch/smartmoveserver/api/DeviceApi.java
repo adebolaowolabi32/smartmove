@@ -3,9 +3,7 @@ package com.interswitch.smartmoveserver.api;
 import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.request.DeviceConnection;
-import com.interswitch.smartmoveserver.model.request.GetDeviceId;
 import com.interswitch.smartmoveserver.model.response.DeviceConnectionResponse;
-import com.interswitch.smartmoveserver.model.response.GetDeviceIdResponse;
 import com.interswitch.smartmoveserver.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,13 +26,6 @@ public class DeviceApi {
     public DeviceConnectionResponse connectDevice(@RequestBody @Validated DeviceConnection deviceConnection) {
         return deviceService.connectDevice(deviceConnection);
     }
-
-/*
-    @PostMapping(value = "/getOwnerId", consumes = "application/json", produces = "application/json")
-    public GetOwnerIdResponse getOwnerId(@RequestBody GetOwnerId getOwnerId) {
-        return deviceService.getOwnerId(getOwnerId);
-    }
-*/
 
     @GetMapping(produces = "application/json")
     private List<Device> findAll() {
@@ -82,11 +73,6 @@ public class DeviceApi {
     @DeleteMapping("/{id}")
     private void delete(@Validated @PathVariable long id) {
         deviceService.delete(id);
-    }
-
-    @PostMapping(value = "/getDeviceId", consumes = "application/json", produces = "application/json")
-    public GetDeviceIdResponse getDeviceId(@RequestBody GetDeviceId getDeviceId) {
-        return deviceService.getDeviceId(getDeviceId);
     }
 
     @PostMapping(value = "/activate/{id}", produces = "application/json")

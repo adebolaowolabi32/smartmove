@@ -18,19 +18,35 @@
                     "ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
         </transition>
         <on-exit>
-            <evaluate expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Out now')"/>
+            <evaluate
+                    expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Leaving ticket flow')"/>
         </on-exit>
     </view-state>
 
     <view-state id="schedule" view="tickets/schedule" model="flowScope.scheduleBooking">
         <on-entry>
-            <evaluate expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('In now')"/>
+            <evaluate
+                    expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Entering ticket flow')"/>
+            <set name="flowScope.return" value="flowRequestContext.currentState.id"/>
         </on-entry>
-        <transition on="makeBooking" to="details">
-            <evaluate result="flowScope.ticketDetails" expression=
-                    "ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
+        <transition on="makeBooking" to="showReturnSchedule">
+            <evaluate result="flowScope.return" expression="flowScope.roundTrip ? false : flowScope.return"/>
         </transition>
     </view-state>
+
+    <action-state id="showReturnSchedule">
+        <evaluate expression="flowScope.return"/>
+        <transition on="true" to="schedule">
+            <evaluate result="flowScope.roundTrip" expression="true"/>
+        </transition>
+        <transition on="false" to="details">
+            <evaluate result="flowScope.ticketDetails" expression=
+                    "ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
+
+            <evaluate result="flowScope.ticketDetails" expression=
+                    "ticketService.makeReturnBooking(flowScope.ticketDetails, requestParameters.scheduleId)"/>
+        </transition>
+    </action-state>
 
     <view-state id="details" view="tickets/details" model="flowScope.ticketDetails">
         <transition on="next" to="confirmation">

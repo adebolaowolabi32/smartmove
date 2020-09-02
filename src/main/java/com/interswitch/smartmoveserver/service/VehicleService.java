@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Document;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.repository.UserRepository;
@@ -51,10 +50,10 @@ public class VehicleService {
         boolean exists = vehicleRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle already exists");
 
-        if (vehicle.getPicture() != null) {
+       /* if (vehicle.getPicture() != null) {
             Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
             vehicle.setPictureUrl(doc.getUrl());
-        }
+        }*/
         Vehicle createdVehicle = vehicleRepository.save(vehicle);
         return createdVehicle;
     }
@@ -89,18 +88,18 @@ public class VehicleService {
 
     public Vehicle update(Vehicle vehicle) {
 
-        logger.info("Vehicle Picture===>" + vehicle.getPicture());
+        //logger.info("Vehicle Picture===>" + vehicle.getPicture());
 
         Optional<Vehicle> existing = vehicleRepository.findById(vehicle.getId());
 
-        if (existing.isPresent()) {
+        /*if (existing.isPresent()) {
             if (vehicle.getPicture() != null) {
                 logger.info("Vehicle Picture Not Null");
                 Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
                 vehicle.setPictureUrl(doc.getUrl());
             }
             return vehicleRepository.save(vehicle);
-        }
+        }*/
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
     }
 

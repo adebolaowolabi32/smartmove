@@ -67,9 +67,4 @@ public class DeviceServiceTests {
         when(deviceRepository.save(device)).thenReturn(device);
         assertThat(deviceService.connectDevice(deviceConnection).getMessageId()).isEqualTo(deviceConnectionResponse.getMessageId());
     }
-
-    @Test
-    public void testGetDeviceID() {
-        assertThat(deviceService.getDeviceId(getDeviceId).getMessageId()).isEqualTo(getDeviceIdResponse.getMessageId());
-    }
 }

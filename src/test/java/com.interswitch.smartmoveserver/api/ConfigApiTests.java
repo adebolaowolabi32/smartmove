@@ -48,7 +48,7 @@ public class ConfigApiTests {
     @Test
     public void testSave() throws Exception {
        when(configService.save(config)).thenReturn(config);
-        mvc.perform(post("/configurations")
+        mvc.perform(post("/api/configurations")
                 .content(new ObjectMapper().writeValueAsString(config))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -59,7 +59,7 @@ public class ConfigApiTests {
     @Test
     public void testUpdate() throws Exception {
         when(configService.update(config)).thenReturn(config);
-        mvc.perform(put("/configurations")
+        mvc.perform(put("/api/configurations")
                 .content(new ObjectMapper().writeValueAsString(config))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -70,7 +70,7 @@ public class ConfigApiTests {
     @Test
     public void testfindAll() throws Exception {
         when(configService.findAll()).thenReturn(Arrays.asList(config, new Config()));
-        mvc.perform(get("/configurations")
+        mvc.perform(get("/api/configurations")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -81,7 +81,7 @@ public class ConfigApiTests {
     @Test
     public void testGetFindById() throws Exception {
         when(configService.findById(config.getId())).thenReturn(config);
-        mvc.perform(get("/configurations/{id}", config.getId())
+        mvc.perform(get("/api/configurations/{id}", config.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -91,7 +91,7 @@ public class ConfigApiTests {
     /*@Test
     public void testGetFindByName() throws Exception {
         when(configService.findByName(Enum.ConfigList.TRANSACTION_UPLOAD_PERIOD)).thenReturn(config);
-        mvc.perform(get("/configurations/{name}", config.getName())
+        mvc.perform(get("/api/configurations/{name}", config.getName())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -100,7 +100,7 @@ public class ConfigApiTests {
 
     @Test
     public void testDelete() throws Exception {
-        mvc.perform(delete("/configurations/{id}", config.getId())
+        mvc.perform(delete("/api/configurations/{id}", config.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

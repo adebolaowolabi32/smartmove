@@ -51,7 +51,7 @@ public class VehicleApiTests {
     @Test
     public void testSave() throws Exception {
         when(vehicleService.save(vehicle)).thenReturn(vehicle);
-        mvc.perform(post("/vehicles")
+        mvc.perform(post("/api/vehicles")
                 .content(new ObjectMapper().writeValueAsString(vehicle))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -62,7 +62,7 @@ public class VehicleApiTests {
     @Test
     public void testUpdate() throws Exception {
         when(vehicleService.update(vehicle)).thenReturn(vehicle);
-        mvc.perform(put("/vehicles")
+        mvc.perform(put("/api/vehicles")
                 .content(new ObjectMapper().writeValueAsString(vehicle))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -73,7 +73,7 @@ public class VehicleApiTests {
    /* @Test
     public void testfindAll() throws Exception {
         when(vehicleService.findAll()).thenReturn(Arrays.asList(vehicle, new Vehicle()));
-        mvc.perform(get("/vehicles")
+        mvc.perform(get("/api/vehicles")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -85,7 +85,7 @@ public class VehicleApiTests {
     @Test
     public void testFindById() throws Exception {
         when(vehicleService.findById(vehicle.getId())).thenReturn(vehicle);
-        mvc.perform(get("/vehicles/{id}", vehicle.getId())
+        mvc.perform(get("/api/vehicles/{id}", vehicle.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -95,7 +95,7 @@ public class VehicleApiTests {
 /*    @Test
     public void testFindByOwner() throws Exception {
         when(vehicleService.findByOwner(vehicle.getOwnerId())).thenReturn(Arrays.asList(vehicle));
-        mvc.perform(get("/vehicles/{ownerId}", vehicle.getOwnerId())
+        mvc.perform(get("/api/vehicles/{ownerId}", vehicle.getOwnerId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -104,7 +104,7 @@ public class VehicleApiTests {
 
     @Test
     public void testDelete() throws Exception {
-        mvc.perform(delete("/vehicles/{id}", vehicle.getId())
+        mvc.perform(delete("/api/vehicles/{id}", vehicle.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

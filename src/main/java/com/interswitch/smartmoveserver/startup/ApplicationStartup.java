@@ -1,4 +1,4 @@
-package com.interswitch.smartmoveserver.config;
+package com.interswitch.smartmoveserver.startup;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
@@ -53,7 +53,7 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setAddress("Lagos Nigeria");
         adminUser.setRole(Enum.Role.ISW_ADMIN);
         adminUser.setEnabled(true);
-        userService.setUp(adminUser);
+        //userService.setUp(adminUser);
         logger.info("System Administrator created successfully!");
 
         User driver = new User();
@@ -65,7 +65,7 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setAddress("Lagos Nigeria");
         adminUser.setRole(Enum.Role.DRIVER);
         adminUser.setEnabled(true);
-        userService.setUpS(adminUser);
+        //userService.setUpS(adminUser);
         logger.info("Driver created successfully!");
         //loadManifestData(7);
         loadStatesAndLocalGovt();

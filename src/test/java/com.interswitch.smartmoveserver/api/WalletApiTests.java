@@ -50,7 +50,7 @@ public class WalletApiTests {
     @Test
     public void testSave() throws Exception {
         when(walletService.save(wallet)).thenReturn(wallet);
-        mvc.perform(post("/wallets")
+        mvc.perform(post("/api/wallet")
                 .content(new ObjectMapper().writeValueAsString(wallet))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -61,7 +61,7 @@ public class WalletApiTests {
     @Test
     public void testUpdate() throws Exception {
         when(walletService.update(wallet)).thenReturn(wallet);
-        mvc.perform(put("/wallets")
+        mvc.perform(put("/api/wallet")
                 .content(new ObjectMapper().writeValueAsString(wallet))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -72,18 +72,10 @@ public class WalletApiTests {
     @Test
     public void testGetFindById() throws Exception {
         when(walletService.findById(wallet.getId())).thenReturn(wallet);
-        mvc.perform(get("/wallets/{id}", wallet.getId())
+        mvc.perform(get("/api/wallet/{id}", wallet.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()));
-    }
-
-    @Test
-    public void testDelete() throws Exception {
-        mvc.perform(delete("/wallets/{id}", wallet.getId())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
     }
 }

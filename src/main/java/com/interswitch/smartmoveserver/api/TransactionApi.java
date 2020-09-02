@@ -21,8 +21,8 @@ public class TransactionApi {
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Transaction saveTransaction(@RequestBody @Validated Transaction transaction) {
-        return transactionService.saveTransaction(transaction);
+    public Transaction save(@RequestBody @Validated Transaction transaction) {
+        return transactionService.save(transaction);
     }
 
     @GetMapping(produces = "application/json")

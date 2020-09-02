@@ -49,6 +49,8 @@ public class TicketDetails implements Serializable {
 
     private Schedule schedule;
 
+    private Schedule returnSchedule;
+
     private String scheduleId;
 
     private Trip trip;

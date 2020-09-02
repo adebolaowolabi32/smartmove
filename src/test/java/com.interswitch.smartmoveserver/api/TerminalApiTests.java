@@ -66,7 +66,7 @@ public class TerminalApiTests {
     @Test
     public void testUpdate() throws Exception {
         when(terminalService.update(terminal)).thenReturn(terminal);
-        mvc.perform(put("/terminals")
+        mvc.perform(put("/api/terminals")
                 .content(new ObjectMapper().writeValueAsString(terminal))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -77,7 +77,7 @@ public class TerminalApiTests {
     @Test
     public void testfindAll() throws Exception {
         when(terminalService.findAll()).thenReturn(Arrays.asList(terminal, new Terminal()));
-        mvc.perform(get("/terminals")
+        mvc.perform(get("/api/terminals")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -89,7 +89,7 @@ public class TerminalApiTests {
     @Test
     public void testGetFindById() throws Exception {
         when(terminalService.findById(terminal.getId())).thenReturn(terminal);
-        mvc.perform(get("/terminals/{id}", terminal.getId())
+        mvc.perform(get("/api/terminals/{id}", terminal.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -99,7 +99,7 @@ public class TerminalApiTests {
 /*    @Test
     public void testGetFindByTerminalNumber() throws Exception {
         when(terminalService.findByOwner(terminal.getOwnerId())).thenReturn(Arrays.asList(terminal));
-        mvc.perform(get("/terminals/{terminalNumber}", terminal.getOwnerId())
+        mvc.perform(get("/api/terminals/{terminalNumber}", terminal.getOwnerId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -108,7 +108,7 @@ public class TerminalApiTests {
 
     @Test
     public void testDelete() throws Exception {
-        mvc.perform(delete("/terminals/{id}", terminal.getId())
+        mvc.perform(delete("/api/terminals/{id}", terminal.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
