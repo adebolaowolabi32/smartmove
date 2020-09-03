@@ -8,43 +8,60 @@
         <on-entry>
             <set name="flowScope.scheduleBooking"
                  value="new com.interswitch.smartmoveserver.model.view.ScheduleBooking()"/>
-          <!--  <evaluate result="viewScope.today" expression=
-                    "T(com.interswitch.smartmoveserver.util.DateUtil).getTodayDate())"/>-->
-            <evaluate result="viewScope.terminals" expression="ticketService.getTerminals()"/>
-            <evaluate result="viewScope.schedules" expression="ticketService.getSchedules()"/>
+            <set name="flowScope.return" value="false"/>
+            <!--<evaluate result="viewScope.today" expression="T(com.interswitch.smartmoveserver.util.DateUtil).getTodayDate())"/>-->
+            <evaluate result="flowScope.terminals" expression="ticketService.getTerminals()"/>
+            <evaluate result="flowScope.schedules" expression="ticketService.getSchedules()"/>
         </on-entry>
         <transition on="findBooking" to="schedule">
-            <evaluate result="flowScope.scheduleBooking" expression=
-                    "ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
+            <evaluate result="flowScope.scheduleBooking"
+                      expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
         </transition>
         <on-exit>
             <evaluate
-                    expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Leaving ticket flow')"/>
+                    expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Leaving ticket book flow')"/>
         </on-exit>
     </view-state>
 
     <view-state id="schedule" view="tickets/schedule" model="flowScope.scheduleBooking">
         <on-entry>
             <evaluate
-                    expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Entering ticket flow')"/>
-            <set name="flowScope.return" value="flowRequestContext.currentState.id"/>
+                    expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Entering schedule flow')"/>
         </on-entry>
-        <transition on="makeBooking" to="showReturnSchedule">
-            <evaluate result="flowScope.return" expression="flowScope.roundTrip ? false : flowScope.return"/>
+        <transition on="findBooking" to="schedule">
+            <evaluate result="flowScope.scheduleBooking"
+                      expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
         </transition>
+        <transition on="makeBooking" to="showReturnSchedule"/>
+        <on-exit>
+            <evaluate
+                    expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Leaving ticket schedule flow')"/>
+        </on-exit>
     </view-state>
 
     <action-state id="showReturnSchedule">
-        <evaluate expression="flowScope.return"/>
-        <transition on="true" to="schedule">
-            <evaluate result="flowScope.roundTrip" expression="true"/>
+        <on-entry>
+            <set name="flowScope.roundTrip" value="flowScope.scheduleBooking.roundTrip"/>
+            <evaluate result="flowScope.roundTrip" expression="flowScope.return ? false : flowScope.roundTrip"/>
+        </on-entry>
+        <evaluate expression="flowScope.roundTrip"/>
+        <transition on="yes" to="schedule">
+            <evaluate result="flowScope.return" expression="true"/>
+            <evaluate result="flowScope.ticketDetails"
+                      expression="ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
-        <transition on="false" to="details">
-            <evaluate result="flowScope.ticketDetails" expression=
-                    "ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
+        <transition on="no" to="makeBooking"/>
+    </action-state>
 
-            <evaluate result="flowScope.ticketDetails" expression=
-                    "ticketService.makeReturnBooking(flowScope.ticketDetails, requestParameters.scheduleId)"/>
+    <action-state id="makeBooking">
+        <evaluate expression="flowScope.return"/>
+        <transition on="yes" to="details">
+            <evaluate result="flowScope.ticketDetails"
+                      expression="ticketService.makeReturnBooking(flowScope.ticketDetails, requestParameters.scheduleId)"/>
+        </transition>
+        <transition on="no" to="details">
+            <evaluate result="flowScope.ticketDetails"
+                      expression="ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
     </action-state>
 

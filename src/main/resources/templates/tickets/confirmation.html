@@ -22,6 +22,7 @@
                 <tr>
                     <th>Ticket Reference</th>
                     <th>Name</th>
+                    <th>Departure/Arrival</th>
                     <th>Amount (&#8358;)</th>
                 </tr>
             </thead>
@@ -30,9 +31,11 @@
                 <tr th:each="ticket : ${ticketDetails.tickets}">
                     <td th:text="${ticket.referenceNo}"></td>
                     <td th:text="${ticket.passengerName}"></td>
+                    <td th:text="${ticket.schedule != null ? ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name  : ''}"></td>
                     <td th:text="${ticket.fare}"></td>
                 </tr>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td th:text="Total"></td>
                     <td th:text="${ticketDetails.totalFare}"></td>

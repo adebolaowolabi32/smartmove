@@ -49,6 +49,10 @@ public class ManifestService {
         return manifestRepository.save(manifest);
     }
 
+    public Iterable<Manifest> saveAll(List<Manifest> manifests) {
+        return manifestRepository.saveAll(manifests);
+    }
+
     public Manifest findById(long id) {
         return manifestRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist"));
     }

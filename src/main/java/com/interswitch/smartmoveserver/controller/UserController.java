@@ -69,6 +69,7 @@ public class UserController {
         User user = userService.findById(principal, id);
         model.addAttribute("regulators_no", userService.countByRoleAndOwner(user, Enum.Role.REGULATOR));
         model.addAttribute("operators_no", userService.countByRoleAndOwner(user, Enum.Role.OPERATOR));
+        model.addAttribute("ticketers_no", userService.countByRoleAndOwner(user, Enum.Role.TICKETER));
         model.addAttribute("agents_no", userService.countByRoleAndOwner(user, Enum.Role.AGENT));
         model.addAttribute("vehicles_no", vehicleService.countByOwner(user));
         model.addAttribute("terminals_no", terminalService.countByOwner(user));

@@ -14,7 +14,13 @@
 
             </div>
         </div>
-        <div th:with="schedules = ${scheduleBooking.roundTrip ? scheduleBooking.schedules : scheduleBooking.returnSchedules}">
+        <div th:replace="fragments/booking-search :: booking-search"></div>
+        <br>
+        <div th:unless="${scheduleBooking.schedules.empty || scheduleBooking.roundTrip ? scheduleBooking.returnSchedules.empty : false}"
+             th:with="schedules = ${return ? scheduleBooking.returnSchedules : scheduleBooking.schedules}">
+            <div class="card-header"><b><span th:text="${return ? 'Return Trip Availability' : 'Trip Availability'}">Trip Details</span></b>
+            </div>
+            <br>
             <div class="list-group-item list-group-item-action" th:each="schedule : ${schedules}">
                 <div class="row">
                     <div class="col-sm-3">
@@ -89,7 +95,9 @@
                 <img src="/img/luxury-coach.png" alt="Chisco Executive Coach (59 Seats)" title="Chisco Executive Coach (59 Seats)">
             </div>
         </div>-->
-        <div th:if="${scheduleBooking.schedules.empty}">  No schedule was found for the selected route and/or date . Please try again. </div>
+        <div th:if="${scheduleBooking.schedules.empty ||  scheduleBooking.roundTrip ? scheduleBooking.returnSchedules.empty : false}">
+            <br> No schedules were found for the selected route and/or date . Please try again.
+        </div>
     </div>
 </div>
 </html>

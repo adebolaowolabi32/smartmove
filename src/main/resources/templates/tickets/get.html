@@ -25,7 +25,9 @@
                 <tr>
                     <th>Ticket Reference</th>
                     <th>Passenger Name</th>
-                    <th>Trip ID</th>
+                    <th>Trip</th>
+                    <th>Departure Date/Time</th>
+                    <th>Vehicle</th>
                     <th>Seat</th>
                     <th>Seat Class</th>
                     <th>Booking Date</th>
@@ -35,7 +37,9 @@
                 <tr th:each="ticket : ${ticketPage.content}">
                     <td th:text="${ticket.referenceNo}"></td>
                     <td th:text="${ticket.passengerName}"></td>
-                    <td th:text="${ticket.schedule.id}"></td>
+                    <td th:text="${ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name}"></td>
+                    <td th:text="${ticket.schedule.departureDate + ' ' + ticket.schedule.departureTime}"></td>
+                    <td th:text="${ticket.schedule.vehicle.name}"></td>
                     <td th:text="${ticket.seatNo}"></td>
                     <td th:text="${ticket.seatClass}"></td>
                     <td th:text="${ticket.bookingDate}"></td>

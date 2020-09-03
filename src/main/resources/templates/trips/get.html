@@ -47,8 +47,8 @@
                 <tr th:each="trip : ${tripPage.content}">
                     <td th:text="${trip.referenceNo}"></td>
                     <td th:text="${trip.mode}"></td>
-                    <td th:text="${trip.driver!=null ? trip.driver.firstName+' '+trip.driver.lastName : ''}"></td>
-                    <td th:text="${trip.vehicle!=null ? trip.vehicle.name+'-'+trip.vehicle.regNo : '' }"></td>
+                    <td th:text="${trip.driver!=null ? trip.driver.firstName + ' ' + trip.driver.lastName : ''}"></td>
+                    <td th:text="${trip.vehicle!=null ? trip.vehicle.name + ' - ' + trip.vehicle.regNo : '' }"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.startTerminal.name  : ''}"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.stopTerminal.name  : ''}"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.departureDate  : ''}"></td>
