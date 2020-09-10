@@ -4,74 +4,84 @@
 <title layout:fragment="title">Schedules</title>
 <div layout:fragment="content" class="card mb-4">
     <div class="card-header"><i class="fas fas fa-calendar"></i>
-        <span>Schedule & Passenger Details</span>
+        <span>Schedule and Passenger Manifest</span>
         <a style="float:right;">
             <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
                 manifest
             </button>
         </a>
     </div>
-    <div>
+    <div class="card-body">
         <div class="table-wrapper">
             <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{schedule.saved.message} : (${updated} ? #{schedule.updated.message} : false))"></div>
             <div class="p-3">
-                <div class="card-header"><span><b> Trip & Passenger Details</b></span></div>
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="mode">Transport Mode</label>
-                        <div class="col-sm-10">
-                            <span id="mode" th:text="${schedule.mode}"></span></div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="startTerminal">Departure Terminal</label>
-                        <div class="col-sm-10">
-                        <span id="startTerminal"
-                              th:text="${schedule.startTerminal!=null ? schedule.startTerminal.name : ''}"></span>
+                <div class="card">
+                    <div class="card-header">
+                        <span><b>Trip</b></span></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div><b>Departure Terminal</b></div>
+                                <div th:text="${schedule.startTerminal.name}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Destination Terminal</b></div>
+                                <div th:text="${schedule.stopTerminal.name}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Transport Mode</b></div>
+                                <div th:text="${schedule.mode}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Vehicle</b></div>
+                                <div th:text="${schedule.vehicle.name}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Price</b></div>
+                                <div><span>&#8358; <span th:text="${schedule.fare}"></span></span></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="stopTerminal">Destination Terminal</label>
-                        <div class="col-sm-10">
-                        <span id="stopTerminal"
-                              th:text="${schedule.stopTerminal!=null ? schedule.stopTerminal.name : '' }"></span>
+                        <br>
+                        <hr>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <div><b>Departure Date</b></div>
+                                <div th:text="${schedule.departureDate}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Departure Time</b></div>
+                                <div th:text="${schedule.departureTime}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Arrival Date</b></div>
+                                <div th:text="${schedule.arrivalDate}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Estimated Arrival Time</b></div>
+                                <div th:text="${schedule.arrivalTime}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Owner</b></div>
+                                <div th:text="${schedule.owner.username}"></div>
+                            </div>
+                            <div class="col">
+                                <div><b>Active</b></div>
+                                <div>
+                                    <label class="switch">
+                                        <input disabled th:checked="${schedule.enabled}" type="checkbox">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="arrival">Vehicle</label>
-                        <div class="col-sm-10"><span id="vehicle"
-                                                     th:text="${schedule.vehicle!=null ? schedule.vehicle.name : '' }"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="departure">Departure</label>
-                        <div class="col-sm-10"><span id="departure" th:text="${schedule.departureString}"></span></div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="arrival">Arrival</label>
-                        <div class="col-sm-10"><span id="arrival" th:text="${schedule.arrivalString}"></span></div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="fare">Price</label>
-                        <div class="col-sm-10">&#8358; <span id="fare" th:text="${schedule.fare}"></span></div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-sm-2" for="owner">Owner</label>
-                        <div class="col-sm-10">
-                            <span id="owner" th:text="${schedule.owner != null ? schedule.owner.username : ''}"></span></div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="enabled">Active</label>
-                        <div class="col-sm-10">
-                            <label class="switch">
-                                <input type="checkbox" id="enabled" name="enabled" th:checked="${schedule.enabled}" disabled>
-                                <span class="slider round"></span>
-                            </label>
-                            </span></div>
                     </div>
                 </div>
-                <br><br>
-                <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+
+                <br>
+                <br>
+                <br>
+                <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
                     <thead class='thead-light'>
                     <tr>
                         <th>SN</th>
@@ -114,13 +124,14 @@
             <div class="btn-group" style="margin-top:10px;">
 
                 <a th:href="@{/schedules/get}">
-                    <button type='button' style="margin:5px" class='btn btn-outline-info'><i
+                    <button class='btn btn-outline-info' style="margin:5px" type='button'><i
                             class='fas fa-arrow-left'></i> View all schedules
                     </button>
                 </a>
 
                 <a th:href="@{/schedules/update/{id}(id=${schedule.id})}">
-                    <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-edit'></i> Edit
+                    <button class='btn btn-outline-info' style="margin:5px" type='button'><i class='fas fa-edit'></i>
+                        Edit
                         Schedule
                     </button>
                 </a>

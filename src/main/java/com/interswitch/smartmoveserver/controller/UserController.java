@@ -3,8 +3,11 @@ package com.interswitch.smartmoveserver.controller;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.*;
+import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -39,6 +42,9 @@ public class UserController {
     PageUtil pageUtil;
 
     @Autowired
+    ErrorResponseUtil errorResponseUtil;
+
+    @Autowired
     private CardService cardService;
 
     @Autowired
@@ -49,6 +55,9 @@ public class UserController {
 
     @Autowired
     private RouteService routeService;
+
+
+    private final Log logger = LogFactory.getLog(getClass());
 
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam("role") Enum.Role role,
@@ -77,7 +86,6 @@ public class UserController {
         model.addAttribute("transactions_no", transactionService.countAll());
         model.addAttribute("settlements_no", 0);
         model.addAttribute("cards_no", cardService.countByOwner(user));
-
         model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
         model.addAttribute("user", user);
         model.addAttribute("isOwned", securityUtil.isOwnedEntity(user.getRole()));
@@ -102,8 +110,12 @@ public class UserController {
 
     @PostMapping("/create")
     public String create(Principal principal, @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
+        logger.info("Wanna create user for role==>"+role.name());
         user.setRole(role);
+
         if (result.hasErrors()) {
+            logger.info("Error trying to create user==>"+errorResponseUtil.getErrorMessages(result));
             model.addAttribute("title", pageUtil.buildTitle(role));
             model.addAttribute("user", user);
             //TODO change findAll to findAllEligible
@@ -112,6 +124,7 @@ public class UserController {
             return "users/create";
         }
 
+        logger.info("wanna call user service to to create user");
         User savedUser = userService.save(user, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         redirectAttributes.addFlashAttribute("saved_message", pageUtil.buildSaveMessage(role));

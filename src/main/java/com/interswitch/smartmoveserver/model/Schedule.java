@@ -5,7 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /*
  * Created by adebola.owolabi on 8/7/2020
@@ -34,15 +35,27 @@ public class Schedule implements Serializable {
     @ManyToOne
     private VehicleCategory vehicle;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime departure;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate departureDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime arrival;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    private LocalTime departureTime;
 
-    private String departureString;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate arrivalDate;
 
-    private String arrivalString;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    private LocalTime arrivalTime;
+
+    private String duration;
+
+    private String departureDateString;
+
+    private String arrivalDateString;
+
+    private String departureTimeString;
+
+    private String arrivalTimeString;
 
     @ManyToOne
     @JoinColumn(name = "owner")

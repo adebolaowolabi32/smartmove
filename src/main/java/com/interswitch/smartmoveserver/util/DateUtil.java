@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -82,8 +83,13 @@ public class DateUtil {
     }
 
     public static String formatDate(LocalDate date) {
-        DateFormat format = new SimpleDateFormat("MMM dd yyyy");
+        DateFormat format = new SimpleDateFormat("MMMM dd, yyyy");
         return format.format(date);
+    }
+
+    public static String formatTime(LocalTime time) {
+        DateFormat format = new SimpleDateFormat("HH:mm aa");
+        return format.format(time);
     }
 
     public static String getTodayDate() {

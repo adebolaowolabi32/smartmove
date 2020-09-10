@@ -76,7 +76,8 @@ public class TicketService {
         //List<Schedule> schedules = scheduleService.findByOwner);
         List<Schedule> schedules = scheduleService.findAll();
         List<Schedule> scheduleResults = schedules.stream()
-                .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName().equals(scheduleBooking.getStopTerminal()) && s.getDeparture().toLocalDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
+                .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName()
+                        .equals(scheduleBooking.getStopTerminal()) && s.getDepartureDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
         scheduleBooking.setSchedules(scheduleResults);
         return scheduleBooking;
     }
@@ -88,6 +89,7 @@ public class TicketService {
         ticketDetails.setNoOfPassengers(noOfPassengers);
         ticketDetails.setSeats(getAvailableSeats());
         ticketDetails.setCountries(stateService.findAllCountries());
+        ticketDetails.setPassengers(initializePassengerList(noOfPassengers));
         return ticketDetails;
     }
 
@@ -102,7 +104,7 @@ public class TicketService {
         if (user.isPresent()) //and if user is operator
             operator = user.get();
         List<Ticket> tickets = new ArrayList<>();
-        Passenger passenger = new Passenger();
+        /*Passenger passenger = new Passenger();
         passenger.setGender(ticketDetails.getGender());
         passenger.setIdCategory(ticketDetails.getIdCategory());
         passenger.setIdNumber(ticketDetails.getIdNumber());
@@ -110,9 +112,10 @@ public class TicketService {
         passenger.setNationality(ticketDetails.getNationality());
         passenger.setSeatClass(ticketDetails.getSeatClass());
         passenger.setSeatNo(ticketDetails.getSeatNo());
-        ticketDetails.setPassenger(passenger);
-        List<Passenger> passengers = new ArrayList<>(); //ticketDetails.getPassengers();
-        passengers.add(passenger);
+        ticketDetails.setPassenger(passenger);*/
+        List<Passenger> passengers = ticketDetails.getPassengers();
+        logger.info("Passengers:");
+        logger.info(passengers);
         for (Passenger pass : passengers) {
             Ticket ticket = new Ticket();
             ticket.setOperator(operator);
@@ -134,9 +137,8 @@ public class TicketService {
 
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
         ticketRepository.saveAll(ticketDetails.getTickets());
-        Passenger passenger = ticketDetails.getPassenger();
         List<Passenger> passengers = ticketDetails.getPassengers();
-      //  for (Passenger passenger : passengers) {
+        for (Passenger passenger : passengers) {
             Manifest manifest = new Manifest();
             manifest.setName(passenger.getName());
             manifest.setGender(passenger.getGender());
@@ -154,7 +156,7 @@ public class TicketService {
             manifest.setTrip(ticketDetails.getTrip());
             manifest.setSchedule(ticketDetails.getSchedule());
             manifestService.save(manifest);
-       // }
+        }
 
         Transaction transaction = new Transaction();
         transaction.setVehicleId(ticketDetails.getSchedule().getVehicle().getName());
@@ -166,6 +168,14 @@ public class TicketService {
         transaction.setTransactionDateTime(LocalDateTime.now());
         transactionService.saveTransaction(transaction);
         return ticketDetails;
+    }
+
+    public List<Passenger> initializePassengerList(int noOfPassengers) {
+        List<Passenger> passengers = new ArrayList<>();
+        for (int i = 0; i < noOfPassengers; i++) {
+            passengers.add(new Passenger());
+        }
+        return passengers;
     }
 
     public List<String> getAvailableSeats() {

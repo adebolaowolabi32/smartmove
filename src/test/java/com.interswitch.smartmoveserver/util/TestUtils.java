@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public final class TestUtils {
-
     public static User buildTestUser(){
         User user = new User();
         user.setFirstName("Alice");

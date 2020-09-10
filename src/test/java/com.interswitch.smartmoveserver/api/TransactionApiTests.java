@@ -6,16 +6,17 @@ import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.model.request.LogTransaction;
 import com.interswitch.smartmoveserver.model.response.LogTransactionResponse;
 import com.interswitch.smartmoveserver.service.TransactionService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -28,7 +29,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest(excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @ContextConfiguration(classes = TransactionApi.class)
 public class TransactionApiTests {
@@ -44,7 +47,7 @@ public class TransactionApiTests {
 
     private Transaction transaction;
 
-    @Before
+    @BeforeAll
     public void setup() {
         transaction = new Transaction();
         long id = 1000013;

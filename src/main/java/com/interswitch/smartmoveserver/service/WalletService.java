@@ -2,20 +2,15 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
-import com.interswitch.smartmoveserver.model.WalletTransfer;
-import com.interswitch.smartmoveserver.model.request.Transfer;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.WalletRepository;
 import com.interswitch.smartmoveserver.repository.WalletTransferRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.util.Optional;
 
 /**
@@ -24,21 +19,24 @@ import java.util.Optional;
 @Service
 public class WalletService {
     @Autowired
-    WalletRepository walletRepository;
+    private WalletRepository walletRepository;
 
     @Autowired
-    WalletTransferRepository transferRepository;
+    private WalletTransferRepository transferRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private TransferService transferService;
 
     @Autowired
     PageUtil pageUtil;
 
     public Wallet save(Wallet wallet) {
-        long id = wallet.getId();
-        boolean exists = walletRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Wallet already exists");
         return walletRepository.save(wallet);
     }
 
@@ -57,12 +55,15 @@ public class WalletService {
     public Wallet findByOwner(String owner) {
         Optional<User> user = userRepository.findByUsername(owner);
         if(user.isPresent())
-            return this.findByOwner(user.get());
+            return walletRepository.findByOwnerId(user.get().getId());
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
-    public Wallet findByOwner(User user) {
-        return walletRepository.findByOwner(user).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist"));
+    public Wallet findByOwner(long ownerId) {
+        Optional<User> user = userRepository.findById(ownerId);
+        if (user.isPresent())
+            return walletRepository.findByOwnerId(ownerId);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
     public Wallet update(Wallet wallet) {
@@ -79,47 +80,6 @@ public class WalletService {
         else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
         }
-    }
-
-    public Page<WalletTransfer> findAllTransfers(Principal principal, Long owner, int page, int size) {
-        PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<Wallet> existing = walletRepository.findById(owner);
-        if(existing.isPresent()){
-            Wallet wallet = existing.get();
-            return transferRepository.findByWallet(pageable, wallet);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
-    }
-
-    public Long countTransfers(Principal principal, User owner){
-        Optional<Wallet> existing = walletRepository.findByOwner(owner);
-        if(existing.isPresent()){
-            Wallet wallet = existing.get();
-            return transferRepository.countByWallet(wallet);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
-    }
-
-    public void transfer(Transfer transfer, User authenticatedUser) {
-        double amount = transfer.getAmount();
-        Optional<Wallet> fromOptional = walletRepository.findById(authenticatedUser.getId());
-        if(fromOptional.isPresent()){
-            Optional<Wallet> toOptional = walletRepository.findById(transfer.getTo());
-            if(toOptional.isPresent()) {
-                Wallet from = fromOptional.get();
-                Wallet to = toOptional.get();
-                double fromBalance = from.getBalance();
-                double toBalance = to.getBalance();
-                fromBalance = fromBalance - amount;
-                toBalance = toBalance + amount;
-                from.setBalance(fromBalance);
-                to.setBalance(toBalance);
-                walletRepository.save(from);
-                walletRepository.save(to);
-            }
-            else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipient wallet does not exist");
-        }
-        else throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sender wallet does not exist");
     }
 
     public void activate(long walletId) {

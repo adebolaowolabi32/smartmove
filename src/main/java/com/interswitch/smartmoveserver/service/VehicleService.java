@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -38,25 +37,27 @@ public class VehicleService {
     @Autowired
     PageUtil pageUtil;
 
+    private final Log logger = LogFactory.getLog(getClass());
+
     @Autowired
     DocumentService documentService;
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     public List<Vehicle> findAll() {
         return vehicleRepository.findAll();
     }
 
     public Vehicle save(Vehicle vehicle) {
-
         long id = vehicle.getId();
         boolean exists = vehicleRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle already exists");
 
-        if (vehicle.getPicture() != null) {
+        if (!vehicle.getPicture().isEmpty() || vehicle.getPicture().getSize() > 0) {
             Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
             vehicle.setPictureUrl(doc.getUrl());
+        } else {
+            vehicle.setPictureUrl("");
         }
+
         Vehicle createdVehicle = vehicleRepository.save(vehicle);
         return createdVehicle;
     }
@@ -91,17 +92,18 @@ public class VehicleService {
 
     public Vehicle update(Vehicle vehicle) {
 
-        logger.info("Vehicle Picture===>"+vehicle.getPicture());
-
         Optional<Vehicle> existing = vehicleRepository.findById(vehicle.getId());
 
         if (existing.isPresent()) {
-            if (vehicle.getPicture() != null) {
-                logger.info("Vehicle Picture Not Null");
+
+            if (!vehicle.getPicture().isEmpty() || vehicle.getPicture().getSize() > 0) {
+                logger.info("...picture not null in vehicle service");
                 Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
                 vehicle.setPictureUrl(doc.getUrl());
             }
+
             return vehicleRepository.save(vehicle);
+
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
     }
