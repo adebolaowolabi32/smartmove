@@ -41,10 +41,10 @@
 				<tr th:each="vehicleCategory : ${vehicleCategoryPage.content}">
 					<td th:text="${vehicleCategory.id}"></td>
 					<td th:text="${vehicleCategory.mode}"></td>
-					<td th:text="${vehicleCategory.name}"></td>
-					<td th:text="${vehicleCategory.make.name}"></td>
-					<td th:text="${vehicleCategory.model.name}"></td>
-					<td th:text="${vehicleCategory.color}"></td>
+					<td th:text="${vehicleCategory !=null ? vehicleCategory.name : ''}"></td>
+					<td th:text="${vehicleCategory.make !=null ? vehicleCategory.make.name : '' }"></td>
+					<td th:text="${vehicleCategory.model !=null ? vehicleCategory.model.name : ''}"></td>
+					<td th:text="${vehicleCategory !=null ? vehicleCategory.color : ''}"></td>
 					<td th:text="${vehicleCategory.capacity}"></td>
 					<td th:text="${vehicleCategory.owner != null ? vehicleCategory.owner.username : ''}"></td>
 					<td>

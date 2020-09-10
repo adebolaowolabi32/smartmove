@@ -75,6 +75,7 @@ public class VehicleController {
     public String create(Principal principal, @Valid Vehicle vehicle, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            logger.info("wanna create vehicle===>ERROR");
             model.addAttribute("vehicle", vehicle);
             //TODO change findAll to findAllEligible
             List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();

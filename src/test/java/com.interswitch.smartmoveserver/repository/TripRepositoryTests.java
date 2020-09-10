@@ -52,11 +52,11 @@ public class TripRepositoryTests {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    private final Log logger = LogFactory.getLog(getClass());
+    //private final Log logger = LogFactory.getLog(getClass());
 
     @Before
     public void setUp() {
-        logger.info("Wanna setup tripRepository test");
+
         //User testUser = buildTestUser();
         User testUser = new User();
         testUser.setFirstName("Alice");
@@ -64,7 +64,9 @@ public class TripRepositoryTests {
         testUser.setRole(Enum.Role.VEHICLE_OWNER);
         testUser.setEmail(new RandomUtil().nextString().concat("@example.com"));
         testUser.setMobileNo(RandomUtil.getRandomNumber(11));
-        logger.info("Test user===>"+testUser);
+        testUser.setUsername(testUser.getEmail());
+        testUser.setPassword(""+new RandomUtil().nextString());
+
         User owner = userRepository.save(testUser);
         vehicle = new Vehicle();
         vehicle.setName("vehicle_A");
@@ -126,7 +128,7 @@ public class TripRepositoryTests {
 
     @After
     public void tearDown() {
-        logger.info("wanna tear down...");
+
         //delete all composite entities
         userRepository.deleteAll();
         vehicleRepository.deleteAll();
@@ -134,7 +136,6 @@ public class TripRepositoryTests {
         vehicleCategoryRepository.deleteAll();
         scheduleRepository.deleteAll();
         tripRepository.deleteAll();
-        logger.info("done with tear down...");
 
     }
     @Test

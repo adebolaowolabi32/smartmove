@@ -94,6 +94,7 @@ public class UserService {
     //if not, bounce request
 
     public User save(User user, Principal principal) {
+        logger.info("Inside user service...");
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //TODO :: see below
@@ -118,8 +119,10 @@ public class UserService {
     }
 
     private User save(PassportUser passportUser, User user, String owner) {
+        logger.info("Inside save for repo save");
         Enum.Role role = user.getRole();
         user.setOwner(null);
+
         if (!role.equals(Enum.Role.ISW_ADMIN)) {
             Optional<User> ownerUser = userRepository.findByUsername(owner);
             if (ownerUser.isPresent()) user.setOwner(ownerUser.get());
@@ -128,15 +131,18 @@ public class UserService {
         user.setUsername(passportUser.getUsername());
         user.setPassword(passportUser.getPassword());
 
-        if (user.getPicture() != null) {
+        if (!user.getPicture().isEmpty() || user.getPicture().getSize()>0) {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
             user.setPictureUrl(doc.getUrl());
         }
+
         userRepository.save(user);
+
         if (role.equals(Enum.Role.AGENT)) {
             walletService.autoCreateForUser(user);
             cardService.autoCreateForUser(user);
         }
+
         return user;
     }
 
@@ -183,7 +189,7 @@ public class UserService {
             User user = existingUser.get();
             user.setEnabled(enabled);
 
-            if (user.getPicture() != null) {
+            if (user.getPicture()!=null && (!user.getPicture().isEmpty() || user.getPicture().getSize()>0)) {
                 Document doc = documentService.saveDocument(new Document(user.getPicture()));
                 user.setPictureUrl(doc.getUrl());
             }

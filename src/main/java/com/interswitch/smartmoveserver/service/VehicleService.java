@@ -47,15 +47,17 @@ public class VehicleService {
     }
 
     public Vehicle save(Vehicle vehicle) {
-
         long id = vehicle.getId();
         boolean exists = vehicleRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle already exists");
 
-        if (vehicle.getPicture() != null) {
+        if (!vehicle.getPicture().isEmpty() || vehicle.getPicture().getSize() > 0) {
             Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
             vehicle.setPictureUrl(doc.getUrl());
+        } else {
+            vehicle.setPictureUrl("");
         }
+
         Vehicle createdVehicle = vehicleRepository.save(vehicle);
         return createdVehicle;
     }
@@ -90,17 +92,18 @@ public class VehicleService {
 
     public Vehicle update(Vehicle vehicle) {
 
-        logger.info("Vehicle Picture===>" + vehicle.getPicture());
-
         Optional<Vehicle> existing = vehicleRepository.findById(vehicle.getId());
 
         if (existing.isPresent()) {
-            if (vehicle.getPicture() != null) {
-                logger.info("Vehicle Picture Not Null");
+
+            if (!vehicle.getPicture().isEmpty() || vehicle.getPicture().getSize() > 0) {
+                logger.info("...picture not null in vehicle service");
                 Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
                 vehicle.setPictureUrl(doc.getUrl());
             }
+
             return vehicleRepository.save(vehicle);
+
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
     }

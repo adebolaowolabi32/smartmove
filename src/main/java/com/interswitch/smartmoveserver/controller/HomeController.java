@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.Wallet;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,7 @@ public class HomeController {
     public String dashboard(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
+        Wallet wallet = walletService.findByOwner(user.getUsername());
         Long no_admins = 0L;
         Long no_regulators = 0L;
         Long no_operators = 0L;
@@ -106,8 +108,8 @@ public class HomeController {
             no_readers = deviceService.countByTypeAndOwner(Enum.DeviceType.READER, user);
             no_transactions = transactionService.countAll();
             //if(role == Enum.Role.AGENT ) {
-                card_balance = cardService.findByOwner(user.getId()).getBalance();
-            wallet_balance = walletService.findByOwner(user.getUsername()).getBalance();
+            card_balance = cardService.findByOwner(user.getId()).getBalance();
+            wallet_balance = wallet!=null ? wallet.getBalance() : 0D;
             no_cards = cardService.countAll();
             no_transfers = transferService.countAll();
             //}
@@ -130,7 +132,7 @@ public class HomeController {
             no_cards = cardService.countAll();
             no_transfers = transferService.countAll();
             no_trips = tripService.countAll();
-            wallet_balance = walletService.findByOwner(user.getUsername()).getBalance();
+            wallet_balance = wallet!=null ? wallet.getBalance() : 0D;;
         }
         model.addAttribute("no_admins", no_admins);
         model.addAttribute("no_regulators", no_regulators);
