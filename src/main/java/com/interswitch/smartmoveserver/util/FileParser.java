@@ -21,7 +21,6 @@ public class FileParser<T> {
         ObjectReader reader = mapper.readerFor(model).with(schema);
         return reader.<T>readValues(stream).readAll();
     }
-
         /*
         public static <T> void write(File file,List<CustomerDTO> customersDto) throws IOException {
 

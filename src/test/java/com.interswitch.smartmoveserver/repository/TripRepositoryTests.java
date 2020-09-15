@@ -26,14 +26,14 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class TripRepositoryTests {
 
-    @Autowired
-    private TripRepository tripRepository;
-
     private Trip savedTrip;
 
     private Trip trip;
 
     private Vehicle vehicle;
+
+    @Autowired
+    private TripRepository tripRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -52,7 +52,7 @@ public class TripRepositoryTests {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    //private final Log logger = LogFactory.getLog(getClass());
+    private final Log logger = LogFactory.getLog(getClass());
 
     @Before
     public void setUp() {
@@ -68,6 +68,7 @@ public class TripRepositoryTests {
         testUser.setPassword(""+new RandomUtil().nextString());
 
         User owner = userRepository.save(testUser);
+
         vehicle = new Vehicle();
         vehicle.setName("vehicle_A");
         vehicle.setDevice(new Device());
@@ -128,14 +129,13 @@ public class TripRepositoryTests {
 
     @After
     public void tearDown() {
-
         //delete all composite entities
-        userRepository.deleteAll();
-        vehicleRepository.deleteAll();
-        vehicleMakeRepository.deleteAll();
-        vehicleCategoryRepository.deleteAll();
-        scheduleRepository.deleteAll();
         tripRepository.deleteAll();
+        scheduleRepository.deleteAll();
+        vehicleCategoryRepository.deleteAll();
+        vehicleMakeRepository.deleteAll();
+        vehicleRepository.deleteAll();
+        userRepository.deleteAll();
 
     }
     @Test
@@ -149,7 +149,6 @@ public class TripRepositoryTests {
                     assertThat(trp.getReferenceNo()).isEqualTo(trip.getReferenceNo());
                     assertThat(trp.getVehicle()).isEqualTo(trip.getVehicle());
                     assertThat(trp.getSchedule()).isEqualTo(trip.getSchedule());
-
                 });
     }
     @Test
@@ -169,11 +168,13 @@ public class TripRepositoryTests {
         List<Trip> trips = tripRepository.findByDriverUsername(savedTrip.getDriver().getUsername());
         assertTrue(trips.size()>0);
     }
+
     @Test
-    public void testfindAll() {
+    public void testFindAll() {
         List<Trip> trips = tripRepository.findAll();
         assertTrue(trips.size()>0);
     }
+
     @Test
     public void testDelete() {
         tripRepository.deleteById(savedTrip.getId());
