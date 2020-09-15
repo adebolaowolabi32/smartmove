@@ -6,9 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/*
- * Created by adebola.owolabi on 7/18/2020
- */
+
 @Data
 @Entity
 @Table(name = "manifests")
