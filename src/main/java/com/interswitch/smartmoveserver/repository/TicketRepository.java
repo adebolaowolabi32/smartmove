@@ -13,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
     Page<Ticket> findAllByOperator(Pageable pageable, User operator);
+
+    Ticket findByReferenceNo(String referenceNo);
 }

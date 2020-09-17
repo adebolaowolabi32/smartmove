@@ -237,11 +237,15 @@ public class TicketService {
         return ticketRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket does not exist"));
     }
 
+    public Ticket findByReferenceNo(String ref) {
+        return ticketRepository.findByReferenceNo(ref);
+    }
+
     public Page<Ticket> findAllByOperator(Principal principal, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         Optional<User> user = userRepository.findByUsername(principal.getName());
         if (user.isPresent())
             return ticketRepository.findAllByOperator(pageable, user.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket Owner not found");
     }
 }

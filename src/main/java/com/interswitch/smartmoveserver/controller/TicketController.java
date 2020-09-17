@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Ticket;
-import com.interswitch.smartmoveserver.model.view.TicketDetails;
 import com.interswitch.smartmoveserver.service.TicketService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -39,14 +38,6 @@ public class TicketController {
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
         model.addAttribute("ticketPage", ticketPage);
         return "tickets/get";
-    }
-
-    @GetMapping("/pass")
-    public String showBoardingPass(Principal principal, Model model) {
-        TicketDetails ticketDetails = new TicketDetails();
-        model.addAttribute("ticketDetails", ticketDetails);
-        model.addAttribute("owners", userService.findAll());
-        return "tickets/pass";
     }
 
     @GetMapping("/details/{id}")
