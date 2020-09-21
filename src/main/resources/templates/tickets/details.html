@@ -8,9 +8,10 @@
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <h2><b>Ticket Details</b></h2>
+                    <h2 class="tabbed"><b> Ticket Details</b></h2>
                 </div>
             </div>
+            <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{ticket.saved.message} : false)"></div>
             <div class="card p-3">
                 <div class="row">
@@ -35,31 +36,45 @@
                             <div class="col-sm-8">
                                 <span id="vehicle" th:text="${ticket.schedule.vehicle.name}"></span></div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="trip"><b>Trip</b></label>
+                            <div class="col-sm-8">
+                                <span id="trip" th:text="${ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name}"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="col">
                         <div class="form-group row">
-                            <label class="control-label col-sm-4" for="trip"><b>Trip</b></label>
-                            <div class="col-sm-8">
-                                <span id="trip"
-                                      th:text="${ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name}"></span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4" for="date"><b>Trip Departure Date</b></label>
+                            <label class="col-sm-4" for="date"><b>Departure Date</b></label>
                             <div class="col-sm-8">
                                 <span id="date"
                                       th:text="${ticket.schedule.departureDate + ' ' + ticket.schedule.departureTime}"></span>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-sm-4" for="seatNo"><b>Seat</b></label>
+                            <label class="col-sm-4" for="seatNo"><b>Seat</b></label>
                             <div class="col-sm-8">
                                 <span id="seatNo" th:text="${ticket.seatNo}"></span></div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-sm-4" for="seatClass"><b>Seat Class</b></label>
+                            <label class="col-sm-4" for="seatClass"><b>Seat Class</b></label>
                             <div class="col-sm-8">
                                 <span id="seatClass" th:text="${ticket.seatClass}"></span></div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="fare"><b>Fare</b></label>
+                            <div class="col-sm-8">
+                                <span id="fare" th:text="${ticket.fare}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="refunded"><b>Refunded</b></label>
+                            <div class="col-sm-8">
+                                <label class="switch">
+                                    <input disabled id="refunded" name="refunded" th:checked="${ticket.refunded}" type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                                </span></div>
                         </div>
                     </div>
                 </div>

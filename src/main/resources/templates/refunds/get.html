@@ -34,17 +34,23 @@
                     <th>Vehicle</th>
                     <th>Reason for Refund</th>
                     <th>Refund Date</th>
+                    <th>View Details</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="refund : ${refundPage.content}">
-                    <td th:text="${refund.referenceNo}"></td>
+                    <td th:text="${refund.ticket.referenceNo}"></td>
                     <td th:text="${refund.ticket.passengerName}"></td>
                     <td th:text="${refund.ticket.schedule.startTerminal.name + ' - ' + refund.ticket.schedule.stopTerminal.name}"></td>
                     <td th:text="${refund.ticket.schedule.departureDate + ' ' + refund.ticket.schedule.departureTime}"></td>
                     <td th:text="${refund.ticket.schedule.vehicle.name}"></td>
                     <td th:text="${refund.reason}"></td>
                     <td th:text="${refund.refundDateTime}"></td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/refunds/details/{id}(id=${refund.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.Passenger;
+import com.interswitch.smartmoveserver.model.view.ReassignTicket;
 import com.interswitch.smartmoveserver.model.view.ScheduleBooking;
 import com.interswitch.smartmoveserver.model.view.TicketDetails;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
@@ -77,6 +78,7 @@ public class TicketService {
         //List<Schedule> schedules = scheduleService.findByOwner);
         LocalDate returnDate = scheduleBooking.getReturnDate();
         if (returnDate != null) scheduleBooking.setRoundTrip(true);
+        //make sure to search by operator
         List<Schedule> schedules = scheduleService.findAll();
         List<Schedule> scheduleResults = schedules.stream()
                 .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName()
@@ -173,6 +175,28 @@ public class TicketService {
         return ticketDetails;
     }
 
+    public ScheduleBooking reassignTicket(String username, ReassignTicket reassignTicket) {
+        User operator = new User();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) //and if user is operator
+            operator = user.get();
+        ScheduleBooking scheduleBooking = new ScheduleBooking();
+
+        Ticket ticket = findByReferenceNo(reassignTicket.getReferenceNo().trim());
+        if (ticket != null) {
+            Schedule schedule = ticket.getSchedule();
+            //make sure to search by operator
+            //List<Schedule> schedules = scheduleService.findByOwner);
+            List<Schedule> schedules = scheduleService.findAll();
+            List<Schedule> scheduleResults = schedules.stream()
+                    .filter(s -> s.getStartTerminal().getName().equals(schedule.getStartTerminal()) && s.getStopTerminal().getName()
+                            .equals(schedule.getStopTerminal()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
+            scheduleBooking.setSchedules(scheduleResults);
+        }
+        else scheduleBooking.setInvalid(true);
+        return scheduleBooking;
+    }
+
     private Ticket populateTicket(TicketDetails ticketDetails, Passenger pass) {
         Ticket ticket = new Ticket();
         ticket.setOperator(ticketDetails.getOperator());
@@ -226,6 +250,10 @@ public class TicketService {
     public Ticket save(Principal principal, Ticket ticket) {
         Optional<User> owner = userRepository.findByUsername(principal.getName());
         if (owner.isPresent()) ticket.setOperator(owner.get());
+        return ticketRepository.save(ticket);
+    }
+
+    public Ticket save(Ticket ticket) {
         return ticketRepository.save(ticket);
     }
 

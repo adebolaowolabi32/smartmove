@@ -42,6 +42,14 @@ public class ManifestService {
         return manifestRepository.findByScheduleId(pageable, scheduleId);
     }
 
+    public Manifest findByTripIdAndName(long tripId, String name) {
+        return manifestRepository.findByTripIdAndName(tripId, name);
+    }
+
+    public Manifest findByScheduleIdAndName(long scheduleId, String name) {
+        return manifestRepository.findByScheduleIdAndName(scheduleId, name);
+    }
+
     public Manifest save(Manifest manifest) {
         long id = manifest.getId();
         boolean exists = manifestRepository.existsById(id);
@@ -71,10 +79,6 @@ public class ManifestService {
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
         }
-    }
-
-    public List<Manifest> findByTripId(long tripId) {
-        return manifestRepository.findByTripId(tripId);
     }
 
     public Long countAll() {

@@ -14,6 +14,7 @@
 
             </div>
         </div>
+        <br>
         <div th:replace="fragments/booking-search :: booking-search"></div>
         <br>
         <div th:unless="${scheduleBooking.schedules.empty || scheduleBooking.roundTrip ? scheduleBooking.returnSchedules.empty : false}"

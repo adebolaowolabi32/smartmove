@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.model.view;
 
-import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.model.Ticket;
 import lombok.Data;
 
@@ -12,8 +11,6 @@ import java.io.Serializable;
  */
 @Data
 public class RefundTicket implements Serializable {
-    private Schedule schedule;
-
     private String referenceNo;
 
     private Ticket ticket;

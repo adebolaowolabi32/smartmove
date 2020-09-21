@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -32,5 +33,12 @@ public class RefundController {
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(refundPage));
         model.addAttribute("refundPage", refundPage);
         return "refunds/get";
+    }
+
+    @GetMapping("/details/{id}")
+    public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
+        TicketRefund refund = refundService.findById(id);
+        model.addAttribute("refund", refund);
+        return "refunds/details";
     }
 }
