@@ -130,7 +130,6 @@ public class HomeController {
             no_cards = cardService.countAll();
             no_transfers = transferService.countAll();
             no_trips = tripService.countAll();
-            wallet_balance = walletService.findByOwner(user.getUsername()).getBalance();
         }
         model.addAttribute("no_admins", no_admins);
         model.addAttribute("no_regulators", no_regulators);
