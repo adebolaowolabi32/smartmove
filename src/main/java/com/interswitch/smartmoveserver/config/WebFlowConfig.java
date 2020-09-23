@@ -28,6 +28,7 @@ public class WebFlowConfig extends AbstractFlowConfiguration {
         return getFlowDefinitionRegistryBuilder(flowBuilderServices())
                 .addFlowLocation("classpath:flows/issue-ticket-flow.xml", "issueTicket")
                 .addFlowLocation("classpath:flows/refund-ticket-flow.xml", "refundTicket")
+                .addFlowLocation("classpath:flows/reassign-ticket-flow.xml", "reassignTicket")
                 .build();
     }
 

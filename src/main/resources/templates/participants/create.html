@@ -13,6 +13,7 @@
                 </div>
             </div>
         </div>
+        <br>
         <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
         <form class="card p-3" action="#" method="post"
               th:action="@{/participants/create}" th:object="${participant}"

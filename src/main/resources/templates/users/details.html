@@ -18,6 +18,7 @@
                     </div>
                 </div>
             </div>
+            <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{${saved_message}} : (${updated} ? #{${updated_message}} : false))"></div>
             <div class="card p-3">
                 <div class="row">

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <title layout:fragment="title">Reassign Ticket</title>
 <div class="card mb-4" layout:fragment="content">
-    <div class="card-header"><i class="fas fa-retweet mr-1"></i>
+    <div class="card-header"><i class="fas fa-refresh-alt mr-1"></i>
         <span>Reassign Ticket</span></div>
     <div class="card-body">
         <div class="table-title">
@@ -14,23 +14,22 @@
 
             </div>
         </div>
-        <div>
-            <form class="card p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
-                  th:object="${reassignTicket}">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <label class="control-label" for="referenceNo"><b>Ticket Reference No.</b></label>
-                    </div>
-                    <div class="col-sm-8">
-                        <input class="form-control" id="referenceNo" th:field="*{referenceNo}">
-                    </div>
-                    <div class="col-sm-2">
-                        <input class="btn btn-outline-info btn-sized" type="submit" value="Next"/>
-                    </div>
+        <br>
+        <form class="card p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
+              th:object="${reassignTicket}">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="control-label" for="referenceNo"><b>Ticket Reference No.</b></label>
                 </div>
-                <input name="_eventId" type="hidden" value="reassignTicket"/>
-            </form>
-        </div>
+                <div class="col-sm-8">
+                    <input class="form-control" id="referenceNo" th:field="*{referenceNo}">
+                </div>
+                <div class="col-sm-2">
+                    <input class="btn btn-outline-info btn-sized" type="submit" value="Next"/>
+                </div>
+            </div>
+            <input name="_eventId" type="hidden" value="reassignTicket"/>
+        </form>
     </div>
 </div>
 </html>

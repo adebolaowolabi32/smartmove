@@ -23,6 +23,7 @@
 					</div>
 				</div>
 			</div>
+			<br>
             <div th:replace="fragments/alert-success :: alert-success (message=${funded} ? #{device.funded.message} : false)"></div>
 			<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{device.saved.message} : (${updated} ? #{device.updated.message} : false))"></div>
 			<div class="card p-3">

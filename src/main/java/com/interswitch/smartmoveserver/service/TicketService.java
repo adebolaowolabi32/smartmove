@@ -181,20 +181,42 @@ public class TicketService {
         if (user.isPresent()) //and if user is operator
             operator = user.get();
         ScheduleBooking scheduleBooking = new ScheduleBooking();
-
         Ticket ticket = findByReferenceNo(reassignTicket.getReferenceNo().trim());
         if (ticket != null) {
+            Schedule schedule = ticket.getSchedule();
+            reassignTicket.setSchedule(schedule);
+            reassignTicket.setTicket(ticket);
+            //make sure to search by operator
+            //List<Schedule> schedules = scheduleService.findByOwner);
+            List<Schedule> schedules = scheduleService.findAll();
+            List<Schedule> scheduleResults = schedules.stream()
+                    .filter(s -> s.getStartTerminal().getName().equals(schedule.getStartTerminal().getName()) && s.getStopTerminal().getName()
+                            .equals(schedule.getStopTerminal().getName()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
+            scheduleBooking.setSchedules(scheduleResults);
+        }
+        else scheduleBooking.setInvalid(true);
+        return scheduleBooking;
+    }
+
+    public TicketDetails confirmReassignment(String username, ReassignTicket reassignTicket, TicketDetails ticketDetails) {
+        User operator = new User();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) //and if user is operator
+            operator = user.get();
+        Ticket ticket = reassignTicket.getTicket();
+        Schedule fromSchedule = reassignTicket.getSchedule();
+        Schedule toSchedule = ticketDetails.getSchedule();
+        Manifest manifest = manifestService.findByScheduleIdAndName(ticket.getSchedule().getId(), ticket.getPassengerName());
+        manifestService.delete(manifest.getId());
             Schedule schedule = ticket.getSchedule();
             //make sure to search by operator
             //List<Schedule> schedules = scheduleService.findByOwner);
             List<Schedule> schedules = scheduleService.findAll();
             List<Schedule> scheduleResults = schedules.stream()
-                    .filter(s -> s.getStartTerminal().getName().equals(schedule.getStartTerminal()) && s.getStopTerminal().getName()
-                            .equals(schedule.getStopTerminal()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
+                    .filter(s -> s.getStartTerminal().getName().equals(schedule.getStartTerminal().getName()) && s.getStopTerminal().getName()
+                            .equals(schedule.getStopTerminal().getName()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
             scheduleBooking.setSchedules(scheduleResults);
-        }
-        else scheduleBooking.setInvalid(true);
-        return scheduleBooking;
+            return ticketDetails;
     }
 
     private Ticket populateTicket(TicketDetails ticketDetails, Passenger pass) {

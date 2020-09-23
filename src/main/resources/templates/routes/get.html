@@ -20,6 +20,7 @@
                     </div>
                 </div>
             </div>
+            <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{route.deleted.message} : false)"></div>
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 

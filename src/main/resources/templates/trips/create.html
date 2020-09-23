@@ -11,10 +11,9 @@
                 <div class="col-sm-4">
                     <h2><b> Create New Trip</b></h2>
                 </div>
-
             </div>
         </div>
-
+        <br>
         <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
         <form class="card p-3" action="#" method="post"
               th:action="@{/trips/create}" th:object="${trip}"
