@@ -15,89 +15,89 @@
             </div>
         </div>
         <br>
-        <div th:replace="fragments/booking-search :: booking-search"></div>
-        <br>
-        <div th:unless="${scheduleBooking.schedules.empty || scheduleBooking.roundTrip ? scheduleBooking.returnSchedules.empty : false}"
-             th:with="schedules = ${return ? scheduleBooking.returnSchedules : scheduleBooking.schedules}">
-            <div class="card-header"><b><span th:text="${return ? 'Return Trip Availability' : 'Trip Availability'}">Trip Details</span></b>
-            </div>
+        <div th:unless="${scheduleBooking.invalid}">
+            <div th:replace="fragments/booking-search :: booking-search"></div>
             <br>
-            <div class="list-group-item list-group-item-action" th:each="schedule : ${schedules}">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <img alt="BRT Bus" id="brt" src="/img/brt.png">
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="booking-item-flight-details">
-                            <h5 class="booking-item-title" th:text="${schedule.vehicle.name}"> Executive Coach</h5>
-                            <p>
-                                <span th:text="${schedule.vehicle.capacity}"> 59</span> Seat(s)
-                            </p>
+            <div th:unless="${scheduleBooking.schedules.empty || scheduleBooking.roundTrip ? scheduleBooking.returnSchedules.empty : false}"
+                 th:with="schedules = ${return ? scheduleBooking.returnSchedules : scheduleBooking.schedules}">
+                <div class="card-header"><b><span th:text="${return ? 'Return Trip Availability' : 'Trip Availability'}">Trip Details</span></b>
+                </div>
+                <br>
+                <div class="list-group-item list-group-item-action" th:each="schedule : ${schedules}">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <img alt="BRT Bus" id="brt" src="/img/brt.png">
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <i class="fas fa-fan"></i><div class="text-small"> Air Conditioner</div>
+                        <div class="col-sm-4">
+                            <div class="booking-item-flight-details">
+                                <h5 class="booking-item-title" th:text="${schedule.vehicle.name}"> Executive Coach</h5>
+                                <p>
+                                    <span th:text="${schedule.vehicle.capacity}"> 59</span> Seat(s)
+                                </p>
                             </div>
-                            <div class="col">
-                                <i class="fa fa-film"></i><div class="text-small"> Media</div>
-                            </div>
-                            <div class="col">
-                                <i class="fa fa-plug"></i><div class="text-small"> Power</div>
-                            </div>
-                            <div class="col">
-                                <i class="fas fa-toilet"></i><div class="text-small"> Toilet</div>
-                            </div>
-                            <div class="col">
-                                <i class="fa fa-suitcase"></i><div class="text-small"> Excess Luggage</div>
-                            </div>
-                            <div class="col">
-                                <i class="fa fa-briefcase"></i><div class="text-small"> Extra Leg Room</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="row">
-                            <div class="col">
-                                <div class="booking-item-arrival">
-                                    <p class="text-color"><b>Departure</b></p>
-                                    <p class="booking-item-address" th:text="${schedule.startTerminal.name}"><i
-                                            class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
-                                    <p class="booking-item-address" th:text="${schedule.departureDate}"><i
-                                            class="fa fa-calender"></i> 17-Aug-2020</p>
-                                    <p class="booking-item-address" th:text="${schedule.departureTime}"><i
-                                            class="fa fa-clock-o"></i> 4:00 PM</p>
+                            <div class="row">
+                                <div class="col">
+                                    <i class="fas fa-fan"></i><div class="text-small"> Air Conditioner</div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="booking-item-arrival">
-                                    <p class="text-color"><b>Arrival</b></p>
-                                    <p class="booking-item-address" th:text="${schedule.stopTerminal.name}"><i
-                                            class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
-                                    <p class="booking-item-address" th:text="${schedule.arrivalDate}"><i
-                                            class="fa fa-calender"></i> 17-Aug-2020</p>
-                                    <p class="booking-item-address" th:text="${schedule.arrivalTime}"><i
-                                            class="fa fa-clock-o"></i> 4:00 PM</p>
+                                <div class="col">
+                                    <i class="fa fa-film"></i><div class="text-small"> Media</div>
+                                </div>
+                                <div class="col">
+                                    <i class="fa fa-plug"></i><div class="text-small"> Power</div>
+                                </div>
+                                <div class="col">
+                                    <i class="fas fa-toilet"></i><div class="text-small"> Toilet</div>
+                                </div>
+                                <div class="col">
+                                    <i class="fa fa-suitcase"></i><div class="text-small"> Excess Luggage</div>
+                                </div>
+                                <div class="col">
+                                    <i class="fa fa-briefcase"></i><div class="text-small"> Extra Leg Room</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <span class="amt-big">&#8358; <span th:text="${schedule.fare}">14,000.00/seat</span></span>
-                        <br>
-                        <a class="btn btn-lg btn-outline-primary btn-sized" id="expander"
-                           th:href="@{${flowExecutionUrl} + '&_eventId=makeBooking&scheduleId=' + ${schedule.id} + '&noOfPassengers=' + ${scheduleBooking.noOfPassengers}}">Select</a>
+                        <div class="col-sm-3">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="booking-item-arrival">
+                                        <p class="text-color"><b>Departure</b></p>
+                                        <p class="booking-item-address" th:text="${schedule.startTerminal.name}"><i
+                                                class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
+                                        <p class="booking-item-address" th:text="${schedule.departureDate}"><i
+                                                class="fa fa-calender"></i> 17-Aug-2020</p>
+                                        <p class="booking-item-address" th:text="${schedule.departureTime}"><i
+                                                class="fa fa-clock-o"></i> 4:00 PM</p>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="booking-item-arrival">
+                                        <p class="text-color"><b>Arrival</b></p>
+                                        <p class="booking-item-address" th:text="${schedule.stopTerminal.name}"><i
+                                                class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
+                                        <p class="booking-item-address" th:text="${schedule.arrivalDate}"><i
+                                                class="fa fa-calender"></i> 17-Aug-2020</p>
+                                        <p class="booking-item-address" th:text="${schedule.arrivalTime}"><i
+                                                class="fa fa-clock-o"></i> 4:00 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <span class="amt-big">&#8358; <span th:text="${schedule.fare}">14,000.00/seat</span></span>
+                            <br>
+                            <a class="btn btn-lg btn-outline-primary btn-sized" id="expander"
+                               th:href="@{${flowExecutionUrl} + '&_eventId=makeBooking&scheduleId=' + ${schedule.id} + '&noOfPassengers=' + ${scheduleBooking.noOfPassengers}}">Select</a>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--<div class="col-md-2">
-            <div class="booking-item-img-wrap">
-                <img src="/img/luxury-coach.png" alt="Chisco Executive Coach (59 Seats)" title="Chisco Executive Coach (59 Seats)">
+            <div th:if="${scheduleBooking.schedules.empty ||  scheduleBooking.roundTrip ? scheduleBooking.returnSchedules.empty : false}">
+                <br> No schedules were found for the selected route and/or date . Please try again.
             </div>
-        </div>-->
-        <div th:if="${scheduleBooking.schedules.empty ||  scheduleBooking.roundTrip ? scheduleBooking.returnSchedules.empty : false}">
-            <br> No schedules were found for the selected route and/or date . Please try again.
+        </div>
+        <div th:if="${scheduleBooking.invalid}">
+            <br> No tickets were found for the provided reference no. Please try again.
         </div>
     </div>
 </div>

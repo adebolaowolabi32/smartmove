@@ -96,9 +96,9 @@ public class TicketService {
         Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
         ticketDetails.setSchedule(schedule);
         ticketDetails.setNoOfPassengers(noOfPassengers);
-        ticketDetails.setSeats(getAvailableSeats());
+        ticketDetails.setSeats(this.getAvailableSeats());
         ticketDetails.setCountries(stateService.findAllCountries());
-        ticketDetails.setPassengers(initializePassengerList(noOfPassengers));
+        ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
 
         return ticketDetails;
     }
@@ -124,14 +124,14 @@ public class TicketService {
         logger.info("Passengers:");
         logger.info(passengers);
         for (Passenger pass : passengers) {
-            Ticket ticket = populateTicket(ticketDetails, pass);
+            Ticket ticket = this.populateTicket(ticketDetails, pass);
             //ticket.setTrip(ticketDetails.getTrip());
             ticket.setSchedule(ticketDetails.getSchedule());
             ticket.setFare(ticketDetails.getSchedule().getFare());
             totalFare += ticket.getFare();
             tickets.add(ticket);
             if (ticketDetails.getReturnSchedule() != null) {
-                Ticket returnTicket = populateTicket(ticketDetails, pass);
+                Ticket returnTicket = this.populateTicket(ticketDetails, pass);
                 //returnTicket.setTrip(ticketDetails.getTrip());
                 returnTicket.setSchedule(ticketDetails.getReturnSchedule());
                 returnTicket.setFare(ticketDetails.getReturnSchedule().getFare());
@@ -146,16 +146,16 @@ public class TicketService {
     }
 
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
-        saveAll(ticketDetails.getTickets());
+        this.saveAll(ticketDetails.getTickets());
         List<Manifest> manifests = new ArrayList<>();
         List<Passenger> passengers = ticketDetails.getPassengers();
         for (Passenger passenger : passengers) {
-            Manifest manifest = populateManifest(ticketDetails, passenger);
+            Manifest manifest = this.populateManifest(ticketDetails, passenger);
             //manifest.setTrip(ticketDetails.getTrip());
             manifest.setSchedule(ticketDetails.getSchedule());
             manifests.add(manifest);
             if (ticketDetails.getReturnSchedule() != null) {
-                Manifest manifest1 = populateManifest(ticketDetails, passenger);
+                Manifest manifest1 = this.populateManifest(ticketDetails, passenger);
                 //manifest1.setTrip(ticketDetails.getTrip());
                 manifest1.setSchedule(ticketDetails.getReturnSchedule());
                 manifests.add(manifest1);
@@ -184,9 +184,7 @@ public class TicketService {
         Ticket ticket = findByReferenceNo(reassignTicket.getReferenceNo().trim());
         if (ticket != null) {
             Schedule schedule = ticket.getSchedule();
-            reassignTicket.setSchedule(schedule);
             reassignTicket.setTicket(ticket);
-            //make sure to search by operator
             //List<Schedule> schedules = scheduleService.findByOwner);
             List<Schedule> schedules = scheduleService.findAll();
             List<Schedule> scheduleResults = schedules.stream()
@@ -203,20 +201,20 @@ public class TicketService {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) //and if user is operator
             operator = user.get();
+        List<Ticket> tickets = new ArrayList<>();
         Ticket ticket = reassignTicket.getTicket();
-        Schedule fromSchedule = reassignTicket.getSchedule();
+        Schedule fromSchedule = ticket.getSchedule();
         Schedule toSchedule = ticketDetails.getSchedule();
-        Manifest manifest = manifestService.findByScheduleIdAndName(ticket.getSchedule().getId(), ticket.getPassengerName());
-        manifestService.delete(manifest.getId());
-            Schedule schedule = ticket.getSchedule();
-            //make sure to search by operator
-            //List<Schedule> schedules = scheduleService.findByOwner);
-            List<Schedule> schedules = scheduleService.findAll();
-            List<Schedule> scheduleResults = schedules.stream()
-                    .filter(s -> s.getStartTerminal().getName().equals(schedule.getStartTerminal().getName()) && s.getStopTerminal().getName()
-                            .equals(schedule.getStopTerminal().getName()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
-            scheduleBooking.setSchedules(scheduleResults);
-            return ticketDetails;
+        ticket.setSchedule(toSchedule);
+        ticket.setReferenceNo(this.getTicketReference());
+        ticket.setBookingDate(DateUtil.formatDate(LocalDateTime.now()));
+        this.save(ticket);
+        tickets.add(ticket);
+        ticketDetails.setTickets(tickets);
+        Manifest manifest = manifestService.findByScheduleIdAndName(fromSchedule.getId(), ticket.getPassengerName());
+        manifest.setSchedule(toSchedule);
+        manifestService.update(manifest);
+        return ticketDetails;
     }
 
     private Ticket populateTicket(TicketDetails ticketDetails, Passenger pass) {
@@ -224,7 +222,7 @@ public class TicketService {
         ticket.setOperator(ticketDetails.getOperator());
         ticket.setBookingDate(ticketDetails.getBookingDate());
         ticket.setPassengerName(pass.getName());
-        ticket.setReferenceNo(getTicketReference());
+        ticket.setReferenceNo(this.getTicketReference());
         ticket.setSeatClass(pass.getSeatClass());
         ticket.setSeatNo(pass.getSeatNo());
         return ticket;

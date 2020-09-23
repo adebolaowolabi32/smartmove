@@ -14,7 +14,6 @@ import java.util.List;
 public class ReassignTicket implements Serializable {
     private String referenceNo;
     private Ticket ticket;
-    private Schedule schedule;
     private List<Schedule> schedules;
 
 }
