@@ -1,7 +1,9 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.model.Manifest;
 import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.view.Shuffle;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.apache.commons.logging.Log;
@@ -32,7 +34,17 @@ public class ScheduleService {
     ScheduleRepository scheduleRepository;
 
     @Autowired
+    ManifestService manifestService;
+
+    @Autowired
     PageUtil pageUtil;
+
+    public List<Schedule> shuffle(Shuffle shuffle) {
+        Manifest manifest = manifestService.findById(Long.parseLong(shuffle.getManifestId()));
+        manifest.setSchedule(shuffle.getSchedule());
+        manifestService.update(manifest);
+        return scheduleRepository.findAll();
+    }
 
     public List<Schedule> findAll() {
         return scheduleRepository.findAll();

@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.controller;
 import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Manifest;
 import com.interswitch.smartmoveserver.model.Schedule;
+import com.interswitch.smartmoveserver.model.view.Shuffle;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.apache.commons.logging.Log;
@@ -119,6 +120,14 @@ public class ScheduleController {
         scheduleService.update(schedule);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/schedules/details/" + id;
+    }
+
+    @PostMapping("/shuffle")
+    public String shuffle(Principal principal, @Valid Shuffle shuffle,
+                         BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        scheduleService.shuffle(shuffle);
+        redirectAttributes.addFlashAttribute("updated", true);
+        return "redirect:/schedules/details/";
     }
 
     @GetMapping("/delete/{id}")
