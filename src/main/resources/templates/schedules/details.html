@@ -81,7 +81,7 @@
                 <br>
                 <br>
                 <br>
-                <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
+                <table cellspacing="0" class="table table-bordered table-responsive-sm manifestTable" id="dataTable" width="100%">
                     <thead class='thead-light'>
                         <tr>
                             <th>SN</th>
@@ -112,17 +112,12 @@
                             <td th:text="${manifest.address}"></td>
                             <td th:text="${manifest.nextOfKinName}"></td>
                             <td th:text="${manifest.nextOfKinMobile}"></td>
-                            <td>
-                                <a class="justify-content-center movePassenger" data-id="${manifest.id}" data-toggle="modal" data-target="#movePassengerModal">
-                                    <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
-                                </a>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
-                <!-- Button to Open the Modal -->
-                <button type="button" class="btn btn-primary" >
-                    Open modal
+
+                <button class="btn btn-primary movePassenger" data-id="${manifest.id}" data-toggle="modal" data-target="#movePassengerModal">
+                    Move passengers
                 </button>
 
                 <div class="modal" id="movePassengerModal">
@@ -136,15 +131,16 @@
                                 <form class="card p-3" action="#" method="post"
                                       th:action="@{/schedules/shuffle}" th:object="${shuffle}">
                                     <div class="form-group row">
-                                        <label class="col-sm-2" for="schedule"><b>Select Schedule</b></label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control" th:field="*{schedule}" id="schedule">
+                                        <label class="col-sm-4" for="toSchedule"><b>Select Schedule</b></label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" th:field="*{toSchedule}" id="toSchedule">
                                                 <option value="">Select...</option>
-                                                <option th:each="schedule : ${schedules}" th:value="${schedule}" th:text="${schedule}"></option>
+                                                <option th:each="schedule : ${schedules}" th:value="${schedule.id}" th:text="${schedule}"></option>
                                             </select>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="manifestId" id="manifestId" value=""/>
+                                    <input type="hidden" name="fromSchedule" id="fromSchedule" th:value="${schedule.id}"/>
+                                    <input type="hidden" name="manifests" id="manifests" />
                                     <button type="submit" class="btn btn-outline-info btn-sized">Submit</button>
                                 </form>
                             </div>
@@ -166,20 +162,11 @@
                 </a>
                 <a th:href="@{/schedules/update/{id}(id=${schedule.id})}">
                     <button class='btn btn-outline-info' style="margin:5px" type='button'><i class='fas fa-edit'></i>
-                        Edit
-                        Schedule
+                        Edit Schedule
                     </button>
                 </a>
-
             </div>
-
         </div>
     </div>
-    <script>
-        $(document).on("click", "#movePassengerModal", function () {
-             var manifest = $(this).data('id');
-             $(".modal-body #manifestId").val( manifest);
-         });
-    </script>
 </div>
 </html>

@@ -33,5 +33,18 @@
                  document.title = "Error";
              }
         </script>
+        <script>
+            $(document).on("click", "#movePassengerModal", function () {
+                var selected = [];
+                $("#dataTable.manifestTable tr.selected").each(function(){
+                    selected.push($('td', this).html());
+                });
+                $(".modal-body #manifests").val(selected);
+             });
+
+             $("#dataTable.manifestTable tr").click(function(){
+                $(this).toggleClass('selected');
+             });
+        </script>
     </body>
 </html>

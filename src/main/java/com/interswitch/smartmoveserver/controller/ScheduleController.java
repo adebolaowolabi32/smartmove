@@ -60,11 +60,12 @@ public class ScheduleController {
                              @RequestParam(defaultValue = "10") int size) {
 
         Schedule schedule = scheduleService.findById(id);
-
         Page<Manifest> manifestPage = manifestService.findPaginatedManifestByScheduleId(page, size, schedule.getId());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(manifestPage));
         model.addAttribute("manifestPage", manifestPage);
         model.addAttribute("schedule", schedule);
+        model.addAttribute("shuffle", new Shuffle());
+        model.addAttribute("schedules", scheduleService.findAll()); //rework
         return "schedules/details";
     }
 
@@ -126,8 +127,7 @@ public class ScheduleController {
     public String shuffle(Principal principal, @Valid Shuffle shuffle,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         scheduleService.shuffle(shuffle);
-        redirectAttributes.addFlashAttribute("updated", true);
-        return "redirect:/schedules/details/";
+        return "redirect:/schedules/details/" + shuffle.getFromSchedule();
     }
 
     @GetMapping("/delete/{id}")

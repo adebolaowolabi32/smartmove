@@ -39,11 +39,12 @@ public class ScheduleService {
     @Autowired
     PageUtil pageUtil;
 
-    public List<Schedule> shuffle(Shuffle shuffle) {
-        Manifest manifest = manifestService.findById(Long.parseLong(shuffle.getManifestId()));
-        manifest.setSchedule(shuffle.getSchedule());
-        manifestService.update(manifest);
-        return scheduleRepository.findAll();
+    public void shuffle(Shuffle shuffle) {
+        for (Manifest manifest : shuffle.getManifests()) {
+            manifest.setSchedule(shuffle.getToSchedule());
+            manifestService.update(manifest);
+        }
+        //Manifest manifest = manifestService.findById(Long.parseLong(shuffle.getManifests()));
     }
 
     public List<Schedule> findAll() {
