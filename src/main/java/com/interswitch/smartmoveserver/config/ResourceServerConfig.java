@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
@@ -39,7 +40,8 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/api/**")
+        http.requestMatcher(new RequestHeaderRequestMatcher("Authorization"))
+                .authorizeRequests().antMatchers("/api/**")
                 .authenticated()
                 .and().csrf().disable()
                 .oauth2ResourceServer()
