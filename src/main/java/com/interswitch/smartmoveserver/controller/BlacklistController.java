@@ -65,7 +65,7 @@ public class BlacklistController {
         }
 
         @GetMapping("/remove/{id}")
-        public String remove(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+        public String remove(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
             blacklistService.remove(id);
             redirectAttributes.addFlashAttribute("deleted", true);
             return "redirect:/blacklists/get";

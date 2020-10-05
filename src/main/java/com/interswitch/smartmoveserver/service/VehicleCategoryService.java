@@ -1,10 +1,13 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.VehicleCategory;
+import com.interswitch.smartmoveserver.model.VehicleMake;
+import com.interswitch.smartmoveserver.model.VehicleModel;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleCategoryRepository;
+import com.interswitch.smartmoveserver.repository.VehicleMakeRepository;
+import com.interswitch.smartmoveserver.repository.VehicleModelRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,12 @@ public class VehicleCategoryService {
     VehicleCategoryRepository vehicleCategoryRepository;
 
     @Autowired
+    VehicleMakeService vehicleMakeService;
+
+    @Autowired
+    VehicleModelService vehicleModelService;
+
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -39,53 +48,41 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findAll();
     }
 
-    public VehicleCategory save(VehicleCategory vehicleCategory) {
-        long id = vehicleCategory.getId();
-        boolean exists = vehicleCategoryRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Category already exists");
-        return vehicleCategoryRepository.save(vehicleCategory);
-    }
-
     public VehicleCategory save(VehicleCategory vehicleCategory, Principal principal) {
         long id = vehicleCategory.getId();
         boolean exists = vehicleCategoryRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Category already exists");
         if(vehicleCategory.getOwner() == null) {
-            Optional<User> owner = userRepository.findByUsername(principal.getName());
-            if(owner.isPresent()) vehicleCategory.setOwner(owner.get());
+            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            vehicleCategory.setOwner(owner);
         }
-        return vehicleCategoryRepository.save(vehicleCategory);
+        return vehicleCategoryRepository.save(buildVehicleCategory(vehicleCategory));
     }
 
     public VehicleCategory findById(long id) {
         return vehicleCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist"));
     }
 
-    public VehicleCategory findById(Principal principal, long id) {
+    public VehicleCategory findById(long id, Principal principal) {
         return vehicleCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist"));
     }
 
-    public List<VehicleCategory> findAllByMode(Enum.TransportMode mode) {
-        return vehicleCategoryRepository.findAllByMode(mode);
-    }
+    //findAllByMode
 
-    public List<VehicleCategory> findAllByOwner(User owner) {
-        return vehicleCategoryRepository.findAllByOwner(owner);
-    }
-
-    public List<VehicleCategory> findAllByOwner(Long ownerId) {
-        Optional<User> owner = userRepository.findById(ownerId);
-        return vehicleCategoryRepository.findAllByOwner(owner.get());
-    }
-
-    public VehicleCategory update(VehicleCategory vehicleCategory) {
+    public VehicleCategory update(VehicleCategory vehicleCategory, Principal principal) {
         Optional<VehicleCategory> existing = vehicleCategoryRepository.findById(vehicleCategory.getId());
         if(existing.isPresent())
+        {
+            if(vehicleCategory.getOwner() == null) {
+                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                vehicleCategory.setOwner(owner);
+            }
             return vehicleCategoryRepository.save(vehicleCategory);
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist");
     }
 
-    public void delete(long id) {
+    public void delete(long id, Principal principal) {
         Optional<VehicleCategory> existing = vehicleCategoryRepository.findById(id);
         if(existing.isPresent())
             vehicleCategoryRepository.deleteById(id);
@@ -123,5 +120,16 @@ public class VehicleCategoryService {
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
+    }
+
+    private VehicleCategory buildVehicleCategory(VehicleCategory vehicleCategory) {
+        VehicleMake vehicleMake = vehicleCategory.getMake();
+        if(vehicleMake != null)
+            vehicleCategory.setMake(vehicleMakeService.findById(vehicleMake.getId()));
+
+        VehicleModel vehicleModel = vehicleCategory.getModel();
+        if(vehicleModel != null)
+            vehicleCategory.setModel(vehicleModelService.findById(vehicleModel.getId()));
+        return vehicleCategory;
     }
 }

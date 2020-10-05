@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Device;
-import com.interswitch.smartmoveserver.model.FundDevice;
+import com.interswitch.smartmoveserver.model.view.FundDevice;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.DeviceService;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -45,7 +45,7 @@ public class DeviceController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Device device = deviceService.findById(id);
+        Device device = deviceService.findById(id, principal);
         model.addAttribute("device", device);
         return "devices/details";
     }
@@ -72,7 +72,7 @@ public class DeviceController {
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Device device = deviceService.findById(id);
+        Device device = deviceService.findById(id, principal);
         model.addAttribute("device", device);
         model.addAttribute("owners", userService.findAll());
         return "devices/update";
@@ -87,15 +87,15 @@ public class DeviceController {
             model.addAttribute("owners", userService.findAll());
             return "devices/update";
         }
-        deviceService.update(device);
+        deviceService.update(device, principal);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/devices/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        Device device = deviceService.findById(id);
-        deviceService.delete(id);
+    public String delete(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+        Device device = deviceService.findById(id, principal);
+        deviceService.delete(id, principal);
         User owner = device.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

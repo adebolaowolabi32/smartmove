@@ -60,69 +60,44 @@ public class TerminalService {
         }
     }
 
-    public Terminal save(Terminal terminal) {
-        long id = terminal.getId();
-        boolean exists = terminalRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Terminal already exists");
-        return terminalRepository.save(terminal);
-    }
-
     public Terminal save(Terminal terminal, Principal principal) {
         long id = terminal.getId();
         boolean exists = terminalRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Terminal already exists");
         if(terminal.getOwner() == null) {
-            Optional<User> owner = userRepository.findByUsername(principal.getName());
-            if(owner.isPresent()) terminal.setOwner(owner.get());
+            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            terminal.setOwner(owner);
         }
         return terminalRepository.save(terminal);
     }
-    
+
     public Terminal findById(long id) {
         return terminalRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist"));
     }
-
-    public List<Terminal> findByOwner(long owner) {
-        Optional<User> user = userRepository.findById(owner);
-        if(user.isPresent())
-            return terminalRepository.findAllByOwner(user.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
+    
+    public Terminal findById(long id, Principal principal) {
+        return terminalRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist"));
     }
 
-    public Terminal update(Terminal terminal) {
+    public Terminal update(Terminal terminal, Principal principal) {
         Optional<Terminal> existing = terminalRepository.findById(terminal.getId());
-        if(existing.isPresent())
+        if(existing.isPresent()){
+            if(terminal.getOwner() == null) {
+                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                terminal.setOwner(owner);
+            }
             return terminalRepository.save(terminal);
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
     }
 
-    public void delete(long id) {
+    public void delete(long id, Principal principal) {
         Optional<Terminal> existing = terminalRepository.findById(id);
         if(existing.isPresent())
             terminalRepository.deleteById(id);
         else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
         }
-    }
-
-    public void activate(long terminalId) {
-        Optional<Terminal> terminalOptional = terminalRepository.findById(terminalId);
-        if(terminalOptional.isPresent()){
-            Terminal terminal = terminalOptional.get();
-            terminal.setEnabled(true);
-            terminalRepository.save(terminal);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
-    }
-
-    public void deactivate(long terminalId) {
-        Optional<Terminal> terminalOptional = terminalRepository.findById(terminalId);
-        if(terminalOptional.isPresent()){
-            Terminal terminal = terminalOptional.get();
-            terminal.setEnabled(false);
-            terminalRepository.save(terminal);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
     }
 
     public Long countByOwner(User user){

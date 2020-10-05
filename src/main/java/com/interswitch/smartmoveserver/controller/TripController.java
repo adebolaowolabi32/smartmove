@@ -48,7 +48,7 @@ public class TripController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Trip> tripPage = tripService.findAllPaginated(page, size);
+        Page<Trip> tripPage = tripService.findAllPaginated(principal, page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(tripPage));
         model.addAttribute("tripPage", tripPage);
         return "trips/get";
@@ -59,7 +59,7 @@ public class TripController {
                              @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "10") int size) {
 
-        Trip trip = tripService.findById(id);
+        Trip trip = tripService.findById(id, principal);
 
         Page<Manifest> manifestPage = manifestService.findPaginatedManifestByTripId(page, size, trip.getId());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(manifestPage));
@@ -90,14 +90,14 @@ public class TripController {
             return "trips/create";
         }
 
-        Trip savedTrip = tripService.save(trip);
+        Trip savedTrip = tripService.save(trip, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/trips/details/" + savedTrip.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Trip trip = tripService.findById(id);
+        Trip trip = tripService.findById(id, principal);
         model.addAttribute("trip", trip);
         model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
         model.addAttribute("schedules", scheduleService.findAll());
@@ -117,15 +117,15 @@ public class TripController {
             return "trips/update";
         }
 
-        tripService.update(trip);
+        tripService.update(trip, principal);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/trips/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        Trip trip = tripService.findById(id);
-        tripService.delete(id);
+        Trip trip = tripService.findById(id, principal);
+        tripService.delete(id, principal);
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/trips/get";
     }

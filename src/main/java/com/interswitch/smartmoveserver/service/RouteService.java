@@ -88,28 +88,21 @@ public class RouteService {
         boolean exists = routeRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route already exists");
         if (route.getOwner() == null) {
-            Optional<User> owner = userRepository.findByUsername(principal.getName());
-            if (owner.isPresent()) route.setOwner(owner.get());
+            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            route.setOwner(owner);
         }
         return routeRepository.save(route);
     }
 
-    public Route findById(long id) {
+    public Route findById(long id, Principal principal) {
         return routeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist"));
     }
 
-    public List<Route> find(Enum.TransportMode type) {
+    public List<Route> findByType(Enum.TransportMode type) {
         return routeRepository.findAllByType(type);
     }
 
-    public List<Route> findByOwner(long owner) {
-        Optional<User> user = userRepository.findById(owner);
-        if (user.isPresent())
-            return routeRepository.findAllByOwner(user.get());
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
-    }
-
-    public Route update(Route route) {
+    public Route update(Route route, Principal principal) {
         Optional<Route> existing = routeRepository.findById(route.getId());
         if (existing.isPresent()) {
             Terminal startTerminal = terminalService.findById(route.getStartTerminalId());
@@ -119,68 +112,22 @@ public class RouteService {
             route.setStartTerminalName(startTerminalName);
             route.setStopTerminalName(stopTerminalName);
             route.setName(startTerminalName + " - " + stopTerminalName);
+            if (route.getOwner() == null) {
+                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                route.setOwner(owner);
+            }
             return routeRepository.save(route);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
     }
 
-   /* public void assignToVehicle(long routeId, long vehicleId) {
-        Optional<Route> routeOptional = routeRepository.findById(routeId);
-        if (routeOptional.isPresent()) {
-            Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-            if (vehicleOptional.isPresent()) {
-                Vehicle vehicle = vehicleOptional.get();
-                Route route = routeOptional.get();
-                Set<Vehicle> vehicles = route.getVehicles();
-                vehicles.add(vehicle);
-                route.setVehicles(vehicles);
-                routeRepository.save(route);
-                Set<Route> routes = vehicle.getRoutes();
-                routes.add(route);
-                vehicle.setRoutes(routes);
-                vehicleRepository.save(vehicle);
-            } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Vehicle does not exist");
-        } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Route does not exist");
-    }
-
-    public void unassignFromVehicle(long routeId, long vehicleId) {
-        Optional<Route> route = routeRepository.findById(routeId);
-        if (route.isPresent()) {
-            Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleId);
-            if (vehicle.isPresent()) {
-                Set<Route> routes = vehicle.get().getRoutes();
-                routes.remove(route.get());
-            } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Vehicle does not exist");
-        } else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Route does not exist");
-    }*/
-
-    public void delete(long id) {
+    public void delete(long id, Principal principal) {
         Optional<Route> existing = routeRepository.findById(id);
         if (existing.isPresent())
             routeRepository.deleteById(id);
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
         }
-    }
-
-    public void activate(long routeId) {
-        Optional<Route> routeOptional = routeRepository.findById(routeId);
-        if (routeOptional.isPresent()) {
-            Route route = routeOptional.get();
-            route.setEnabled(true);
-            routeRepository.save(route);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
-    }
-
-    public void deactivate(long routeId) {
-        Optional<Route> routeOptional = routeRepository.findById(routeId);
-        if (routeOptional.isPresent()) {
-            Route route = routeOptional.get();
-            route.setEnabled(false);
-            routeRepository.save(route);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
     }
 
     public Long countByOwner(User user) {

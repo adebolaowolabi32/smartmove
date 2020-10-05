@@ -104,15 +104,6 @@ public class TicketService {
         if (user.isPresent()) //and if user is operator
             operator = user.get();
         List<Ticket> tickets = new ArrayList<>();
-        /*Passenger passenger = new Passenger();
-        passenger.setGender(ticketDetails.getGender());
-        passenger.setIdCategory(ticketDetails.getIdCategory());
-        passenger.setIdNumber(ticketDetails.getIdNumber());
-        passenger.setName(ticketDetails.getName());
-        passenger.setNationality(ticketDetails.getNationality());
-        passenger.setSeatClass(ticketDetails.getSeatClass());
-        passenger.setSeatNo(ticketDetails.getSeatNo());
-        ticketDetails.setPassenger(passenger);*/
         List<Passenger> passengers = ticketDetails.getPassengers();
         logger.info("Passengers:");
         logger.info(passengers);
@@ -166,7 +157,7 @@ public class TicketService {
         transaction.setMode(ticketDetails.getSchedule().getMode());
         transaction.setAmount(ticketDetails.getTotalFare());
         transaction.setTransactionDateTime(LocalDateTime.now());
-        transactionService.saveTransaction(transaction);
+        transactionService.save(transaction);
         return ticketDetails;
     }
 

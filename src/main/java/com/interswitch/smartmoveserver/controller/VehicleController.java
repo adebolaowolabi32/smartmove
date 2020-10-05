@@ -55,7 +55,7 @@ public class VehicleController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Vehicle vehicle = vehicleService.findById(principal, id);
+        Vehicle vehicle = vehicleService.findById(id, principal);
         model.addAttribute("vehicle", vehicle);
         return "vehicles/details";
     }
@@ -83,14 +83,14 @@ public class VehicleController {
             return "vehicles/create";
         }
 
-        Vehicle savedVehicle = vehicleService.save(vehicle);
+        Vehicle savedVehicle = vehicleService.save(vehicle, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/vehicles/details/" + savedVehicle.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Vehicle vehicle = vehicleService.findById(principal, id);
+        Vehicle vehicle = vehicleService.findById(id, principal);
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
         List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
@@ -112,15 +112,15 @@ public class VehicleController {
             model.addAttribute("owners", userService.findAll());
             return "vehicles/update";
         }
-        vehicleService.update(vehicle);
+        vehicleService.update(vehicle, principal);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/vehicles/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        Vehicle vehicle = vehicleService.findById(id);
-        vehicleService.delete(id);
+        Vehicle vehicle = vehicleService.findById(id, principal);
+        vehicleService.delete(id, principal);
         User owner = vehicle.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);
