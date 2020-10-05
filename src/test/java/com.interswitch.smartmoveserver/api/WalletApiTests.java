@@ -17,7 +17,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.Principal;
+
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,7 +53,7 @@ public class WalletApiTests {
     @Test
     public void testSave() throws Exception {
         when(walletService.save(wallet)).thenReturn(wallet);
-        mvc.perform(post("/wallets")
+        mvc.perform(post("/api/wallets")
                 .content(new ObjectMapper().writeValueAsString(wallet))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -60,8 +63,8 @@ public class WalletApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(walletService.update(wallet)).thenReturn(wallet);
-        mvc.perform(put("/wallets")
+        when(walletService.update(wallet, any(Principal.class))).thenReturn(wallet);
+        mvc.perform(put("/api/wallets")
                 .content(new ObjectMapper().writeValueAsString(wallet))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -71,8 +74,8 @@ public class WalletApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(walletService.findById(wallet.getId())).thenReturn(wallet);
-        mvc.perform(get("/wallets/{id}", wallet.getId())
+        when(walletService.findById(wallet.getId(), any(Principal.class))).thenReturn(wallet);
+        mvc.perform(get("/api/wallets/{id}", wallet.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -81,7 +84,7 @@ public class WalletApiTests {
 
     @Test
     public void testDelete() throws Exception {
-        mvc.perform(delete("/wallets/{id}", wallet.getId())
+        mvc.perform(delete("/api/wallets/{id}", wallet.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

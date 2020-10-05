@@ -28,8 +28,6 @@ public class Terminal implements Serializable {
 
     private String lga;
 
-    private String location;
-
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;

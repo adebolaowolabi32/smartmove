@@ -56,7 +56,7 @@ public class RouteController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Route route = routeService.findById(id);
+        Route route = routeService.findById(id, principal);
         model.addAttribute("route", route);
         return "routes/details";
     }
@@ -89,7 +89,7 @@ public class RouteController {
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Route route = routeService.findById(id);
+        Route route = routeService.findById(id, principal);
         model.addAttribute("route", route);
         model.addAttribute("owners", userService.findAll());
         model.addAttribute("terminals", terminalService.findAll());
@@ -108,15 +108,15 @@ public class RouteController {
             model.addAttribute("vehicles", vehicleService.findAll());
             return "routes/update";
         }
-        routeService.update(route);
+        routeService.update(route, principal);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/routes/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        Route route = routeService.findById(id);
-        routeService.delete(id);
+    public String delete(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+        Route route = routeService.findById(id, principal);
+        routeService.delete(id, principal);
         User owner = route.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

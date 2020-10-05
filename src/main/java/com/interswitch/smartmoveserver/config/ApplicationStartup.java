@@ -44,7 +44,6 @@ public class ApplicationStartup implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        logger.info("This is deployment 403 forbidden!");
         User adminUser = new User();
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
@@ -73,6 +72,7 @@ public class ApplicationStartup implements CommandLineRunner {
         loadVehicleMakesAndModels();
     }
 
+/*
     public void loadManifestData(long tripId) {
 
         manifestService.deleteAll();
@@ -118,6 +118,7 @@ public class ApplicationStartup implements CommandLineRunner {
         manifest.setAddress("22 Captain Black Road,Lagos.");
         manifestService.save(manifest);
     }
+*/
 
     public void loadVehicleMakesAndModels(){
         Map<String, List<String>> vehicles = new HashMap<>();
