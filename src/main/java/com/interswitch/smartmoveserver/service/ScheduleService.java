@@ -4,8 +4,6 @@ import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,8 +23,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ScheduleService {
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     ScheduleRepository scheduleRepository;

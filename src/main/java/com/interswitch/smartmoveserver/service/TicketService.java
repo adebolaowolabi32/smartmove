@@ -10,8 +10,7 @@ import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +28,9 @@ import java.util.stream.Collectors;
 /*
  * Created by adebola.owolabi on 7/27/2020
  */
+@Slf4j
 @Service
 public class TicketService {
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     private TicketRepository ticketRepository;
@@ -105,8 +104,7 @@ public class TicketService {
             operator = user.get();
         List<Ticket> tickets = new ArrayList<>();
         List<Passenger> passengers = ticketDetails.getPassengers();
-        logger.info("Passengers:");
-        logger.info(passengers);
+        log.info("Passengers:", passengers);
         for (Passenger pass : passengers) {
             Ticket ticket = new Ticket();
             ticket.setOperator(operator);

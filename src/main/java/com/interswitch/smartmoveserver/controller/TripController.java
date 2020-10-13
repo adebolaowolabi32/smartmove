@@ -6,8 +6,6 @@ import com.interswitch.smartmoveserver.model.Manifest;
 import com.interswitch.smartmoveserver.model.Trip;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -38,8 +36,6 @@ public class TripController {
 
     @Autowired
     private VehicleService vehicleService;
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     PageUtil pageUtil;
