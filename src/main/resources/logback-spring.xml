@@ -1,0 +1,39 @@
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <property scope="context" name="service_name" value="smartmove"/>
+    <springProperty scope="context" name="springKafkaBootstrapServers" source="spring.kafka.bootstrap-servers"
+                    defaultValue=""/>
+    <property name="LOG_FILE" value="logs/${service_name}.log"/>​
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${service_name:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+    <appender name="TIME_BASED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%i.log.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>13</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>20MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+    <appender name="kafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+        <topic>${service_name}-logs</topic>
+        <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy" />
+        <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy" />
+        <producerConfig>max.block.ms=0</producerConfig>
+        <producerConfig>bootstrap.servers=172.26.40.211:9092,172.26.40.212:9092,172.26.40.213:9092</producerConfig>
+        <appender-ref ref="TIME_BASED_FILE" />
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <springProfile name="uat, prod">
+            <appender-ref ref="kafkaAppender" />
+        </springProfile>
+    </root>
+</configuration>

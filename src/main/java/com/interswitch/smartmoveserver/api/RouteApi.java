@@ -1,6 +1,6 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.Page;
 import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
 
 /**
  * @author adebola.owolabi
@@ -20,63 +20,30 @@ public class RouteApi {
     RouteService routeService;
 
     @GetMapping(produces = "application/json")
-    private List<Route> findAll() {
+    private Page<Route> findAll(@RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "10") int size, Principal principal) {
 
-        return routeService.findAll();
-    }
+        org.springframework.data.domain.Page pageable = routeService.findAllPaginated(principal, 0L, page, size);
+        return new Page<Route>(pageable.getTotalElements(), pageable.getContent());    }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private Route save(@Validated @RequestBody Route route) {
-        return routeService.save(route);
+    private Route save(@Validated @RequestBody Route route, Principal principal) {
+        return routeService.save(route, principal);
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    private Route findById(@Validated @PathVariable long id) {
-        return routeService.findById(id);
+    private Route findById(@Validated @PathVariable long id, Principal principal) {
+        return routeService.findById(id, principal);
     }
-
-    @GetMapping(value = "/findByType/{type}", produces = "application/json")
-    private List<Route> find(@Validated @PathVariable Enum.TransportMode type) {
-        return routeService.find(type);
-    }
-
-    @GetMapping(value = "/findByOwner/{owner}", produces = "application/json")
-    private List<Route> findByOwner(@Validated @PathVariable long owner) {
-        return routeService.findByOwner(owner);
-    }
-
-   /* @PostMapping(value = "/{routeId}/assignToVehicle/{vehicleId}", produces = "application/json", consumes = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void assignToVehicle(@Validated @PathVariable long routeId, @Validated @PathVariable long vehicleId) {
-        routeService.assignToVehicle(routeId, vehicleId);
-    }
-
-    @DeleteMapping(value = "/{routeId}/unAssignFromVehicle/{vehicleId}", produces = "application/json", consumes = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void unassignFromVehicle(@Validated @PathVariable long routeId, @Validated @PathVariable long vehicleId) {
-        routeService.unassignFromVehicle(routeId, vehicleId);
-    }*/
 
     @PutMapping(produces = "application/json", consumes = "application/json")
-    private Route update(@Validated @RequestBody Route route) {
-        return routeService.update(route);
+    private Route update(@Validated @RequestBody Route route, Principal principal) {
+        return routeService.update(route, principal);
     }
 
     @DeleteMapping("/{id}")
-    private void delete(@Validated @PathVariable long id) {
-        routeService.delete(id);
-    }
-
-    @PostMapping(value = "/activate/{id}", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void activate(@Validated @PathVariable long id) {
-        routeService.activate(id);
-    }
-
-    @PostMapping(value = "/deactivate/{id}", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void deactivate(@Validated @PathVariable long id) {
-        routeService.deactivate(id);
+    private void delete(@Validated @PathVariable long id, Principal principal) {
+        routeService.delete(id, principal);
     }
 }

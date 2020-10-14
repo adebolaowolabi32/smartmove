@@ -28,12 +28,8 @@ public class User implements Serializable {
 
     private String address;
 
-    //@Column(unique=true)
-    //add non null unique constraint
     private String mobileNo;
 
-    //@Column(unique=true)
-    //add non null unique constraint
     private String email;
 
     @Enumerated(EnumType.STRING)

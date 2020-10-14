@@ -72,7 +72,7 @@ public class ConfigController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
         configService.delete(id);
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/configurations/get";

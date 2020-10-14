@@ -1,13 +1,20 @@
 package com.interswitch.smartmoveserver.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 /**
  * @author adebola.owolabi
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "terminals")
 public class Terminal implements Serializable {
@@ -27,8 +34,6 @@ public class Terminal implements Serializable {
     private String code;
 
     private String lga;
-
-    private String location;
 
     @ManyToOne
     @JoinColumn(name = "owner")

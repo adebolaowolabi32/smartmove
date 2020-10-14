@@ -1,6 +1,6 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.Page;
 import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
 
 /**
  * @author adebola.owolabi
@@ -19,29 +19,20 @@ public class TransactionApi {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public Transaction save(@RequestBody @Validated Transaction transaction) {
-        return transactionService.save(transaction);
-    }
-
     @GetMapping(produces = "application/json")
-    public List<Transaction> findAll() {
-        return transactionService.findAll();
-    }
+    public Page<Transaction> findAll(@RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "10") int size, Principal principal) {
+        org.springframework.data.domain.Page pageable = transactionService.findAllPaginated(principal, page, size);
+        return new Page<Transaction>(pageable.getTotalElements(), pageable.getContent());    }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    public Transaction findById(@Validated @PathVariable long id) {
-        return transactionService.findById(id);
+    public Transaction findById(@Validated @PathVariable long id, Principal principal) {
+        return transactionService.findById(id, principal);
     }
 
-    @GetMapping(value = "/findByType/{type}", produces = "application/json")
-    public List<Transaction> find(@Validated @PathVariable Enum.TransactionType type) {
-        return transactionService.find(type);
-    }
-
-    @GetMapping(value = "/findByOperator/{operatorId}", produces = "application/json")
-    public List<Transaction> findByRecipient(@Validated @PathVariable String operatorId) {
-        return transactionService.findByOperator(operatorId);
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Transaction save(@RequestBody @Validated Transaction transaction, Principal principal) {
+        return transactionService.save(transaction, principal);
     }
 }

@@ -8,6 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
+/**
+ * @author earnest.suru
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

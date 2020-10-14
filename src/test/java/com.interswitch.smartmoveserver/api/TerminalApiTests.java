@@ -18,10 +18,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.Principal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,13 +50,13 @@ public class TerminalApiTests {
         terminal.setName("my_terminal");
         terminal.setMode(Enum.TransportMode.RAIL);
         terminal.setOwner(new User());
-        terminal.setLocation("my_location_one");
+        //terminal.setLocation("my_location_one");
         terminal.setEnabled(true);
     }
 
     @Test
     public void testSave() throws Exception {
-        when(terminalService.save(terminal)).thenReturn(terminal);
+        when(terminalService.save(terminal, any(Principal.class))).thenReturn(terminal);
         mvc.perform(post("/api/terminals")
                 .content(new ObjectMapper().writeValueAsString(terminal))
                 .characterEncoding("utf-8")
@@ -65,7 +67,7 @@ public class TerminalApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(terminalService.update(terminal)).thenReturn(terminal);
+        when(terminalService.update(terminal, any(Principal.class))).thenReturn(terminal);
         mvc.perform(put("/api/terminals")
                 .content(new ObjectMapper().writeValueAsString(terminal))
                 .characterEncoding("utf-8")
@@ -88,23 +90,13 @@ public class TerminalApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(terminalService.findById(terminal.getId())).thenReturn(terminal);
+        when(terminalService.findById(terminal.getId(), any(Principal.class))).thenReturn(terminal);
         mvc.perform(get("/api/terminals/{id}", terminal.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()));
     }
-
-/*    @Test
-    public void testGetFindByTerminalNumber() throws Exception {
-        when(terminalService.findByOwner(terminal.getOwnerId())).thenReturn(Arrays.asList(terminal));
-        mvc.perform(get("/api/terminals/{terminalNumber}", terminal.getOwnerId())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }*/
 
     @Test
     public void testDelete() throws Exception {

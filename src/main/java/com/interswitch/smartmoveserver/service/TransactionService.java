@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,10 +28,12 @@ public class TransactionService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    DeviceRepository deviceRepository;
-
     public Transaction save(Transaction transaction) {
+        transaction.setTransactionId(UUID.randomUUID().toString());
+        return transactionRepository.save(transaction);
+    }
+
+    public Transaction save(Transaction transaction, Principal principal) {
         transaction.setTransactionId(UUID.randomUUID().toString());
         return transactionRepository.save(transaction);
     }
@@ -39,21 +42,17 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public Page<Transaction> findAllPaginated(int page, int size) {
+    public Page<Transaction> findAllPaginated(Principal principal, int page, int size) {
         PageRequest pageable = PageRequest.of(page - 1, size);
         return transactionRepository.findAll(pageable);
     }
 
-    public Transaction findById(long id) {
+    public Transaction findById(long id, Principal principal) {
         return transactionRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction does not exist"));
     }
 
     public List<Transaction> find(Enum.TransactionType type) {
         return transactionRepository.findAllByType(type);
-    }
-
-    public List<Transaction> findByOperator(String operatorId) {
-        return transactionRepository.findAllByOperatorId(operatorId);
     }
 
     public Long countAll(){

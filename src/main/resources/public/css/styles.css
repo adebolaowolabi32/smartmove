@@ -15640,8 +15640,10 @@ body {
    .spaced {
         padding: 50px;
    }
-   .dotted-hr {
-        border-top: dotted 3px;
+   .dotted-line {
+        border-top: dotted 2px;
+        color: #333; /* old IE */
+        background-color: #333; /* Modern Browsers */
    }
 
    .boarding-pass-body{
@@ -15674,13 +15676,13 @@ body {
        height:100px;
    }
 
-   #brt {
+   #vehiclePicture {
         width:250px;
         height:150px;
    }
 
-   #brt-bus {
-           width:350px;
+   #vehiclePic, #profilePic {
+           width:300px;
            height:200px;
    }
 

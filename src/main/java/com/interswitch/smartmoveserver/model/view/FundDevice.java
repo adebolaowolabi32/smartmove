@@ -1,4 +1,4 @@
-package com.interswitch.smartmoveserver.model;
+package com.interswitch.smartmoveserver.model.view;
 
 import lombok.Data;
 

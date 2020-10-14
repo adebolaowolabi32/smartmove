@@ -7,45 +7,35 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 /**
  * @author adebola.owolabi
  */
 @RestController
-@RequestMapping("/api/wallet")
+@RequestMapping("/api/wallets")
 public class WalletApi {
     @Autowired
     WalletService walletService;
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private Wallet save(@Validated @RequestBody Wallet wallet) {
+    private Wallet save(@Validated @RequestBody Wallet wallet, Principal principal) {
         return walletService.save(wallet);
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    private Wallet findById(@Validated @PathVariable long id) {
-        return walletService.findById(id);
-    }
-
-    @GetMapping(value = "/findByOwner/{owner}", produces = "application/json")
-    private Wallet findByOwner(@Validated @PathVariable String owner) {
-        return walletService.findByOwner(owner);
+    private Wallet findById(@Validated @PathVariable long id, Principal principal) {
+        return walletService.findById(id, principal);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")
-    private Wallet update(@Validated @RequestBody Wallet wallet) {
-        return walletService.update(wallet);
+    private Wallet update(@Validated @RequestBody Wallet wallet, Principal principal) {
+        return walletService.update(wallet, principal);
     }
 
-    @PostMapping(value = "/activate/{id}", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void activate(@Validated @PathVariable long id) {
-        walletService.activate(id);
-    }
-
-    @PostMapping(value = "/deactivate/{id}", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void deactivate(@Validated @PathVariable long id) {
-        walletService.deactivate(id);
+    @DeleteMapping("/{id}")
+    private void delete(@Validated @PathVariable long id, Principal principal) {
+        walletService.delete(id, principal);
     }
 }

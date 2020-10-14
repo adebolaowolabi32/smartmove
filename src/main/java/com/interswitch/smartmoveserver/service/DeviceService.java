@@ -2,8 +2,7 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
-import com.interswitch.smartmoveserver.model.request.DeviceConnection;
-import com.interswitch.smartmoveserver.model.response.DeviceConnectionResponse;
+import com.interswitch.smartmoveserver.model.view.FundDevice;
 import com.interswitch.smartmoveserver.repository.DeviceRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
@@ -49,22 +48,6 @@ public class DeviceService {
 
     @Autowired
     PageUtil pageUtil;
-
-    public DeviceConnectionResponse connectDevice(DeviceConnection deviceConnection) {
-        Device device = new Device();
-        device.setOwner(deviceConnection.getOwner());
-        device.setDeviceId(deviceConnection.getDeviceId());
-        device.setDeviceStatus(deviceConnection.getDeviceStatus());
-        device.setHardwareVersion(deviceConnection.getHardwareVersion());
-        device.setSoftwareVersion(deviceConnection.getSoftwareVersion());
-        device.setFareType(deviceConnection.getFareType());
-        deviceRepository.save(device);
-        DeviceConnectionResponse deviceConnectionResponse = new DeviceConnectionResponse();
-        deviceConnectionResponse.setMessageId(deviceConnection.getMessageId());
-        deviceConnectionResponse.setTimeDate(LocalDateTime.now().toString());
-        deviceConnectionResponse.setResponseCode("00");
-        return deviceConnectionResponse;
-    }
 
     public Page<Device> findAllPaginatedByType(Principal principal, Long owner, Enum.DeviceType type, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
@@ -123,13 +106,17 @@ public class DeviceService {
         boolean exists = deviceRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Device already exists");
         if(device.getOwner() == null) {
-            Optional<User> owner = userRepository.findByUsername(principal.getName());
-            if(owner.isPresent()) device.setOwner(owner.get());
+            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            device.setOwner(owner);
         }
         return deviceRepository.save(device);
     }
-    
+
     public Device findById(long id) {
+        return deviceRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist"));
+    }
+
+    public Device findById(long id, Principal principal) {
         return deviceRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist"));
     }
 
@@ -137,50 +124,19 @@ public class DeviceService {
         return deviceRepository.findAllByType(type);
     }
 
-    public List<Device> findAllByOwner(User owner) {
-        return deviceRepository.findAllByOwner(owner);
-    }
-
-    public List<Device> findAllByOwner(long owner) {
-        return deviceRepository.findAll();//urgent
-    }
-
-    public Device update(Device device) {
+    public Device update(Device device, Principal principal) {
         Optional<Device> existing = deviceRepository.findById(device.getId());
-        if(existing.isPresent())
+        if(existing.isPresent()){
+            if(device.getOwner() == null) {
+                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                device.setOwner(owner);
+            }
             return deviceRepository.save(device);
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist");
     }
 
-    public void assignToVehicle(long deviceId, long vehicleId) {
-        Optional<Device> deviceOptional = deviceRepository.findById(deviceId);
-        if(deviceOptional.isPresent()){
-            Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-            if(vehicleOptional.isPresent()){
-                Vehicle vehicle = vehicleOptional.get();
-                vehicle.setDevice(deviceOptional.get());
-                vehicleRepository.save(vehicle);
-            }
-            else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Vehicle does not exist");
-        }
-        else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Device does not exist");
-    }
-
-    public void assignToAgent(long deviceId, long agentId) {
-        Optional<Device> deviceOptional = deviceRepository.findById(deviceId);
-        if(deviceOptional.isPresent()){
-            Optional<User> userOptional = userRepository.findById(agentId);
-            if(userOptional.isPresent()){
-                Device device = deviceOptional.get();
-                device.setOwner(userOptional.get());
-                deviceRepository.save(device);
-            }
-            else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Agent does not exist");
-        }
-        else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Device does not exist");
-    }
-
-    public void delete(long id) {
+    public void delete(long id, Principal principal) {
         Optional<Device> existing = deviceRepository.findById(id);
         if(existing.isPresent())
             deviceRepository.deleteById(id);
@@ -192,7 +148,7 @@ public class DeviceService {
     public String fundDevice(Principal principal, FundDevice fundDevice) {
         double amount = fundDevice.getAmount();
         Wallet wallet = walletService.findByOwner(principal.getName());
-        Device device = findById(fundDevice.getDeviceId());
+        Device device = findById(fundDevice.getDeviceId(), principal);
         double deviceBalance = device.getBalance();
         double walletBalance = wallet.getBalance();
         if (walletBalance >= amount) {

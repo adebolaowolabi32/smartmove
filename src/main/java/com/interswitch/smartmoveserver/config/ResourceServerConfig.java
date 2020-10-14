@@ -14,8 +14,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
@@ -26,7 +26,7 @@ import java.util.Base64;
  * @author adebola.owolabi
  */
 @Configuration
-@Order(2)
+@Order(1)
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.security.oauth2.resourceserver.jwt.public-key}")
     private String publicKey;
@@ -36,13 +36,12 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers(HttpMethod.OPTIONS)
                 .antMatchers("/error", "/health");
-
-
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/api/**")
+        http.requestMatcher(new RequestHeaderRequestMatcher("Authorization"))
+                .authorizeRequests().antMatchers("/api/**")
                 .authenticated()
                 .and().csrf().disable()
                 .oauth2ResourceServer()
@@ -50,17 +49,14 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder() throws IOException, GeneralSecurityException {
+    public JwtDecoder jwtDecoder() throws GeneralSecurityException {
         byte[] spec;
         spec = Base64.getDecoder().decode(publicKey);
         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA")
                 .generatePublic(new X509EncodedKeySpec(spec));
-
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(pubKey).build();
-
         OAuth2TokenValidator<Jwt> withExpiry = new JwtTimestampValidator();
         OAuth2TokenValidator<Jwt> validators = new DelegatingOAuth2TokenValidator<>(withExpiry);
-
         jwtDecoder.setJwtValidator(validators);
 
         return jwtDecoder;
