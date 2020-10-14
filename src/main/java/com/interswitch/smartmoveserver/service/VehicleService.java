@@ -5,8 +5,7 @@ import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +20,7 @@ import java.util.Optional;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Service
 public class VehicleService {
     @Autowired
@@ -41,7 +41,6 @@ public class VehicleService {
     @Autowired
     PageUtil pageUtil;
 
-    private final Log logger = LogFactory.getLog(getClass());
     @Autowired
     DocumentService documentService;
 
@@ -74,13 +73,13 @@ public class VehicleService {
 
     public Vehicle update(Vehicle vehicle, Principal principal) {
 
-        logger.info("Vehicle Picture =>" + vehicle.getPicture());
+        log.info("Vehicle Picture =>" + vehicle.getPicture());
 
         Optional<Vehicle> existing = vehicleRepository.findById(vehicle.getId());
 
         if (existing.isPresent()) {
             if (vehicle.getPicture() != null) {
-                logger.info("Vehicle Picture Not Null");
+                log.info("Vehicle Picture Not Null");
                 Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
                 vehicle.setPictureUrl(doc.getUrl());
             }

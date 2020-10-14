@@ -1,8 +1,5 @@
 package com.interswitch.smartmoveserver.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -13,9 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class DateUtil {
-
-    private static final Log logger = LogFactory.getLog(DateUtil.class);
-
 
     /*public static LocalDate toLocalDateFormat(Date startDate) {
         LocalDate localDateFormat = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

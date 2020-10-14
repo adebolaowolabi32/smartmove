@@ -7,8 +7,6 @@ import com.interswitch.smartmoveserver.service.TerminalService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.service.VehicleService;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -26,8 +24,6 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/routes")
 public class RouteController {
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     private RouteService routeService;

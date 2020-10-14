@@ -2,8 +2,7 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Document;
 import com.interswitch.smartmoveserver.repository.DocumentRepository;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -22,10 +21,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class DocumentService {
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Value("${app.docs.dir}")
     private String dir;
@@ -72,7 +70,7 @@ public class DocumentService {
             doc.setDocPath(filePath.toAbsolutePath().toString());
             return documentRepository.save(doc);
         } catch (IOException ex) {
-            logger.error("IOException happened trying to saving document", ex);
+            log.error("IOException while trying to saving document", ex);
             return null;
         }
 
@@ -102,7 +100,7 @@ public class DocumentService {
             Files.setPosixFilePermissions(path, filePermissions);
 
         } catch (IOException e) {
-            logger.error("Exception setting file permissions", e);
+            log.error("Exception setting file permissions", e);
         }
     }
 

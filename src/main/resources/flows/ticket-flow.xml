@@ -18,13 +18,13 @@
                     "ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
         </transition>
         <on-exit>
-            <evaluate expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Out now')"/>
+            <evaluate expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Out now')"/>
         </on-exit>
     </view-state>
 
     <view-state id="schedule" view="tickets/schedule" model="flowScope.scheduleBooking">
         <on-entry>
-            <evaluate expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('In now')"/>
+            <evaluate expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('In now')"/>
         </on-entry>
         <transition on="makeBooking" to="details">
             <evaluate result="flowScope.ticketDetails" expression=

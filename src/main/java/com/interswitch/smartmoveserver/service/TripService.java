@@ -4,8 +4,6 @@ import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.TripRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,8 +19,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class TripService {
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     TripRepository tripRepository;

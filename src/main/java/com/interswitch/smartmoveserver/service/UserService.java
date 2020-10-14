@@ -7,8 +7,6 @@ import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,8 +25,6 @@ import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmai
  */
 @Service
 public class UserService {
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     private UserRepository userRepository;
