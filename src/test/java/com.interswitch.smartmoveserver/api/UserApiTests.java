@@ -39,7 +39,7 @@ public class UserApiTests {
 
     @MockBean
     private UserService userService;
-    
+
     private User user;
 
     @BeforeAll

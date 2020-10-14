@@ -115,7 +115,7 @@ public class DeviceService {
     public Device findById(long id) {
         return deviceRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist"));
     }
-    
+
     public Device findById(long id, Principal principal) {
         return deviceRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Device does not exist"));
     }

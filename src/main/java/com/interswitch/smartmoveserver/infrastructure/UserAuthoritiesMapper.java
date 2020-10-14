@@ -1,4 +1,4 @@
-package com.interswitch.smartmoveserver.handler;
+package com.interswitch.smartmoveserver.infrastructure;
 
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.IswCoreService;

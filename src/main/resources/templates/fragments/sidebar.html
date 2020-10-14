@@ -18,7 +18,12 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')" th:href="@{/users/get?role=ISW_ADMIN}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             Administrators</a>
-                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_REGULATORS')" th:href="@{/users/get?role=REGULATOR}" href="#">
+                        <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_EXECUTIVES')"
+                           th:href="@{/users/get?role=EXECUTIVE}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                            Executives</a>
+                        <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_REGULATORS')"
+                           th:href="@{/users/get?role=REGULATOR}">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             Regulators</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_OPERATORS')" th:href="@{/users/get?role=OPERATOR}" href="#">
@@ -78,7 +83,8 @@
                            href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
                             Schedules</a>
-                        <a class="nav-link" th:href="@{/tickets/get}" href="#">
+                        <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
+                           th:href="@{/tickets/get}">
                             <div class="sb-nav-link-icon"><i class="fas fa-memory"></i></div>
                             Bookings</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')" th:href="@{/transactions/get}" href="#">

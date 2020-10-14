@@ -37,6 +37,9 @@ public class PageUtil {
             case ISW_ADMIN:
                 title = "Administrator";
                 break;
+            case EXECUTIVE:
+                title = "Executive";
+                break;
             case REGULATOR:
                 title = "Regulator";
                 break;
@@ -78,6 +81,9 @@ public class PageUtil {
             case ISW_ADMIN:
                 message = "administrator.saved.message";
                 break;
+            case EXECUTIVE:
+                message = "executive.saved.message";
+                break;
             case REGULATOR:
                 message = "regulator.saved.message";
                 break;
@@ -116,6 +122,9 @@ public class PageUtil {
             case ISW_ADMIN:
                 message = "administrator.updated.message";
                 break;
+            case EXECUTIVE:
+                message = "executive.updated.message";
+                break;
             case REGULATOR:
                 message = "regulator.updated.message";
                 break;
@@ -153,6 +162,9 @@ public class PageUtil {
         {
             case ISW_ADMIN:
                 message = "administrator.deleted.message";
+                break;
+            case EXECUTIVE:
+                message = "executive.deleted.message";
                 break;
             case REGULATOR:
                 message = "regulator.deleted.message";

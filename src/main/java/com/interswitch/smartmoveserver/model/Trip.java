@@ -19,6 +19,9 @@ public class Trip implements Serializable {
     @Column(unique = true)
     private String referenceNo;
 
+    @Enumerated(EnumType.STRING)
+    private Enum.TransportMode mode;
+
     private long fare;
 
     @ManyToOne

@@ -5,7 +5,7 @@ package com.interswitch.smartmoveserver.model;
  */
 public class Enum {
     public enum TransportMode {
-        KEKE, BUS, CAR, RAIL, FERRY, RICKSHAW
+        BUS, CAR, RAIL, FERRY, RICKSHAW
     }
 
     public enum DeviceType {
@@ -25,7 +25,7 @@ public class Enum {
     }
 
     public enum Role {
-        ISW_ADMIN, REGULATOR, OPERATOR, SERVICE_PROVIDER, INSPECTOR, TICKETER, VEHICLE_OWNER, AGENT, DRIVER, COMMUTER
+        ISW_ADMIN, REGULATOR, OPERATOR, EXECUTIVE, SERVICE_PROVIDER, INSPECTOR, TICKETER, VEHICLE_OWNER, AGENT, DRIVER, COMMUTER
     }
 
     public enum CardType {

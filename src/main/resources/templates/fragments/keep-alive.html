@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="keep-alive">
-    <input th:if="${#ctx.httpSession}" type="hidden" id="session-timeout" th:value="${#ctx.httpSession.maxInactiveInterval}"/>
+    <input id="session-timeout" th:if="${#ctx.httpSession}" th:value="${#ctx.httpSession.maxInactiveInterval}"
+           type="hidden"/>
 </div>
+</html>

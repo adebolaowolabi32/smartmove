@@ -32,4 +32,8 @@ public class ScheduleBooking implements Serializable {
     private int noOfPassengers;
 
     private List<Schedule> schedules;
+
+    private List<Schedule> returnSchedules;
+
+    private boolean roundTrip;
 }

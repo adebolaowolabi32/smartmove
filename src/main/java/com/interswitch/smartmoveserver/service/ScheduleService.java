@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +55,9 @@ public class ScheduleService {
 
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Schedule already exists");
 
-        Duration duration = Duration.between(schedule.getDepartureTime(), schedule.getArrivalTime());
+        LocalDateTime start = LocalDateTime.of(schedule.getDepartureDate(), schedule.getDepartureTime());
+        LocalDateTime stop = LocalDateTime.of(schedule.getArrivalDate(), schedule.getArrivalTime());
+        Duration duration = Duration.between(start, stop);
         schedule.setDuration(String.valueOf(duration.getSeconds() / 60 / 60));
         /*schedule.setArrivalDateString(DateUtil.formatDate(schedule.getArrivalDate()));
         schedule.setDepartureDateString(DateUtil.formatDate(schedule.getDepartureDate()));

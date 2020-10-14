@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.request.IswRole;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -17,17 +17,19 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest(classes = {IswCoreService.class})
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IswCoreServiceTests {
     User user;
     @Autowired
+    private APIRequestClient apiRequestClient;
+    @Autowired
     private  IswCoreService iswCoreService;
-    @Value("${spring.user.url}")
-    private String userurl;
-    @Value("${spring.user.roles}")
-    private String roleurl;
+    //@Value("${spring.user.url}")
+    private String userurl = "";
+    //@Value("${spring.user.roles}")
+    private String roleurl = "";
 
 
     private IswUser iswUser;

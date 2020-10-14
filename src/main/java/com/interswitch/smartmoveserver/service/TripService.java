@@ -48,6 +48,10 @@ public class TripService {
 
     }
 
+    public Trip save(Trip trip) {
+        return tripRepository.save(trip);
+    }
+
     public Trip save(Trip trip, Principal principal) {
         long id = trip.getId();
         boolean exists = tripRepository.existsById(id);
@@ -67,6 +71,16 @@ public class TripService {
 
     public Trip findById(long id, Principal principal) {
         return tripRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist"));
+    }
+
+    public Trip update(Trip trip) {
+        Optional<Trip> existing = tripRepository.findById(trip.getId());
+        if (existing.isPresent())
+        {
+            return tripRepository.save(trip);
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist");
     }
 
     public Trip update(Trip trip, Principal principal) {

@@ -90,6 +90,10 @@ public class ManifestService {
         return manifestRepository.findByTripId(tripId);
     }
 
+    public Iterable<Manifest> saveAll(List<Manifest> manifests) {
+        return manifestRepository.saveAll(manifests);
+    }
+
     public Long countAll() {
         return manifestRepository.count();
     }

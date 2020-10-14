@@ -19,7 +19,7 @@
               data-parsley-validate="true">
             <div class="card">
                 <div class="card-header">
-                    <span><b>Trip details</b></span></div>
+                    <span><b>Trip Details</b></span></div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -62,34 +62,52 @@
                 <br>
             </div>
             <br>
-            <div class="card">
-                <div class="row card-body">
-                    <div class="form-group col">
-                        <label class="control-label" for="paymentMode">Payment Mode *</label>
-                        <div>
-                            <select class="form-control" id="paymentMode" required th:field="*{paymentMode}">
-                                <option value="">Select...</option>
-                                <option value="CASH">Cash</option>
-                                <option value="POS">POS</option>
-                                <option value="TRANSFER">Transfer</option>
-                            </select>
+            <div class="card" th:if="${return}">
+                <div class="card-header">
+                    <span><b>Return Trip Details</b></span></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure</div>
+                            <div th:text="${ticketDetails.returnSchedule.startTerminal.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Destination</div>
+                            <div th:text="${ticketDetails.returnSchedule.stopTerminal.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Vehicle</div>
+                            <div th:text="${ticketDetails.returnSchedule.vehicle.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Price</div>
+                            <div><span>&#8358; <span th:text="${ticketDetails.returnSchedule.fare}"></span></span></div>
                         </div>
                     </div>
-                    <div class="form-group col">
-                        <label class="control-label" for="bvn">BVN</label>
-
-                        <div>
-                            <input class="form-control" id="bvn" onkeyup="validateBvn()" th:field="*{bvn}">
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure Date</div>
+                            <div th:text="${ticketDetails.returnSchedule.departureDate}"></div>
                         </div>
-                        <div id="bvnDiv">
+                        <div class="col">
+                            <div class="label-small">Departure Time</div>
+                            <div th:text="${ticketDetails.returnSchedule.departureTime}"></div>
                         </div>
-                        <!--<label class="control-label" for="return">Return</label>
-                        <span>
-                            <input type="checkbox" id="return">
-                        </span>-->
+                        <div class="col">
+                            <div class="label-small">Arrival Date</div>
+                            <div th:text="${ticketDetails.returnSchedule.arrivalDate}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Estimated Arrival Time</div>
+                            <div th:text="${ticketDetails.returnSchedule.arrivalTime}"></div>
+                        </div>
                     </div>
                 </div>
-
+                <br>
+            </div>
+            <br>
+            <div class="card">
                 <div class="row card-body">
                     <div class="col">
                         <label><b>Contact Details</b></label>
@@ -217,6 +235,36 @@
                                 <option th:each="seat : ${ticketDetails.seats}" th:text="${seat}"
                                         th:value="${seat}"></option>
                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <hr>
+                    <br>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label class="control-label" for="paymentMode">Payment Mode *</label>
+                            <div>
+                                <select class="form-control" id="paymentMode" required th:field="*{paymentMode}">
+                                    <option value="">Select...</option>
+                                    <option value="CASH">Cash</option>
+                                    <option value="POS">POS</option>
+                                    <option value="TRANSFER">Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="bvn">BVN</label>
+
+                            <div>
+                                <input class="form-control" id="bvn" onkeyup="validateBvn()" th:field="*{bvn}">
+                            </div>
+                            <div id="bvnDiv">
+                            </div>
+                            <!--<label class="control-label" for="return">Return</label>
+                            <span>
+                                <input type="checkbox" id="return">
+                            </span>-->
                         </div>
                     </div>
                 </div>
