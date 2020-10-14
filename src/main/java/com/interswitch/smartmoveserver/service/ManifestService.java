@@ -1,6 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Manifest;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.ManifestRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 /**
- *  Passenger manifest management service
+ * @author adebola.owolabi
  */
 @Service
 public class ManifestService {
@@ -23,13 +24,19 @@ public class ManifestService {
     ManifestRepository manifestRepository;
 
     @Autowired
+    TripService tripService;
+
+    @Autowired
+    ScheduleService scheduleService;
+
+    @Autowired
     PageUtil pageUtil;
 
     public List<Manifest> findAll() {
         return manifestRepository.findAll();
     }
 
-    public Page<Manifest> findAllPaginated(int page, int size) {
+    public Page<Manifest> findAllPaginated(Principal principal, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         return manifestRepository.findAll(pageable);
 
@@ -52,18 +59,25 @@ public class ManifestService {
         return manifestRepository.save(manifest);
     }
 
-    public Manifest findById(long id) {
+    public Manifest save(Manifest manifest, Principal principal) {
+        long id = manifest.getId();
+        boolean exists = manifestRepository.existsById(id);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Manifest already exists");
+        return manifestRepository.save(buildManifest(manifest));
+    }
+
+    public Manifest findById(long id, Principal principal) {
         return manifestRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist"));
     }
 
-    public Manifest update(Manifest manifest) {
+    public Manifest update(Manifest manifest, Principal principal) {
         Optional<Manifest> existing = manifestRepository.findById(manifest.getId());
         if (existing.isPresent())
-            return manifestRepository.save(manifest);
+            return manifestRepository.save(buildManifest(manifest));
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
     }
 
-    public void delete(long id) {
+    public void delete(long id, Principal principal) {
         Optional<Manifest> existing = manifestRepository.findById(id);
         if (existing.isPresent())
             manifestRepository.deleteById(id);
@@ -84,4 +98,15 @@ public class ManifestService {
         manifestRepository.deleteAll();
     }
 
+    private Manifest buildManifest(Manifest manifest) {
+        Trip trip = manifest.getTrip();
+        if(trip != null)
+            manifest.setTrip(tripService.findById(trip.getId()));
+
+        Schedule schedule = manifest.getSchedule();
+        if(schedule != null)
+            manifest.setSchedule(scheduleService.findById(schedule.getId()));
+
+        return manifest;
+    }
 }

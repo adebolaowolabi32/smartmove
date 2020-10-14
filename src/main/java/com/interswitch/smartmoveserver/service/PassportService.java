@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +26,6 @@ import java.util.Map;
 @Service
 public class PassportService {
 
-    protected final Log logger = LogFactory.getLog(getClass());
     @Value("${spring.application.passport.user-url}")
     private String userUrl;
     @Value("${spring.application.passport.token-url}")

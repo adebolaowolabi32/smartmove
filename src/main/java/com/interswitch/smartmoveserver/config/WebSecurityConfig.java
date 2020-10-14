@@ -22,22 +22,23 @@ import org.springframework.security.oauth2.client.web.HttpSessionOAuth2Authoriza
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author adebola.owolabi
- */
+
+/*
+@author adebola.owolabi
+*/
+
+
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(1)
+@Order(2)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -50,20 +51,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**","/swf/**", "/img/**", "/assets/**", "/vendor/**",
-                        "/keep-alive", "/retry",
-                        "/", "/index", "/login",
-                        "/signup/**",
-                        "/health").permitAll()
-                .requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**"))).authenticated()
+                        "/keep-alive", "/retry", "/", "/index", "/login", "/signup/**", "/health").permitAll()
+                //.requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
+                .anyRequest().authenticated()
                 .and()
                 .httpBasic().disable()
                 .formLogin().disable()
-                //.loginPage("/login.html")
-                //.loginProcessingUrl("/perform_login")
-                //.defaultSuccessUrl("/homepage.html", true)
-                //.failureUrl("/login.html?error=true")
-                //.failureHandler(authenticationFailureHandler())
-                //.and()
                 .logout().clearAuthentication(true)
                 .logoutSuccessUrl("/")
                 .deleteCookies("JSESSIONID")
@@ -71,8 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .defaultSuccessUrl("/dashboard")
-                //.successHandler(userAuthoritiesMapper)
-                //.failureUrl()
                 .authorizationEndpoint()
                 .baseUri("/oauth/authorize")
                 .authorizationRequestRepository(authorizationRequestRepository())

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 /**
  * @author adebola.owolabi
  */
@@ -33,8 +34,6 @@ public class Terminal implements Serializable {
     private String code;
 
     private String lga;
-
-    private String location;
 
     @ManyToOne
     @JoinColumn(name = "owner")

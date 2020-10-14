@@ -4,12 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.request.DeviceConnection;
-import com.interswitch.smartmoveserver.model.request.GetDeviceId;
-import com.interswitch.smartmoveserver.model.request.GetOwnerId;
-import com.interswitch.smartmoveserver.model.response.DeviceConnectionResponse;
-import com.interswitch.smartmoveserver.model.response.GetDeviceIdResponse;
-import com.interswitch.smartmoveserver.model.response.GetOwnerIdResponse;
 import com.interswitch.smartmoveserver.service.DeviceService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,10 +18,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.Principal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,13 +41,6 @@ public class DeviceApiTests {
 
     private Device device;
 
-    private GetDeviceId getDeviceId;
-    private GetDeviceIdResponse getDeviceIdResponse;
-    private GetOwnerId getOwnerId;
-    private GetOwnerIdResponse getOwnerIdResponse;
-    private DeviceConnection deviceConnection;
-    private DeviceConnectionResponse deviceConnectionResponse;
-
     @BeforeAll
     public void setup() {
         device = new Device();
@@ -64,12 +53,6 @@ public class DeviceApiTests {
         device.setHardwareVersion("1.0.0");
         device.setSoftwareVersion("2.0.2");
         device.setFareType(Enum.FareType.FIXED);
-        deviceConnection = new DeviceConnection();
-        deviceConnection.setMessageId("id_message");
-        deviceConnection.setDeviceId("id_device");
-        deviceConnectionResponse = new DeviceConnectionResponse();
-        deviceConnectionResponse.setResponseCode("00");
-        deviceConnectionResponse.setMessageId("id_message");
     }
 
     @Test
@@ -85,7 +68,7 @@ public class DeviceApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(deviceService.update(device)).thenReturn(device);
+        when(deviceService.update(device, any(Principal.class))).thenReturn(device);
         mvc.perform(put("/api/devices")
                 .content(new ObjectMapper().writeValueAsString(device))
                 .characterEncoding("utf-8")
@@ -108,7 +91,7 @@ public class DeviceApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(deviceService.findById(device.getId())).thenReturn(device);
+        when(deviceService.findById(device.getId(), any(Principal.class))).thenReturn(device);
         mvc.perform(get("/api/devices/{id}", device.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -123,16 +106,4 @@ public class DeviceApiTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-    @Test
-    public void testConnectDevice() throws Exception {
-        when(deviceService.connectDevice(deviceConnection)).thenReturn(deviceConnectionResponse);
-
-        mvc.perform(post("/api/devices/connect")
-                .content(new ObjectMapper().writeValueAsString(deviceConnection))
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json(new ObjectMapper().writeValueAsString(deviceConnectionResponse)));
-    }
-    
 }

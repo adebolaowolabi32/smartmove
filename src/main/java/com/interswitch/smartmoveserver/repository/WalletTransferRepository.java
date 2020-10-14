@@ -7,9 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/*
- * Created by adebola.owolabi on 5/19/2020
- */
 @Repository
 public interface WalletTransferRepository extends CrudRepository<Transfer, Long> {
     Page<Transfer> findByWallet(Pageable pageable, Wallet wallet);

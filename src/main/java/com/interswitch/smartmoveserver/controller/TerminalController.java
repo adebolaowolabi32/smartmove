@@ -6,8 +6,6 @@ import com.interswitch.smartmoveserver.service.StateService;
 import com.interswitch.smartmoveserver.service.TerminalService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -26,8 +24,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/terminals")
 public class TerminalController {
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     private TerminalService terminalService;
@@ -59,7 +55,7 @@ public class TerminalController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Terminal terminal = terminalService.findById(id);
+        Terminal terminal = terminalService.findById(id, principal);
         model.addAttribute("terminal", terminal);
         return "terminals/details";
     }
@@ -91,7 +87,7 @@ public class TerminalController {
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Terminal terminal = terminalService.findById(id);
+        Terminal terminal = terminalService.findById(id, principal);
         model.addAttribute("terminal", terminal);
         model.addAttribute("countries", stateService.findAllCountries());
         model.addAttribute("states", stateService.findAll());
@@ -110,16 +106,16 @@ public class TerminalController {
             model.addAttribute("owners", userService.findAll());
             return "terminals/update";
         }
-        terminalService.update(terminal);
+        terminalService.update(terminal, principal);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/terminals/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+    public String delete(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
 
-        Terminal terminal = terminalService.findById(id);
-        terminalService.delete(id);
+        Terminal terminal = terminalService.findById(id, principal);
+        terminalService.delete(id, principal);
         User owner = terminal.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

@@ -18,7 +18,7 @@
             <div class="list-group-item list-group-item-action" th:each="schedule : ${scheduleBooking.schedules}">
                 <div class="row">
                     <div class="col-sm-3">
-                        <img alt="BRT Bus" id="brt" src="/img/brt.png">
+                        <img alt="Vehicle Picture" id="vehiclePicture" th:src="${schedule.vehicle.pictureUrl}">
                     </div>
                     <div class="col-sm-4">
                         <div class="booking-item-flight-details">

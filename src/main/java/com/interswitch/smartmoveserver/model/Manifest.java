@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+/**
+ * @author adebola.owolabi
+ */
 @Data
 @Entity
 @Table(name = "manifests")
