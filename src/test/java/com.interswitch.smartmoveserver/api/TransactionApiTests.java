@@ -3,8 +3,6 @@ package com.interswitch.smartmoveserver.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Transaction;
-import com.interswitch.smartmoveserver.model.request.LogTransaction;
-import com.interswitch.smartmoveserver.model.response.LogTransactionResponse;
 import com.interswitch.smartmoveserver.service.TransactionService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,11 +17,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,10 +40,6 @@ public class TransactionApiTests {
 
     @MockBean
     private TransactionService transactionService;
-
-    private LogTransaction logTransaction;
-    
-    private LogTransactionResponse logTransactionResponse;
 
     private Transaction transaction;
 
@@ -65,7 +61,7 @@ public class TransactionApiTests {
 
     @Test
     public void testSave() throws Exception {
-        when(transactionService.save(transaction)).thenReturn(transaction);
+        when(transactionService.save(transaction, any(Principal.class))).thenReturn(transaction);
         mvc.perform(post("/api/transactions")
                 .content(new ObjectMapper().writeValueAsString(transaction))
                 .characterEncoding("utf-8")
@@ -88,52 +84,11 @@ public class TransactionApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(transactionService.findById(transaction.getId())).thenReturn(transaction);
+        when(transactionService.findById(transaction.getId(), any(Principal.class))).thenReturn(transaction);
         mvc.perform(get("/api/transactions/{id}", transaction.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()));
     }
-
-/*    @Test
-    public void testFindByCardNumber() throws Exception {
-        when(transactionService.findByCardNumber(transaction.getCardNumber())).thenReturn(Arrays.asList(transaction));
-        mvc.perform(get("/api/transactions/{cardNumber}", transaction.getCardNumber())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }
-
-    @Test
-    public void testFindByDeviceId() throws Exception {
-        when(transactionService.findByDeviceId(transaction.getDeviceId())).thenReturn(Arrays.asList(transaction));
-        mvc.perform(get("/api/transactions/{deviceId}", transaction.getDeviceId())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }
-
-    @Test
-    public void testFindBySender() throws Exception {
-        when(transactionService.findBySender(transaction.getSender())).thenReturn(Arrays.asList(transaction));
-        mvc.perform(get("/api/transactions/{sender}", transaction.getSender())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }
-
-    @Test
-    public void testFindByRecipient() throws Exception {
-        when(transactionService.findByRecipient(transaction.getRecipient())).thenReturn(Arrays.asList(transaction));
-        mvc.perform(get("/api/transactions/{recipient}", transaction.getRecipient())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }*/
-
 }

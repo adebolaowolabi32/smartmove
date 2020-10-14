@@ -18,11 +18,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.Principal;
+import java.util.Arrays;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @ExtendWith(SpringExtension.class)
@@ -50,7 +54,7 @@ public class VehicleApiTests {
 
     @Test
     public void testSave() throws Exception {
-        when(vehicleService.save(vehicle)).thenReturn(vehicle);
+        when(vehicleService.save(vehicle, any(Principal.class))).thenReturn(vehicle);
         mvc.perform(post("/api/vehicles")
                 .content(new ObjectMapper().writeValueAsString(vehicle))
                 .characterEncoding("utf-8")
@@ -61,7 +65,7 @@ public class VehicleApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(vehicleService.update(vehicle)).thenReturn(vehicle);
+        when(vehicleService.update(vehicle, any(Principal.class))).thenReturn(vehicle);
         mvc.perform(put("/api/vehicles")
                 .content(new ObjectMapper().writeValueAsString(vehicle))
                 .characterEncoding("utf-8")
@@ -70,7 +74,7 @@ public class VehicleApiTests {
                 .andExpect(jsonPath("$", notNullValue()));
     }
 
-   /* @Test
+    @Test
     public void testfindAll() throws Exception {
         when(vehicleService.findAll()).thenReturn(Arrays.asList(vehicle, new Vehicle()));
         mvc.perform(get("/api/vehicles")
@@ -80,27 +84,17 @@ public class VehicleApiTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$", hasSize(2)));
 
-    }*/
+    }
 
     @Test
     public void testFindById() throws Exception {
-        when(vehicleService.findById(vehicle.getId())).thenReturn(vehicle);
+        when(vehicleService.findById(vehicle.getId(), any(Principal.class))).thenReturn(vehicle);
         mvc.perform(get("/api/vehicles/{id}", vehicle.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()));
     }
-
-/*    @Test
-    public void testFindByOwner() throws Exception {
-        when(vehicleService.findByOwner(vehicle.getOwnerId())).thenReturn(Arrays.asList(vehicle));
-        mvc.perform(get("/api/vehicles/{ownerId}", vehicle.getOwnerId())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
-    }*/
 
     @Test
     public void testDelete() throws Exception {

@@ -21,11 +21,6 @@ public class Report {
     private String participantName;
 
     private LocalDateTime createdDate;
-   /* private MimeType mimeType;
-    private Status status;
-    private Instant requestedDate;
-    private Integer schemeId;
-*/
 
     public static String generateFileName(String name, MimeType mimeType) {
         return String.format("%s.%s", name, "")

@@ -49,14 +49,6 @@ public class Schedule implements Serializable {
 
     private String duration;
 
-    private String departureDateString;
-
-    private String arrivalDateString;
-
-    private String departureTimeString;
-
-    private String arrivalTimeString;
-
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;

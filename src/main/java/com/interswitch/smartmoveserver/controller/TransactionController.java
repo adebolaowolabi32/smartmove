@@ -30,7 +30,7 @@ public class TransactionController {
     public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Transaction> transactionPage = transactionService.findAllPaginated(page, size);
+        Page<Transaction> transactionPage = transactionService.findAllPaginated(principal, page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(transactionPage));
         model.addAttribute("transactionPage", transactionPage);
         return "transactions/get";
@@ -38,7 +38,7 @@ public class TransactionController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Transaction transaction = transactionService.findById(id);
+        Transaction transaction = transactionService.findById(id, principal);
         model.addAttribute( "transaction", transaction);
         return "transactions/details";
     }

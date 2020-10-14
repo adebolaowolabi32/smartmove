@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,8 +31,9 @@ public class VehicleCategory implements Serializable {
 
     private String color;
 
-/*    @ManyToMany
-    private List<Facility> facilities;*/
+    private String pictureUrl;
+
+    private transient MultipartFile picture;
 
     @ManyToOne
     @JoinColumn(name = "owner")

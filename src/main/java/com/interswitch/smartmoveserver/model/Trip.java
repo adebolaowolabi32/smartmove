@@ -19,10 +19,10 @@ public class Trip implements Serializable {
     @Column(unique = true)
     private String referenceNo;
 
-    private double fare;
-
     @Enumerated(EnumType.STRING)
     private Enum.TransportMode mode;
+
+    private long fare;
 
     @ManyToOne
     @JoinColumn(name = "driver")

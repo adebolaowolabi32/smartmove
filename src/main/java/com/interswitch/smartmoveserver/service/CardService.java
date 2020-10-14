@@ -62,10 +62,14 @@ public class CardService {
         }
     }
 
-    public Card save(Card card) {
+    public Card save(Card card, Principal principal) {
         long id = card.getId();
         boolean exists = cardRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Card already exists");
+        if(card.getOwner() == null) {
+            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            card.setOwner(owner);
+        }
         return cardRepository.save(card);
     }
 
@@ -79,11 +83,11 @@ public class CardService {
         return cardRepository.save(card);
     }
 
-    public Card findById(long id) {
+    public Card findById(long id, Principal principal) {
         return cardRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
     }
 
-    public Card findByPan(String cardNumber) {
+    public Card findByPan(String cardNumber, Principal principal) {
         return cardRepository.findByPan(cardNumber).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
     }
 
@@ -94,55 +98,25 @@ public class CardService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
-    public Card update(Card card) {
+    public Card update(Card card, Principal principal) {
         Optional<Card> existing = cardRepository.findById(card.getId());
-        if(existing.isPresent())
+        if(existing.isPresent()){
+            if(card.getOwner() == null) {
+                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                card.setOwner(owner);
+            }
             return cardRepository.save(card);
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist");
     }
 
-    public void assignToAgent(long cardId, long agentId) {
-        Optional<Card> cardOptional = cardRepository.findById(cardId);
-        if(cardOptional.isPresent()){
-            Optional<User> userOptional = userRepository.findById(agentId);
-            if(userOptional.isPresent()){
-                Card card = cardOptional.get();
-                card.setOwner(userOptional.get());
-                cardRepository.save(card);
-            }
-            else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Agent does not exist");
-        }
-        else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Card does not exist");
-    }
-
-
-    public void delete(long id) {
+    public void delete(long id, Principal principal) {
         Optional<Card> existing = cardRepository.findById(id);
         if(existing.isPresent())
             cardRepository.deleteById(id);
         else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist");
         }
-    }
-
-    public void activate(long cardId) {
-        Optional<Card> cardOptional = cardRepository.findById(cardId);
-        if(cardOptional.isPresent()){
-            Card card = cardOptional.get();
-            card.setEnabled(true);
-            cardRepository.save(card);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist");
-    }
-
-    public void deactivate(long cardId) {
-        Optional<Card> cardOptional = cardRepository.findById(cardId);
-        if(cardOptional.isPresent()){
-            Card card = cardOptional.get();
-            card.setEnabled(false);
-            cardRepository.save(card);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist");
     }
 
     public Long countAll(){

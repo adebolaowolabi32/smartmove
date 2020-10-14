@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.model.User;
+import org.junit.After;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -36,8 +37,7 @@ public class TransactionRepositoryTests {
     @BeforeAll
     public void setUp() {
         transaction = new Transaction();
-        User user = buildTestUser();
-        userRepository.save(user);
+        //User user = userRepository.save(buildTestUser());
         transaction.setTransactionId("");
         transaction.setDeviceId("123457385");
         transaction.setCardId("12345556");
@@ -50,7 +50,7 @@ public class TransactionRepositoryTests {
         savedTransaction = transactionRepository.save(transaction);
         assertNotNull(savedTransaction);
         Transaction transaction1 = new Transaction();
-        transaction1.setTransactionId("");
+        transaction1.setTransactionId("23");
         transaction1.setDeviceId("123457385");
         transaction1.setCardId("12345556");
         transaction1.setType(Enum.TransactionType.TAP_OUT);
@@ -60,6 +60,13 @@ public class TransactionRepositoryTests {
         transaction1.setMode(Enum.TransportMode.RAIL);
         transaction1.setTransactionDateTime(LocalDateTime.now());
         assertNotNull(transactionRepository.save(transaction1));
+    }
+
+    @After
+    public void tearDown() {
+        //delete all composite entities
+        userRepository.deleteAll();
+        transactionRepository.deleteAll();
     }
 
     @Test

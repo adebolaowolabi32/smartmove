@@ -59,7 +59,7 @@ public class VehicleCategoryController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        VehicleCategory vehicleCategory = vehicleCategoryService.findById(principal, id);
+        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal);
         model.addAttribute("vehicleCategory", vehicleCategory);
         return "vehicleCategories/details";
     }
@@ -85,14 +85,14 @@ public class VehicleCategoryController {
             model.addAttribute("owners", userService.findAll());
             return "vehicleCategories/create";
         }
-        VehicleCategory savedVehicleCategory = vehicleCategoryService.save(vehicleCategory);
+        VehicleCategory savedVehicleCategory = vehicleCategoryService.save(vehicleCategory, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/vehicleCategories/details/" + savedVehicleCategory.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        VehicleCategory vehicleCategory = vehicleCategoryService.findById(principal, id);
+        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal);
         model.addAttribute("vehicleCategory", vehicleCategory);
         //TODO change findAll to findAllEligible
         model.addAttribute("makes",  vehicleMakeService.findAll());
@@ -113,15 +113,15 @@ public class VehicleCategoryController {
             model.addAttribute("owners", userService.findAll());
             return "vehicleCategories/update";
         }
-        vehicleCategoryService.update(vehicleCategory);
+        vehicleCategoryService.update(vehicleCategory, principal);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/vehicleCategories/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id);
-        vehicleCategoryService.delete(id);
+        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal);
+        vehicleCategoryService.delete(id, principal);
         User owner = vehicleCategory.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

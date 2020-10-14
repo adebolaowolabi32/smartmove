@@ -6,13 +6,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/*
- * Created by adebola.owolabi on 7/18/2020
+/**
+ * @author adebola.owolabi
  */
 @Data
 @Entity
 @Table(name = "manifests")
 public class Manifest implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

@@ -6,9 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/*
- * Created by adebola.owolabi on 7/27/2020
- */
 @Repository
 public interface StateRepository extends CrudRepository<State, Long> {
     List<State> findAll();

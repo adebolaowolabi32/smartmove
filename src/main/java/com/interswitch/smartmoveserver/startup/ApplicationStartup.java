@@ -1,12 +1,11 @@
-package com.interswitch.smartmoveserver.startup;
+package com.interswitch.smartmoveserver.config;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.StateRepository;
 import com.interswitch.smartmoveserver.service.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -16,10 +15,9 @@ import java.util.*;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Component
 public class ApplicationStartup implements CommandLineRunner {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     @Autowired
     UserService userService;
 
@@ -53,8 +51,8 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setAddress("Lagos Nigeria");
         adminUser.setRole(Enum.Role.ISW_ADMIN);
         adminUser.setEnabled(true);
-        //userService.setUp(adminUser);
-        logger.info("System Administrator created successfully!");
+        userService.setUp(adminUser);
+        log.info("System Administrator created successfully!");
 
         User driver = new User();
         adminUser.setFirstName("Suleiman");
@@ -65,13 +63,14 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setAddress("Lagos Nigeria");
         adminUser.setRole(Enum.Role.DRIVER);
         adminUser.setEnabled(true);
-        //userService.setUpS(adminUser);
-        logger.info("Driver created successfully!");
+        userService.setUpS(adminUser);
+        log.info("Driver created successfully!");
         //loadManifestData(7);
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
     }
 
+/*
     public void loadManifestData(long tripId) {
 
         manifestService.deleteAll();
@@ -117,6 +116,7 @@ public class ApplicationStartup implements CommandLineRunner {
         manifest.setAddress("22 Captain Black Road,Lagos.");
         manifestService.save(manifest);
     }
+*/
 
     public void loadVehicleMakesAndModels(){
         Map<String, List<String>> vehicles = new HashMap<>();

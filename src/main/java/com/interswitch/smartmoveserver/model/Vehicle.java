@@ -35,9 +35,5 @@ public class Vehicle implements Serializable {
     @OneToOne
     private Device device;
 
-    /*private String pictureUrl;
-
-    private transient MultipartFile picture;*/
-
     private boolean enabled;
 }

@@ -7,8 +7,6 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.view.RefundTicket;
 import com.interswitch.smartmoveserver.repository.TicketRefundRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +22,6 @@ import java.time.LocalDateTime;
  */
 @Service
 public class TicketRefundService {
-    private final Log logger = LogFactory.getLog(getClass());
     @Autowired
     PageUtil pageUtil;
 
