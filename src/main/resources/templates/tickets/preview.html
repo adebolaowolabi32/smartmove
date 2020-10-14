@@ -3,7 +3,7 @@
       layout:decorate="~{layouts/default}">
 <title layout:fragment="title">Tickets</title>
 <div layout:fragment="content" class="card mb-4">
-    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+    <div class="card-header"><i class="fas fa-ticket-alt mr-1"></i>
         <span>Tickets</span>
         <a style="float:right;">
             <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
@@ -22,9 +22,7 @@
                             <span th:text="${ticket.operator.firstName + ' ' + ticket.operator.lastName}">AK Transport</span>
                         </div>
                         <div class="col-5">
-                            <div ;class="row"
-                                 style="color:#311b92;margin-top:6px;margin-left:15px;font-weight:bold;"
-                                 th:text="${'TICKET/BOARDING PASS'}"></div>
+                            <div class="row" style="color:#311b92;margin-top:6px;margin-left:15px;font-weight:bold;" th:text="${'TICKET/BOARDING PASS'}"></div>
                         </div>
                     </div>
 

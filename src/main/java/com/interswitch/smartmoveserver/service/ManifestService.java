@@ -70,6 +70,13 @@ public class ManifestService {
         return manifestRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist"));
     }
 
+    public Manifest update(Manifest manifest) {
+        Optional<Manifest> existing = manifestRepository.findById(manifest.getId());
+        if (existing.isPresent())
+            return manifestRepository.save(buildManifest(manifest));
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
+    }
+
     public Manifest update(Manifest manifest, Principal principal) {
         Optional<Manifest> existing = manifestRepository.findById(manifest.getId());
         if (existing.isPresent())
@@ -77,6 +84,14 @@ public class ManifestService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
     }
 
+    public void delete(long id) {
+        Optional<Manifest> existing = manifestRepository.findById(id);
+        if (existing.isPresent())
+            manifestRepository.deleteById(id);
+        else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
+        }
+    }
     public void delete(long id, Principal principal) {
         Optional<Manifest> existing = manifestRepository.findById(id);
         if (existing.isPresent())
@@ -86,8 +101,12 @@ public class ManifestService {
         }
     }
 
-    public List<Manifest> findByTripId(long tripId) {
-        return manifestRepository.findByTripId(tripId);
+    public Manifest findByTripIdAndName(long tripId, String name) {
+        return manifestRepository.findByTripIdAndName(tripId, name);
+    }
+
+    public Manifest findByScheduleIdAndName(long scheduleId, String name) {
+        return manifestRepository.findByScheduleIdAndName(scheduleId, name);
     }
 
     public Iterable<Manifest> saveAll(List<Manifest> manifests) {

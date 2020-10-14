@@ -85,8 +85,16 @@
                             Schedules</a>
                         <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
                            th:href="@{/tickets/get}">
-                            <div class="sb-nav-link-icon"><i class="fas fa-memory"></i></div>
-                            Bookings</a>
+                            <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
+                            Tickets</a>
+                        <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
+                           th:href="@{/refunds/get}">
+                            <div class="sb-nav-link-icon"><i class="fa fa-retweet"></i></div>
+                            Refunds</a>
+                        <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
+                           th:href="@{/reassignTicket}">
+                            <div class="sb-nav-link-icon"><i class="fa fa-sync-alt"></i></div>
+                            Reassign Ticket</a>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')" th:href="@{/transactions/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                             Transactions</a>

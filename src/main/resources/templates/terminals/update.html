@@ -11,9 +11,9 @@
 				<div class="col-sm-4">
 					<h2> <b> Update Terminal</b></h2>
 				</div>
-
 			</div>
 		</div>
+		<br>
 		<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 		<form class="card p-3" action="#" method="post"
 			  th:action="@{/terminals/update/{id}(id=${terminal.id})}" th:object="${terminal}"

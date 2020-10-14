@@ -20,6 +20,7 @@
 					</div>
 				</div>
 			</div>
+			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{vehicle.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">

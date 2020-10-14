@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.springframework.org/schema/webflow"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <view-state id="create" view="reassignments/create" model="flowScope.reassignTicket">
+        <on-entry>
+            <set name="flowScope.reassignTicket"
+                 value="new com.interswitch.smartmoveserver.model.view.ReassignTicket()"/>
+            <evaluate result="flowScope.terminals" expression="ticketService.getTerminals()"/>
+            <evaluate result="flowScope.schedules" expression="ticketService.getSchedules()"/>
+        </on-entry>
+        <transition on="reassignTicket" to="schedule">
+            <set name="flowScope.return" value="false"/>
+            <evaluate result="flowScope.scheduleBooking"
+                      expression="ticketService.reassignTicket(currentUser.name, flowScope.reassignTicket)"/>
+        </transition>
+        <on-exit>
+            <evaluate expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket reassign flow')"/>
+        </on-exit>
+    </view-state>
+
+    <view-state id="schedule" view="tickets/schedule" model="flowScope.scheduleBooking">
+        <on-entry>
+            <evaluate result="flowScope.terminals" expression="ticketService.getTerminals()"/>
+            <evaluate result="flowScope.schedules" expression="ticketService.getSchedules()"/>
+        </on-entry>
+        <transition on="makeBooking" to="confirm">
+            <evaluate result="flowScope.ticketDetails" expression="ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
+        </transition>
+        <transition on="findBooking" to="schedule">
+            <evaluate result="flowScope.scheduleBooking" expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
+        </transition>
+        <on-exit>
+            <evaluate expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket reassign flow')"/>
+        </on-exit>
+    </view-state>
+
+    <view-state id="confirm" view="reassignments/confirm" model="flowScope.ticketDetails">
+        <transition on="complete" to="preview">
+            <evaluate result="flowScope.ticketDetails" expression="ticketService.confirmReassignment(currentUser.name, flowScope.reassignTicket, flowScope.ticketDetails)"/>
+        </transition>
+        <transition on="back" to="create"/>
+    </view-state>
+
+    <view-state id="preview" view="tickets/preview" model="flowScope.ticketDetails"/>
+    <end-state id="cancel"/>
+
+
+</flow>
