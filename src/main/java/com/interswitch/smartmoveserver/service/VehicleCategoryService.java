@@ -1,13 +1,8 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.VehicleCategory;
-import com.interswitch.smartmoveserver.model.VehicleMake;
-import com.interswitch.smartmoveserver.model.VehicleModel;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleCategoryRepository;
-import com.interswitch.smartmoveserver.repository.VehicleMakeRepository;
-import com.interswitch.smartmoveserver.repository.VehicleModelRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +34,9 @@ public class VehicleCategoryService {
     UserRepository userRepository;
 
     @Autowired
+    DocumentService documentService;
+
+    @Autowired
     SecurityUtil securityUtil;
 
     @Autowired
@@ -55,6 +53,10 @@ public class VehicleCategoryService {
         if(vehicleCategory.getOwner() == null) {
             User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             vehicleCategory.setOwner(owner);
+        }
+        if (vehicleCategory.getPicture() != null && vehicleCategory.getPicture().getSize() > 0) {
+            Document doc = documentService.saveDocument(new Document(vehicleCategory.getPicture()));
+            vehicleCategory.setPictureUrl(doc.getUrl());
         }
         return vehicleCategoryRepository.save(buildVehicleCategory(vehicleCategory));
     }
@@ -76,6 +78,10 @@ public class VehicleCategoryService {
             if(vehicleCategory.getOwner() == null) {
                 User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
                 vehicleCategory.setOwner(owner);
+            }
+            if (vehicleCategory.getPicture() != null && vehicleCategory.getPicture().getSize() > 0) {
+                Document doc = documentService.saveDocument(new Document(vehicleCategory.getPicture()));
+                vehicleCategory.setPictureUrl(doc.getUrl());
             }
             return vehicleCategoryRepository.save(vehicleCategory);
         }

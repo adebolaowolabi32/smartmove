@@ -16,6 +16,9 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author adebola.owolabi
+ */
 @Service
 @Transactional
 public class TripService {
@@ -50,7 +53,7 @@ public class TripService {
         boolean exists = tripRepository.existsById(id);
 
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Trip already exists");
-        trip.setReferenceNo(RandomUtil.getRandomNumber());
+        trip.setReferenceNo(RandomUtil.getRandomNumber(6));
         if(trip.getOwner() == null) {
             User owner = userService.findByUsername(principal.getName());
             trip.setOwner(owner);

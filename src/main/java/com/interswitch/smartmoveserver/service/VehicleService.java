@@ -41,9 +41,6 @@ public class VehicleService {
     @Autowired
     PageUtil pageUtil;
 
-    @Autowired
-    DocumentService documentService;
-
     public List<Vehicle> findAll() {
         return vehicleRepository.findAll();
     }
@@ -55,10 +52,6 @@ public class VehicleService {
         if (vehicle.getOwner() == null) {
             User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             vehicle.setOwner(owner);
-        }
-        if (vehicle.getPicture() != null) {
-            Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
-            vehicle.setPictureUrl(doc.getUrl());
         }
         return vehicleRepository.save(buildVehicle(vehicle));
     }
@@ -72,17 +65,9 @@ public class VehicleService {
     }
 
     public Vehicle update(Vehicle vehicle, Principal principal) {
-
-        log.info("Vehicle Picture =>" + vehicle.getPicture());
-
         Optional<Vehicle> existing = vehicleRepository.findById(vehicle.getId());
 
         if (existing.isPresent()) {
-            if (vehicle.getPicture() != null) {
-                log.info("Vehicle Picture Not Null");
-                Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
-                vehicle.setPictureUrl(doc.getUrl());
-            }
             if (vehicle.getOwner() == null) {
                 User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
                 vehicle.setOwner(owner);

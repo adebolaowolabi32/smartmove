@@ -1,13 +1,20 @@
 package com.interswitch.smartmoveserver.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 /**
  * @author adebola.owolabi
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "terminals")
 public class Terminal implements Serializable {

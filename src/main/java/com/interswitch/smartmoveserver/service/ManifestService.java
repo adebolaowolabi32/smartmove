@@ -14,6 +14,9 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author adebola.owolabi
+ */
 @Service
 public class ManifestService {
 

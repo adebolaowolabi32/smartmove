@@ -15676,12 +15676,12 @@ body {
        height:100px;
    }
 
-   #brt {
+   #vehiclePicture {
         width:250px;
         height:150px;
    }
 
-   #brt-bus {
+   #vehiclePic, #profilePic {
            width:300px;
            height:200px;
    }
