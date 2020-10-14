@@ -15681,7 +15681,7 @@ body {
         height:150px;
    }
 
-   #vehiclePic {
+   #vehiclePic, #profilePic {
            width:300px;
            height:200px;
    }
