@@ -72,9 +72,16 @@ public class DateUtil {
         return date;
     }
     public static LocalDateTime textToLocalDateTime(String text) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
-        return dateTime;
+        try {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm");
+            LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
+            return dateTime;
+
+        }catch(Exception ex){
+            return null;
+        }
+
     }
 
     public static LocalDate textToLocalDate(String text) {

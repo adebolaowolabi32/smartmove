@@ -11,6 +11,9 @@
                     <div class="col-sm-8">
                         <h2><b><span>Trips</span></b></h2>
                     </div>
+
+                    <div th:replace="fragments/alert-success :: alert-success(message=${uploaded} ? #{trip.uploaded.message} : (${updated} ? #{trip.updated.message} : false))"></div>
+
                     <div class="col-sm-4">
                         <div class="row">
                             <a href="#" th:href="@{/trips/create}" class="btn btn-info"><i class="fas fa-plus"
@@ -18,7 +21,7 @@
                                 New</a>
                             <a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh
                                 List</a>
-                            <a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i>Import Trips</a>
+                            <a href="#" th:href="@{/trips/upload}" class="btn btn-info"><i class="fas fa-file-import"  aria-hidden="true"></i>Import Trips CSV </a>
                         </div>
                     </div>
                 </div>

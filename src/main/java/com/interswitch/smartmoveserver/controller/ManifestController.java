@@ -46,7 +46,7 @@ public class ManifestController {
     @GetMapping("/upload-schedule-manifest/{id}")
     public String showManifestUploadPage(Principal principal, @PathVariable("id") long id, Model model) {
 
-            logger.info("Entered manifest controller==>ID " + id);
+            logger.info("GET===>Entered manifest controller==>ID " + id);
             List<Manifest> manifests = new ArrayList<>();
             Schedule schedule = scheduleService.findById(id);
             model.addAttribute("schedule",schedule);
@@ -60,12 +60,14 @@ public class ManifestController {
                                  MultipartFile file, Model model,
                                  RedirectAttributes redirectAttributes) {
         try {
-            logger.info("POST Entered manifest controller==>ID " + id );
+            logger.info("POST===> Entered manifest controller for schedule==>ID " + id );
             List<Manifest> manifestList = new ArrayList<>();
+            logger.info("finished declaring manifest list===>"+manifestList);
             manifestList  =  manifestService.upload(file,null,scheduleService.findById(id));
+            logger.info("finished declaring manifest list===>" );
             redirectAttributes.addFlashAttribute("updated", true);
             return "redirect:/schedules/details/"+ id;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             logger.error("Error happened trying to upload manifest==>"+ex.getMessage());
             redirectAttributes.addFlashAttribute("error", true);
             return "redirect:/schedules/details/"+ id;

@@ -1,8 +1,16 @@
 package com.interswitch.smartmoveserver.config;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.view.Drum;
 import com.interswitch.smartmoveserver.model.view.TicketTillView;
+import com.interswitch.smartmoveserver.model.view.Facility;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.StateRepository;
 import com.interswitch.smartmoveserver.repository.TicketTillRepository;
@@ -13,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -48,8 +57,9 @@ public class ApplicationStartup implements CommandLineRunner {
 
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws IOException {
 
+        ObjectToCSV();
         viewTicketTillSummary();
         User adminUser = new User();
         adminUser.setFirstName("Smart");
@@ -241,6 +251,7 @@ public class ApplicationStartup implements CommandLineRunner {
 
     private void viewTicketTillSummary(){
         logger.info("Wanna view ticket till summary");
+
         List<TicketTillView> ticketTillViewSummaryList = ticketTillRepo.findAggregatedTicketTillByIssuanceDateAndStatus("2020-10-08",false);
 
         logger.info(ticketTillViewSummaryList);
@@ -252,5 +263,33 @@ public class ApplicationStartup implements CommandLineRunner {
         }
 
         logger.info("Size of ticket till summary===>"+ticketTillViewSummaryList.size());
+    }
+
+   public void ObjectToCSV() throws IOException {
+       File csvOutputFile = new File("fac_output.csv");
+
+       Facility fac = new Facility();
+       fac.setId(1);
+       fac.setImage("ABC");
+       fac.setName("EARNEST");
+       fac.setDrum(new Drum(5,9));
+
+       List<Facility> list = new ArrayList<>(Arrays.asList(fac, fac, fac));
+
+       // create mapper and schema
+       CsvMapper mapper = new CsvMapper();
+       CsvSchema schema = mapper.schemaFor(Facility.class).withHeader();
+
+       String csv = mapper.writer(schema.withUseHeader(true)).writeValueAsString(fac);
+       logger.info("CSV===>"+csv);
+       // output writer
+       ObjectWriter myObjectWriter = mapper.writer(schema);
+       FileOutputStream tempFileOutputStream = new FileOutputStream(csvOutputFile);
+       BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(tempFileOutputStream, 1024);
+       OutputStreamWriter writerOutputStream = new OutputStreamWriter(bufferedOutputStream, "UTF-8");
+       myObjectWriter.writeValue(writerOutputStream, list);
+
+       System.out.println("Users saved to csv file under path: ");
+       System.out.println(csvOutputFile);
     }
 }
