@@ -39,7 +39,7 @@
                         <tr>
                             <th>Transfer ID</th>
                             <th>Recipient</th>
-                            <th>Amount (&#8358;)</th>
+                            <th>Amount (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
                             <th>Transfer Date Time</th>
                         </tr>
                         </thead>
@@ -72,7 +72,7 @@
                         <tr>
                             <th>Transfer ID</th>
                             <th>Sender</th>
-                            <th>Amount (&#8358;)</th>
+                            <th>Amount (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
                             <th>Transfer Date Time</th>
                         </tr>
                         </thead>

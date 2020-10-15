@@ -23,7 +23,7 @@
                     <th>Ticket Reference</th>
                     <th>Name</th>
                     <th>Departure/Arrival</th>
-                    <th>Amount (&#8358;)</th>
+                    <th>Amount (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
                 </tr>
             </thead>
 
@@ -44,7 +44,7 @@
         </table>
 
         <div class="amt-big">
-            <span>Total Amount Payable: &#8358; </span>
+            <span>Total Amount Payable: <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></span>
             <span th:text="${ticketDetails.totalFare}"></span>
         </div>
 

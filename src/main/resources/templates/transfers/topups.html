@@ -27,7 +27,7 @@
                 <tr>
                     <th>Topup ID</th>
                     <th>Topup Method</th>
-                    <th>Amount (&#8358;)</th>
+                    <th>Amount (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
                     <th>Topup Date</th>
                     <th>View Details</th>
                 </tr>
