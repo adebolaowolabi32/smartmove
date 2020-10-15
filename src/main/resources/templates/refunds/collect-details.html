@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Ticket Refunds</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-retweet mr-1"></i>
+        <span>Ticket Refunds</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Create New Ticket Refund</b></h2>
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <div th:unless="${refundTicket.invalid}">
+            <form class="p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
+                  th:object="${refundTicket}">
+                <div class="card">
+                    <div class="card-header">
+                        <span><b>Ticket Details</b></span>
+                    </div>
+                    <div class="card-body row">
+                        <div class="col">
+                            <div class="label-small">Reference No</div>
+                            <div th:text="${refundTicket.referenceNo}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Passenger Name</div>
+                            <div th:text="${refundTicket.ticket.passengerName}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Seat</div>
+                            <div th:text="${refundTicket.ticket.seatNo}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Booking Date</div>
+                            <div th:text="${refundTicket.ticket.bookingDate}"></div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card">
+                    <div class="card-header">
+                        <span><b>Trip Details</b></span></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="label-small">Departure</div>
+                                <div th:text="${refundTicket.ticket.schedule.startTerminal.name}"></div>
+                            </div>
+                            <div class="col">
+                                <div class="label-small">Destination</div>
+                                <div th:text="${refundTicket.ticket.schedule.stopTerminal.name}"></div>
+                            </div>
+                            <div class="col">
+                                <div class="label-small">Vehicle</div>
+                                <div th:text="${refundTicket.ticket.schedule.vehicle.name}"></div>
+                            </div>
+                            <div class="col">
+                                <div class="label-small">Price</div>
+                                <div><span th:text="${refundTicket.ticket.schedule.fare}"></span>
+                                    <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <div class="label-small">Departure Date</div>
+                                <div th:text="${refundTicket.ticket.schedule.departureDate}"></div>
+                            </div>
+                            <div class="col">
+                                <div class="label-small">Departure Time</div>
+                                <div th:text="${refundTicket.ticket.schedule.departureTime}"></div>
+                            </div>
+                            <div class="col">
+                                <div class="label-small">Arrival Date</div>
+                                <div th:text="${refundTicket.ticket.schedule.arrivalDate}"></div>
+                            </div>
+                            <div class="col">
+                                <div class="label-small">Estimated Arrival Time</div>
+                                <div th:text="${refundTicket.ticket.schedule.arrivalTime}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <br>
+                <br>
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label class="control-label" for="reason"><b>Reason for Refund</b></label>
+                    </div>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="reason" th:field="*{reason}">
+                    </div>
+                </div>
+                <br><br>
+                <div><b>Disclaimer:</b> Your clicking the complete button will imply that you have physically collected
+                    the total sum of this ticket refund from the customer.
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="btn-group col-sm-6">
+                        <input class="btn btn-outline-info" name="_eventId_back" type="submit"
+                               value="Back"/>
+                        <input class="btn btn-outline-info" name="_eventId_complete"
+                               type="submit" value="Complete"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div th:if="${refundTicket.invalid}">
+            <br> No tickets were found for the provided reference no. Please try again.
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Reassign Ticket</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-sync-alt mr-1"></i>
+        <span>Reassign Ticket</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Reassign Ticket</b></h2>
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <form class="p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
+              th:object="${reassignTicket}">
+            <div class="card">
+                <div class="card-header">
+                    <span><b>Passenger Details</b></span>
+                </div>
+                <div class="card-body row">
+                    <div class="col">
+                        <div class="label-small">Passenger Name</div>
+                        <div th:text="${reassignTicket.ticket.passengerName}"></div>
+                    </div>
+                    <div class="col">
+                        <div class="label-small">Seat</div>
+                        <div th:text="${reassignTicket.ticket.seatNo}"></div>
+                    </div>
+                    <div class="col">
+                        <div class="label-small">Seat Class</div>
+                        <div th:text="${reassignTicket.ticket.seatClass}"></div>
+                    </div>
+                    <div class="col">
+                        <div class="label-small">Booking Date</div>
+                        <div th:text="${reassignTicket.ticket.bookingDate}"></div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    <span><b>Trip Details</b></span></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure</div>
+                            <div th:text="${reassignTicket.ticket.schedule.startTerminal.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Destination</div>
+                            <div th:text="${reassignTicket.ticket.schedule.stopTerminal.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Vehicle</div>
+                            <div th:text="${reassignTicket.ticket.schedule.vehicle.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Price</div>
+                            <div><span th:text="${reassignTicket.ticket.schedule.fare}"></span>
+                                <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure Date</div>
+                            <div th:text="${reassignTicket.ticket.schedule.departureDate}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Departure Time</div>
+                            <div th:text="${reassignTicket.ticket.schedule.departureTime}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Arrival Date</div>
+                            <div th:text="${reassignTicket.ticket.schedule.arrivalDate}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Estimated Arrival Time</div>
+                            <div th:text="${reassignTicket.ticket.schedule.arrivalTime}"></div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-sm-6"></div>
+                <div class="btn-group col-sm-6">
+                    <input class="btn btn-outline-info" name="_eventId_back" type="submit"
+                           value="Back"/>
+                    <input class="btn btn-outline-info" name="_eventId_complete"
+                           type="submit" value="Complete"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</html>

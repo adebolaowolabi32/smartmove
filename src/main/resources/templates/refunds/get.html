@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Ticket Refunds</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-retweet mr-1"></i><span>Ticket Refunds</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2><b><span>Ticket Refunds</span></b></h2>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <a class="btn btn-info" href="#" th:href="@{/refundTicket}"><i aria-hidden="true"
+                                                                                           class="fas fa-plus"></i>
+                                Create New</a>
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fas fa-sync-alt"></i> Refresh
+                                List</a>
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fa fa-file-export"></i> Export
+                                to Excel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
+                <thead class='thead-light'>
+                <tr>
+                    <th>Ticket Reference</th>
+                    <th>Passenger Name</th>
+                    <th>Trip</th>
+                    <th>Departure Date/Time</th>
+                    <th>Vehicle</th>
+                    <th>Reason for Refund</th>
+                    <th>Refund Date</th>
+                    <th>View Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="refund : ${refundPage.content}">
+                    <td th:text="${refund.ticket.referenceNo}"></td>
+                    <td th:text="${refund.ticket.passengerName}"></td>
+                    <td th:text="${refund.ticket.schedule.startTerminal.name + ' - ' + refund.ticket.schedule.stopTerminal.name}"></td>
+                    <td th:text="${refund.ticket.schedule.departureDate + ' ' + refund.ticket.schedule.departureTime}"></td>
+                    <td th:text="${refund.ticket.schedule.vehicle.name}"></td>
+                    <td th:text="${refund.reason}"></td>
+                    <td th:text="${refund.refundDateTime}"></td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/refunds/details/{id}(id=${refund.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagination" th:each="pageNumber : ${pageNumbers}"
+                 th:if="${refundPage.totalPages > 0}">
+                <a th:class="${pageNumber==refundPage.number + 1} ? active"
+                   th:href="@{/get(size=${refundPage.size}, page=${pageNumber})}">
+                    <button class='btn btn-outline-default' th:text=${pageNumber}></button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
