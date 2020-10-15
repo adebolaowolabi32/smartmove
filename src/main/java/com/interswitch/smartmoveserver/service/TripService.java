@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.dto.ManifestDto;
 import com.interswitch.smartmoveserver.model.dto.TripDto;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
 import com.interswitch.smartmoveserver.repository.TripRepository;
@@ -11,8 +10,6 @@ import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,21 +20,29 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Trips management service
+ * @author adebola.owolabi
  */
 @Service
 @Transactional
 public class TripService {
 
-    private final Log logger = LogFactory.getLog(getClass());
-
     @Autowired
     TripRepository tripRepository;
+
+    @Autowired
+    VehicleService vehicleService;
+
+    @Autowired
+    ScheduleService scheduleService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     UserRepository userRepository;
@@ -48,7 +53,6 @@ public class TripService {
     @Autowired
     ScheduleRepository scheduleRepository;
 
-
     @Autowired
     PageUtil pageUtil;
 
@@ -56,35 +60,62 @@ public class TripService {
         return tripRepository.findAll();
     }
 
-    public Page<Trip> findAllPaginated(int page, int size) {
+    public Page<Trip> findAllPaginated(Principal principal, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         return tripRepository.findAll(pageable);
 
     }
 
     public Trip save(Trip trip) {
+        return tripRepository.save(trip);
+    }
+
+    public Trip save(Trip trip, Principal principal) {
         long id = trip.getId();
         boolean exists = tripRepository.existsById(id);
 
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Trip already exists");
-
         trip.setReferenceNo(RandomUtil.getRandomNumber(6));
-        return tripRepository.save(trip);
+        if(trip.getOwner() == null) {
+            User owner = userService.findByUsername(principal.getName());
+            trip.setOwner(owner);
+        }
+        return tripRepository.save(buildVehicle(trip));
     }
 
     public Trip findById(long id) {
         return tripRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist"));
     }
 
+    public Trip findById(long id, Principal principal) {
+        return tripRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist"));
+    }
+
     public Trip update(Trip trip) {
         Optional<Trip> existing = tripRepository.findById(trip.getId());
         if (existing.isPresent())
+        {
             return tripRepository.save(trip);
+        }
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist");
     }
 
-    public void delete(long id) {
+    public Trip update(Trip trip, Principal principal) {
+        Optional<Trip> existing = tripRepository.findById(trip.getId());
+        if (existing.isPresent())
+        {
+            if(trip.getOwner() == null) {
+                User owner = userService.findByUsername(principal.getName());
+                trip.setOwner(owner);
+            }
+            return tripRepository.save(buildVehicle(trip));
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist");
+    }
+
+    public void delete(long id, Principal principal) {
         Optional<Trip> existing = tripRepository.findById(id);
         if (existing.isPresent())
             tripRepository.deleteById(id);
@@ -93,28 +124,33 @@ public class TripService {
         }
     }
 
-    public List<Trip> findByDriverUsername(String username) {
-        return tripRepository.findByDriverUsername(username);
-    }
-
-
-/*    public List<Trip> findByVehicleRegNo(String vehicleRegNo) {
-        return tripRepository.findByVehicleRegNo(vehicleRegNo);
-    }*/
+    //findByVehicleRegNo, findByDriverName
 
     public Long countAll() {
         return tripRepository.count();
     }
 
+    private Trip buildVehicle(Trip trip) {
+        Vehicle vehicle = trip.getVehicle();
+        if(vehicle != null)
+            trip.setVehicle(vehicleService.findById(vehicle.getId()));
+
+        Schedule schedule = trip.getSchedule();
+        if(schedule != null)
+            trip.setSchedule(scheduleService.findById(schedule.getId()));
+
+        User driver = trip.getDriver();
+        if(driver != null)
+            trip.setDriver(userService.findById(driver.getId()));
+        return trip;
+    }
     public boolean upload(MultipartFile file) throws IOException {
 
         List<Trip> savedTrips = new ArrayList<>();
         if(file.getSize()>1){
-            logger.info("upload trips===>");
             FileParser<TripDto> fileParser = new FileParser<>();
             List<TripDto> tripDtoList = fileParser.parseFileToEntity(file, TripDto.class);
             tripDtoList.forEach(tripDto->{
-                logger.info("upload trips===>"+tripDto);
                 savedTrips.add( tripRepository.save(mapToTrip(tripDto)));
 
             });

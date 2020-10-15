@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.springframework.org/schema/webflow"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <view-state id="create" view="refunds/create" model="flowScope.refundTicket">
+        <on-entry>
+            <set name="flowScope.refundTicket"
+                 value="new com.interswitch.smartmoveserver.model.view.RefundTicket()"/>
+        </on-entry>
+        <transition on="refundTicket" to="collect-details">
+            <evaluate result="flowScope.refundTicket"
+                      expression="ticketRefundService.refundTicket(currentUser.name, flowScope.refundTicket)"/>
+        </transition>
+        <on-exit>
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket refund flow')"/>
+        </on-exit>
+    </view-state>
+
+    <view-state id="collect-details" view="refunds/collect-details" model="flowScope.refundTicket">
+        <transition on="complete" to="complete">
+            <evaluate result="flowScope.refund"
+                      expression="ticketRefundService.confirmRefund(currentUser.name, flowScope.refundTicket)"/>
+        </transition>
+        <transition on="back" to="create"/>
+    </view-state>
+
+    <view-state id="complete" view="refunds/details" model="flowScope.refund"/>
+
+    <end-state id="cancel"/>
+
+
+</flow>

@@ -46,4 +46,6 @@ public class Ticket implements Serializable {
     private String seatNo;
 
     private String bookingDate;
+
+    private boolean refunded = false;
 }

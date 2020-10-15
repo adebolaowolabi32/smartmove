@@ -7,9 +7,9 @@
     <div class="card-body">
 
         <div class="row" th:style="${status == 'CLOSE' ? 'display : block' : 'display : none'}">
-        <div style="width:500px;margin-left:50px;" class="alert alert-warning" role="alert">
-            <p> Your ticket till is <b>closed</b>,you can't sell ticket until after <b>approved.</b><p>
-        </div>
+            <div style="width:500px;margin-left:50px;" class="alert alert-warning" role="alert">
+                <p> Your ticket till is <b>closed</b>,you can't sell ticket until after <b>approved.</b><p>
+            </div>
         </div>
         <div class="table-wrapper">
             <div class="table-title">
@@ -32,20 +32,39 @@
                 <tr>
                     <th>Ticket Reference</th>
                     <th>Passenger Name</th>
-                    <th>Trip ID</th>
+                    <th>Trip</th>
+                    <th>Departure Date/Time</th>
+                    <th>Vehicle</th>
                     <th>Seat</th>
                     <th>Seat Class</th>
+                    <th>Fare (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
                     <th>Booking Date</th>
+                    <th>Refunded</th>
+                    <th>View Details</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="ticket : ${ticketPage.content}">
                     <td th:text="${ticket.referenceNo}"></td>
                     <td th:text="${ticket.passengerName}"></td>
-                    <td th:text="${ticket.schedule.id}"></td>
+                    <td th:text="${ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name}"></td>
+                    <td th:text="${ticket.schedule.departureDate + ' ' + ticket.schedule.departureTime}"></td>
+                    <td th:text="${ticket.schedule.vehicle.name}"></td>
                     <td th:text="${ticket.seatNo}"></td>
                     <td th:text="${ticket.seatClass}"></td>
+                    <td th:text="${ticket.fare}"></td>
                     <td th:text="${ticket.bookingDate}"></td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" id="refunded" name="refunded" th:checked="${ticket.refunded}" disabled>
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/tickets/details/{id}(id=${ticket.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

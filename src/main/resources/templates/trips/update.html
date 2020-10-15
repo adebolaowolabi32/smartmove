@@ -14,6 +14,7 @@
 
             </div>
         </div>
+        <br>
         <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
         <form class="card p-3" action="#" method="post"
               th:action="@{/trips/update/{id}(id=${trip.id})}" th:object="${trip}"
@@ -46,7 +47,7 @@
                     <select class="form-control" th:field="*{schedule}" id="schedule">
                         <option value="">Select...</option>
                         <option th:each="schedule : ${schedules}" th:value="${schedule.id}"
-                                th:text="${schedule != null ? schedule.id : ''}"></option>
+                                th:text="${schedule != null ? schedule.startTerminal.name + ' - ' + schedule.stopTerminal.name + ' ' + schedule.departureDate + ' ' + schedule.departureTime : ''}"></option>
                     </select>
                     <p class="small text-danger" th:if="${#fields.hasErrors('schedule')}" th:errors="*{schedule}"></p>
                 </div>

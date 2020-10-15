@@ -44,7 +44,7 @@ public class CardController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Card card = cardService.findById(id);
+        Card card = cardService.findById(id, principal);
         model.addAttribute("card", card);
         return "cards/details";
     }
@@ -64,14 +64,14 @@ public class CardController {
             model.addAttribute("owners", userService.findAll());
             return "cards/create";
         }
-        Card savedCard = cardService.save(card);
+        Card savedCard = cardService.save(card, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/cards/details/" + savedCard.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Card card = cardService.findById(id);
+        Card card = cardService.findById(id, principal);
         model.addAttribute("card", card);
         model.addAttribute("owners", userService.findAll());
         return "cards/update";
@@ -86,15 +86,15 @@ public class CardController {
             model.addAttribute("owners", userService.findAll());
             return "cards/update";
         }
-        cardService.update(card);
+        cardService.update(card,principal);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/cards/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        Card card = cardService.findById(id);
-        cardService.delete(id);
+    public String delete(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+        Card card = cardService.findById(id, principal);
+        cardService.delete(id, principal);
         User owner = card.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

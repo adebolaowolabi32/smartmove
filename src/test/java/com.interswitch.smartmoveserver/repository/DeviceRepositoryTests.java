@@ -3,12 +3,14 @@ package com.interswitch.smartmoveserver.repository;
 import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.service.DeviceService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -17,9 +19,10 @@ import java.util.List;
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest(classes = {DeviceService.class})
+@AutoConfigureTestDatabase
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
 public class DeviceRepositoryTests {
     @Autowired
     private DeviceRepository deviceRepository;

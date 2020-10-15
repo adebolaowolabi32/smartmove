@@ -18,10 +18,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.Principal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -37,7 +39,7 @@ public class UserApiTests {
 
     @MockBean
     private UserService userService;
-    
+
     private User user;
 
     @BeforeAll
@@ -51,23 +53,11 @@ public class UserApiTests {
         user.setEmail("alice@example.com");
         user.setMobileNo("123456789");
     }
-    
-/*    @Test
-    public void testSave() throws Exception {
-        when(userService.save(Enum.Role.VEHICLE_OWNER, "parent_id")).thenReturn(user);
-        mvc.perform(post("/users/VEHICLE_OWNER/parent_id")
-                .content(new ObjectMapper().writeValueAsString(user))
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(content().json(new ObjectMapper().writeValueAsString(user)));
-
-    }*/
 
     @Test
     public void testSave() throws Exception {
-        mvc.perform(post("/users")
+        when(userService.save(user, any(Principal.class))).thenReturn(user);
+        mvc.perform(post("/api/users")
                 .content(new ObjectMapper().writeValueAsString(user))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -78,7 +68,7 @@ public class UserApiTests {
     @Test
     public void testfindAll() throws Exception {
         when(userService.findAll()).thenReturn(Arrays.asList(user, new User()));
-        mvc.perform(get("/users")
+        mvc.perform(get("/api/users")
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -89,49 +79,17 @@ public class UserApiTests {
 
     @Test
     public void testFindById() throws Exception {
-        when(userService.findById(user.getId())).thenReturn(user);
-        mvc.perform(get("/users/{id}", user.getId())
+        when(userService.findById(user.getId(), any(Principal.class))).thenReturn(user);
+        mvc.perform(get("/api/users/{id}", user.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()));
     }
-/*
-
-    @Test
-    public void testFindByParent() throws Exception {
-        when(userService.findByParent(user.getParentId())).thenReturn(Arrays.asList(user));
-        mvc.perform(get("/users/{parentId}", user.getParentId())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }
-
-    @Test
-    public void testFindByEmail() throws Exception {
-        when(userService.findByEmail(user.getEmail())).thenReturn(user);
-        mvc.perform(get("/users/{email}", user.getEmail())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }
-    @Test
-    public void testFindByMobile() throws Exception {
-        when(userService.findByMobile(user.getMobileNo())).thenReturn(user);
-        mvc.perform(get("/users/{mobileNo}", user.getMobileNo())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }
-*/
-
 
     @Test
     public void testDelete() throws Exception {
-        mvc.perform(delete("/users/{id}", user.getId())
+        mvc.perform(delete("/api/users/{id}", user.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

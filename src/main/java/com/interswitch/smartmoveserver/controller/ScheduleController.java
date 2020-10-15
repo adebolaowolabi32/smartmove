@@ -5,8 +5,6 @@ import com.interswitch.smartmoveserver.model.Manifest;
 import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -38,8 +36,6 @@ public class ScheduleController {
     @Autowired
     private VehicleCategoryService vehicleCategoryService;
 
-    private final Log logger = LogFactory.getLog(getClass());
-
     @Autowired
     PageUtil pageUtil;
 
@@ -47,7 +43,7 @@ public class ScheduleController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Schedule> schedulePage = scheduleService.findAllPaginated(page, size);
+        Page<Schedule> schedulePage = scheduleService.findAllPaginated(principal, page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(schedulePage));
         model.addAttribute("schedulePage", schedulePage);
         return "schedules/get";
@@ -58,7 +54,7 @@ public class ScheduleController {
                              @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "10") int size) {
 
-        Schedule schedule = scheduleService.findById(id);
+        Schedule schedule = scheduleService.findById(id, principal);
 
         Page<Manifest> manifestPage = manifestService.findPaginatedManifestByScheduleId(page, size, schedule.getId());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(manifestPage));
@@ -88,14 +84,14 @@ public class ScheduleController {
             return "schedules/create";
         }
 
-        Schedule savedSchedule = scheduleService.save(schedule);
+        Schedule savedSchedule = scheduleService.save(schedule, principal);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/schedules/details/" + savedSchedule.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Schedule schedule = scheduleService.findById(id);
+        Schedule schedule = scheduleService.findById(id, principal);
         model.addAttribute("schedule", schedule);
         model.addAttribute("owners", userService.findAll());
         model.addAttribute("terminals", terminalService.findAll());
@@ -116,15 +112,15 @@ public class ScheduleController {
             return "schedules/update";
         }
 
-        scheduleService.update(schedule);
+        scheduleService.update(schedule, principal);
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/schedules/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        Schedule schedule = scheduleService.findById(id);
-        scheduleService.delete(id);
+    public String delete(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+        Schedule schedule = scheduleService.findById(id, principal);
+        scheduleService.delete(id, principal);
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/schedules/get";
     }

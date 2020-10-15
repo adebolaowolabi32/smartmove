@@ -5,13 +5,11 @@
 <div layout:fragment="content" class="card mb-4">
     <div class="card-header"><i class="fas fas fa-road"></i>
         <span>Trip & Passenger Manifest details</span>
-
         <a style="float:right;">
             <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
                 manifest
             </button>
         </a>
-
     </div>
     <div class="card-body">
         <div class="table-wrapper">
@@ -45,7 +43,7 @@
                                 <label class="col-sm-4" for="vehicle"><b>Vehicle</b></label>
                                 <div class="col-sm-8">
                                     <span id="vehicle"
-                                          th:text="${trip.vehicle!=null ? trip.vehicle.name+'-'+trip.vehicle.regNo : '' }"></span>
+                                          th:text="${trip.vehicle!=null ? trip.vehicle.name + ' - ' + trip.vehicle.regNo : '' }"></span>
                                 </div>
                             </div>
 

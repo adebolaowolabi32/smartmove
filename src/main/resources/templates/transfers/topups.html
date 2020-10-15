@@ -21,12 +21,13 @@
                     </div>
                 </div>
             </div>
+            <br>
             <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
                     <th>Topup ID</th>
                     <th>Topup Method</th>
-                    <th>Amount (&#8358;)</th>
+                    <th>Amount (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
                     <th>Topup Date</th>
                     <th>View Details</th>
                 </tr>

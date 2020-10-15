@@ -1,4 +1,5 @@
 package com.interswitch.smartmoveserver.repository;
+
 import com.interswitch.smartmoveserver.model.TicketTill;
 import com.interswitch.smartmoveserver.model.view.TicketTillView;
 import com.interswitch.smartmoveserver.queries.CustomQuery;

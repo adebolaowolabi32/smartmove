@@ -102,6 +102,7 @@ public class IswCoreService {
                 permissions.add("VIEW_TICKETERS");
                 permissions.add("VIEW_VEHICLE_OWNERS");
                 permissions.add("VIEW_ADMINISTRATORS");
+                permissions.add("VIEW_EXECUTIVES");
                 permissions.add("VIEW_TRANSACTIONS");
                 permissions.add("VIEW_SETTLEMENTS");
                 permissions.add("VIEW_ROUTES");
@@ -111,6 +112,7 @@ public class IswCoreService {
                 permissions.add("VIEW_BLACKLISTS");
                 permissions.add("VIEW_TRIPS");
                 permissions.add("VIEW_SCHEDULES");
+                permissions.add("VIEW_TICKETS");
 
 
                 permissions.add("CREATE_CARD");
@@ -127,6 +129,7 @@ public class IswCoreService {
                 permissions.add("CREATE_TICKETER");
                 permissions.add("CREATE_VEHICLE_OWNER");
                 permissions.add("CREATE_ADMINISTRATOR");
+                permissions.add("CREATE_EXECUTIVE");
                 permissions.add("CREATE_WALLET");
                 permissions.add("CREATE_TRANSACTION");
                 permissions.add("CREATE_SETTLEMENT");
@@ -137,7 +140,7 @@ public class IswCoreService {
                 permissions.add("CREATE_BLACKLIST");
                 permissions.add("CREATE_TRIP");
                 permissions.add("CREATE_SCHEDULE");
-
+                permissions.add("CREATE_TICKET");
 
                 permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_DEVICE_DETAILS");
@@ -152,6 +155,7 @@ public class IswCoreService {
                 permissions.add("VIEW_TICKETER_DETAILS");
                 permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
                 permissions.add("VIEW_ADMINISTRATOR_DETAILS");
+                permissions.add("VIEW_EXECUTIVE_DETAILS");
                 permissions.add("VIEW_TRANSACTION_DETAILS");
                 permissions.add("VIEW_SETTLEMENT_DETAILS");
                 permissions.add("VIEW_ROUTE_DETAILS");
@@ -161,6 +165,7 @@ public class IswCoreService {
                 permissions.add("VIEW_BLACKLIST_DETAILS");
                 permissions.add("VIEW_TRIP_DETAILS");
                 permissions.add("VIEW_SCHEDULE_DETAILS");
+                permissions.add("VIEW_TICKET_DETAILS");
                 permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("UPDATE_CARD");
@@ -177,6 +182,8 @@ public class IswCoreService {
                 permissions.add("UPDATE_TICKETER");
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ADMINISTRATOR");
+                permissions.add("UPDATE_EXECUTIVE");
+                permissions.add("UPDATE_EXECUTIVE");
                 permissions.add("UPDATE_WALLET");
                 permissions.add("UPDATE_ROUTE");
                 permissions.add("UPDATE_VEHICLE_CATEGORY");
@@ -201,6 +208,7 @@ public class IswCoreService {
                 permissions.add("DELETE_TICKETER");
                 permissions.add("DELETE_VEHICLE_OWNER");
                 permissions.add("DELETE_ADMINISTRATOR");
+                permissions.add("DELETE_EXECUTIVE");
                 permissions.add("DELETE_WALLET");
                 permissions.add("DELETE_ROUTE");
                 permissions.add("DELETE_VEHICLE_CATEGORY");
@@ -209,6 +217,54 @@ public class IswCoreService {
                 permissions.add("DELETE_BLACKLIST");
                 permissions.add("DELETE_TRIP");
                 permissions.add("DELETE_SCHEDULE");
+                return permissions;
+            }
+            case EXECUTIVE:
+            case SERVICE_PROVIDER: {
+                permissions = new ArrayList<>();
+                permissions.add("VIEW_CARDS");
+                permissions.add("VIEW_AGENTS");
+                permissions.add("VIEW_DEVICES");
+                permissions.add("VIEW_READERS");
+                permissions.add("VIEW_VALIDATORS");
+                permissions.add("VIEW_TERMINALS");
+                permissions.add("VIEW_DRIVERS");
+                permissions.add("VIEW_OPERATORS");
+                permissions.add("VIEW_REGULATORS");
+                permissions.add("VIEW_SERVICE_PROVIDERS");
+                permissions.add("VIEW_INSPECTORS");
+                permissions.add("VIEW_TICKETERS");
+                permissions.add("VIEW_VEHICLE_OWNERS");
+                permissions.add("VIEW_TRANSACTIONS");
+                permissions.add("VIEW_SETTLEMENTS");
+                permissions.add("VIEW_ROUTES");
+                permissions.add("VIEW_VEHICLE_CATEGORIES");
+                permissions.add("VIEW_VEHICLES");
+                permissions.add("VIEW_BLACKLISTS");
+                permissions.add("VIEW_TRIPS");
+                permissions.add("VIEW_SCHEDULES");
+
+                permissions.add("VIEW_AGENT_DETAILS");
+                permissions.add("VIEW_DEVICE_DETAILS");
+                permissions.add("VIEW_READER_DETAILS");
+                permissions.add("VIEW_VALIDATOR_DETAILS");
+                permissions.add("VIEW_TERMINAL_DETAILS");
+                permissions.add("VIEW_DRIVER_DETAILS");
+                permissions.add("VIEW_OPERATOR_DETAILS");
+                permissions.add("VIEW_REGULATOR_DETAILS");
+                permissions.add("VIEW_SERVICE_PROVIDER_DETAILS");
+                permissions.add("VIEW_INSPECTOR_DETAILS");
+                permissions.add("VIEW_TICKETER_DETAILS");
+                permissions.add("VIEW_VEHICLE_OWNER_DETAILS");
+                permissions.add("VIEW_TRANSACTION_DETAILS");
+                permissions.add("VIEW_SETTLEMENT_DETAILS");
+                permissions.add("VIEW_ROUTE_DETAILS");
+                permissions.add("VIEW_VEHICLE_CATEGORY_DETAILS");
+                permissions.add("VIEW_VEHICLE_DETAILS");
+                permissions.add("VIEW_BLACKLIST_DETAILS");
+                permissions.add("VIEW_TRIP_DETAILS");
+                permissions.add("VIEW_SCHEDULE_DETAILS");
+
                 return permissions;
             }
             case REGULATOR: {
@@ -327,6 +383,7 @@ public class IswCoreService {
                 permissions.add("VIEW_VEHICLES");
                 permissions.add("VIEW_TRIPS");
                 permissions.add("VIEW_SCHEDULES");
+                permissions.add("VIEW_TICKETS");
                 permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("CREATE_AGENT");
@@ -344,6 +401,7 @@ public class IswCoreService {
                 permissions.add("CREATE_VEHICLE");
                 permissions.add("CREATE_TRIP");
                 permissions.add("CREATE_SCHEDULE");
+                permissions.add("CREATE_TICKET");
 
                 permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_DEVICE_DETAILS");
@@ -363,6 +421,7 @@ public class IswCoreService {
                 permissions.add("VIEW_VEHICLE_DETAILS");
                 permissions.add("VIEW_TRIP_DETAILS");
                 permissions.add("VIEW_SCHEDULE_DETAILS");
+                permissions.add("VIEW_TICKET_DETAILS");
 
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");

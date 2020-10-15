@@ -1,14 +1,11 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Document;
-import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.Vehicle;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +20,17 @@ import java.util.Optional;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Service
 public class VehicleService {
     @Autowired
     VehicleRepository vehicleRepository;
+
+    @Autowired
+    VehicleCategoryService vehicleCategoryService;
+
+    @Autowired
+    DeviceService deviceService;
 
     @Autowired
     UserRepository userRepository;
@@ -37,27 +41,8 @@ public class VehicleService {
     @Autowired
     PageUtil pageUtil;
 
-    private final Log logger = LogFactory.getLog(getClass());
-
-    @Autowired
-    DocumentService documentService;
-
     public List<Vehicle> findAll() {
         return vehicleRepository.findAll();
-    }
-
-    public Vehicle save(Vehicle vehicle) {
-        long id = vehicle.getId();
-        boolean exists = vehicleRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle already exists");
-
-        if (!vehicle.getPicture().isEmpty() || vehicle.getPicture().getSize() > 0) {
-            Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
-            vehicle.setPictureUrl(doc.getUrl());
-        }
-
-        Vehicle createdVehicle = vehicleRepository.save(vehicle);
-        return createdVehicle;
     }
 
     public Vehicle save(Vehicle vehicle, Principal principal) {
@@ -65,74 +50,40 @@ public class VehicleService {
         boolean exists = vehicleRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle already exists");
         if (vehicle.getOwner() == null) {
-            Optional<User> owner = userRepository.findByUsername(principal.getName());
-            if (owner.isPresent()) vehicle.setOwner(owner.get());
+            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            vehicle.setOwner(owner);
         }
-        return vehicleRepository.save(vehicle);
+        return vehicleRepository.save(buildVehicle(vehicle));
     }
 
     public Vehicle findById(long id) {
         return vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist"));
     }
 
-    public Vehicle findById(Principal principal, long id) {
+    public Vehicle findById(long id, Principal principal) {
         return vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist"));
     }
 
-    public List<Vehicle> findAllByOwner(User owner) {
-        return vehicleRepository.findAllByOwner(owner);
-    }
-
-    public List<Vehicle> findAllByOwner(Long ownerId) {
-        Optional<User> owner = userRepository.findById(ownerId);
-        return vehicleRepository.findAllByOwner(owner.get());
-    }
-
-    public Vehicle update(Vehicle vehicle) {
-
+    public Vehicle update(Vehicle vehicle, Principal principal) {
         Optional<Vehicle> existing = vehicleRepository.findById(vehicle.getId());
 
         if (existing.isPresent()) {
-
-            if (!vehicle.getPicture().isEmpty() || vehicle.getPicture().getSize() > 0) {
-                logger.info("...picture not null in vehicle service");
-                Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
-                vehicle.setPictureUrl(doc.getUrl());
+            if (vehicle.getOwner() == null) {
+                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                vehicle.setOwner(owner);
             }
-
-            return vehicleRepository.save(vehicle);
-
+            return vehicleRepository.save(buildVehicle(vehicle));
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
     }
 
-    public void delete(long id) {
+    public void delete(long id, Principal principal) {
         Optional<Vehicle> existing = vehicleRepository.findById(id);
         if (existing.isPresent())
             vehicleRepository.deleteById(id);
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
         }
-    }
-
-    public void activate(long vehicleId) {
-        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-        if (vehicleOptional.isPresent()) {
-            Vehicle vehicle = vehicleOptional.get();
-            vehicle.setEnabled(true);
-            vehicleRepository.save(vehicle);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
-    }
-
-    public void deactivate(long vehicleId) {
-        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(vehicleId);
-        if (vehicleOptional.isPresent()) {
-            Vehicle vehicle = vehicleOptional.get();
-            vehicle.setEnabled(false);
-            vehicleRepository.save(vehicle);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist");
     }
 
     public long countByOwner(User user) {
@@ -163,5 +114,15 @@ public class VehicleService {
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
+    }
+    private Vehicle buildVehicle(Vehicle vehicle) {
+        VehicleCategory vehicleCategory = vehicle.getCategory();
+        if(vehicleCategory != null)
+            vehicle.setCategory(vehicleCategoryService.findById(vehicleCategory.getId()));
+
+        Device device = vehicle.getDevice();
+        if(device != null)
+            vehicle.setDevice(deviceService.findById(device.getId()));
+        return vehicle;
     }
 }

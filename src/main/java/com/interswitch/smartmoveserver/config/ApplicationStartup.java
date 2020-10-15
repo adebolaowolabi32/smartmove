@@ -1,22 +1,13 @@
 package com.interswitch.smartmoveserver.config;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
-import com.interswitch.smartmoveserver.model.view.Drum;
 import com.interswitch.smartmoveserver.model.view.TicketTillView;
-import com.interswitch.smartmoveserver.model.view.Facility;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.StateRepository;
 import com.interswitch.smartmoveserver.repository.TicketTillRepository;
 import com.interswitch.smartmoveserver.service.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -27,10 +18,9 @@ import java.util.*;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Component
 public class ApplicationStartup implements CommandLineRunner {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     @Autowired
     UserService userService;
 
@@ -58,9 +48,6 @@ public class ApplicationStartup implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws IOException {
-
-        ObjectToCSV();
-        viewTicketTillSummary();
         User adminUser = new User();
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
@@ -71,7 +58,7 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setRole(Enum.Role.ISW_ADMIN);
         adminUser.setEnabled(true);
         userService.setUp(adminUser);
-        logger.info("System Administrator created successfully!");
+        log.info("System Administrator created successfully!");
 
         User driver = new User();
         adminUser.setFirstName("Suleiman");
@@ -83,12 +70,14 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setRole(Enum.Role.DRIVER);
         adminUser.setEnabled(true);
         userService.setUpS(adminUser);
-        logger.info("Driver created successfully!");
+        log.info("Driver created successfully!");
         //loadManifestData(7);
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
+        viewTicketTillSummary();
     }
 
+/*
     public void loadManifestData(long tripId) {
 
         manifestService.deleteAll();
@@ -134,6 +123,7 @@ public class ApplicationStartup implements CommandLineRunner {
         manifest.setAddress("22 Captain Black Road,Lagos.");
         manifestService.save(manifest);
     }
+*/
 
     public void loadVehicleMakesAndModels(){
         Map<String, List<String>> vehicles = new HashMap<>();
@@ -250,46 +240,10 @@ public class ApplicationStartup implements CommandLineRunner {
     }
 
     private void viewTicketTillSummary(){
-        logger.info("Wanna view ticket till summary");
-
         List<TicketTillView> ticketTillViewSummaryList = ticketTillRepo.findAggregatedTicketTillByIssuanceDateAndStatus("2020-10-08",false);
-
-        logger.info(ticketTillViewSummaryList);
-
         int counter =0;
         for (TicketTillView t:ticketTillViewSummaryList) {
             counter++;
-            logger.info("Ticket summary===>"+counter+" "+t.getTotalNumberOfTickets());
         }
-
-        logger.info("Size of ticket till summary===>"+ticketTillViewSummaryList.size());
-    }
-
-   public void ObjectToCSV() throws IOException {
-       File csvOutputFile = new File("fac_output.csv");
-
-       Facility fac = new Facility();
-       fac.setId(1);
-       fac.setImage("ABC");
-       fac.setName("EARNEST");
-       fac.setDrum(new Drum(5,9));
-
-       List<Facility> list = new ArrayList<>(Arrays.asList(fac, fac, fac));
-
-       // create mapper and schema
-       CsvMapper mapper = new CsvMapper();
-       CsvSchema schema = mapper.schemaFor(Facility.class).withHeader();
-
-       String csv = mapper.writer(schema.withUseHeader(true)).writeValueAsString(fac);
-       logger.info("CSV===>"+csv);
-       // output writer
-       ObjectWriter myObjectWriter = mapper.writer(schema);
-       FileOutputStream tempFileOutputStream = new FileOutputStream(csvOutputFile);
-       BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(tempFileOutputStream, 1024);
-       OutputStreamWriter writerOutputStream = new OutputStreamWriter(bufferedOutputStream, "UTF-8");
-       myObjectWriter.writeValue(writerOutputStream, list);
-
-       System.out.println("Users saved to csv file under path: ");
-       System.out.println(csvOutputFile);
     }
 }

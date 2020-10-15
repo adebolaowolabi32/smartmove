@@ -1,13 +1,9 @@
 package com.interswitch.smartmoveserver.model.view;
 
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.Schedule;
-import com.interswitch.smartmoveserver.model.Ticket;
-import com.interswitch.smartmoveserver.model.Trip;
+import com.interswitch.smartmoveserver.model.*;
 import lombok.Data;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,9 +14,13 @@ import java.util.List;
 @Data
 public class TicketDetails implements Serializable {
 
+    private User operator;
+
     private String contactMobile;
 
     private String contactEmail;
+
+    private String address;
 
     private String nextOfKinName;
 
@@ -30,24 +30,11 @@ public class TicketDetails implements Serializable {
 
     private String bvn;
 
-    private String name;
-
-    private String gender;
-
-    private String nationality;
-
-    private Enum.IdCategory idCategory;
-
-    private String idNumber;
-
-    @Enumerated(EnumType.STRING)
-    private Enum.SeatClass seatClass;
-
-    private String seatNo;
-
     private String tripId;
 
     private Schedule schedule;
+
+    private Schedule returnSchedule;
 
     private String scheduleId;
 
@@ -65,13 +52,9 @@ public class TicketDetails implements Serializable {
 
     private LocalDate departure;
 
-    private Passenger passenger;
-
     private List<Passenger> passengers;
 
     private List<Ticket> tickets;
-
-    private List<Schedule> schedules;
 
     private String referenceNo;
 

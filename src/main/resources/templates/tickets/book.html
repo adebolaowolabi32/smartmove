@@ -3,7 +3,7 @@
       layout:decorate="~{layouts/default}">
 <title layout:fragment="title">Tickets</title>
 <div layout:fragment="content" class="card mb-4">
-    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+    <div class="card-header"><i class="fas fa-ticket-alt mr-1"></i>
         <span>Tickets</span></div>
     <div class="card-body">
         <div class="table-title">
@@ -14,55 +14,8 @@
 
             </div>
         </div>
-        <form class="card p-3" method="post" th:action="${flowExecutionUrl}" th:object="${scheduleBooking}"
-              data-parsley-validate="true">
-            <div class="row">
-                <div class="form-group col">
-                    <label class="control-label" for="startTerminal">Leaving from</label>
-                    <div>
-                        <select class="form-control" th:field="*{startTerminal}" id="startTerminal">
-                            <option value="">Select...</option>
-                            <option th:each="terminal : ${terminals}" th:value="${terminal.name}" th:text="${terminal.name}"></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="stopTerminal">Going to</label>
-                    <div>
-                        <select class="form-control" th:field="*{stopTerminal}" id="stopTerminal">
-                            <option value="">Select...</option>
-                            <option th:each="terminal : ${terminals}" th:value="${terminal.name}" th:text="${terminal.name}"></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="departure">Departure Date</label>
-                    <div>
-                        <input class="form-control" type="date" th:field="*{departure}" th:value="${today}" id="departure">
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="returnDate">Return Date (Optional)</label>
-                    <div>
-                        <input class="form-control" type="date" th:field="*{returnDate}" id="returnDate">
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label" for="noOfPassengers">Seats</label>
-                    <div>
-                        <input class="form-control" id="noOfPassengers" th:field="*{noOfPassengers}" th:value="1"
-                               type="number">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-10"></div>
-                <div class="col-sm-2">
-                    <input class="btn btn-outline-info btn-sized" type="submit" value="Proceed"/>
-                </div>
-            </div>
-            <input type="hidden" name="_eventId" value="findBooking"/>
-        </form>
+        <br>
+        <div th:replace="fragments/booking-search :: booking-search"></div>
     </div>
 </div>
 </html>

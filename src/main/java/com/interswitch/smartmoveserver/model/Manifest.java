@@ -10,7 +10,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+/**
+ * @author adebola.owolabi
+ */
 @Data
 @Builder
 @AllArgsConstructor

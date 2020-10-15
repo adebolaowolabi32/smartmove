@@ -9,9 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/*
- * Created by adebola.owolabi on 8/7/2020
- */
 @Repository
 public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 

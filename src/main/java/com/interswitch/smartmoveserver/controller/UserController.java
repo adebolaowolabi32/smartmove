@@ -64,7 +64,7 @@ public class UserController {
                          @RequestParam(required = false, defaultValue = "0") Long owner,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
-        Page<User> userPage = userService.findAllByRole(principal, owner, role, page, size);
+        Page<User> userPage = userService.findAllPaginatedByRole(principal, owner, role, page, size);
         model.addAttribute("title", pageUtil.buildTitle(role));
         model.addAttribute("role", role);
         model.addAttribute("userPage", userPage);
@@ -75,9 +75,10 @@ public class UserController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        User user = userService.findById(principal, id);
+        User user = userService.findById(id, principal);
         model.addAttribute("regulators_no", userService.countByRoleAndOwner(user, Enum.Role.REGULATOR));
         model.addAttribute("operators_no", userService.countByRoleAndOwner(user, Enum.Role.OPERATOR));
+        model.addAttribute("ticketers_no", userService.countByRoleAndOwner(user, Enum.Role.TICKETER));
         model.addAttribute("agents_no", userService.countByRoleAndOwner(user, Enum.Role.AGENT));
         model.addAttribute("vehicles_no", vehicleService.countByOwner(user));
         model.addAttribute("terminals_no", terminalService.countByOwner(user));
@@ -132,7 +133,7 @@ public class UserController {
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        User user = userService.findById(principal, id);
+        User user = userService.findById(id, principal);
         model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
         model.addAttribute("user", user);
         //TODO change findAll to findAllEligible
@@ -144,7 +145,7 @@ public class UserController {
     @PostMapping("/update/{id}")
     public String update(Principal principal, @PathVariable("id") long id, @Valid User user,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        User existing = userService.findById(id);
+        User existing = userService.findById(id, principal);
         Enum.Role role = existing.getRole();
         if (result.hasErrors()) {
             //TODO change findAll to findAllEligible
@@ -154,8 +155,7 @@ public class UserController {
             model.addAttribute("owners", userService.findAll());
             return "users/update";
         }
-        boolean enabled = user.isEnabled();
-        userService.update(id, enabled);
+        userService.update(user, principal);
         redirectAttributes.addFlashAttribute("updated", true);
         redirectAttributes.addFlashAttribute("updated_message", pageUtil.buildUpdateMessage(role));
         return "redirect:/users/details/" + id;
@@ -163,8 +163,8 @@ public class UserController {
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        User user = userService.findById(id);
-        userService.delete(id);
+        User user = userService.findById(id, principal);
+        userService.delete(id, principal);
         Enum.Role role = user.getRole();
         User owner = user.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;

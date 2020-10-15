@@ -18,6 +18,7 @@
                     </div>
                 </div>
             </div>
+            <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{${saved_message}} : (${updated} ? #{${updated_message}} : false))"></div>
             <div class="card p-3">
                 <div class="row">
@@ -66,9 +67,17 @@
                                    th:if="${operators_no}"> <i class='far fa-eye'></i></a>
                             </div>
                         </div>
+                        <div class="form-group row" th:if="${isOwned}">
+                            <label class="control-label col-sm-4" for="ticketers"><b>Ticketers</b></label>
+                            <div class="col-sm-8">
+                                <span id="ticketers" th:text="${ticketers_no}"></span> &emsp;
+                                <a class="btn btn-primary btn-sm" href="#"
+                                   th:href="@{'/users/get?role=TICKETER&owner=' + ${user.id}}"
+                                   th:if="${ticketers_no}"> <i class='far fa-eye'></i></a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col">
-
                         <div class="form-group row" th:if="${isOwned}">
                             <label class="control-label col-sm-4" for="agents"><b>Agents</b></label>
                             <div class="col-sm-8">
@@ -146,8 +155,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col" style="width:100%;height:100%;">
-                        <img style="width:200px;height:200px;" alt="User Picture" id="profilePic" src="${user.pictureUrl}">
+                    <div class="col">
+                        <img alt="Operator Logo" id="profilePic" src="${user.pictureUrl}">
                     </div>
                 </div>
             </div>

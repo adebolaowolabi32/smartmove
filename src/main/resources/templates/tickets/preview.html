@@ -3,7 +3,7 @@
       layout:decorate="~{layouts/default}">
 <title layout:fragment="title">Tickets</title>
 <div layout:fragment="content" class="card mb-4">
-    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+    <div class="card-header"><i class="fas fa-ticket-alt mr-1"></i>
         <span>Tickets</span>
         <a style="float:right;">
             <button type='button' style="margin:5px" class='btn btn-outline-info'><i class='fas fa-print'></i> Print
@@ -19,14 +19,10 @@
                     <div class="row" id="leftDivTop">
                         <div class="col-7">
                             <img alt="Operator Logo Not available" id="imgLogo" th:src="${ticket.operator.pictureUrl}">
-                            <span th:text="${ticket.operator.firstName + ' ' + ticket.operator.lastName}"></span>
+                            <span th:text="${ticket.operator.firstName + ' ' + ticket.operator.lastName}">AK Transport</span>
                         </div>
                         <div class="col-5">
-                            <div ;class="row"
-                                 style="color:#311b92;margin-top:6px;margin-left:15px;font-weight:bold;"
-                                 th:text="${'TICKET/BOARDING PASS'}">
-
-                            </div>
+                            <div class="row" style="color:#311b92;margin-top:6px;margin-left:15px;font-weight:bold;" th:text="${'TICKET/BOARDING PASS'}"></div>
                         </div>
                     </div>
 
@@ -138,8 +134,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div style="font-weight:bold;font-size:15px; font-family:Arial">&#8358; <span
-                                        th:text="${ticket.schedule.fare}"></span></div>
+                                <div style="font-weight:bold;font-size:15px; font-family:Arial"> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
+                                    <span th:text="${ticket.schedule.fare}"></span></div>
                             </div>
                         </div>
 
@@ -213,8 +209,9 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div style="font-weight:bold;font-size:15px; font-family:Arial">&#8358; <span
-                                            th:text="${ticket.schedule.fare}"></span></div>
+                                    <div style="font-weight:bold;font-size:15px; font-family:Arial">
+                                        <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
+                                        <span th:text="${ticket.schedule.fare}"></span></div>
                                 </div>
                             </div>
                         </div>
@@ -243,7 +240,7 @@
             </div>
         </div>
         <br>
-        <hr class="dotted-line">
+        <hr class="dotted-line"/>
     </div>
 </div>
 </html>
