@@ -21,8 +21,4 @@ public class Facility implements Serializable {
 
     private String image;
 
-    @ManyToOne
-    @JoinColumn(name = "owner")
-    private User owner;
-
 }

@@ -54,8 +54,6 @@ public class VehicleService {
         if (!vehicle.getPicture().isEmpty() || vehicle.getPicture().getSize() > 0) {
             Document doc = documentService.saveDocument(new Document(vehicle.getPicture()));
             vehicle.setPictureUrl(doc.getUrl());
-        } else {
-            vehicle.setPictureUrl("");
         }
 
         Vehicle createdVehicle = vehicleRepository.save(vehicle);

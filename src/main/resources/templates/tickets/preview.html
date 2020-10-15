@@ -18,13 +18,15 @@
                 <div class="col-8" id="leftDiv">
                     <div class="row" id="leftDivTop">
                         <div class="col-7">
-                            <img alt="Operator Logo" id="imgLogo" src="/img/logos/envato.jpg">
-                            <span th:text="${ticket.operator.firstName + ' ' + ticket.operator.lastName}">AK Transport</span>
+                            <img alt="Operator Logo Not available" id="imgLogo" th:src="${ticket.operator.pictureUrl}">
+                            <span th:text="${ticket.operator.firstName + ' ' + ticket.operator.lastName}"></span>
                         </div>
                         <div class="col-5">
                             <div ;class="row"
                                  style="color:#311b92;margin-top:6px;margin-left:15px;font-weight:bold;"
-                                 th:text="${'TICKET/BOARDING PASS'}"></div>
+                                 th:text="${'TICKET/BOARDING PASS'}">
+
+                            </div>
                         </div>
                     </div>
 

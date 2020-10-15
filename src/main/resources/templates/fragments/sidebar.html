@@ -12,7 +12,8 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                     User Management
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div></a>
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
                 <div class="collapse" id="collapseUser" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')" th:href="@{/users/get?role=ISW_ADMIN}" href="#">
@@ -47,6 +48,7 @@
                             Vehicle Owners</a>
                     </nav>
                 </div>
+
                 <div data-parent="#sidenavAccordion">
                     <nav class=".sb-sidenav-menu nav">
                         <!--<a class="nav-link" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')" th:href="@{/wallets/details}" href="#">
@@ -81,6 +83,33 @@
                         <a class="nav-link" th:href="@{/tickets/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-memory"></i></div>
                             Bookings</a>
+
+                        <!--
+                        ticket till start
+                        -->
+
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicketTill" aria-expanded="false" aria-controls="collapseTicketTill">
+                            <div class="sb-nav-link-icon"><i class="fa fa-tasks"></i></div>
+                            Ticket Till
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+
+                        <div class="collapse" id="collapseTicketTill" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TICKET_TILL')" th:href="@{/ticket-till/status}" href="#">
+                                    <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
+                                    Status</a>
+
+                                <a class="nav-link" sec:authorize="hasAuthority('UPDATE_TICKET_TILL')" th:href="@{/ticket-till/approval}" href="#">
+                                    <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
+                                    Approval</a>
+
+                            </nav>
+                        </div>
+
+                        <!--
+                        ticket till end
+                        -->
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')" th:href="@{/transactions/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                             Transactions</a>
@@ -93,6 +122,7 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_BLACKLISTS')" th:href="@{/blacklists/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-ban"></i></div>
                             Blacklists</a>
+
                     </nav>
                 </div>
             </div>

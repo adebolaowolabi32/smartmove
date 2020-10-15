@@ -122,6 +122,7 @@ public class UserService {
         logger.info("Inside save for repo save");
         Enum.Role role = user.getRole();
         user.setOwner(null);
+        user.setTillStatus(Enum.TicketTillStatus.OPEN);
 
         if (!role.equals(Enum.Role.ISW_ADMIN)) {
             Optional<User> ownerUser = userRepository.findByUsername(owner);

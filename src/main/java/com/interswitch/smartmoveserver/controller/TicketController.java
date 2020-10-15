@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Ticket;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.view.TicketDetails;
 import com.interswitch.smartmoveserver.service.TicketService;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -35,9 +36,12 @@ public class TicketController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
+
+        User user = userService.findByUsername(principal.getName());
         Page<Ticket> ticketPage = ticketService.findAllByOperator(principal, page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
         model.addAttribute("ticketPage", ticketPage);
+        model.addAttribute("status",user.getTillStatus().name());
         return "tickets/get";
     }
 

@@ -51,4 +51,8 @@ public class Enum {
     public enum IdCategory {
         NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT, VOTERS_CARD, SCHOOL_ID, OTHER
     }
+
+    public enum TicketTillStatus{
+        OPEN,CLOSE
+    }
 }

@@ -44,4 +44,7 @@ public class User implements Serializable {
     private String pictureUrl;
 
     private transient MultipartFile picture;
+
+    @Enumerated(EnumType.STRING)
+    private Enum.TicketTillStatus tillStatus = Enum.TicketTillStatus.OPEN;;
 }

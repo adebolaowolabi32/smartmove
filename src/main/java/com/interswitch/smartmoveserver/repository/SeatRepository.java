@@ -4,4 +4,6 @@ import com.interswitch.smartmoveserver.model.Seat;
 import org.springframework.data.repository.CrudRepository;
 
 public interface SeatRepository extends CrudRepository<Seat, Long> {
+
+      Seat findBySeatId(String seatId);
 }

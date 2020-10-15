@@ -6,6 +6,7 @@ import com.interswitch.smartmoveserver.model.view.Passenger;
 import com.interswitch.smartmoveserver.model.view.ScheduleBooking;
 import com.interswitch.smartmoveserver.model.view.TicketDetails;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
+import com.interswitch.smartmoveserver.repository.TicketTillRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -16,12 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,6 +60,9 @@ public class TicketService {
 
     @Autowired
     private StateService stateService;
+
+    @Autowired
+    private TicketTillService ticketTillService;
 
     @Autowired
     PageUtil pageUtil;
@@ -136,9 +143,13 @@ public class TicketService {
     }
 
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
-        ticketRepository.saveAll(ticketDetails.getTickets());
+        Iterable<Ticket> savedTicketsIterable = ticketRepository.saveAll(ticketDetails.getTickets());
+        //this is an asynchronous event here running on another thread.
+        ticketTillService.pushDataToTicketTill(savedTicketsIterable);
         List<Passenger> passengers = ticketDetails.getPassengers();
         for (Passenger passenger : passengers) {
+            //put an asynchronous event here to run on another thread.
+            logger.info("looping over passenger===>"+passenger.getName());
             Manifest manifest = new Manifest();
             manifest.setName(passenger.getName());
             manifest.setGender(passenger.getGender());
@@ -158,6 +169,7 @@ public class TicketService {
             manifestService.save(manifest);
         }
 
+        logger.info("begin wanna persist txn===>");
         Transaction transaction = new Transaction();
         transaction.setVehicleId(ticketDetails.getSchedule().getVehicle().getName());
         transaction.setTerminalId(String.valueOf(ticketDetails.getSchedule().getId()));
@@ -166,7 +178,11 @@ public class TicketService {
         transaction.setMode(ticketDetails.getSchedule().getMode());
         transaction.setAmount(ticketDetails.getTotalFare());
         transaction.setTransactionDateTime(LocalDateTime.now());
+        logger.info("wanna persist txn===>");
         transactionService.saveTransaction(transaction);
+        logger.info("done persisting txn===>");
+
+        logger.info("done with confirm tickets");
         return ticketDetails;
     }
 
@@ -208,4 +224,7 @@ public class TicketService {
             return ticketRepository.findAllByOperator(pageable, user.get());
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
+
+
+
 }

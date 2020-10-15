@@ -54,7 +54,10 @@ public class Manifest implements Serializable {
     private Schedule schedule;
 
     private boolean boarded;
+
     private boolean completed;
+
     private LocalDateTime timeofBoarding;
+
     private LocalDateTime timeofCompletion;
 }

@@ -19,7 +19,6 @@ public class SecurityUtil {
         Optional<User> userOptional = userRepository.findByUsername(principal.getName());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-
         }
         //TODO:: see below
         //returns true if principal equals owner or is hierarchical parent of owner

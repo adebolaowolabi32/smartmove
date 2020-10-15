@@ -105,10 +105,12 @@ public class TripController {
         return "trips/update";
     }
 
+
     @PostMapping("/update/{id}")
     public String update(Principal principal, @PathVariable("id") long id, @Valid Trip trip,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         trip.setId(id);
+
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
             model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));

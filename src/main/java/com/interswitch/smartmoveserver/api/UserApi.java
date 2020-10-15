@@ -21,7 +21,7 @@ public class UserApi {
     @Autowired
     private UserService userService;
 
-/*    @PostMapping(value = "/{type}/{id}", consumes = "application/json", produces = "application/json")
+   /*    @PostMapping(value = "/{type}/{id}", consumes = "application/json", produces = "application/json")
     public User save(@Validated @PathVariable Enum.Role type, @Validated @PathVariable long id){
           return userService.save(type, id);
     }*/

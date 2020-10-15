@@ -20,4 +20,5 @@ public interface ManifestRepository extends CrudRepository<Manifest, Long> {
 
     Page<Manifest> findByScheduleId(Pageable pageable, long scheduleId);
 
+
 }

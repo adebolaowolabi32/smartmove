@@ -2,8 +2,10 @@ package com.interswitch.smartmoveserver.config;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.view.TicketTillView;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.StateRepository;
+import com.interswitch.smartmoveserver.repository.TicketTillRepository;
 import com.interswitch.smartmoveserver.service.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,9 +43,14 @@ public class ApplicationStartup implements CommandLineRunner {
     @Autowired
     StateRepository stateRepo;
 
+   @Autowired
+   TicketTillRepository ticketTillRepo;
+
 
     @Override
     public void run(String... args) {
+
+        viewTicketTillSummary();
         User adminUser = new User();
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
@@ -230,5 +237,20 @@ public class ApplicationStartup implements CommandLineRunner {
     private List<String> parseToList(String categories) {
         String[] categoryArray = categories.split(",");
         return Arrays.asList(categoryArray);
+    }
+
+    private void viewTicketTillSummary(){
+        logger.info("Wanna view ticket till summary");
+        List<TicketTillView> ticketTillViewSummaryList = ticketTillRepo.findAggregatedTicketTillByIssuanceDateAndStatus("2020-10-08",false);
+
+        logger.info(ticketTillViewSummaryList);
+
+        int counter =0;
+        for (TicketTillView t:ticketTillViewSummaryList) {
+            counter++;
+            logger.info("Ticket summary===>"+counter+" "+t.getTotalNumberOfTickets());
+        }
+
+        logger.info("Size of ticket till summary===>"+ticketTillViewSummaryList.size());
     }
 }

@@ -1,15 +1,23 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Manifest;
+import com.interswitch.smartmoveserver.model.Schedule;
+import com.interswitch.smartmoveserver.model.Seat;
+import com.interswitch.smartmoveserver.model.Trip;
 import com.interswitch.smartmoveserver.repository.ManifestRepository;
+import com.interswitch.smartmoveserver.repository.SeatRepository;
+import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +29,9 @@ public class ManifestService {
 
     @Autowired
     ManifestRepository manifestRepository;
+
+    @Autowired
+    SeatRepository seatRepository;
 
     @Autowired
     PageUtil pageUtil;
@@ -82,6 +93,24 @@ public class ManifestService {
 
     public void deleteAll() {
         manifestRepository.deleteAll();
+    }
+
+    public List<Manifest> upload(MultipartFile file, Trip trip, Schedule schedule) throws IOException {
+
+        FileParser<Manifest> fileParser = new FileParser<>();
+        List<Manifest> savedManifests = new ArrayList<>();
+        List<Manifest> manifests = fileParser.parseFileToEntity(file,Manifest.class);
+
+        manifests.forEach(manifest->{
+
+            if(trip!=null){
+                manifest.setTrip(trip);
+                manifest.setSchedule(trip.getSchedule());
+            }
+            savedManifests.add(manifestRepository.save(manifest));
+        });
+
+        return savedManifests;
     }
 
 }
