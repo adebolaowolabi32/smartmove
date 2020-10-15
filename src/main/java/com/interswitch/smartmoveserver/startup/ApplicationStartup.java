@@ -1,15 +1,18 @@
-package com.interswitch.smartmoveserver.config;
+package com.interswitch.smartmoveserver.startup;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.view.TicketTillView;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.StateRepository;
+import com.interswitch.smartmoveserver.repository.TicketTillRepository;
 import com.interswitch.smartmoveserver.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -39,9 +42,12 @@ public class ApplicationStartup implements CommandLineRunner {
     @Autowired
     StateRepository stateRepo;
 
+   @Autowired
+   TicketTillRepository ticketTillRepo;
+
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws IOException {
         User adminUser = new User();
         adminUser.setFirstName("Smart");
         adminUser.setLastName("Move");
@@ -68,6 +74,7 @@ public class ApplicationStartup implements CommandLineRunner {
         //loadManifestData(7);
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
+        viewTicketTillSummary();
     }
 
 /*
@@ -230,5 +237,13 @@ public class ApplicationStartup implements CommandLineRunner {
     private List<String> parseToList(String categories) {
         String[] categoryArray = categories.split(",");
         return Arrays.asList(categoryArray);
+    }
+
+    private void viewTicketTillSummary(){
+        List<TicketTillView> ticketTillViewSummaryList = ticketTillRepo.findAggregatedTicketTillByIssuanceDateAndStatus("2020-10-08",false);
+        int counter =0;
+        for (TicketTillView t:ticketTillViewSummaryList) {
+            counter++;
+        }
     }
 }

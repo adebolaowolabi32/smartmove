@@ -22,5 +22,4 @@ public interface ManifestRepository extends CrudRepository<Manifest, Long> {
 
     Manifest findByScheduleIdAndName(long scheduleId, String name);
 
-
 }

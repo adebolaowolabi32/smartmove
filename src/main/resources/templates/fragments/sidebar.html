@@ -102,6 +102,23 @@
                                     <span th:text="#{reassignTicket}">Reassign Ticket</span></a>
                             </nav>
                         </div>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicketTill" aria-expanded="false" aria-controls="collapseTicketTill">
+                            <div class="sb-nav-link-icon"><i class="fa fa-tasks"></i></div>
+                            Ticket Till
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseTicketTill" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TICKET_TILL')" th:href="@{/ticket-till/status}" href="#">
+                                    <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
+                                    Status</a>
+
+                                <a class="nav-link" sec:authorize="hasAuthority('UPDATE_TICKET_TILL')" th:href="@{/ticket-till/approval}" href="#">
+                                    <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
+                                    Approval</a>
+
+                            </nav>
+                        </div>
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')" th:href="@{/transactions/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                             <span th:text="#{transactions}">Transactions</span></a>

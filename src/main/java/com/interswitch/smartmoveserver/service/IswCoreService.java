@@ -141,7 +141,6 @@ public class IswCoreService {
                 permissions.add("CREATE_SCHEDULE");
                 permissions.add("CREATE_TICKET");
 
-
                 permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_DEVICE_DETAILS");
                 permissions.add("VIEW_READER_DETAILS");
@@ -166,7 +165,7 @@ public class IswCoreService {
                 permissions.add("VIEW_TRIP_DETAILS");
                 permissions.add("VIEW_SCHEDULE_DETAILS");
                 permissions.add("VIEW_TICKET_DETAILS");
-
+                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("UPDATE_CARD");
                 permissions.add("UPDATE_AGENT");
@@ -183,6 +182,7 @@ public class IswCoreService {
                 permissions.add("UPDATE_VEHICLE_OWNER");
                 permissions.add("UPDATE_ADMINISTRATOR");
                 permissions.add("UPDATE_EXECUTIVE");
+                permissions.add("UPDATE_EXECUTIVE");
                 permissions.add("UPDATE_WALLET");
                 permissions.add("UPDATE_ROUTE");
                 permissions.add("UPDATE_VEHICLE_CATEGORY");
@@ -190,7 +190,7 @@ public class IswCoreService {
                 permissions.add("UPDATE_CONFIGURATION");
                 permissions.add("UPDATE_TRIP");
                 permissions.add("UPDATE_SCHEDULE");
-
+                permissions.add("UPDATE_TICKET_TILL");
 
                 permissions.add("DELETE_CARD");
                 permissions.add("DELETE_AGENT");
@@ -215,7 +215,6 @@ public class IswCoreService {
                 permissions.add("DELETE_BLACKLIST");
                 permissions.add("DELETE_TRIP");
                 permissions.add("DELETE_SCHEDULE");
-
                 return permissions;
             }
             case EXECUTIVE:
@@ -286,7 +285,7 @@ public class IswCoreService {
                 permissions.add("VIEW_VEHICLES");
                 permissions.add("VIEW_TRIPS");
                 permissions.add("VIEW_SCHEDULES");
-
+                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
@@ -323,8 +322,7 @@ public class IswCoreService {
                 permissions.add("VIEW_VEHICLE_DETAILS");
                 permissions.add("VIEW_TRIP_DETAILS");
                 permissions.add("VIEW_SCHEDULE_DETAILS");
-
-
+                
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");
                 permissions.add("UPDATE_READER");
@@ -341,6 +339,7 @@ public class IswCoreService {
                 permissions.add("UPDATE_VEHICLE");
                 permissions.add("UPDATE_TRIP");
                 permissions.add("UPDATE_SCHEDULE");
+                permissions.add("UPDATE_TICKET_TILL");
 
                 permissions.add("DELETE_AGENT");
                 permissions.add("DELETE_DEVICE");
@@ -381,6 +380,7 @@ public class IswCoreService {
                 permissions.add("VIEW_TRIPS");
                 permissions.add("VIEW_SCHEDULES");
                 permissions.add("VIEW_TICKETS");
+                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
@@ -434,6 +434,7 @@ public class IswCoreService {
                 permissions.add("UPDATE_VEHICLE");
                 permissions.add("UPDATE_TRIP");
                 permissions.add("UPDATE_SCHEDULE");
+                permissions.add("UPDATE_TICKET_TILL");
 
                 permissions.add("DELETE_AGENT");
                 permissions.add("DELETE_DEVICE");
@@ -483,7 +484,7 @@ public class IswCoreService {
                 permissions.add("VIEW_REGULATORS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_TRANSACTIONS");
-
+                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("CREATE_READER");
                 permissions.add("CREATE_AGENT");
@@ -500,17 +501,18 @@ public class IswCoreService {
 
                 permissions.add("UPDATE_READER");
                 permissions.add("UPDATE_WALLET");
-
                 permissions.add("DELETE_AGENT");
 
                 return permissions;
             }
 
             case TICKETER: {
+
                 permissions = new ArrayList<>();
                 permissions.add("VIEW_TICKETS");
                 permissions.add("CREATE_TICKET");
                 permissions.add("VIEW_TICKET_DETAILS");
+                permissions.add("VIEW_TICKET_TILL");
 
                 return permissions;
             }

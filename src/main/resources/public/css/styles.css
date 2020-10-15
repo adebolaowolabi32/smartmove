@@ -15769,3 +15769,9 @@ body {
       border-radius: 0.25rem;
       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
+
+    .ticket-till-tiles{
+      height:100px;
+      border:1px solid grey;
+      border-radius: 10px 10px 10px 10px;
+    }

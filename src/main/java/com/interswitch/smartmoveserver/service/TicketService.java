@@ -59,6 +59,9 @@ public class TicketService {
     private StateService stateService;
 
     @Autowired
+    private TicketTillService ticketTillService;
+
+    @Autowired
     PageUtil pageUtil;
 
     public List<Terminal> getTerminals() {
@@ -144,10 +147,13 @@ public class TicketService {
     }
 
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
-        this.saveAll(ticketDetails.getTickets());
+        Iterable<Ticket> savedTicketsIterable = ticketRepository.saveAll(ticketDetails.getTickets());
+        //this is an asynchronous event here running on another thread.
+        ticketTillService.pushDataToTicketTill(savedTicketsIterable);
         List<Manifest> manifests = new ArrayList<>();
         List<Passenger> passengers = ticketDetails.getPassengers();
         for (Passenger passenger : passengers) {
+            //put an asynchronous event here to run on another thread.
             Manifest manifest = this.populateManifest(ticketDetails, passenger);
             //manifest.setTrip(ticketDetails.getTrip());
             manifest.setSchedule(ticketDetails.getSchedule());

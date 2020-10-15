@@ -29,6 +29,7 @@
         <fortify-plugin.version>1.0-SNAPSHOT</fortify-plugin.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
     </properties>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -186,6 +187,5 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-csv</artifactId>
         </dependency>
-
     </dependencies>
 </project>

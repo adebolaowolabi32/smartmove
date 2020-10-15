@@ -1,6 +1,10 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +14,9 @@ import java.time.LocalDateTime;
  * @author adebola.owolabi
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "manifests")
 public class Manifest implements Serializable {
@@ -20,6 +27,7 @@ public class Manifest implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "seat")
+    @JsonIgnore
     private Seat seat;
 
     private String seatNo;
@@ -56,7 +64,10 @@ public class Manifest implements Serializable {
     private Schedule schedule;
 
     private boolean boarded;
+
     private boolean completed;
+
     private LocalDateTime timeofBoarding;
+
     private LocalDateTime timeofCompletion;
 }

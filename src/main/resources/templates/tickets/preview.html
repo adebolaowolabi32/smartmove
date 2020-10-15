@@ -18,7 +18,7 @@
                 <div class="col-8" id="leftDiv">
                     <div class="row" id="leftDivTop">
                         <div class="col-7">
-                            <img alt="Operator Logo" id="imgLogo" src="/img/logos/envato.jpg">
+                            <img alt="Operator Logo Not available" id="imgLogo" th:src="${ticket.operator.pictureUrl}">
                             <span th:text="${ticket.operator.firstName + ' ' + ticket.operator.lastName}">AK Transport</span>
                         </div>
                         <div class="col-5">

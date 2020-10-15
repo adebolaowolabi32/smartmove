@@ -1,16 +1,26 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.dto.ManifestDto;
 import com.interswitch.smartmoveserver.repository.ManifestRepository;
+import com.interswitch.smartmoveserver.repository.ScheduleRepository;
+import com.interswitch.smartmoveserver.repository.SeatRepository;
+import com.interswitch.smartmoveserver.repository.TripRepository;
+import com.interswitch.smartmoveserver.util.DateUtil;
+import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +38,15 @@ public class ManifestService {
 
     @Autowired
     ScheduleService scheduleService;
+
+    @Autowired
+    SeatRepository seatRepository;
+
+    @Autowired
+    TripRepository tripRepository;
+
+    @Autowired
+    ScheduleRepository scheduleRepository;
 
     @Autowired
     PageUtil pageUtil;
@@ -131,5 +150,57 @@ public class ManifestService {
             manifest.setSchedule(scheduleService.findById(schedule.getId()));
 
         return manifest;
+    }
+
+    public List<Manifest> upload(MultipartFile file, Trip trip, Schedule schedule) throws IOException {
+
+        FileParser<ManifestDto> fileParser = new FileParser<>();
+        List<Manifest> savedManifests = new ArrayList<>();
+        List<ManifestDto> manifestDtoList = fileParser.parseFileToEntity(file, ManifestDto.class);
+        manifestDtoList.forEach(manifestDto->{
+
+            Manifest manifest = mapToManifest(manifestDto);
+            if(trip!=null){
+                manifest.setTrip(trip);
+            }
+            else{
+                manifest.setSchedule(schedule);
+            }
+            savedManifests.add(manifestRepository.save(manifest));
+        });
+
+        return savedManifests;
+    }
+
+    private Manifest mapToManifest(ManifestDto dto){
+        return Manifest.builder()
+                .address(dto.getAddress())
+                .boarded( (dto.getBoarded().startsWith("T") || dto.getBoarded().startsWith("t") ) ? true : false)
+                .bvn(dto.getBvn())
+                .completed((dto.getCompleted().startsWith("T") || dto.getCompleted().startsWith("t") ) ? true : false)
+                .contactEmail(dto.getContactEmail())
+                .gender(dto.getGender())
+                .id(0)
+                .idNumber(dto.getIdNumber())
+                .idCategory(convertToCategoryEnum(dto.getIdCategory()))
+                .name(dto.getName())
+                .nationality(dto.getNationality())
+                .nextOfKinMobile(dto.getNextOfKinMobile())
+                .nextOfKinName(dto.getNextOfKinName())
+                .seatNo(dto.getSeatNo())
+                .seat(null)
+                .timeofBoarding(DateUtil.textToLocalDateTime(dto.getTimeOfBoarding()))
+                .timeofCompletion(DateUtil.textToLocalDateTime(dto.getTimeOfBoarding()))
+                .build();
+    }
+
+
+    private Enum.IdCategory convertToCategoryEnum(String name){
+        // NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT, VOTERS_CARD, SCHOOL_ID, OTHER
+        if(name.startsWith("NAT")){
+            return Enum.IdCategory.NATIONAL_ID;
+        }
+
+        return Enum.IdCategory.OTHER;
     }
 }

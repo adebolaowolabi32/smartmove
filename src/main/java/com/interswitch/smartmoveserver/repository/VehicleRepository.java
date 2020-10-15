@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -16,4 +15,5 @@ public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
     Long countByOwner(User owner);
     Page<Vehicle> findAll(Pageable pageable);
     List<Vehicle> findAll();
+    Vehicle findByRegNo(String regNo);
 }

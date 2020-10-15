@@ -3,8 +3,14 @@
       layout:decorate="~{layouts/default.html}">
 <title layout:fragment="title">Tickets</title>
 <div layout:fragment="content" class="card mb-4">
-    <div class="card-header"><i class="fas fa-ticket-alt mr-1"></i><span>Tickets</span></div>
+    <div class="card-header"><i class="fas fa-memory mr-1"></i><span>Tickets</span></div>
     <div class="card-body">
+
+        <div class="row" th:style="${status == 'CLOSE' ? 'display : block' : 'display : none'}">
+            <div style="width:500px;margin-left:50px;" class="alert alert-warning" role="alert">
+                <p> Your ticket till is <b>closed</b>,you can't sell ticket until after <b>approved.</b><p>
+            </div>
+        </div>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -13,16 +19,14 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="row">
-                            <a class="btn btn-info" href="#" th:href="@{/issueTicket}"><i aria-hidden="true"
-                                                                                          class="fas fa-plus"></i>
-                                Create New</a>
+
+                            <a th:style="${status == 'OPEN' ? 'visibility : visible' : 'visibility : hidden'}" href="#" th:href="@{/sellTicket}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Create New</a>
                             <a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
                             <a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <br>
             <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
                 <thead class='thead-light'>
                 <tr>

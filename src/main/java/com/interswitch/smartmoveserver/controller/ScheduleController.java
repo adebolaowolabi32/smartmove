@@ -124,4 +124,5 @@ public class ScheduleController {
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/schedules/get";
     }
+
 }

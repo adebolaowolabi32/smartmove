@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.controller;
 import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Manifest;
+import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.model.Trip;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -12,10 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @Layout(value = "layouts/default")
@@ -101,10 +105,12 @@ public class TripController {
         return "trips/update";
     }
 
+
     @PostMapping("/update/{id}")
     public String update(Principal principal, @PathVariable("id") long id, @Valid Trip trip,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         trip.setId(id);
+
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
             model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
@@ -124,5 +130,28 @@ public class TripController {
         tripService.delete(id, principal);
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/trips/get";
+    }
+
+
+    @GetMapping("/upload")
+    public String showTripUploadPage(Principal principal, Model model) {
+        return "trips/upload";
+    }
+
+
+    @PostMapping("/upload")
+    public String doTripUpload(Principal principal, MultipartFile file,Model model, RedirectAttributes redirectAttributes) {
+        logger.info("POST===>Entered trip upload upload==>ID ");
+        try {
+            logger.info("BEFORE ");
+            boolean succeeded = tripService.upload(file);
+            logger.info("AFTER===>"+succeeded);
+            redirectAttributes.addFlashAttribute("uploaded", succeeded);
+            return "redirect:/trips/get";
+        } catch (Exception ex) {
+            logger.error("Error happened trying to upload manifest==>" + ex.getMessage());
+            redirectAttributes.addFlashAttribute("error", false);
+            return "redirect:/trips/get";
+        }
     }
 }

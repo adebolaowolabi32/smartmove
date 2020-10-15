@@ -1,7 +1,13 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.dto.TripDto;
+import com.interswitch.smartmoveserver.repository.ScheduleRepository;
 import com.interswitch.smartmoveserver.repository.TripRepository;
+import com.interswitch.smartmoveserver.repository.UserRepository;
+import com.interswitch.smartmoveserver.repository.VehicleRepository;
+import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +16,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +43,15 @@ public class TripService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    VehicleRepository vehicleRepository;
+
+    @Autowired
+    ScheduleRepository scheduleRepository;
 
     @Autowired
     PageUtil pageUtil;
@@ -125,5 +143,41 @@ public class TripService {
         if(driver != null)
             trip.setDriver(userService.findById(driver.getId()));
         return trip;
+    }
+    public boolean upload(MultipartFile file) throws IOException {
+
+        List<Trip> savedTrips = new ArrayList<>();
+        if(file.getSize()>1){
+            FileParser<TripDto> fileParser = new FileParser<>();
+            List<TripDto> tripDtoList = fileParser.parseFileToEntity(file, TripDto.class);
+            tripDtoList.forEach(tripDto->{
+                savedTrips.add( tripRepository.save(mapToTrip(tripDto)));
+
+            });
+        }
+        return savedTrips.size()>1;
+    }
+
+    private Trip mapToTrip(TripDto tripDto){
+
+        Optional<User> driverOptional = userRepository.findByEmail(tripDto.getDriverEmail());
+        User driver = driverOptional.isPresent() ? driverOptional.get() : null;
+
+        Optional<Schedule> scheduleOptional = scheduleRepository.findById(tripDto.getScheduleId());
+        Schedule schedule = scheduleOptional.isPresent() ? scheduleOptional.get() : null;
+
+        Vehicle vehicle = vehicleRepository.findByRegNo(tripDto.getVehicleNumber());
+
+        return Trip.builder()
+                .driver(driver)
+                .schedule(schedule)
+                .mode(convertToModeOfTransportEnum(tripDto.getTransportMode()))
+                .vehicle(vehicle)
+                .build();
+    }
+
+    private Enum.TransportMode convertToModeOfTransportEnum(String mode){
+        // KEKE, BUS, CAR, RAIL, FERRY, RICKSHAW
+        return Enum.TransportMode.valueOf(mode.toUpperCase());
     }
 }
