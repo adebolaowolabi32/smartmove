@@ -34,5 +34,4 @@ public class Card implements Serializable {
     private long balance;
 
     private boolean enabled;
-
 }

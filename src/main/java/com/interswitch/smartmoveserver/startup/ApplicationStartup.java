@@ -1,4 +1,4 @@
-package com.interswitch.smartmoveserver.config;
+package com.interswitch.smartmoveserver.startup;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;

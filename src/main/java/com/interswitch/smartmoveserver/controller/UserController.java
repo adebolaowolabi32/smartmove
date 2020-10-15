@@ -105,6 +105,7 @@ public class UserController {
         //TODO change findAll to findAllEligible
         model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
         model.addAttribute("owners", userService.findAll());
+
         return "users/create";
     }
 

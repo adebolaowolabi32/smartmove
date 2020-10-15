@@ -27,5 +27,4 @@ public class Passenger implements Serializable {
     private Enum.SeatClass seatClass;
 
     private String seatNo;
-
 }

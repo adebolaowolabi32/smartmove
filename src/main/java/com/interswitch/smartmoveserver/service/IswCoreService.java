@@ -114,7 +114,6 @@ public class IswCoreService {
                 permissions.add("VIEW_SCHEDULES");
                 permissions.add("VIEW_TICKETS");
 
-
                 permissions.add("CREATE_CARD");
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
@@ -192,7 +191,6 @@ public class IswCoreService {
                 permissions.add("UPDATE_TRIP");
                 permissions.add("UPDATE_SCHEDULE");
                 permissions.add("UPDATE_TICKET_TILL");
-
 
                 permissions.add("DELETE_CARD");
                 permissions.add("DELETE_AGENT");
@@ -289,7 +287,6 @@ public class IswCoreService {
                 permissions.add("VIEW_SCHEDULES");
                 permissions.add("VIEW_TICKET_TILL");
 
-
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
                 permissions.add("CREATE_READER");
@@ -325,8 +322,7 @@ public class IswCoreService {
                 permissions.add("VIEW_VEHICLE_DETAILS");
                 permissions.add("VIEW_TRIP_DETAILS");
                 permissions.add("VIEW_SCHEDULE_DETAILS");
-
-
+                
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");
                 permissions.add("UPDATE_READER");
