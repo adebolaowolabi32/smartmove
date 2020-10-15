@@ -27,7 +27,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2" for="balance">Balance</label>
                     <div class="col-sm-10 dark-text">
-                        &#8358; <span id="balance" th:text="${wallet.balance}"></span>
+                        <span id="balance" th:text="${wallet.balance}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
                     </div>
                 </div>
             </div>

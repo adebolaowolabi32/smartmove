@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="col-sm-2">
-                            <span class="amt-big">&#8358; <span th:text="${schedule.fare}">14,000.00/seat</span></span>
+                            <span class="amt-big"><span th:text="${schedule.fare}">14,000.00/seat</span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></span>
                             <br>
                             <a class="btn btn-lg btn-outline-primary btn-sized" id="expander"
                                th:href="@{${flowExecutionUrl} + '&_eventId=makeBooking&scheduleId=' + ${schedule.id} + '&noOfPassengers=' + ${scheduleBooking.noOfPassengers}}">Select</a>

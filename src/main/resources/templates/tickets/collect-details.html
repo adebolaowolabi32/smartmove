@@ -36,7 +36,7 @@
                         </div>
                         <div class="col">
                             <div class="label-small">Price</div>
-                            <div><span>&#8358; <span th:text="${ticketDetails.schedule.fare}"></span></span></div>
+                            <div><span th:text="${ticketDetails.schedule.fare}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
                         </div>
                     </div>
                     <br>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="col">
                             <div class="label-small">Price</div>
-                            <div><span>&#8358; <span th:text="${ticketDetails.returnSchedule.fare}"></span></span></div>
+                            <div><span th:text="${ticketDetails.returnSchedule.fare}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
                         </div>
                     </div>
                     <br>

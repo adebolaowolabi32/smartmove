@@ -37,8 +37,8 @@
                                 <div th:text="${schedule.vehicle.name}"></div>
                             </div>
                             <div class="col">
-                                <div><b>Price</b></div>
-                                <div><span>&#8358; <span th:text="${schedule.fare}"></span></span></div>
+                                <div><b>Fare</b></div>
+                                <div><span th:text="${schedule.fare}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
                             </div>
                         </div>
                         <br>

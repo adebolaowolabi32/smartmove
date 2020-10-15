@@ -134,8 +134,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div style="font-weight:bold;font-size:15px; font-family:Arial">&#8358; <span
-                                        th:text="${ticket.schedule.fare}"></span></div>
+                                <div style="font-weight:bold;font-size:15px; font-family:Arial"> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
+                                    <span th:text="${ticket.schedule.fare}"></span></div>
                             </div>
                         </div>
 
@@ -209,8 +209,9 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div style="font-weight:bold;font-size:15px; font-family:Arial">&#8358; <span
-                                            th:text="${ticket.schedule.fare}"></span></div>
+                                    <div style="font-weight:bold;font-size:15px; font-family:Arial">
+                                        <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
+                                        <span th:text="${ticket.schedule.fare}"></span></div>
                                 </div>
                             </div>
                         </div>
