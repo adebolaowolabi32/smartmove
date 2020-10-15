@@ -100,16 +100,17 @@ public class ManifestService {
         FileParser<Manifest> fileParser = new FileParser<>();
         List<Manifest> savedManifests = new ArrayList<>();
         List<Manifest> manifests = fileParser.parseFileToEntity(file,Manifest.class);
-
         manifests.forEach(manifest->{
 
             if(trip!=null){
                 manifest.setTrip(trip);
-                manifest.setSchedule(trip.getSchedule());
             }
+            else{
+                manifest.setSchedule(schedule);
+            }
+
             savedManifests.add(manifestRepository.save(manifest));
         });
-
         return savedManifests;
     }
 

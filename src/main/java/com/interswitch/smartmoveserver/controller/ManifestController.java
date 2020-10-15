@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -46,47 +43,58 @@ public class ManifestController {
     private final Log logger = LogFactory.getLog(getClass());
 
 
-    @GetMapping("/upload/{source}/{id}")
-    public String showManifestUploadPage(Principal principal, @PathVariable("id") long id, @PathVariable("source") String originationPage, Model model) {
+    @GetMapping("/upload-schedule-manifest/{id}")
+    public String showManifestUploadPage(Principal principal, @PathVariable("id") long id, Model model) {
 
-        logger.info("Entered manifest controller==>ID " + id + " and source==>" + originationPage);
-
-        List<Manifest> manifests = new ArrayList<>();
-        model.addAttribute("manifests", manifests);
-
-        if (originationPage.equalsIgnoreCase("trip")) {
-            Trip trip = tripService.findById(id);
-            model.addAttribute("trip",trip);
-        }
-
-        if (originationPage.equalsIgnoreCase("schedule")) {
+            logger.info("Entered manifest controller==>ID " + id);
+            List<Manifest> manifests = new ArrayList<>();
             Schedule schedule = scheduleService.findById(id);
             model.addAttribute("schedule",schedule);
-        }
+            model.addAttribute("manifests", manifests);
 
-        return "manifests/upload";
+        return "manifests/upload-schedule-manifest";
     }
 
-    @PostMapping("/upload/{source}/{id}")
+    @PostMapping("/upload-schedule-manifest/{id}")
     public String uploadManifest(Principal principal,@PathVariable("id") long id,
-                                 @PathVariable("source") String originationPage,
                                  MultipartFile file, Model model,
                                  RedirectAttributes redirectAttributes) {
         try {
-
+            logger.info("POST Entered manifest controller==>ID " + id );
             List<Manifest> manifestList = new ArrayList<>();
-
-            if (originationPage.equalsIgnoreCase("trip")) {
-                manifestList  =  manifestService.upload(file,null,null);
-            }
-
-            if(originationPage.equalsIgnoreCase("schedule")){
-                manifestList  =  manifestService.upload(file,null,null);
-            }
-
+            manifestList  =  manifestService.upload(file,null,scheduleService.findById(id));
             redirectAttributes.addFlashAttribute("updated", true);
-            return originationPage.equalsIgnoreCase("trip") ? "redirect:/trips/details/" + id : "redirect:/schedules/details/"+ id;
+            return "redirect:/schedules/details/"+ id;
+        } catch (IOException ex) {
+            logger.error("Error happened trying to upload manifest==>"+ex.getMessage());
+            redirectAttributes.addFlashAttribute("error", true);
+            return "redirect:/schedules/details/"+ id;
+        }
 
+    }
+
+    @GetMapping("/upload-trip-manifest/{id}")
+    public String showTripManifestUploadPage(Principal principal, @PathVariable("id") long id, Model model) {
+
+        logger.info("Entered manifest controller==>ID " + id);
+        List<Manifest> manifests = new ArrayList<>();
+        Trip trip = tripService.findById(id);
+        model.addAttribute("trip",trip);
+        model.addAttribute("manifests", manifests);
+
+        return "manifests/upload-trip-manifest";
+    }
+
+    @PostMapping("/upload-trip-manifest/{id}")
+    public String uploadTripManifest(Principal principal,@PathVariable("id") long id,
+                                 MultipartFile file, Model model,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            logger.info("Entered manifest controller==>ID " + id);
+            List<Manifest> manifestList = new ArrayList<>();
+            manifestList  =  manifestService.upload(file,tripService.findById(id),null);
+            redirectAttributes.addFlashAttribute("updated", true);
+            return "redirect:/schedules/trips/"+ id;
         } catch (IOException ex) {
             logger.error("Error happened trying to upload manifest==>"+ex.getMessage());
             return "";
