@@ -37,7 +37,7 @@ public class ScheduledTaskService {
 
     @Scheduled(cron = "50 23 * * * ?")
     public void runEndOfDayTicketTillUpdate(){
-        doEndOfDayTicketTillUpdate();
+        //doEndOfDayTicketTillUpdate();
     }
 
 
