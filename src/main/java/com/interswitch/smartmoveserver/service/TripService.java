@@ -151,7 +151,9 @@ public class TripService {
             FileParser<TripDto> fileParser = new FileParser<>();
             List<TripDto> tripDtoList = fileParser.parseFileToEntity(file, TripDto.class);
             tripDtoList.forEach(tripDto->{
-                savedTrips.add( tripRepository.save(mapToTrip(tripDto)));
+                Trip trip = mapToTrip(tripDto);
+                trip.setReferenceNo(RandomUtil.getRandomNumber(6));
+                savedTrips.add( tripRepository.save(trip));
 
             });
         }

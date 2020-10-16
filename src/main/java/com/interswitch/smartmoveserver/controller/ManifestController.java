@@ -47,11 +47,8 @@ public class ManifestController {
     public String showManifestUploadPage(Principal principal, @PathVariable("id") long id, Model model) {
 
             logger.info("GET===>Entered manifest controller==>ID " + id);
-            List<Manifest> manifests = new ArrayList<>();
             Schedule schedule = scheduleService.findById(id);
             model.addAttribute("schedule",schedule);
-            model.addAttribute("manifests", manifests);
-
         return "manifests/upload-schedule-manifest";
     }
 
@@ -78,12 +75,9 @@ public class ManifestController {
     @GetMapping("/upload-trip-manifest/{id}")
     public String showTripManifestUploadPage(Principal principal, @PathVariable("id") long id, Model model) {
 
-        logger.info("Entered manifest controller==>ID " + id);
-        List<Manifest> manifests = new ArrayList<>();
+        logger.info("GET==>Entered trip controller==>ID " + id);
         Trip trip = tripService.findById(id);
         model.addAttribute("trip",trip);
-        model.addAttribute("manifests", manifests);
-
         return "manifests/upload-trip-manifest";
     }
 
@@ -92,14 +86,14 @@ public class ManifestController {
                                  MultipartFile file, Model model,
                                  RedirectAttributes redirectAttributes) {
         try {
-            logger.info("Entered manifest controller==>ID " + id);
+            logger.info("POST==>Entered trip controller==>ID " + id);
             List<Manifest> manifestList = new ArrayList<>();
             manifestList  =  manifestService.upload(file,tripService.findById(id),null);
             redirectAttributes.addFlashAttribute("updated", true);
-            return "redirect:/schedules/trips/"+ id;
+            return "redirect:/trips/details/"+ id;
         } catch (IOException ex) {
             logger.error("Error happened trying to upload manifest==>"+ex.getMessage());
-            return "";
+            return "redirect:/trips/details/"+ id;
         }
 
     }

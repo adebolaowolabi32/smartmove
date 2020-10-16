@@ -54,7 +54,7 @@ public class VehicleCategoryService {
             User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             vehicleCategory.setOwner(owner);
         }
-        if (vehicleCategory.getPicture() != null && vehicleCategory.getPicture().getSize() > 0) {
+        if (vehicleCategory.getPicture().getSize() > 0) {
             Document doc = documentService.saveDocument(new Document(vehicleCategory.getPicture()));
             vehicleCategory.setPictureUrl(doc.getUrl());
         }
@@ -79,7 +79,7 @@ public class VehicleCategoryService {
                 User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
                 vehicleCategory.setOwner(owner);
             }
-            if (vehicleCategory.getPicture() != null && vehicleCategory.getPicture().getSize() > 0) {
+            if (vehicleCategory.getPicture().getSize() > 0) {
                 Document doc = documentService.saveDocument(new Document(vehicleCategory.getPicture()));
                 vehicleCategory.setPictureUrl(doc.getUrl());
             }

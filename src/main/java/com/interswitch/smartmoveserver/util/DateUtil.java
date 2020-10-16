@@ -60,7 +60,6 @@ public class DateUtil {
             }
 
         } catch (ParseException e) {
-            logger.error(e);
         }
 
         return date;
