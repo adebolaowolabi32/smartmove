@@ -141,15 +141,11 @@ public class TripController {
 
     @PostMapping("/upload")
     public String doTripUpload(Principal principal, MultipartFile file,Model model, RedirectAttributes redirectAttributes) {
-        logger.info("POST===>Entered trip upload upload==>ID ");
         try {
-            logger.info("BEFORE ");
-            boolean succeeded = tripService.upload(file);
-            logger.info("AFTER===>"+succeeded);
+            boolean succeeded = tripService.upload(file, principal);
             redirectAttributes.addFlashAttribute("uploaded", succeeded);
             return "redirect:/trips/get";
         } catch (Exception ex) {
-            logger.error("Error happened trying to upload manifest==>" + ex.getMessage());
             redirectAttributes.addFlashAttribute("error", false);
             return "redirect:/trips/get";
         }

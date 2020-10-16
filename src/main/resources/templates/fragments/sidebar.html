@@ -104,18 +104,20 @@
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicketTill" aria-expanded="false" aria-controls="collapseTicketTill">
                             <div class="sb-nav-link-icon"><i class="fa fa-tasks"></i></div>
-                            Ticket Till
+                            <span th:text="#{ticketTill}">Ticket Till</span>
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseTicketTill" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" sec:authorize="hasAuthority('VIEW_TICKET_TILL')" th:href="@{/ticket-till/status}" href="#">
                                     <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
-                                    Status</a>
-
+                                    <span th:text="#{tillStatus}">Status</span></a>
+                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TICKET_TILL')" th:href="@{/ticket-till/approved}" href="#">
+                                    <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
+                                    <span th:text="#{approvedTills}">Approved</span></a>
                                 <a class="nav-link" sec:authorize="hasAuthority('UPDATE_TICKET_TILL')" th:href="@{/ticket-till/approval}" href="#">
                                     <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
-                                    Approval</a>
+                                    <span th:text="#{tillApprovals}">Approvals</span></a>
 
                             </nav>
                         </div>

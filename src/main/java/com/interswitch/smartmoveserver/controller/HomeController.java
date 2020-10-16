@@ -134,7 +134,7 @@ public class HomeController {
             no_cards = cardService.countAll();
             no_transfers = transferService.countAll();
             no_trips = tripService.countAll();
-            wallet_balance = wallet!=null ? wallet.getBalance() : 0D;;
+            wallet_balance = wallet!=null ? wallet.getBalance() : 0D;
         }
         model.addAttribute("no_admins", no_admins);
         model.addAttribute("no_regulators", no_regulators);

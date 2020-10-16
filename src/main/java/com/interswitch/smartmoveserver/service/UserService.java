@@ -120,7 +120,7 @@ public class UserService {
         user.setUsername(passportUser.getUsername());
         user.setPassword(passportUser.getPassword());
 
-        if (user.getPicture()!=null && (!user.getPicture().isEmpty() || user.getPicture().getSize()>0)) {
+        if (user.getPicture().getSize()>0) {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
             user.setPictureUrl(doc.getUrl());
         }
@@ -167,7 +167,7 @@ public class UserService {
     public User update(User user, Principal principal) {
         Optional<User> existingUser = userRepository.findById(user.getId());
         if (existingUser.isPresent()) {
-            if (user.getPicture()!=null && (!user.getPicture().isEmpty() || user.getPicture().getSize()>0)) {
+            if (user.getPicture().getSize()>0) {
                 Document doc = documentService.saveDocument(new Document(user.getPicture()));
                 user.setPictureUrl(doc.getUrl());
             }

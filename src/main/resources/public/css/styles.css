@@ -15603,12 +15603,15 @@ body {
     .dark-text {
         font-weight: 400;
         font-size: 1rem;
-        color: black;
+        color: #014260;
     }
     .dark-text-big {
         font-weight: 500;
         font-size: 1.6rem;
         color: black;
+    }
+    .icon-blue {
+        color: #014260;
     }
     .title-text {
         font-size: 1.1rem;

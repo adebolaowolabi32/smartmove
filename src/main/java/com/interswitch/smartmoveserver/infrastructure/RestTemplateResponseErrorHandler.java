@@ -27,7 +27,7 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
     @Override
     public boolean hasError(ClientHttpResponse httpResponse)
       throws IOException {
-        log.info("Remote Server Error:", httpResponse);
+        log.info("Remote Server Error: {}", httpResponse);
         HttpHeaders httpHeaders = httpResponse.getHeaders();
         if(httpHeaders.containsKey(X_APPLICATION_CONTEXT)){
             String applicationContextHeader = httpHeaders.get(X_APPLICATION_CONTEXT) != null ?
