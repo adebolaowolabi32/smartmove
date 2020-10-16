@@ -43,7 +43,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_DRIVERS')">
-            <div class="card bg-secondary text-white mb-4">
+            <div class="card bg-warning text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{drivers}">Drivers</span><span class="number" th:text="${no_drivers}">21</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#" th:href="@{/users/get?role=DRIVER}">View
@@ -88,7 +88,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_VEHICLES')">
-            <div class="card bg-warning text-white mb-4">
+            <div class="card bg-dark text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{vehicles}">Vehicles</span><span class="number" th:text="${no_vehicles}">21</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/vehicles/get}" href="#">View Details</a>
@@ -116,7 +116,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TRIPS')">
-            <div class="card bg-dark text-white mb-4">
+            <div class="card bg-secondary text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{trips}">Trips</span><span class="number" th:text="${no_trips}">50</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/trips/get}" href="#">View Details</a>
@@ -135,7 +135,7 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_READERS')">
-            <div class="card bg-danger text-white mb-4">
+            <div class="card bg-success text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{readers}">Readers</span><span class="number" th:text="${no_readers}">21</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link"  th:href="@{/devices/get?type=READER}" href="#">View Details</a>
@@ -153,7 +153,7 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')">
-            <div class="card bg-warning text-white mb-4">
+            <div class="card bg-danger text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{settlements}">Settlements</span><span class="number" th:text="${no_settlements}">25</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/reports/get}" href="#">View Details</a>
