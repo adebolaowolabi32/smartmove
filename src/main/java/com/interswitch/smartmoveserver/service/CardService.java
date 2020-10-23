@@ -1,20 +1,27 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Card;
+import com.interswitch.smartmoveserver.model.Trip;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.dto.TripDto;
 import com.interswitch.smartmoveserver.repository.CardRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
+import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.RandomUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -125,5 +132,22 @@ public class CardService {
 
     public long countByOwner(User user){
         return cardRepository.countByOwner(user);
+    }
+
+    public boolean upload(MultipartFile file) throws IOException {
+
+        List<Card> savedCards = new ArrayList<>();
+//        if(file.getSize()>1){
+//            FileParser<TripDto> fileParser = new FileParser<>();
+//            List<TripDto> tripDtoList = fileParser.parseFileToEntity(file, TripDto.class);
+//            tripDtoList.forEach(tripDto->{
+//                Trip trip = mapToTrip(tripDto);
+//                trip.setReferenceNo(RandomUtil.getRandomNumber(6));
+//                savedTrips.add( tripRepository.save(trip));
+//            });
+//        }
+//        return savedTrips.size()>1;
+
+        return true;
     }
 }

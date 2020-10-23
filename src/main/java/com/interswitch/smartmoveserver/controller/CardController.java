@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -99,5 +100,23 @@ public class CardController {
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/cards/get?owner=" + ownerId;
+    }
+
+    @GetMapping("/upload")
+    public String showCardsUploadPage(Principal principal, Model model) {
+        return "cards/upload";
+    }
+
+
+    @PostMapping("/upload")
+    public String doCardsUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            boolean succeeded = cardService.upload(file);
+            redirectAttributes.addFlashAttribute("uploaded", succeeded);
+            return "redirect:/cards/get";
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("error", false);
+            return "redirect:/cards/get";
+        }
     }
 }

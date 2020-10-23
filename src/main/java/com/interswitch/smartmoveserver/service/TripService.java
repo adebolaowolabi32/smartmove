@@ -154,7 +154,6 @@ public class TripService {
                 Trip trip = mapToTrip(tripDto);
                 trip.setReferenceNo(RandomUtil.getRandomNumber(6));
                 savedTrips.add( tripRepository.save(trip));
-
             });
         }
         return savedTrips.size()>1;
