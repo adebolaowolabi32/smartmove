@@ -142,7 +142,7 @@ public class TripController {
     @PostMapping("/upload")
     public String doTripUpload(Principal principal, MultipartFile file,Model model, RedirectAttributes redirectAttributes) {
         try {
-            boolean succeeded = tripService.upload(file);
+            boolean succeeded = tripService.upload(file, principal);
             redirectAttributes.addFlashAttribute("uploaded", succeeded);
             return "redirect:/trips/get";
         } catch (Exception ex) {

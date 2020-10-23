@@ -123,7 +123,7 @@ public class TicketService {
         double totalFare = 0;
         List<Ticket> tickets = new ArrayList<>();
         List<Passenger> passengers = ticketDetails.getPassengers();
-        log.info("Passengers:", passengers);
+        log.info("Passengers: {}", passengers);
         for (Passenger pass : passengers) {
             Ticket ticket = this.populateTicket(ticketDetails, pass);
             //ticket.setTrip(ticketDetails.getTrip());

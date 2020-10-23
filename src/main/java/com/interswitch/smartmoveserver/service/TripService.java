@@ -144,22 +144,21 @@ public class TripService {
             trip.setDriver(userService.findById(driver.getId()));
         return trip;
     }
-    public boolean upload(MultipartFile file) throws IOException {
-
+    public boolean upload(MultipartFile file, Principal principal) throws IOException {
+        User owner = userService.findByUsername(principal.getName());
         List<Trip> savedTrips = new ArrayList<>();
         if(file.getSize()>1){
             FileParser<TripDto> fileParser = new FileParser<>();
             List<TripDto> tripDtoList = fileParser.parseFileToEntity(file, TripDto.class);
             tripDtoList.forEach(tripDto->{
-                Trip trip = mapToTrip(tripDto);
-                trip.setReferenceNo(RandomUtil.getRandomNumber(6));
-                savedTrips.add( tripRepository.save(trip));
+                savedTrips.add( tripRepository.save(mapToTrip(tripDto, owner)));
+
             });
         }
         return savedTrips.size()>1;
     }
 
-    private Trip mapToTrip(TripDto tripDto){
+    private Trip mapToTrip(TripDto tripDto, User owner){
 
         Optional<User> driverOptional = userRepository.findByEmail(tripDto.getDriverEmail());
         User driver = driverOptional.isPresent() ? driverOptional.get() : null;
@@ -173,7 +172,9 @@ public class TripService {
                 .driver(driver)
                 .schedule(schedule)
                 .mode(convertToModeOfTransportEnum(tripDto.getTransportMode()))
+                .referenceNo(RandomUtil.getRandomNumber(6))
                 .vehicle(vehicle)
+                .owner(owner)
                 .build();
     }
 

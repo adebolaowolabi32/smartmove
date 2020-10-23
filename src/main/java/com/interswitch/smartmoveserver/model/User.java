@@ -46,5 +46,5 @@ public class User implements Serializable {
     private transient MultipartFile picture;
 
     @Enumerated(EnumType.STRING)
-    private Enum.TicketTillStatus tillStatus = Enum.TicketTillStatus.OPEN;;
+    private Enum.TicketTillStatus tillStatus = Enum.TicketTillStatus.OPEN;
 }

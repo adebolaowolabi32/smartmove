@@ -1,5 +1,7 @@
 package com.interswitch.smartmoveserver.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +12,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+@Slf4j
 public class DateUtil {
 
     /*public static LocalDate toLocalDateFormat(Date startDate) {
@@ -60,6 +63,7 @@ public class DateUtil {
             }
 
         } catch (ParseException e) {
+            log.error("Date conversion error", e);
         }
 
         return date;

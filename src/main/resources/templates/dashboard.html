@@ -43,7 +43,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_DRIVERS')">
-            <div class="card bg-secondary text-white mb-4">
+            <div class="card bg-warning text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{drivers}">Drivers</span><span class="number" th:text="${no_drivers}">21</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#" th:href="@{/users/get?role=DRIVER}">View
@@ -88,7 +88,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_VEHICLES')">
-            <div class="card bg-warning text-white mb-4">
+            <div class="card bg-dark text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{vehicles}">Vehicles</span><span class="number" th:text="${no_vehicles}">21</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/vehicles/get}" href="#">View Details</a>
@@ -116,7 +116,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TRIPS')">
-            <div class="card bg-dark text-white mb-4">
+            <div class="card bg-secondary text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{trips}">Trips</span><span class="number" th:text="${no_trips}">50</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/trips/get}" href="#">View Details</a>
@@ -135,7 +135,7 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_READERS')">
-            <div class="card bg-danger text-white mb-4">
+            <div class="card bg-success text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{readers}">Readers</span><span class="number" th:text="${no_readers}">21</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link"  th:href="@{/devices/get?type=READER}" href="#">View Details</a>
@@ -153,7 +153,7 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')">
-            <div class="card bg-warning text-white mb-4">
+            <div class="card bg-danger text-white mb-4">
                 <div class="card-body heavy"><span th:text="#{settlements}">Settlements</span><span class="number" th:text="${no_settlements}">25</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/reports/get}" href="#">View Details</a>
@@ -164,43 +164,43 @@
 
         <div class="col-xl-4" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')">
             <div class="card bg-light mb-4 wallet-body">
-                <div class="card-body heavy"><span th:text="#{ewallet}">E-Wallet</span>
+                <div class="card-body heavy"><span th:text="#{ewallet}">Wallet</span>
                     <br>
                     <span class="card-status"><i class="fas fa-check"></i><span th:text="#{active}">ACTIVE</span></span>
                     <br>
                     <div class="dark-text-big">
-                        <span>₦<span th:text="${wallet_balance}">15,052</span></span>
-                        <a class="link-black" href="#"><i class="fas fa-sync"></i></a>
+                        <span><span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span> <span th:text="${wallet_balance}">15,052</span></span>
+                        <a class="icon-blue" href="#"><i class="fas fa-sync"></i></a>
                     </div>
                     <div class="balance-time">
                         <span>@ <span th:text="${time_date}">@ Jun 10 2020 3:06 PM </span></span>
                     </div>
                 </div>
-                <div class=" card-footer dark-text d-flex align-items-center justify-content-between">
-                    <a class="link-black" href="#" th:href="@{/topups/get}"><i class="fas fa-coins"></i><span th:text="#{fund-my-wallet}">Fund my Wallet</span></a>
-                    <a class="link-black" href="#" th:href="@{/transfers/get}"><i class="fas fa-history"></i> <span th:text="#{wallet-history}">Wallet History</span></a>
+                <div class=" card-footer d-flex align-items-center justify-content-between">
+                    <a class="dark-text" href="#" th:href="@{/topups/get}"><i class="fas fa-coins"></i><span th:text="#{fund-my-wallet}"> Fund my Wallet</span></a>
+                    <a class="dark-text" href="#" th:href="@{/transfers/get}"><i class="fas fa-history"></i> <span th:text="#{wallet-history}"> Wallet History</span></a>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-4" sec:authorize="hasAuthority('VIEW_CARD_DETAILS')">
+        <div class="col-xl-4" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')">
             <div class="card bg-light mb-4 wallet-body">
                 <div class="card-body heavy">
                     <span th:text="#{wallet-details}">Wallet Details</span>
                     <br>
                     <div class="row">
                         <div class="col wallet-bg" style="margin:5px;">
-                            <a class="link-black" href="#" th:href="@{/cards/get}">
-                                <i class="fas fa-credit-card fa-4x" style="margin:10px;"></i>
-                                <p class="dark-text link-black" style="margin:10px;"
-                                   th:text="${no_cards + ' Cards'}"></p>
+                            <a href="#" th:href="@{/transfers/get}">
+                                <i class="fas fa-user-friends fa-4x icon-blue" style="margin:10px;"></i>
+                                <p class="dark-text" style="margin:10px;"
+                                   th:text="${no_transfers + ' Transfers'}"></p>
                             </a>
                         </div>
                         <div class="col wallet-bg" style="margin:5px;">
-                            <a class="link-black" href="#" th:href="@{/transfers/get}">
-                                <i class="fas fa-user-friends fa-4x" style="margin:10px;"></i>
-                                <p class="dark-text link-black" style="margin:10px;"
-                                   th:text="${no_transfers + ' Transfers'}"></p>
+                            <a href="#" th:href="@{/cards/get}">
+                                <i class="fas fa-credit-card fa-4x icon-blue" style="margin:10px;"></i>
+                                <p class="dark-text" style="margin:10px;"
+                                   th:text="${no_cards + ' Cards'}"></p>
                             </a>
                         </div>
                     </div>

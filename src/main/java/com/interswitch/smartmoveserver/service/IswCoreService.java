@@ -215,6 +215,14 @@ public class IswCoreService {
                 permissions.add("DELETE_BLACKLIST");
                 permissions.add("DELETE_TRIP");
                 permissions.add("DELETE_SCHEDULE");
+
+
+                permissions.add("VIEW_TICKET_TILL");
+
+                permissions.add("VIEW_CARD_DETAILS");
+                permissions.add("VIEW_WALLET_DETAILS");
+
+                permissions.add("UPDATE_WALLET");
                 return permissions;
             }
             case EXECUTIVE:
@@ -285,7 +293,6 @@ public class IswCoreService {
                 permissions.add("VIEW_VEHICLES");
                 permissions.add("VIEW_TRIPS");
                 permissions.add("VIEW_SCHEDULES");
-                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
@@ -322,7 +329,8 @@ public class IswCoreService {
                 permissions.add("VIEW_VEHICLE_DETAILS");
                 permissions.add("VIEW_TRIP_DETAILS");
                 permissions.add("VIEW_SCHEDULE_DETAILS");
-                
+                permissions.add("VIEW_TICKET_TILL");
+
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");
                 permissions.add("UPDATE_READER");
@@ -380,7 +388,6 @@ public class IswCoreService {
                 permissions.add("VIEW_TRIPS");
                 permissions.add("VIEW_SCHEDULES");
                 permissions.add("VIEW_TICKETS");
-                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");
@@ -418,6 +425,7 @@ public class IswCoreService {
                 permissions.add("VIEW_TRIP_DETAILS");
                 permissions.add("VIEW_SCHEDULE_DETAILS");
                 permissions.add("VIEW_TICKET_DETAILS");
+                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");
@@ -484,7 +492,6 @@ public class IswCoreService {
                 permissions.add("VIEW_REGULATORS");
                 permissions.add("VIEW_OPERATORS");
                 permissions.add("VIEW_TRANSACTIONS");
-                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("CREATE_READER");
                 permissions.add("CREATE_AGENT");
@@ -498,6 +505,7 @@ public class IswCoreService {
                 permissions.add("VIEW_REGULATOR_DETAILS");
                 permissions.add("VIEW_WALLET_DETAILS");
                 permissions.add("VIEW_TRANSACTION_DETAILS");
+                permissions.add("VIEW_TICKET_TILL");
 
                 permissions.add("UPDATE_READER");
                 permissions.add("UPDATE_WALLET");
