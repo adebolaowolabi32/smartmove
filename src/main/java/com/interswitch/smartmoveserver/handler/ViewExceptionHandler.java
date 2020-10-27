@@ -1,28 +1,41 @@
 package com.interswitch.smartmoveserver.handler;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
-@ControllerAdvice
-public class ViewExceptionHandler extends ResponseEntityExceptionHandler {
-
+@ControllerAdvice("com.interswitch.smartmoveserver.controller")
+public class ViewExceptionHandler {
     @ExceptionHandler({ResponseStatusException.class})
-    public ModelAndView handleException(ResponseStatusException ex, HttpServletRequest request) {
-        String targetView;
-        /*if (handlerMethod != null && handlerMethod.hasMethodAnnotation(ExceptionTargetView.class)) {
-            targetView = handlerMethod.getMethodAnnotation(ExceptionTargetView.class).value();
-        } else {
-            targetView = "error";
-        }*/
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(request.getServletPath());
-        modelAndView.addObject("status", ex.getStatus());
-        modelAndView.addObject("error", ex.getMessage());
-        return modelAndView;
+    public String handle(ResponseStatusException e, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", e.getReason());
+        return "redirect:" + request.getServletPath();
     }
+
+    @ExceptionHandler(value = Exception.class)
+    public String handle(Exception e, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", e.getMessage());
+        String me = request.getServletPath();
+        return "redirect:" + request.getServletPath();
+    }
+
+   /* @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }*/
 }

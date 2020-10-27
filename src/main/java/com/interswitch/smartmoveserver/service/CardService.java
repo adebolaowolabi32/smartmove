@@ -63,9 +63,9 @@ public class CardService {
     }
 
     public Card save(Card card, Principal principal) {
-        long id = card.getId();
-        boolean exists = cardRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Card already exists");
+        String pan = card.getPan();
+        boolean exists = cardRepository.existsByPan(pan);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "A card already exists with this PAN: " + pan);
         if(card.getOwner() == null) {
             User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             card.setOwner(owner);

@@ -1,8 +1,11 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -17,22 +20,30 @@ public class Device implements Serializable {
     private long id;
 
     @Column(unique=true)
+    @NotBlank(message = "Name is required.")
+    @Length(min = 5, max = 50, message = "Name must be between 5 and 30 characters long.")
     private String name;
 
     @Column(unique=true)
+    @NotBlank(message = "Device ID is required.")
+    @Length(min = 5, max = 50, message = "Device ID must be between 14 and 30 characters long.")
     private String deviceId;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Device type is required.")
     private Enum.DeviceType type;
 
     @ManyToOne
     @JoinColumn(name = "owner")
+    @NotNull(message = "Owner is required.")
     private User owner;
 
-    private String imeiNo;
-
+    @NotBlank(message = "Hardware version is required.")
+    @Length(max = 30, message = "Hardware version must be less than 30 characters long.")
     private String hardwareVersion;
 
+    @NotBlank(message = "Software version is required.")
+    @Length(max = 30, message = "Software version must be less than 30 characters long.")
     private String softwareVersion;
 
     private int batteryPercentage;
@@ -40,6 +51,7 @@ public class Device implements Serializable {
     private double balance = 0;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Fare type is required.")
     private Enum.FareType fareType;
 
     @Enumerated(EnumType.STRING)

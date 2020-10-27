@@ -102,9 +102,10 @@ public class DeviceService {
     }
 
     public Device save(Device device, Principal principal) {
-        long id = device.getId();
-        boolean exists = deviceRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Device already exists");
+        boolean existsByName = deviceRepository.existsByName(device.getName());
+        if (existsByName) throw new ResponseStatusException(HttpStatus.CONFLICT, "A device already exists with this name.");
+        boolean existsByDeviceId = deviceRepository.existsByDeviceId(device.getDeviceId());
+        if (existsByDeviceId) throw new ResponseStatusException(HttpStatus.CONFLICT, "A device already exists with this Device ID.");
         if(device.getOwner() == null) {
             User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             device.setOwner(owner);
