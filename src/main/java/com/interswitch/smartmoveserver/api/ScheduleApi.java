@@ -1,14 +1,14 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.Page;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.service.ScheduleService;
+import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/schedules")
@@ -18,30 +18,30 @@ public class ScheduleApi {
     ScheduleService scheduleService;
 
     @GetMapping(produces = "application/json")
-    private Page<Schedule> findAll(@RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size, Principal principal) {
-        org.springframework.data.domain.Page pageable = scheduleService.findAllPaginated(principal, page, size);
-        return new Page<Schedule>(pageable.getTotalElements(), pageable.getContent());    }
+    private PageView<Schedule> findAll(@RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "10") int size) {
+        return scheduleService.findAllPaginated(page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    private Schedule findById(@Validated @PathVariable long id, Principal principal) {
-        return scheduleService.findById(id, principal);
+    private Schedule findById(@Validated @PathVariable long id) {
+        return scheduleService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private Schedule save(@Validated @RequestBody Schedule schedule, Principal principal) {
-        return scheduleService.save(schedule, principal);
+    private Schedule save(@Validated @RequestBody Schedule schedule) {
+        return scheduleService.save(schedule, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")
-    private Schedule update(@Validated @RequestBody Schedule schedule, Principal principal) {
-        return scheduleService.update(schedule, principal);
+    private Schedule update(@Validated @RequestBody Schedule schedule) {
+        return scheduleService.update(schedule, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void delete(@Validated @PathVariable long id, Principal principal) {
-        scheduleService.delete(id, principal);
+    private void delete(@Validated @PathVariable long id) {
+        scheduleService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 }

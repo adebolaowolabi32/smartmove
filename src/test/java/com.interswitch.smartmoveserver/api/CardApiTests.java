@@ -19,13 +19,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -58,7 +56,7 @@ public class CardApiTests {
 
     @Test
     public void testSave() throws Exception {
-        when(cardService.save(card, any(Principal.class))).thenReturn(card);
+        when(cardService.save(card, "")).thenReturn(card);
         mvc.perform(post("/api/cards")
                 .content(new ObjectMapper().writeValueAsString(card))
                 .characterEncoding("utf-8")
@@ -69,7 +67,7 @@ public class CardApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(cardService.update(card, any(Principal.class))).thenReturn(card);
+        when(cardService.update(card, "")).thenReturn(card);
         mvc.perform(put("/api/cards")
                 .content(new ObjectMapper().writeValueAsString(card))
                 .characterEncoding("utf-8")
@@ -92,7 +90,7 @@ public class CardApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(cardService.findById(card.getId(), any(Principal.class))).thenReturn(card);
+        when(cardService.findById(card.getId(), "")).thenReturn(card);
         mvc.perform(get("/api/cards/{id}", card.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

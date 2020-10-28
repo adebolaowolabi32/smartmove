@@ -17,13 +17,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -61,7 +59,7 @@ public class TransactionApiTests {
 
     @Test
     public void testSave() throws Exception {
-        when(transactionService.save(transaction, any(Principal.class))).thenReturn(transaction);
+        when(transactionService.save(transaction, "")).thenReturn(transaction);
         mvc.perform(post("/api/transactions")
                 .content(new ObjectMapper().writeValueAsString(transaction))
                 .characterEncoding("utf-8")
@@ -84,7 +82,7 @@ public class TransactionApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(transactionService.findById(transaction.getId(), any(Principal.class))).thenReturn(transaction);
+        when(transactionService.findById(transaction.getId(), "")).thenReturn(transaction);
         mvc.perform(get("/api/transactions/{id}", transaction.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

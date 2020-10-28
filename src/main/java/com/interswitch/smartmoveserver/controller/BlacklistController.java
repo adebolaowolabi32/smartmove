@@ -1,11 +1,11 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Blacklist;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.service.BlacklistService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,7 +33,7 @@ public class BlacklistController {
         @GetMapping("/get")
         public String getAll(Principal principal, Model model, @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "10") int size) {
-            Page<Blacklist> blacklistPage = blacklistService.findAllPaginated(page, size);
+            PageView<Blacklist> blacklistPage = blacklistService.findAllPaginated(page, size);
             model.addAttribute("pageNumbers", pageUtil.getPageNumber(blacklistPage));
             model.addAttribute("blacklistPage", blacklistPage);
             return "blacklists/get";

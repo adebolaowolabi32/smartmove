@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.TicketTillView;
 import com.interswitch.smartmoveserver.repository.TicketTillRepository;
 import com.interswitch.smartmoveserver.repository.TicketTillSummaryRepository;
@@ -13,9 +13,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -115,14 +115,14 @@ public class TicketTillService {
 
     }
 
-    public Page<TicketTillSummary> findUnApprovedTicketTillSummary(long tillOperatorId,long tillOperatorOwner,boolean approved,int page,int size){
+    public PageView<TicketTillSummary> findUnApprovedTicketTillSummary(long tillOperatorId,long tillOperatorOwner,boolean approved,int page,int size){
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         logger.info("Size of TicketTillSummary Params===>operator ID:"+tillOperatorId+"==>operator ownerId:"+tillOperatorOwner+"===>approved:"+approved);
         Set<Long> ids  = new HashSet<>();
         ids.addAll(Arrays.asList(tillOperatorId,tillOperatorOwner));
-        Page<TicketTillSummary> summary = ticketTillSummaryRepository.findByTillOperatorOwnerInAndApproved(pageable,ids,approved);
-        logger.info("Size of TicketTillSummary===>"+summary.getContent().size());
-        return summary;
+        Page<TicketTillSummary> pages = ticketTillSummaryRepository.findByTillOperatorOwnerInAndApproved(pageable,ids,approved);
+        logger.info("Size of TicketTillSummary===>"+pages.getContent().size());
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
     public List<TicketTillView> findAggregatedTicketTillByIssuanceDateAndStatus(String date,boolean closed){

@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.TripDto;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
 import com.interswitch.smartmoveserver.repository.TripRepository;
@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,24 +59,24 @@ public class TripService {
         return tripRepository.findAll();
     }
 
-    public Page<Trip> findAllPaginated(Principal principal, int page, int size) {
+    public PageView<Trip> findAllPaginated(int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        return tripRepository.findAll(pageable);
-
+        Page<Trip> pages = tripRepository.findAll(pageable);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
     public Trip save(Trip trip) {
         return tripRepository.save(trip);
     }
 
-    public Trip save(Trip trip, Principal principal) {
+    public Trip save(Trip trip, String principal) {
         long id = trip.getId();
         boolean exists = tripRepository.existsById(id);
 
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Trip already exists");
         trip.setReferenceNo(RandomUtil.getRandomNumber(6));
         if(trip.getOwner() == null) {
-            User owner = userService.findByUsername(principal.getName());
+            User owner = userService.findByUsername(principal);
             trip.setOwner(owner);
         }
         return tripRepository.save(buildVehicle(trip));
@@ -87,7 +86,7 @@ public class TripService {
         return tripRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist"));
     }
 
-    public Trip findById(long id, Principal principal) {
+    public Trip findById(long id, String principal) {
         return tripRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist"));
     }
 
@@ -101,12 +100,12 @@ public class TripService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist");
     }
 
-    public Trip update(Trip trip, Principal principal) {
+    public Trip update(Trip trip, String principal) {
         Optional<Trip> existing = tripRepository.findById(trip.getId());
         if (existing.isPresent())
         {
             if(trip.getOwner() == null) {
-                User owner = userService.findByUsername(principal.getName());
+                User owner = userService.findByUsername(principal);
                 trip.setOwner(owner);
             }
             return tripRepository.save(buildVehicle(trip));
@@ -115,7 +114,7 @@ public class TripService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist");
     }
 
-    public void delete(long id, Principal principal) {
+    public void delete(long id, String principal) {
         Optional<Trip> existing = tripRepository.findById(id);
         if (existing.isPresent())
             tripRepository.deleteById(id);
@@ -144,8 +143,8 @@ public class TripService {
             trip.setDriver(userService.findById(driver.getId()));
         return trip;
     }
-    public boolean upload(MultipartFile file, Principal principal) throws IOException {
-        User owner = userService.findByUsername(principal.getName());
+    public boolean upload(MultipartFile file, String principal) throws IOException {
+        User owner = userService.findByUsername(principal);
         List<Trip> savedTrips = new ArrayList<>();
         if(file.getSize()>1){
             FileParser<TripDto> fileParser = new FileParser<>();

@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.api;
 
 import com.interswitch.smartmoveserver.model.Blacklist;
-import com.interswitch.smartmoveserver.model.Page;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.service.BlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +18,8 @@ public class BlacklistApi {
     BlacklistService blacklistService;
 
     @GetMapping(produces = "application/json")
-    private Page<Blacklist> findAll(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        org.springframework.data.domain.Page pageable = blacklistService.findAllPaginated(page, size);
-        return new Page<Blacklist>(pageable.getTotalElements(), pageable.getContent());
+    private PageView<Blacklist> findAll(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        return blacklistService.findAllPaginated(page, size);
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

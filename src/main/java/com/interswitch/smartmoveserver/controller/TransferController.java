@@ -1,12 +1,12 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transfer;
 import com.interswitch.smartmoveserver.service.TransferService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,7 +35,7 @@ public class TransferController {
     public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                           Model model, @RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "10") int size) {
-        Page<Transfer> transferPage = transferService.findAllPaginated(page, size);
+        PageView<Transfer> transferPage = transferService.findAllPaginated(page, size);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(transferPage));
         model.addAttribute("transferPage", transferPage);
         return "transfers/get";
@@ -62,7 +62,7 @@ public class TransferController {
             model.addAttribute("transfer", new Transfer());
             return "transfers/transfer";
         }
-        transferService.transfer(principal, transfer);
+        transferService.transfer(transfer, principal.getName());
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/transfers/get";
     }
