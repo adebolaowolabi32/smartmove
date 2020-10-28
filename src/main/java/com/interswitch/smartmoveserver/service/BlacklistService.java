@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Blacklist;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.repository.BlacklistRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.util.Optional;
 
 /*
@@ -24,9 +24,10 @@ public class BlacklistService {
     @Autowired
     UserRepository userRepository;
 
-    public Page<Blacklist> findAllPaginated(int page, int size) {
+    public PageView<Blacklist> findAllPaginated(int page, int size) {
         PageRequest pageable = PageRequest.of(page - 1, size);
-        return blacklistRepository.findAll(pageable);
+        Page<Blacklist> pages = blacklistRepository.findAll(pageable);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
     public Blacklist add(Blacklist blacklist) {

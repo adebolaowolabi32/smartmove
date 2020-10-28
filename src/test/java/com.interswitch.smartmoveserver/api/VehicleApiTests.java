@@ -18,12 +18,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.Principal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -54,7 +52,7 @@ public class VehicleApiTests {
 
     @Test
     public void testSave() throws Exception {
-        when(vehicleService.save(vehicle, any(Principal.class))).thenReturn(vehicle);
+        when(vehicleService.save(vehicle, "")).thenReturn(vehicle);
         mvc.perform(post("/api/vehicles")
                 .content(new ObjectMapper().writeValueAsString(vehicle))
                 .characterEncoding("utf-8")
@@ -65,7 +63,7 @@ public class VehicleApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(vehicleService.update(vehicle, any(Principal.class))).thenReturn(vehicle);
+        when(vehicleService.update(vehicle, "")).thenReturn(vehicle);
         mvc.perform(put("/api/vehicles")
                 .content(new ObjectMapper().writeValueAsString(vehicle))
                 .characterEncoding("utf-8")
@@ -88,7 +86,7 @@ public class VehicleApiTests {
 
     @Test
     public void testFindById() throws Exception {
-        when(vehicleService.findById(vehicle.getId(), any(Principal.class))).thenReturn(vehicle);
+        when(vehicleService.findById(vehicle.getId(), "")).thenReturn(vehicle);
         mvc.perform(get("/api/vehicles/{id}", vehicle.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

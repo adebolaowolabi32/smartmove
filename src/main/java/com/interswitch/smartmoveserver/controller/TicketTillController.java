@@ -1,8 +1,8 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.annotation.Layout;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.TicketTillSummary;
-import com.interswitch.smartmoveserver.model.Trip;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.view.TicketTillView;
 import com.interswitch.smartmoveserver.service.TicketTillService;
@@ -12,14 +12,12 @@ import com.interswitch.smartmoveserver.util.PageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @Layout(value = "layouts/default")
@@ -68,7 +66,7 @@ public class TicketTillController {
     public String showApproveTicketTill(Principal principal,@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size,Model model) {
         User user = userService.findByUsername(principal.getName());
-        Page<TicketTillSummary> ticketTillSummaryPage = ticketTillService.findUnApprovedTicketTillSummary(user.getId(),user.getOwner() != null ? user.getOwner().getId() : 0,false,page,size);
+        PageView<TicketTillSummary> ticketTillSummaryPage = ticketTillService.findUnApprovedTicketTillSummary(user.getId(),user.getOwner() != null ? user.getOwner().getId() : 0,false,page,size);
         model.addAttribute("ticketTillSummaryPage",ticketTillSummaryPage);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketTillSummaryPage));
         return "ticket-till/approval";
@@ -78,7 +76,7 @@ public class TicketTillController {
     public String showApprovedTicketTill(Principal principal,@RequestParam(defaultValue = "1") int page,
                                         @RequestParam(defaultValue = "10") int size,Model model) {
         User user = userService.findByUsername(principal.getName());
-        Page<TicketTillSummary> ticketTillSummaryPage = ticketTillService.findUnApprovedTicketTillSummary(user.getId(),user.getOwner() != null ? user.getOwner().getId() : 0,true,page,size);
+        PageView<TicketTillSummary> ticketTillSummaryPage = ticketTillService.findUnApprovedTicketTillSummary(user.getId(),user.getOwner() != null ? user.getOwner().getId() : 0,true,page,size);
         model.addAttribute("ticketTillSummaryPage",ticketTillSummaryPage);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketTillSummaryPage));
         return "ticket-till/approved";

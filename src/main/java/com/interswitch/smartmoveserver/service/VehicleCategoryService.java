@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,12 +45,12 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findAll();
     }
 
-    public VehicleCategory save(VehicleCategory vehicleCategory, Principal principal) {
+    public VehicleCategory save(VehicleCategory vehicleCategory, String principal) {
         long id = vehicleCategory.getId();
         boolean exists = vehicleCategoryRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Category already exists");
         if(vehicleCategory.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             vehicleCategory.setOwner(owner);
         }
         if (vehicleCategory.getPicture() != null && vehicleCategory.getPicture().getSize() > 0) {
@@ -65,18 +64,18 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist"));
     }
 
-    public VehicleCategory findById(long id, Principal principal) {
+    public VehicleCategory findById(long id, String principal) {
         return vehicleCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist"));
     }
 
     //findAllByMode
 
-    public VehicleCategory update(VehicleCategory vehicleCategory, Principal principal) {
+    public VehicleCategory update(VehicleCategory vehicleCategory, String principal) {
         Optional<VehicleCategory> existing = vehicleCategoryRepository.findById(vehicleCategory.getId());
         if(existing.isPresent())
         {
             if(vehicleCategory.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
                 vehicleCategory.setOwner(owner);
             }
             if (vehicleCategory.getPicture() != null && vehicleCategory.getPicture().getSize() > 0) {
@@ -88,7 +87,7 @@ public class VehicleCategoryService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist");
     }
 
-    public void delete(long id, Principal principal) {
+    public void delete(long id, String principal) {
         Optional<VehicleCategory> existing = vehicleCategoryRepository.findById(id);
         if(existing.isPresent())
             vehicleCategoryRepository.deleteById(id);
@@ -105,24 +104,29 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.count();
     }
 
-    public Page<VehicleCategory> findAllPaginated(Principal principal, Long owner, int page, int size) {
+    public PageView<VehicleCategory> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal.getName());
+        Optional<User> user = userRepository.findByUsername(principal);
         if(!user.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
 
         if(owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole()))
-                return vehicleCategoryRepository.findAllByOwner(pageable, user.get());
-            else
-                return vehicleCategoryRepository.findAll(pageable);
+            if (securityUtil.isOwnedEntity(user.get().getRole())) {
+                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, user.get());
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+            else {
+                Page<VehicleCategory> pages = vehicleCategoryRepository.findAll(pageable);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
         }
         else {
             if(securityUtil.isOwner(principal, owner)){
                 Optional<User> ownerUser = userRepository.findById(owner);
                 if(!ownerUser.isPresent())
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                return vehicleCategoryRepository.findAllByOwner(pageable, ownerUser.get());
+                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, ownerUser.get());
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }

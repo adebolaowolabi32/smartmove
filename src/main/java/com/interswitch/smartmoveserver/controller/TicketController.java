@@ -1,12 +1,12 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Ticket;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.TicketService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +37,7 @@ public class TicketController {
                          @RequestParam(defaultValue = "10") int size) {
 
         User user = userService.findByUsername(principal.getName());
-        Page<Ticket> ticketPage = ticketService.findAllByOperator(principal, page, size);
+        PageView<Ticket> ticketPage = ticketService.findAllByOperator(page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
         model.addAttribute("ticketPage", ticketPage);
         model.addAttribute("status",user.getTillStatus().name());
@@ -67,7 +67,7 @@ public class TicketController {
             return "tickets/create";
         }
 
-        Ticket savedTicket = ticketService.save(principal, ticket);
+        Ticket savedTicket = ticketService.save(principal.getName(), ticket);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/tickets/details/" + savedTicket.getId();
     }

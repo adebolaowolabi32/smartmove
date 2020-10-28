@@ -1,12 +1,12 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Card;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.CardService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +36,7 @@ public class CardController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Card> cardPage = cardService.findAllPaginated(principal, owner, page, size);
+        PageView<Card> cardPage = cardService.findAllPaginated(owner, page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(cardPage));
         model.addAttribute("cardPage", cardPage);
         return "cards/get";
@@ -44,7 +44,7 @@ public class CardController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Card card = cardService.findById(id, principal);
+        Card card = cardService.findById(id, principal.getName());
         model.addAttribute("card", card);
         return "cards/details";
     }
@@ -64,14 +64,14 @@ public class CardController {
             model.addAttribute("owners", userService.findAll());
             return "cards/create";
         }
-        Card savedCard = cardService.save(card, principal);
+        Card savedCard = cardService.save(card, principal.getName());
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/cards/details/" + savedCard.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Card card = cardService.findById(id, principal);
+        Card card = cardService.findById(id, principal.getName());
         model.addAttribute("card", card);
         model.addAttribute("owners", userService.findAll());
         return "cards/update";
@@ -86,15 +86,15 @@ public class CardController {
             model.addAttribute("owners", userService.findAll());
             return "cards/update";
         }
-        cardService.update(card,principal);
+        cardService.update(card,principal.getName());
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/cards/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
-        Card card = cardService.findById(id, principal);
-        cardService.delete(id, principal);
+        Card card = cardService.findById(id, principal.getName());
+        cardService.delete(id, principal.getName());
         User owner = card.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

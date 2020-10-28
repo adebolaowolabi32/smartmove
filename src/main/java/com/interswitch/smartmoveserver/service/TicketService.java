@@ -19,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -271,8 +270,8 @@ public class TicketService {
         return "AKT-" + RandomUtil.getRandomNumber(6);
     }
 
-    public Ticket save(Principal principal, Ticket ticket) {
-        Optional<User> owner = userRepository.findByUsername(principal.getName());
+    public Ticket save(String principal, Ticket ticket) {
+        Optional<User> owner = userRepository.findByUsername(principal);
         if (owner.isPresent()) ticket.setOperator(owner.get());
         return ticketRepository.save(ticket);
     }
@@ -293,11 +292,13 @@ public class TicketService {
         return ticketRepository.findByReferenceNo(ref);
     }
 
-    public Page<Ticket> findAllByOperator(Principal principal, int page, int size) {
+    public PageView<Ticket> findAllByOperator(int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal.getName());
-        if (user.isPresent())
-            return ticketRepository.findAllByOperator(pageable, user.get());
+        Optional<User> user = userRepository.findByUsername(principal);
+        if (user.isPresent()) {
+            Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, user.get());
+            return new PageView<>(pages.getTotalElements(), pages.getContent());
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket Owner not found");
     }
 }

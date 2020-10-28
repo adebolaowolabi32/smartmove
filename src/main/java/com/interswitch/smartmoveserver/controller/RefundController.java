@@ -1,10 +1,10 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.TicketRefund;
 import com.interswitch.smartmoveserver.service.TicketRefundService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,7 @@ public class RefundController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<TicketRefund> refundPage = refundService.findAllByOperator(principal, page, size);
+        PageView<TicketRefund> refundPage = refundService.findAllByOperator(page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(refundPage));
         model.addAttribute("refundPage", refundPage);
         return "refunds/get";

@@ -1,9 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Manifest;
-import com.interswitch.smartmoveserver.model.Ticket;
-import com.interswitch.smartmoveserver.model.TicketRefund;
-import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.RefundTicket;
 import com.interswitch.smartmoveserver.repository.TicketRefundRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -14,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 
 /*
@@ -67,9 +63,10 @@ public class TicketRefundService {
         return refundRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket Refund not found"));
     }
 
-    public Page<TicketRefund> findAllByOperator(Principal principal, int page, int size) {
+    public PageView<TicketRefund> findAllByOperator(int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        User user = userService.findByUsername(principal.getName());
-        return refundRepository.findAllByOperator(pageable, user);
+        User user = userService.findByUsername(principal);
+        Page<TicketRefund> pages = refundRepository.findAllByOperator(pageable, user);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 }

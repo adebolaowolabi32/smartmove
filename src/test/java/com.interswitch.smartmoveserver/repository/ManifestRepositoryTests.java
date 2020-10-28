@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.repository;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -181,6 +181,6 @@ public class ManifestRepositoryTests {
     public void testFindByScheduleId(){
         Pageable pageable = PageRequest.of(1, 5);
         Page<Manifest> manifestPage = manifestRepository.findByScheduleId(pageable,savedSchedule.getId());
-        assertTrue(manifestPage.getTotalPages() >=1);
+        assertTrue(manifestPage.getTotalElements() >=1);
     }
 }

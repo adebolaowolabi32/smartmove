@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.ManifestDto;
 import com.interswitch.smartmoveserver.repository.ManifestRepository;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -55,20 +54,24 @@ public class ManifestService {
         return manifestRepository.findAll();
     }
 
-    public Page<Manifest> findAllPaginated(Principal principal, int page, int size) {
+    public PageView<Manifest> findAllPaginated(int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        return manifestRepository.findAll(pageable);
+        Page<Manifest> pages = manifestRepository.findAll(pageable);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
+
 
     }
 
-    public Page<Manifest> findPaginatedManifestByTripId(int page, int size, long tripId) {
+    public PageView<Manifest> findPaginatedManifestByTripId(int page, int size, long tripId) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        return manifestRepository.findByTripId(pageable, tripId);
+        Page<Manifest> pages = manifestRepository.findByTripId(pageable, tripId);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
-    public Page<Manifest> findPaginatedManifestByScheduleId(int page, int size, long scheduleId) {
+    public PageView<Manifest> findPaginatedManifestByScheduleId(int page, int size, long scheduleId) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        return manifestRepository.findByScheduleId(pageable, scheduleId);
+        Page<Manifest> pages = manifestRepository.findByScheduleId(pageable, scheduleId);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
     public Manifest save(Manifest manifest) {
@@ -78,14 +81,14 @@ public class ManifestService {
         return manifestRepository.save(manifest);
     }
 
-    public Manifest save(Manifest manifest, Principal principal) {
+    public Manifest save(Manifest manifest, String principal) {
         long id = manifest.getId();
         boolean exists = manifestRepository.existsById(id);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Manifest already exists");
         return manifestRepository.save(buildManifest(manifest));
     }
 
-    public Manifest findById(long id, Principal principal) {
+    public Manifest findById(long id, String principal) {
         return manifestRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist"));
     }
 
@@ -96,7 +99,7 @@ public class ManifestService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
     }
 
-    public Manifest update(Manifest manifest, Principal principal) {
+    public Manifest update(Manifest manifest, String principal) {
         Optional<Manifest> existing = manifestRepository.findById(manifest.getId());
         if (existing.isPresent())
             return manifestRepository.save(buildManifest(manifest));
@@ -111,7 +114,7 @@ public class ManifestService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
         }
     }
-    public void delete(long id, Principal principal) {
+    public void delete(long id, String principal) {
         Optional<Manifest> existing = manifestRepository.findById(id);
         if (existing.isPresent())
             manifestRepository.deleteById(id);

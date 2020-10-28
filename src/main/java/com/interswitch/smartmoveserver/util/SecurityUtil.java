@@ -6,7 +6,6 @@ import com.interswitch.smartmoveserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.security.Principal;
 import java.util.Optional;
 
 @Component
@@ -15,8 +14,8 @@ public class SecurityUtil {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean isOwner(Principal principal, Long owner){
-        Optional<User> userOptional = userRepository.findByUsername(principal.getName());
+    public boolean isOwner(String username, Long owner){
+        Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
         }

@@ -17,10 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.Principal;
-
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -63,7 +60,7 @@ public class WalletApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(walletService.update(wallet, any(Principal.class))).thenReturn(wallet);
+        when(walletService.update(wallet, "")).thenReturn(wallet);
         mvc.perform(put("/api/wallets")
                 .content(new ObjectMapper().writeValueAsString(wallet))
                 .characterEncoding("utf-8")
@@ -74,7 +71,7 @@ public class WalletApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(walletService.findById(wallet.getId(), any(Principal.class))).thenReturn(wallet);
+        when(walletService.findById(wallet.getId(), "")).thenReturn(wallet);
         mvc.perform(get("/api/wallets/{id}", wallet.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
