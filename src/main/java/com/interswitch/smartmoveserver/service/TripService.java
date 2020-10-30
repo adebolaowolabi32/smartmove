@@ -70,10 +70,6 @@ public class TripService {
     }
 
     public Trip save(Trip trip, String principal) {
-        long id = trip.getId();
-        boolean exists = tripRepository.existsById(id);
-
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Trip already exists");
         trip.setReferenceNo(RandomUtil.getRandomNumber(6));
         if(trip.getOwner() == null) {
             User owner = userService.findByUsername(principal);

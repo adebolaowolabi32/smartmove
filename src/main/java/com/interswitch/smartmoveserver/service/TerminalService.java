@@ -66,9 +66,9 @@ public class TerminalService {
     }
 
     public Terminal save(Terminal terminal, String principal) {
-        long id = terminal.getId();
-        boolean exists = terminalRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Terminal already exists");
+        String name = terminal.getName();
+        boolean exists = terminalRepository.existsByName(name);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Terminal with name: " + name + " already exists");
         if(terminal.getOwner() == null) {
             User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             terminal.setOwner(owner);

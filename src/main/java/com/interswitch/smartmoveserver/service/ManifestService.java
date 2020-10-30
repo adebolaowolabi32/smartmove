@@ -75,16 +75,10 @@ public class ManifestService {
     }
 
     public Manifest save(Manifest manifest) {
-        long id = manifest.getId();
-        boolean exists = manifestRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Manifest already exists");
         return manifestRepository.save(manifest);
     }
 
     public Manifest save(Manifest manifest, String principal) {
-        long id = manifest.getId();
-        boolean exists = manifestRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Manifest already exists");
         return manifestRepository.save(buildManifest(manifest));
     }
 

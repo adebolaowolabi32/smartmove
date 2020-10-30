@@ -50,20 +50,10 @@ public class ScheduleService {
     }
 
     public Schedule save(Schedule schedule, String principal) {
-        long id = schedule.getId();
-        boolean exists = scheduleRepository.existsById(id);
-
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Schedule already exists");
-
         LocalDateTime start = LocalDateTime.of(schedule.getDepartureDate(), schedule.getDepartureTime());
         LocalDateTime stop = LocalDateTime.of(schedule.getArrivalDate(), schedule.getArrivalTime());
         Duration duration = Duration.between(start, stop);
         schedule.setDuration(String.valueOf(duration.getSeconds() / 60 / 60));
-        /*schedule.setArrivalDateString(DateUtil.formatDate(schedule.getArrivalDate()));
-        schedule.setDepartureDateString(DateUtil.formatDate(schedule.getDepartureDate()));
-        schedule.setArrivalTimeString(DateUtil.formatTime(schedule.getArrivalTime()));
-        schedule.setDepartureTimeString(DateUtil.formatTime(schedule.getDepartureTime()));*/
-        //schedule.setName(schedule.getStartTerminal().getName() + " - " + schedule.getStopTerminal().getName() + " " + schedule.getDepartureString());
         if (schedule.getOwner() == null) {
             User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             schedule.setOwner(owner);

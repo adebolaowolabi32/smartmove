@@ -17,4 +17,5 @@ public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
     Page<Vehicle> findAll(Pageable pageable);
     List<Vehicle> findAll();
     Vehicle findByRegNo(String regNo);
+    boolean existsByName(String name);
 }
