@@ -31,17 +31,13 @@ public class Vehicle implements Serializable {
     @Length(min = 5, max = 50, message = "Registration number must be between 5 and 30 characters long.")
     private String regNo;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Transport mode is required.")
-    private Enum.TransportMode mode;
-
     @ManyToOne
     @NotNull(message = "Vehicle category is required.")
     private VehicleCategory category;
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
+    //@NotNull(message = "Owner is required.")
     private User owner;
 
     @OneToOne

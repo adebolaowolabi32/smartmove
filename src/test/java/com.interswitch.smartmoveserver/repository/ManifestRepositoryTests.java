@@ -112,7 +112,6 @@ public class ManifestRepositoryTests {
         vehicleCategory = vehicleCategoryRepository.save(vehicleCategory);
 
         vehicle.setCategory(vehicleCategory);
-        vehicle.setMode(Enum.TransportMode.BUS);
         vehicle = vehicleRepository.save(vehicle);
 
         seat.setVehicle(vehicle);

@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -33,6 +34,7 @@ public class Card implements Serializable {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Expiry date is required.")
+    @Future
     private LocalDate expiry;
 
     @Enumerated(EnumType.STRING)

@@ -62,15 +62,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<div th:if="${userPage.totalPages > 0}" class="pagination"
-					 th:each="pageNumber : ${pageNumbers}">
-					<a th:href="@{/get(size=${userPage.size}, page=${pageNumber})}"
-					   th:class="${pageNumber==userPage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
-				</div>
 			</div>
-<!--
-            <div th:replace="@{/fragments/error} :: error"></div>
--->
         </div>
 	</div>
 </html>

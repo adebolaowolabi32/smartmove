@@ -52,11 +52,6 @@
 				</tr>
 				</tbody>
 			</table>
-			<div th:if="${transactionPage.totalPages > 0}" class="pagination"
-				 th:each="pageNumber : ${pageNumbers}">
-				<a th:href="@{/get(size=${transactionPage.size}, page=${pageNumber})}"
-				   th:class="${pageNumber==transactionPage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
-			</div>
 		</div>
 	</div>
 </div>

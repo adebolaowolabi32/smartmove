@@ -1,3 +1,4 @@
+/*
 package com.interswitch.smartmoveserver.handler;
 
 import com.interswitch.smartmoveserver.model.response.ErrorResponse;
@@ -41,4 +42,4 @@ public class ErrorAttributes extends DefaultErrorAttributes {
 
         return errorAttributes;
     }
-}
+}*/
