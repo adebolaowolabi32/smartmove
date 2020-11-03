@@ -19,7 +19,6 @@
 						</div>
 					</div>
 				</div>
-
 			</div>
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{vehicle.deleted.message} : false)"></div>
@@ -63,11 +62,6 @@
 				</tr>
 				</tbody>
 			</table>
-			<div th:if="${vehiclePage.totalPages > 0}" class="pagination"
-				 th:each="pageNumber : ${pageNumbers}">
-				<a th:href="@{/get(size=${vehiclePage.size}, page=${pageNumber})}"
-				   th:class="${pageNumber==vehiclePage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
-			</div>
 		</div>
 	</div>
 </div>

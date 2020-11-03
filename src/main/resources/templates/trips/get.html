@@ -63,25 +63,14 @@
                             <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
-
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/delete/{id}(id=${trip.id})}">
                             <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
                         </a>
                     </td>
-
                 </tr>
                 </tbody>
             </table>
-
-            <div th:if="${tripPage.totalPages > 0}" class="pagination"
-                 th:each="pageNumber : ${pageNumbers}">
-                <a th:href="@{/get(size=${tripPage.size}, page=${pageNumber})}"
-                   th:class="${pageNumber==tripPage.number + 1} ? active">
-                    <button class='btn btn-outline-default' th:text=${pageNumber}></button>
-                </a>
-            </div>
-
         </div>
     </div>
 </div>

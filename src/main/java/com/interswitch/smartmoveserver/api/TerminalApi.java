@@ -1,14 +1,14 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.Page;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.service.TerminalService;
+import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 /**
  * @author adebola.owolabi
@@ -20,29 +20,29 @@ public class TerminalApi {
     TerminalService terminalService;
 
     @GetMapping(produces = "application/json")
-    private Page<Terminal> findAll(@RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size, Principal principal) {
-        org.springframework.data.domain.Page pageable = terminalService.findAllPaginated(principal, 0L, page, size);
-        return new Page<Terminal>(pageable.getTotalElements(), pageable.getContent());    }
+    private PageView<Terminal> findAll(@RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "10") int size) {
+        return terminalService.findAllPaginated(0L, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private Terminal save(@Validated @RequestBody Terminal terminal, Principal principal) {
-        return terminalService.save(terminal, principal);
+    private Terminal save(@Validated @RequestBody Terminal terminal) {
+        return terminalService.save(terminal, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    private Terminal findById(@Validated @PathVariable long id, Principal principal) {
-        return terminalService.findById(id, principal);
+    private Terminal findById(@Validated @PathVariable long id) {
+        return terminalService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")
-    private Terminal update(@Validated @RequestBody Terminal terminal, Principal principal) {
-        return terminalService.update(terminal, principal);
+    private Terminal update(@Validated @RequestBody Terminal terminal) {
+        return terminalService.update(terminal, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @DeleteMapping("/{id}")
-    private void delete(@Validated @PathVariable long id, Principal principal) {
-        terminalService.delete(id, principal);
+    private void delete(@Validated @PathVariable long id) {
+        terminalService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 }

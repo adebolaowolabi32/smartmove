@@ -18,12 +18,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.Principal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -68,7 +66,7 @@ public class DeviceApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(deviceService.update(device, any(Principal.class))).thenReturn(device);
+        when(deviceService.update(device, "")).thenReturn(device);
         mvc.perform(put("/api/devices")
                 .content(new ObjectMapper().writeValueAsString(device))
                 .characterEncoding("utf-8")
@@ -91,7 +89,7 @@ public class DeviceApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(deviceService.findById(device.getId(), any(Principal.class))).thenReturn(device);
+        when(deviceService.findById(device.getId(), "")).thenReturn(device);
         mvc.perform(get("/api/devices/{id}", device.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

@@ -18,12 +18,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.Principal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,7 +54,7 @@ public class UserApiTests {
 
     @Test
     public void testSave() throws Exception {
-        when(userService.save(user, any(Principal.class))).thenReturn(user);
+        when(userService.save(user, "")).thenReturn(user);
         mvc.perform(post("/api/users")
                 .content(new ObjectMapper().writeValueAsString(user))
                 .characterEncoding("utf-8")
@@ -79,7 +77,7 @@ public class UserApiTests {
 
     @Test
     public void testFindById() throws Exception {
-        when(userService.findById(user.getId(), any(Principal.class))).thenReturn(user);
+        when(userService.findById(user.getId(), "")).thenReturn(user);
         mvc.perform(get("/api/users/{id}", user.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

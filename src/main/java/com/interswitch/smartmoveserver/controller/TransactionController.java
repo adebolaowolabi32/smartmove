@@ -1,10 +1,10 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.service.TransactionService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +30,7 @@ public class TransactionController {
     public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Transaction> transactionPage = transactionService.findAllPaginated(principal, page, size);
+        PageView<Transaction> transactionPage = transactionService.findAllPaginated(page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(transactionPage));
         model.addAttribute("transactionPage", transactionPage);
         return "transactions/get";
@@ -38,7 +38,7 @@ public class TransactionController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Transaction transaction = transactionService.findById(id, principal);
+        Transaction transaction = transactionService.findById(id, principal.getName());
         model.addAttribute( "transaction", transaction);
         return "transactions/details";
     }

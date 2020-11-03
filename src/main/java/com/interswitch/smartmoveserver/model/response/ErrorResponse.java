@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.model.response;
 
 import lombok.Data;
-import org.springframework.validation.FieldError;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -18,6 +17,6 @@ public class ErrorResponse {
     @NotNull
     private String message;
 
-    private List<FieldError> errors;
+    private List<String> errors;
 }
 

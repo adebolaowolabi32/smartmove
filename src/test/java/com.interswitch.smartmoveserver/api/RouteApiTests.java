@@ -18,12 +18,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.security.Principal;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -69,7 +67,7 @@ public class RouteApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(routeService.update(route, any(Principal.class))).thenReturn(route);
+        when(routeService.update(route, "")).thenReturn(route);
         mvc.perform(put("/api/routes")
                 .content(new ObjectMapper().writeValueAsString(route))
                 .characterEncoding("utf-8")
@@ -92,7 +90,7 @@ public class RouteApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(routeService.findById(route.getId(), any(Principal.class))).thenReturn(route);
+        when(routeService.findById(route.getId(), "")).thenReturn(route);
         mvc.perform(get("/api/routes/{id}", route.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

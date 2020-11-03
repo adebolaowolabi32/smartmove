@@ -95,14 +95,15 @@ public class HomeController {
         Long no_ticketers = 0L;
         Long no_drivers = 0L;
 
+        String username = principal.getName();
         if(securityUtil.isOwnedEntity(role)){
-            no_regulators = userService.countByRole(principal, user, Enum.Role.REGULATOR);
-            no_operators = userService.countByRole(principal, user, Enum.Role.OPERATOR);
-            no_agents = userService.countByRole(principal, user, Enum.Role.AGENT);
-            no_service_providers = userService.countByRole(principal, user, Enum.Role.SERVICE_PROVIDER);
-            no_inspectors = userService.countByRole(principal, user, Enum.Role.INSPECTOR);
-            no_ticketers = userService.countByRole(principal, user, Enum.Role.TICKETER);
-            no_drivers = userService.countByRole(principal, user, Enum.Role.DRIVER);
+            no_regulators = userService.countByRole(username, user, Enum.Role.REGULATOR);
+            no_operators = userService.countByRole(username, user, Enum.Role.OPERATOR);
+            no_agents = userService.countByRole(username, user, Enum.Role.AGENT);
+            no_service_providers = userService.countByRole(username, user, Enum.Role.SERVICE_PROVIDER);
+            no_inspectors = userService.countByRole(username, user, Enum.Role.INSPECTOR);
+            no_ticketers = userService.countByRole(username, user, Enum.Role.TICKETER);
+            no_drivers = userService.countByRole(username, user, Enum.Role.DRIVER);
             no_vehicles = vehicleService.countByOwner(user);
             no_terminals = terminalService.countByOwner(user);
             no_routes = routeService.countByOwner(user);
@@ -117,14 +118,14 @@ public class HomeController {
             //}
         }
         else {
-            no_admins = userService.countByRole(principal, null, Enum.Role.ISW_ADMIN);
-            no_regulators = userService.countByRole(principal, null, Enum.Role.REGULATOR);
-            no_operators = userService.countByRole(principal, null, Enum.Role.OPERATOR);
-            no_agents = userService.countByRole(principal, null, Enum.Role.AGENT);
-            no_service_providers = userService.countByRole(principal, null, Enum.Role.SERVICE_PROVIDER);
-            no_inspectors = userService.countByRole(principal, null, Enum.Role.INSPECTOR);
-            no_ticketers = userService.countByRole(principal, null, Enum.Role.TICKETER);
-            no_drivers = userService.countByRole(principal, null, Enum.Role.DRIVER);
+            no_admins = userService.countByRole(username, null, Enum.Role.ISW_ADMIN);
+            no_regulators = userService.countByRole(username, null, Enum.Role.REGULATOR);
+            no_operators = userService.countByRole(username, null, Enum.Role.OPERATOR);
+            no_agents = userService.countByRole(username, null, Enum.Role.AGENT);
+            no_service_providers = userService.countByRole(username, null, Enum.Role.SERVICE_PROVIDER);
+            no_inspectors = userService.countByRole(username, null, Enum.Role.INSPECTOR);
+            no_ticketers = userService.countByRole(username, null, Enum.Role.TICKETER);
+            no_drivers = userService.countByRole(username, null, Enum.Role.DRIVER);
             no_vehicles = vehicleService.countAll();
             no_terminals = terminalService.countAll();
             no_routes = routeService.countAll();

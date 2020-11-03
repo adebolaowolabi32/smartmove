@@ -1,25 +1,25 @@
 package com.interswitch.smartmoveserver.util;
 
 import com.interswitch.smartmoveserver.model.Enum;
-import org.springframework.data.domain.Page;
+import com.interswitch.smartmoveserver.model.PageView;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 /**
  * @author adebola.owolabi
  */
 @Component
 public class PageUtil {
-    public <T> List<Integer> getPageNumber(Page<T> page){
-        List<Integer> pageNumbers = new ArrayList<>();
-        int totalPages = page.getTotalPages();
-        if(totalPages > 0) {
-            pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
+    public <T> List<Long> getPageNumber(PageView<T> page){
+        List<Long> pageNumbers = new ArrayList<>();
+        long pageCount = page.getCount();
+        if(pageCount > 0) {
+            pageNumbers = LongStream.rangeClosed(1,pageCount).boxed().collect(Collectors.toList());
         }
         return pageNumbers;
     }

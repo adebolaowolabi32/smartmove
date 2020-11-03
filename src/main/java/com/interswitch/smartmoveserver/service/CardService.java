@@ -1,5 +1,8 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.model.Card;
+import com.interswitch.smartmoveserver.model.PageView;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.dto.CardDto;
@@ -18,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,34 +46,40 @@ public class CardService {
         return cardRepository.findAll();
     }
 
-    public Page<Card> findAllPaginated(Principal principal, Long owner, int page, int size) {
+    public PageView<Card> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal.getName());
+        Optional<User> user = userRepository.findByUsername(principal);
         if (!user.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
 
         if (owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole()))
-                return cardRepository.findAllByOwner(pageable, user.get());
-            else
-                return cardRepository.findAll(pageable);
+            if (securityUtil.isOwnedEntity(user.get().getRole())) {
+                Page<Card> pages = cardRepository.findAllByOwner(pageable, user.get());
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+            else {
+                Page<Card> pages = cardRepository.findAll(pageable);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
         } else {
             if (securityUtil.isOwner(principal, owner)) {
                 Optional<User> ownerUser = userRepository.findById(owner);
                 if (!ownerUser.isPresent())
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                return cardRepository.findAllByOwner(pageable, ownerUser.get());
+                Page<Card> pages = cardRepository.findAllByOwner(pageable, ownerUser.get());
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
 
-    public Card save(Card card, Principal principal) {
-        long id = card.getId();
-        boolean exists = cardRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Card already exists");
+    public Card save(Card card, String principal) {
+        String pan = card.getPan();
+        boolean exists = cardRepository.existsByPan(pan);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "A card with this PAN: " + pan + " already exists.");
         if(card.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             card.setOwner(owner);
         }
         return cardRepository.save(card);
@@ -87,11 +95,11 @@ public class CardService {
         return cardRepository.save(card);
     }
 
-    public Card findById(long id, Principal principal) {
+    public Card findById(long id, String principal) {
         return cardRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
     }
 
-    public Card findByPan(String cardNumber, Principal principal) {
+    public Card findByPan(String cardNumber, String principal) {
         return cardRepository.findByPan(cardNumber).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
     }
 
@@ -102,11 +110,14 @@ public class CardService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
-    public Card update(Card card, Principal principal) {
+    public Card update(Card card, String principal) {
         Optional<Card> existing = cardRepository.findById(card.getId());
         if(existing.isPresent()){
+            String pan = card.getPan();
+            boolean exists = cardRepository.existsByPan(pan);
+            if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "A card with this PAN: " + pan + " already exists.");
             if(card.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
                 card.setOwner(owner);
             }
             return cardRepository.save(card);
@@ -114,7 +125,7 @@ public class CardService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist");
     }
 
-    public void delete(long id, Principal principal) {
+    public void delete(long id, String principal) {
         Optional<Card> existing = cardRepository.findById(id);
         if(existing.isPresent())
             cardRepository.deleteById(id);

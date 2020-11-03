@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transfer;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 
 
@@ -36,9 +36,10 @@ public class TransferService {
         return transferRepository.save(transfer);
     }
 
-    public Page<Transfer> findAllPaginated(int page, int size) {
+    public PageView<Transfer> findAllPaginated(int page, int size) {
         PageRequest pageable = PageRequest.of(page - 1, size);
-        return transferRepository.findAll(pageable);
+        Page<Transfer> pages = transferRepository.findAll(pageable);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
     public Transfer findById(long id) {
@@ -68,11 +69,11 @@ public class TransferService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
     }*/
 
-    public String transfer(Principal principal, Transfer transfer) {
-        User user = userService.findByUsername(principal.getName());
+    public String transfer(Transfer transfer, String principal) {
+        User user = userService.findByUsername(principal);
 
         double amount = transfer.getAmount();
-        Wallet from = walletService.findByOwner(principal.getName());
+        Wallet from = walletService.findByOwner(principal);
         Wallet to = walletService.findByOwner(Long.parseLong(transfer.getRecipient()));
         double fromBalance = from.getBalance();
         double toBalance = to.getBalance();

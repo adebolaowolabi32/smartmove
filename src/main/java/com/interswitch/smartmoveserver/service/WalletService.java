@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.util.Optional;
 
 /**
@@ -49,7 +48,7 @@ public class WalletService {
         return walletRepository.save(wallet);
     }
 
-    public Wallet findById(long id, Principal principal) {
+    public Wallet findById(long id, String principal) {
         return walletRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist"));
     }
 
@@ -67,14 +66,14 @@ public class WalletService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
-    public Wallet update(Wallet wallet, Principal principal) {
+    public Wallet update(Wallet wallet, String principal) {
         Optional<Wallet> existing = walletRepository.findById(wallet.getId());
         if(existing.isPresent())
             return walletRepository.save(wallet);
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
     }
 
-    public void delete(long id, Principal principal) {
+    public void delete(long id, String principal) {
         Optional<Wallet> existing = walletRepository.findById(id);
         if(existing.isPresent())
             walletRepository.deleteById(id);

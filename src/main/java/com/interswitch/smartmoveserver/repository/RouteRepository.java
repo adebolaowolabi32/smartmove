@@ -19,4 +19,5 @@ public interface  RouteRepository extends CrudRepository<Route, Long> {
     Long countByOwner(User owner);
     Page<Route> findAll(Pageable pageable);
     List<Route> findAll();
+    boolean existsByName(String name);
 }

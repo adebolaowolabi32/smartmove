@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.VehicleCategory;
 import com.interswitch.smartmoveserver.model.VehicleModel;
@@ -9,7 +10,6 @@ import com.interswitch.smartmoveserver.service.VehicleMakeService;
 import com.interswitch.smartmoveserver.service.VehicleModelService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,7 +45,7 @@ public class VehicleCategoryController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
-        Page<VehicleCategory> vehicleCategoryPage = vehicleCategoryService.findAllPaginated(principal, owner, page, size);
+        PageView<VehicleCategory> vehicleCategoryPage = vehicleCategoryService.findAllPaginated(owner, page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehicleCategoryPage));
         model.addAttribute("vehicleCategoryPage", vehicleCategoryPage);
         return "vehicleCategories/get";
@@ -59,7 +59,7 @@ public class VehicleCategoryController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal);
+        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal.getName());
         model.addAttribute("vehicleCategory", vehicleCategory);
         return "vehicleCategories/details";
     }
@@ -85,14 +85,14 @@ public class VehicleCategoryController {
             model.addAttribute("owners", userService.findAll());
             return "vehicleCategories/create";
         }
-        VehicleCategory savedVehicleCategory = vehicleCategoryService.save(vehicleCategory, principal);
+        VehicleCategory savedVehicleCategory = vehicleCategoryService.save(vehicleCategory, principal.getName());
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/vehicleCategories/details/" + savedVehicleCategory.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal);
+        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal.getName());
         model.addAttribute("vehicleCategory", vehicleCategory);
         //TODO change findAll to findAllEligible
         model.addAttribute("makes",  vehicleMakeService.findAll());
@@ -113,15 +113,15 @@ public class VehicleCategoryController {
             model.addAttribute("owners", userService.findAll());
             return "vehicleCategories/update";
         }
-        vehicleCategoryService.update(vehicleCategory, principal);
+        vehicleCategoryService.update(vehicleCategory, principal.getName());
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/vehicleCategories/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal);
-        vehicleCategoryService.delete(id, principal);
+        VehicleCategory vehicleCategory = vehicleCategoryService.findById(id, principal.getName());
+        vehicleCategoryService.delete(id, principal.getName());
         User owner = vehicleCategory.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

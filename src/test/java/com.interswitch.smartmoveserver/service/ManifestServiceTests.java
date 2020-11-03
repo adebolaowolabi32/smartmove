@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.*;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import org.junit.After;
@@ -10,16 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.junit.Assert.assertTrue;
@@ -110,7 +105,6 @@ public class ManifestServiceTests {
         vehicleCategory = vehicleCategoryRepository.save(vehicleCategory);
 
         vehicle.setCategory(vehicleCategory);
-        vehicle.setMode(com.interswitch.smartmoveserver.model.Enum.TransportMode.BUS);
         vehicle = vehicleRepository.save(vehicle);
 
         seat.setVehicle(vehicle);
@@ -126,13 +120,13 @@ public class ManifestServiceTests {
 
 
         schedule.setStartTerminal(Terminal.builder()
-                .country("Nigera").state("Lagos").code("LAG")
+                .country("Nigeria").state("Lagos").code("LAG")
                 .lga("Alimosho").owner(buildTestUser())
                 .name("LAGOS TERMINAL 1").mode(com.interswitch.smartmoveserver.model.Enum.TransportMode.BUS)
                 .build());
 
         schedule.setStopTerminal(Terminal.builder()
-                .country("Nigera").state("Lagos").code("LAG")
+                .country("Nigeria").state("Lagos").code("LAG")
                 .lga("Agege").owner(buildTestUser())
                 .name("LAGOS TERMINAL 2").mode(com.interswitch.smartmoveserver.model.Enum.TransportMode.BUS)
                 .build());

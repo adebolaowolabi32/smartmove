@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,28 +43,19 @@ public class ScheduleService {
         return scheduleRepository.findAll();
     }
 
-    public Page<Schedule> findAllPaginated(Principal principal, int page, int size) {
+    public PageView<Schedule> findAllPaginated(int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        return scheduleRepository.findAll(pageable);
+        Page<Schedule> pages = scheduleRepository.findAll(pageable);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
-    public Schedule save(Schedule schedule, Principal principal) {
-        long id = schedule.getId();
-        boolean exists = scheduleRepository.existsById(id);
-
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Schedule already exists");
-
+    public Schedule save(Schedule schedule, String principal) {
         LocalDateTime start = LocalDateTime.of(schedule.getDepartureDate(), schedule.getDepartureTime());
         LocalDateTime stop = LocalDateTime.of(schedule.getArrivalDate(), schedule.getArrivalTime());
         Duration duration = Duration.between(start, stop);
         schedule.setDuration(String.valueOf(duration.getSeconds() / 60 / 60));
-        /*schedule.setArrivalDateString(DateUtil.formatDate(schedule.getArrivalDate()));
-        schedule.setDepartureDateString(DateUtil.formatDate(schedule.getDepartureDate()));
-        schedule.setArrivalTimeString(DateUtil.formatTime(schedule.getArrivalTime()));
-        schedule.setDepartureTimeString(DateUtil.formatTime(schedule.getDepartureTime()));*/
-        //schedule.setName(schedule.getStartTerminal().getName() + " - " + schedule.getStopTerminal().getName() + " " + schedule.getDepartureString());
         if (schedule.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             schedule.setOwner(owner);
         }
         return scheduleRepository.save(buildSchedule(schedule));
@@ -75,15 +65,15 @@ public class ScheduleService {
         return scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule does not exist"));
     }
 
-    public Schedule findById(long id, Principal principal) {
+    public Schedule findById(long id, String principal) {
         return scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule does not exist"));
     }
 
-    public Schedule update(Schedule schedule, Principal principal) {
+    public Schedule update(Schedule schedule, String principal) {
         Optional<Schedule> existing = scheduleRepository.findById(schedule.getId());
         if (existing.isPresent()){
             if (schedule.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal.getName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
                 schedule.setOwner(owner);
             }
             return scheduleRepository.save(buildSchedule(schedule));
@@ -91,7 +81,7 @@ public class ScheduleService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule does not exist");
     }
 
-    public void delete(long id, Principal principal) {
+    public void delete(long id, String principal) {
         Optional<Schedule> existing = scheduleRepository.findById(id);
         if (existing.isPresent())
             scheduleRepository.deleteById(id);

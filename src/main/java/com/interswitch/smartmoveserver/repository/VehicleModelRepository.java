@@ -11,4 +11,5 @@ import java.util.List;
 public interface VehicleModelRepository extends CrudRepository<VehicleModel, Long> {
     List<VehicleModel> findAllByMake(VehicleMake make);
     List<VehicleModel> findAll();
+    boolean existsByNameIgnoreCase(String name);
 }

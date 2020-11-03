@@ -39,8 +39,8 @@ public class VehicleModelService {
     }
 
     public VehicleModel save(VehicleModel vehicleModel) {
-        long id = vehicleModel.getId();
-        boolean exists = vehicleModelRepository.existsById(id);
+        String name = vehicleModel.getName();
+        boolean exists = vehicleModelRepository.existsByNameIgnoreCase(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Model already exists");
         return vehicleModelRepository.save(vehicleModel);
     }

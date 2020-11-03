@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
@@ -9,7 +10,6 @@ import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -65,7 +65,7 @@ public class UserController {
                          @RequestParam(required = false, defaultValue = "0") Long owner,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
-        Page<User> userPage = userService.findAllPaginatedByRole(principal, owner, role, page, size);
+        PageView<User> userPage = userService.findAllPaginatedByRole(principal.getName(), owner, role, page, size);
         model.addAttribute("title", pageUtil.buildTitle(role));
         model.addAttribute("role", role);
         model.addAttribute("userPage", userPage);
@@ -76,7 +76,7 @@ public class UserController {
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        User user = userService.findById(id, principal);
+        User user = userService.findById(id, principal.getName());
         model.addAttribute("regulators_no", userService.countByRoleAndOwner(user, Enum.Role.REGULATOR));
         model.addAttribute("operators_no", userService.countByRoleAndOwner(user, Enum.Role.OPERATOR));
         model.addAttribute("ticketers_no", userService.countByRoleAndOwner(user, Enum.Role.TICKETER));
@@ -127,7 +127,7 @@ public class UserController {
         }
 
         logger.info("wanna call user service to to create user");
-        User savedUser = userService.save(user, principal);
+        User savedUser = userService.save(user, principal.getName());
         redirectAttributes.addFlashAttribute("saved", true);
         redirectAttributes.addFlashAttribute("saved_message", pageUtil.buildSaveMessage(role));
         return "redirect:/users/details/" + savedUser.getId();
@@ -135,7 +135,7 @@ public class UserController {
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        User user = userService.findById(id, principal);
+        User user = userService.findById(id, principal.getName());
         model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
         model.addAttribute("user", user);
         //TODO change findAll to findAllEligible
@@ -147,7 +147,7 @@ public class UserController {
     @PostMapping("/update/{id}")
     public String update(Principal principal, @PathVariable("id") long id, @Valid User user,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        User existing = userService.findById(id, principal);
+        User existing = userService.findById(id, principal.getName());
         Enum.Role role = existing.getRole();
         if (result.hasErrors()) {
             //TODO change findAll to findAllEligible
@@ -157,7 +157,7 @@ public class UserController {
             model.addAttribute("owners", userService.findAll());
             return "users/update";
         }
-        userService.update(user, principal);
+        userService.update(user, principal.getName());
         redirectAttributes.addFlashAttribute("updated", true);
         redirectAttributes.addFlashAttribute("updated_message", pageUtil.buildUpdateMessage(role));
         return "redirect:/users/details/" + id;
@@ -165,8 +165,8 @@ public class UserController {
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        User user = userService.findById(id, principal);
-        userService.delete(id, principal);
+        User user = userService.findById(id, principal.getName());
+        userService.delete(id, principal.getName());
         Enum.Role role = user.getRole();
         User owner = user.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;

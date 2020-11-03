@@ -2,11 +2,11 @@ package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.Manifest;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,7 +43,7 @@ public class ScheduleController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Schedule> schedulePage = scheduleService.findAllPaginated(principal, page, size);
+        PageView<Schedule> schedulePage = scheduleService.findAllPaginated(page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(schedulePage));
         model.addAttribute("schedulePage", schedulePage);
         return "schedules/get";
@@ -54,9 +54,9 @@ public class ScheduleController {
                              @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "10") int size) {
 
-        Schedule schedule = scheduleService.findById(id, principal);
+        Schedule schedule = scheduleService.findById(id, principal.getName());
 
-        Page<Manifest> manifestPage = manifestService.findPaginatedManifestByScheduleId(page, size, schedule.getId());
+        PageView<Manifest> manifestPage = manifestService.findPaginatedManifestByScheduleId(page, size, schedule.getId());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(manifestPage));
         model.addAttribute("manifestPage", manifestPage);
         model.addAttribute("schedule", schedule);
@@ -84,14 +84,14 @@ public class ScheduleController {
             return "schedules/create";
         }
 
-        Schedule savedSchedule = scheduleService.save(schedule, principal);
+        Schedule savedSchedule = scheduleService.save(schedule, principal.getName());
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/schedules/details/" + savedSchedule.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Schedule schedule = scheduleService.findById(id, principal);
+        Schedule schedule = scheduleService.findById(id, principal.getName());
         model.addAttribute("schedule", schedule);
         model.addAttribute("owners", userService.findAll());
         model.addAttribute("terminals", terminalService.findAll());
@@ -112,15 +112,15 @@ public class ScheduleController {
             return "schedules/update";
         }
 
-        scheduleService.update(schedule, principal);
+        scheduleService.update(schedule, principal.getName());
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/schedules/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
-        Schedule schedule = scheduleService.findById(id, principal);
-        scheduleService.delete(id, principal);
+        Schedule schedule = scheduleService.findById(id, principal.getName());
+        scheduleService.delete(id, principal.getName());
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/schedules/get";
     }
