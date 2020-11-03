@@ -79,7 +79,7 @@ public class RouteService {
     }
 
     public Route save(Route route, String principal) {
-        long id = route.getId();
+        String name = route.getName();
         Terminal startTerminal = terminalService.findById(route.getStartTerminalId());
         Terminal stopTerminal = terminalService.findById(route.getStopTerminalId());
         String startTerminalName = startTerminal.getName();
@@ -87,8 +87,8 @@ public class RouteService {
         route.setStartTerminalName(startTerminalName);
         route.setStopTerminalName(stopTerminalName);
         route.setName(startTerminalName + " - " + stopTerminalName);
-        boolean exists = routeRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route already exists");
+        boolean exists = routeRepository.existsByName(name);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route with name: " + name + " already exists");
         if (route.getOwner() == null) {
             User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             route.setOwner(owner);

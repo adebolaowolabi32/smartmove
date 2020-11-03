@@ -35,8 +35,8 @@ public class VehicleMakeService {
     }
 
     public VehicleMake save(VehicleMake vehicleMake) {
-        long id = vehicleMake.getId();
-        boolean exists = vehicleMakeRepository.existsById(id);
+        String name = vehicleMake.getName();
+        boolean exists = vehicleMakeRepository.existsByNameIgnoreCase(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Make already exists");
         return vehicleMakeRepository.save(vehicleMake);
     }

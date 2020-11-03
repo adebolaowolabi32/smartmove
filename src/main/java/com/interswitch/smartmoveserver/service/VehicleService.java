@@ -45,9 +45,9 @@ public class VehicleService {
     }
 
     public Vehicle save(Vehicle vehicle, String principal) {
-        long id = vehicle.getId();
-        boolean exists = vehicleRepository.existsById(id);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle already exists");
+        String name = vehicle.getName();
+        boolean exists = vehicleRepository.existsByName(name);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle with name: " + name + " already exists");
         if (vehicle.getOwner() == null) {
             User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
             vehicle.setOwner(owner);

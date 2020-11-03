@@ -14,6 +14,7 @@
 
             </div>
         </div>
+        <br>
         <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
         <form class="card p-3" action="#" method="post"
               th:action="@{/manifests/upload-trip-manifest/{id}(id=${trip.id})" enctype="multipart/form-data">

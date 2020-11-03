@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /*
@@ -25,23 +26,29 @@ public class Trip implements Serializable {
     @Column(unique = true)
     private String referenceNo;
 
-    @Enumerated(EnumType.STRING)
-    private Enum.TransportMode mode;
-
+    @NotNull(message = "Fare is required.")
     private long fare;
 
     @ManyToOne
     @JoinColumn(name = "driver")
+    @NotNull(message = "Driver is required.")
     private User driver;
 
     @ManyToOne
     @JoinColumn(name = "schedule")
+    @NotNull(message = "Schedule is required.")
     private Schedule schedule;
 
     @ManyToOne
+    @NotNull(message = "Vehicle is required.")
     private Vehicle vehicle;
 
     @ManyToOne
     @JoinColumn(name = "owner")
+    @NotNull(message = "Owner is required.")
     private User owner;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Transport mode is required.")
+    private Enum.TransportMode mode;
 }

@@ -86,7 +86,7 @@ public class UserService {
     //if not, bounce request
 
     public User save(User user, String principal) {
-        boolean exists = userRepository.existsById(user.getId());
+        boolean exists = userRepository.existsByUsername(user.getEmail());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //TODO :: see below
         user.setEnabled(true);

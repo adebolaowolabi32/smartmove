@@ -1,17 +1,19 @@
 package com.interswitch.smartmoveserver.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * @author adebola.owolabi
+/*
+ * Created by adebola.owolabi on 7/18/2020
  */
 @Data
 @Builder
@@ -20,39 +22,57 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "manifests")
 public class Manifest implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
     @JoinColumn(name = "seat")
-    @JsonIgnore
     private Seat seat;
 
+    @NotNull(message = "Seat is required.")
     private String seatNo;
 
+    @NotBlank(message = "Name is required.")
+    @Length(min = 5, max = 50, message = "Name must be between 5 and 30 characters long.")
     private String name;
 
+    @NotBlank(message = "Address is required.")
+    @Length(min = 5, max = 50, message = "Address must be between 8 and 50 characters long.")
     private String address;
 
+    @NotNull(message = "Gender is required.")
     private String gender;
 
+    @NotBlank(message = "BVN is required.")
+    @Length(min = 5, max = 50, message = "BVN must be between 10 and 15 characters long.")
     private String bvn;
 
+    @NotNull(message = "Nationality is required.")
     private String nationality;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "ID category is required.")
     private Enum.IdCategory idCategory;
 
+    @NotBlank(message = "ID number is required.")
+    @Length(min = 5, max = 50, message = "ID number must be between 5 and 20 characters long.")
     private String idNumber;
 
+    @NotBlank(message = "Contact mobile is required.")
+    @Length(min = 11, max = 16, message = "Contact mobile must be between 11 and 16 characters long.")
     private String contactMobile;
 
+    @NotBlank(message = "Contact email is required.")
+    @Length(min = 5, max = 50, message = "Contact email must be between 14 and 30 characters long.")
     private String contactEmail;
 
+    @NotBlank(message = "Next of Kin name is required.")
+    @Length(min = 5, max = 50, message = "Next of Kin name must be between 5 and 30 characters long.")
     private String nextOfKinName;
 
+    @NotBlank(message = "Next of Kin mobile is required.")
+    @Length(min = 5, max = 50, message = "Next of Kin mobile must be between 14 and 30 characters long.")
     private String nextOfKinMobile;
 
     @ManyToOne
@@ -61,13 +81,11 @@ public class Manifest implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "schedule")
+    @NotNull(message = "Schedule is required.")
     private Schedule schedule;
 
     private boolean boarded;
-
     private boolean completed;
-
     private LocalDateTime timeofBoarding;
-
     private LocalDateTime timeofCompletion;
 }
