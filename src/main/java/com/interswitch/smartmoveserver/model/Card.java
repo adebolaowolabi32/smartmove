@@ -1,6 +1,9 @@
 package com.interswitch.smartmoveserver.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -11,6 +14,9 @@ import java.time.LocalDate;
  * @author adebola.owolabi
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "cards")
 public class Card implements Serializable {

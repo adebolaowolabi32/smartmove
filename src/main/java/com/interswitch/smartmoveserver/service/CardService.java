@@ -1,15 +1,12 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Card;
-import com.interswitch.smartmoveserver.model.Trip;
-import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.dto.CardDto;
 import com.interswitch.smartmoveserver.model.dto.TripDto;
 import com.interswitch.smartmoveserver.repository.CardRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
-import com.interswitch.smartmoveserver.util.FileParser;
-import com.interswitch.smartmoveserver.util.PageUtil;
-import com.interswitch.smartmoveserver.util.RandomUtil;
-import com.interswitch.smartmoveserver.util.SecurityUtil;
+import com.interswitch.smartmoveserver.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -134,20 +131,41 @@ public class CardService {
         return cardRepository.countByOwner(user);
     }
 
-    public boolean upload(MultipartFile file) throws IOException {
-
+    public boolean upload(MultipartFile file, Principal principal) throws IOException {
+        Optional<User> ownerOptional = userRepository.findByUsername(principal.getName());
         List<Card> savedCards = new ArrayList<>();
-//        if(file.getSize()>1){
-//            FileParser<TripDto> fileParser = new FileParser<>();
-//            List<TripDto> tripDtoList = fileParser.parseFileToEntity(file, TripDto.class);
-//            tripDtoList.forEach(tripDto->{
-//                Trip trip = mapToTrip(tripDto);
-//                trip.setReferenceNo(RandomUtil.getRandomNumber(6));
-//                savedTrips.add( tripRepository.save(trip));
-//            });
-//        }
-//        return savedTrips.size()>1;
+        if(file.getSize()>1){
+            FileParser<CardDto> fileParser = new FileParser<>();
+            List<CardDto> cardDtoList = fileParser.parseFileToEntity(file, CardDto.class);
+            cardDtoList.forEach(cardDto->{
+                savedCards.add(cardRepository.save(mapToCard(cardDto, ownerOptional.isPresent() ? ownerOptional.get() : null)));
+            });
+        }
+        return savedCards.size()>1;
+    }
 
-        return true;
+    private Card mapToCard(CardDto cardDto, User owner){
+
+        return Card.builder()
+                .balance(0)
+                .enabled(true)
+                .expiry(DateUtil.textToLocalDate(cardDto.getExpiry()))
+                .pan(cardDto.getPan())
+                .type(convertToCardTypeEnum(cardDto.getType()))
+                .enabled(isEnabled(cardDto.getEnabled()))
+                .owner(owner)
+                .build();
+    }
+
+    private Enum.CardType convertToCardTypeEnum(String mode){
+        //ISW_ADMIN, REGULATOR, OPERATOR, VEHICLE_OWNER, EMV, DRIVER, AGENT, COMMUTER
+        return Enum.CardType.valueOf(mode.toUpperCase());
+    }
+
+    private boolean isEnabled(String enabledStatus){
+        if(enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true")){
+            return true;
+        }
+        return false;
     }
 }

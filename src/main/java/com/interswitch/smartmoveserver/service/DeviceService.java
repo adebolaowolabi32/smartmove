@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
@@ -203,5 +204,10 @@ public class DeviceService {
 
     public Long countByTypeAndOwner(Enum.DeviceType deviceType, User owner){
         return deviceRepository.countByTypeAndOwner(deviceType, owner);
+    }
+
+    public boolean  upload(MultipartFile file,Principal principal){
+
+        return false;
     }
 }

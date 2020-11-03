@@ -45,6 +45,12 @@ public class ApplicationStartup implements CommandLineRunner {
    @Autowired
    TicketTillRepository ticketTillRepo;
 
+   @Autowired
+   MessagingService messagingService;
+
+   @Autowired
+   PassportService passportService;
+
 
     @Override
     public void run(String... args) throws IOException {
@@ -74,7 +80,7 @@ public class ApplicationStartup implements CommandLineRunner {
         //loadManifestData(7);
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
-        viewTicketTillSummary();
+        //sendMsg();
     }
 
 /*
@@ -245,5 +251,20 @@ public class ApplicationStartup implements CommandLineRunner {
         for (TicketTillView t:ticketTillViewSummaryList) {
             counter++;
         }
+    }
+
+    private void sendMsg(){
+
+        Map<String,Object> params  = new HashMap<>();
+        params.put("userName","Earnest");
+        params.put("emailAddress","serihbrah@gmail.com");
+        params.put("password","Ser!hbra!0!");
+
+        messagingService.sendMailAsRest("serihbrah@gmail.com",
+                "Hi","messages"+File.separator+"welcome_new",params);
+
+//        log.info("wanna send message");
+//        messagingService.sendSMS("2349021711733", "Hello,what's up?") ;
+//        log.info("done sending sms");
     }
 }

@@ -144,6 +144,7 @@ public class TripService {
             trip.setDriver(userService.findById(driver.getId()));
         return trip;
     }
+
     public boolean upload(MultipartFile file, Principal principal) throws IOException {
         User owner = userService.findByUsername(principal.getName());
         List<Trip> savedTrips = new ArrayList<>();

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -120,5 +121,23 @@ public class DeviceController {
         deviceService.fundDevice(principal, fundDevice);
         redirectAttributes.addFlashAttribute("funded", true);
         return "redirect:/devices/details/" + fundDevice.getDeviceId();
+    }
+
+    @GetMapping("/upload")
+    public String showCardsUploadPage(Principal principal, Model model) {
+        return "devices/upload";
+    }
+
+
+    @PostMapping("/upload")
+    public String doCardsUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            boolean succeeded = deviceService.upload(file,principal);
+            redirectAttributes.addFlashAttribute("uploaded", succeeded);
+            return "redirect:/devices/get";
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("error", false);
+            return "redirect:/devices/get";
+        }
     }
 }

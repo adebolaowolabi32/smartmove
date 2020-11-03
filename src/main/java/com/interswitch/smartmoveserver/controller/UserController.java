@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -172,5 +173,23 @@ public class UserController {
         redirectAttributes.addFlashAttribute("deleted", true);
         redirectAttributes.addFlashAttribute("deleted_message", pageUtil.buildDeleteMessage(role));
         return "redirect:/users/get?role=" + role + "&owner=" + ownerId;
+    }
+
+    @GetMapping("/upload")
+    public String showUserUploadPage(Principal principal, Model model) {
+        return "users/upload";
+    }
+
+
+    @PostMapping("/upload")
+    public String doUserUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            boolean succeeded = userService.upload(file, principal);
+            redirectAttributes.addFlashAttribute("uploaded", succeeded);
+            return "redirect:/users/get";
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("error", false);
+            return "redirect:/users/get";
+        }
     }
 }

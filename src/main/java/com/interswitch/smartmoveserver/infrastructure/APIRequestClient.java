@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,8 @@ public class APIRequestClient {
     @Autowired
     public APIRequestClient(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
+                .setConnectTimeout(Duration.ofSeconds(300))
+                .setReadTimeout(Duration.ofSeconds(300))
                 .errorHandler(new RestTemplateResponseErrorHandler())
                 .build();
     }

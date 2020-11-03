@@ -14,7 +14,11 @@ import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 @EnableAsync
 @EnableScheduling
 public class SmartMoveApplication {
+
+
     public static void main(String[] args) {
+        System.setProperty("java.net.preferIPv4Stack", "true");
+        System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "");
         SpringApplication.run(SmartMoveApplication.class, args);
     }
 

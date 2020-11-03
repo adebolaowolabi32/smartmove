@@ -111,7 +111,7 @@ public class CardController {
     @PostMapping("/upload")
     public String doCardsUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
         try {
-            boolean succeeded = cardService.upload(file);
+            boolean succeeded = cardService.upload(file,principal);
             redirectAttributes.addFlashAttribute("uploaded", succeeded);
             return "redirect:/cards/get";
         } catch (Exception ex) {

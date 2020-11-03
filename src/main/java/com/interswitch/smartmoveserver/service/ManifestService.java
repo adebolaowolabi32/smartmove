@@ -201,6 +201,14 @@ public class ManifestService {
             return Enum.IdCategory.NATIONAL_ID;
         }
 
+        if(name.startsWith("DRIVERS_LICENSE")){
+            return Enum.IdCategory.DRIVERS_LICENSE;
+        }
+
+        if(name.startsWith("INTERNATIONAL_PASSPORT")){
+            return Enum.IdCategory.INTERNATIONAL_PASSPORT;
+        }
+
         return Enum.IdCategory.OTHER;
     }
 }
