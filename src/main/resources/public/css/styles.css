@@ -15782,3 +15782,9 @@ body {
     .text-content {
         text-align: center;
     }
+    .red {
+        color: red;
+    }
+    .inline {
+        display: inline;
+    }

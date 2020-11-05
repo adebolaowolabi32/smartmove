@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default.html}">
+<title layout:fragment="title">Trip Reference</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-bus mr-1"></i><span>Trip Reference</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h2><b>Trip Reference</b></h2>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="row">
+                            <a th:unless="${tripReference}" th:href="@{/tripReference/create}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New</a>
+                            <a th:if="${tripReference}" th:href="@{/tripReference/update}" class="btn btn-info"><i class="fas fa-edit" aria-hidden="true"></i> Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div th:unless="${tripReference}">
+                <br> No trip reference configurations were found.
+            </div>
+            <div th:if="${tripReference}">
+                <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{tripReference.saved.message} : (${updated} ? #{tripReference.updated.message} : false))"></div>
+                <div class="card p-3">
+                    <div class="form-group row">
+                        <label class="control-label col-sm-4" for="prefix"><b>Prefix</b></label>
+                        <div class="col-sm-8">
+                            <span id="prefix" th:text="${tripReference.prefix}"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4" for="enabled"><b>Active</b></label>
+                        <div class="col-sm-8">
+                            <label class="switch">
+                                <input disabled id="enabled" name="enabled" th:checked="${tripReference.enabled}" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                            </span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
