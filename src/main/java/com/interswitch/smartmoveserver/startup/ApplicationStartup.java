@@ -1,5 +1,9 @@
 package com.interswitch.smartmoveserver.startup;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.TicketTillView;
@@ -7,6 +11,7 @@ import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.StateRepository;
 import com.interswitch.smartmoveserver.repository.TicketTillRepository;
 import com.interswitch.smartmoveserver.service.*;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -45,6 +50,9 @@ public class ApplicationStartup implements CommandLineRunner {
    @Autowired
    TicketTillRepository ticketTillRepo;
 
+   @Autowired
+   PassportService passportService;
+
 
     @Override
     public void run(String... args) throws IOException {
@@ -74,7 +82,6 @@ public class ApplicationStartup implements CommandLineRunner {
         //loadManifestData(7);
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
-        viewTicketTillSummary();
     }
 
 /*
@@ -246,4 +253,5 @@ public class ApplicationStartup implements CommandLineRunner {
             counter++;
         }
     }
+
 }

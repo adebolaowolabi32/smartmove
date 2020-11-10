@@ -152,7 +152,6 @@ public class TicketService {
         List<Manifest> manifests = new ArrayList<>();
         List<Passenger> passengers = ticketDetails.getPassengers();
         for (Passenger passenger : passengers) {
-            //put an asynchronous event here to run on another thread.
             Manifest manifest = this.populateManifest(ticketDetails, passenger);
             //manifest.setTrip(ticketDetails.getTrip());
             manifest.setSchedule(ticketDetails.getSchedule());
@@ -164,8 +163,8 @@ public class TicketService {
                 manifests.add(manifest1);
             }
         }
-        manifestService.saveAll(manifests);
 
+        manifestService.saveAll(manifests);
         Transaction transaction = new Transaction();
         transaction.setVehicleId(ticketDetails.getSchedule().getVehicle().getName());
         transaction.setTerminalId(String.valueOf(ticketDetails.getSchedule().getId()));

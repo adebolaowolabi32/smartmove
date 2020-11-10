@@ -8,12 +8,12 @@ import java.io.Serializable;
 @Data
 public class TripDto implements Serializable {
 
-    @JsonProperty
-    private String TransportMode;
-    @JsonProperty
-    private String VehicleNumber;
-    @JsonProperty
-    private long  ScheduleId;
-    @JsonProperty
-    private String DriverEmail;
+    @JsonProperty("TransportMode")
+    private String transportMode;
+    @JsonProperty("VehicleNumber")
+    private String vehicleNumber;
+    @JsonProperty("ScheduleId")
+    private long  scheduleId;
+    @JsonProperty("DriverEmail")
+    private String driverEmail;
 }

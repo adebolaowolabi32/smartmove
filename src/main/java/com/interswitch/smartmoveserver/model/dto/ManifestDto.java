@@ -12,51 +12,51 @@ import java.io.Serializable;
 @Data
 public class ManifestDto implements Serializable {
 
-    @JsonProperty
-    private String SeatNo;
+    @JsonProperty("SeatNo")
+    private String seatNo;
 
-    @JsonProperty
-    private String Name;
+    @JsonProperty("Name")
+    private String name;
 
-    @JsonProperty
-    private String Address;
+    @JsonProperty("Address")
+    private String address;
 
-    @JsonProperty
-    private String Gender;
+    @JsonProperty("Gender")
+    private String gender;
 
-    @JsonProperty
-    private String Bvn;
+    @JsonProperty("Bvn")
+    private String bvn;
 
-    @JsonProperty
-    private String Nationality;
+    @JsonProperty("Nationality")
+    private String nationality;
 
-    @JsonProperty
-    private String IdCategory;
+    @JsonProperty("IdCategory")
+    private String idCategory;
 
-    @JsonProperty
-    private String IdNumber;
+    @JsonProperty("IdNumber")
+    private String idNumber;
 
-    @JsonProperty
-    private String ContactMobile;
+    @JsonProperty("ContactMobile")
+    private String contactMobile;
 
-    @JsonProperty
-    private String ContactEmail;
+    @JsonProperty("ContactEmail")
+    private String contactEmail;
 
-    @JsonProperty
-    private String NextOfKinName;
+    @JsonProperty("NextOfKinName")
+    private String nextOfKinName;
 
-    @JsonProperty
-    private String NextOfKinMobile;
+    @JsonProperty("NextOfKinMobile")
+    private String nextOfKinMobile;
 
-    @JsonProperty
-    private String Boarded;
+    @JsonProperty("Boarded")
+    private String boarded;
 
-    @JsonProperty
-    private String Completed;
+    @JsonProperty("Completed")
+    private String completed;
 
-    @JsonProperty
-    private String TimeOfBoarding;
+    @JsonProperty("TimeOfBoarding")
+    private String timeOfBoarding;
 
-    @JsonProperty
-    private String TimeOfCompletion;
+    @JsonProperty("TimeOfBoarding")
+    private String timeOfCompletion;
 }

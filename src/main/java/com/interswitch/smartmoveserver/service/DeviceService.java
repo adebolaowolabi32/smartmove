@@ -2,10 +2,13 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.dto.DeviceDto;
+import com.interswitch.smartmoveserver.model.dto.UserDto;
 import com.interswitch.smartmoveserver.model.view.FundDevice;
 import com.interswitch.smartmoveserver.repository.DeviceRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
+import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +38,6 @@ public class DeviceService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private WalletService walletService;
@@ -214,4 +217,64 @@ public class DeviceService {
     public Long countByTypeAndOwner(Enum.DeviceType deviceType, User owner){
         return deviceRepository.countByTypeAndOwner(deviceType, owner);
     }
+
+    public boolean upload(MultipartFile file, String principal) throws IOException {
+        Optional<User> ownerOptional = userRepository.findByUsername(principal);
+        List<Device> savedDevices = new ArrayList<>();
+        if(file.getSize()>1){
+            FileParser<DeviceDto> fileParser = new FileParser<>();
+            List<DeviceDto> deviceDtoList = fileParser.parseFileToEntity(file, DeviceDto.class);
+            deviceDtoList.forEach(deviceDto->{
+                savedDevices.add(save(mapToDevice(deviceDto, ownerOptional.isPresent()? ownerOptional.get() : null),principal));
+            });
+        }
+        return savedDevices.size()>1;
+    }
+
+    private Device mapToDevice(DeviceDto deviceDto, User owner){
+
+        return Device.builder()
+                .balance(0)
+                .batteryPercentage(deviceDto.getBatteryPercentage())
+                .deviceId(deviceDto.getDeviceId())
+                .enabled(isEnabled(deviceDto.getEnabled()))
+                .name(deviceDto.getName())
+                .hardwareVersion(deviceDto.getHardwareVersion())
+                .softwareVersion(deviceDto.getSoftwareVersion())
+                .deviceStatus(convertToDeviceStatus(deviceDto.getDeviceStatus()))
+                .fareType(convertToFareType(deviceDto.getFareType()))
+                .type(convertToDeviceType(deviceDto.getDeviceType()))
+                .owner(owner)
+                .build();
+    }
+
+    private boolean isEnabled(String enabledStatus){
+        if(enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true")){
+            return true;
+        }
+        return false;
+    }
+
+    private Enum.DeviceStatus convertToDeviceStatus(String status){
+        //CONNECTED, DISCONNECTED, BATTERY_LOW, EMERGENCY
+        Enum.DeviceStatus deviceStatus = null;
+        try{
+             deviceStatus = Enum.DeviceStatus.valueOf(status.toUpperCase());
+        }catch(IllegalArgumentException ex){
+
+        }
+
+        return deviceStatus;
+    }
+
+    private Enum.FareType convertToFareType(String fareType){
+        //FIXED, VARIABLE
+        return Enum.FareType.valueOf(fareType.toUpperCase());
+    }
+
+    private Enum.DeviceType convertToDeviceType(String fareType){
+        // READER, VALIDATOR, READER_VALIDATOR
+        return Enum.DeviceType.valueOf(fareType.toUpperCase());
+    }
+
 }

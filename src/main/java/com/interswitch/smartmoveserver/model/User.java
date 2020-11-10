@@ -1,6 +1,9 @@
 package com.interswitch.smartmoveserver.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +17,9 @@ import java.io.Serializable;
  * @author adebola.owolabi
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class User implements Serializable {

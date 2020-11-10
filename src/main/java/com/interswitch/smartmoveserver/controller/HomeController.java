@@ -6,12 +6,15 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -22,6 +25,7 @@ import java.util.Date;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Controller
 public class HomeController {
 
@@ -76,9 +80,16 @@ public class HomeController {
     public String dashboard(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
-        //fix this
-        Wallet wallet = walletService.findByOwner(user.getUsername());
-        Card card = cardService.findByOwner(user.getUsername());
+        Wallet wallet = null;
+        Card card =null;
+
+        try{
+            wallet = walletService.findByOwner(user.getUsername());
+            card = cardService.findByOwner(user.getUsername());
+        }catch(Exception ex ){
+           log.info("An Error happened in Home Controller ===>"+ex.getMessage());
+        }
+
         Long no_admins = 0L;
         Long no_regulators = 0L;
         Long no_operators = 0L;
@@ -169,6 +180,7 @@ public class HomeController {
         Date dateobj = new Date();
         model.addAttribute("time_date", format.format(dateobj));
         return "dashboard";
+
     }
 
     @GetMapping("/smlogout")

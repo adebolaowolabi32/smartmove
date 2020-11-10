@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Welcome</title>
+</head>
+<body style="font-family:'Helvetica Neue',sans-serif; margin:0;padding:0; height:100%; color: #00425F; font-weight: 400">
+<div class="wrapper" style="width:600px; margin: 0 auto;">
+    <div class="body" style="padding:40px;font-size: 14px; line-height: 20px">
+        <img th:src="@{__${mufasa}__/images/interswitchng.png}"
+             alt="Interswitch Logo" style="float:right" width="150" />
+
+        <div class="body-content" style="margin-top:100px; float:left">
+            <p>
+				Hello <span th:text="${userName}"></span>,
+			</p>
+
+            <p>
+				An account has been created for you on the <strong>Smart Move Platform</strong> platform.
+			</p>
+			
+			<p>			
+				To access your account,<br/>
+				click <a th:href="@{${portletUri}}">here</a> or paste the following link into your browser:
+				<a th:href="@{${portletUri}}" th:text="${portletUri}"></a>
+            </p>
+			
+			<p>
+				Your account credentials are as follows:
+				<ul>
+					<li>Email: <span th:text="${emailAddress}"></span></li>
+					<li>Password: <span th:text="${password}"></span></li>
+				</ul>
+				
+				For your security, you are required to change your password after your first login.
+            </p>
+
+            <p>
+                Thanks, Have an awesome day!
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -30,15 +30,15 @@ public class ScheduledTaskService {
     @Autowired
     TicketTillSummaryRepository ticketTillSummaryRepository;
 
-    @Scheduled(cron = "0 * * * * ?")
-    public void scheduleTaskWithCronExpression() {
-        logger.info("#####Cron Task :: Execution Time - ##### "+dateTimeFormatter.format(LocalDateTime.now()));
-    }
-
-    @Scheduled(cron = "50 23 * * * ?")
-    public void runEndOfDayTicketTillUpdate(){
-        //doEndOfDayTicketTillUpdate();
-    }
+//    @Scheduled(cron = "0 * * * * ?")
+//    public void scheduleTaskWithCronExpression() {
+//        logger.info("#####Cron Task :: Execution Time - ##### "+dateTimeFormatter.format(LocalDateTime.now()));
+//    }
+//
+//    @Scheduled(cron = "50 23 * * * ?")
+//    public void runEndOfDayTicketTillUpdate(){
+//        //doEndOfDayTicketTillUpdate();
+//    }
 
 
     public void doEndOfDayTicketTillUpdate(){

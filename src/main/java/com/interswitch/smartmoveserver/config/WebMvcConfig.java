@@ -9,12 +9,17 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.webflow.view.AjaxThymeleafViewResolver;
 import org.thymeleaf.spring5.webflow.view.FlowAjaxThymeleafView;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.FileTemplateResolver;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.Locale;
 
 /**
@@ -25,6 +30,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private SpringResourceTemplateResolver templateResolver;
+
+    @Autowired
+    private TemplateEngine templateEngine;
+
 
     @Bean
     public LocaleResolver localeResolver() {
@@ -61,5 +70,28 @@ public class WebMvcConfig implements WebMvcConfigurer {
         viewResolver.setViewClass(FlowAjaxThymeleafView.class);
         viewResolver.setTemplateEngine(templateEngine());
         return viewResolver;
+    }
+
+
+    @PostConstruct
+    public void remoteTemplateResolver() {
+
+        final FileTemplateResolver resolver = new FileTemplateResolver();
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("templates").getFile());
+
+        String templateDir = file.getPath();
+
+        String pathToSearch = String.format("%s%s", templateDir, File.separator);
+
+        System.out.println("PathToSearch===>"+pathToSearch);
+
+        resolver.setPrefix(pathToSearch);
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode(TemplateMode.HTML);
+        resolver.setCacheable(false);
+
+        templateEngine.addTemplateResolver(resolver);
     }
 }

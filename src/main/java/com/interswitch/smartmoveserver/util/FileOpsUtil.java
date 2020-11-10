@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-public class FilefileOpsUtil {
+public class FileOpsUtil {
 
     public static String convertFileToBase64String(File file) throws IOException {
 

@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ManifestRepository extends CrudRepository<Manifest, Long> {
+
     List<Manifest> findAll();
 
     Page<Manifest> findAll(Pageable pageable);
