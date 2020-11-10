@@ -1,20 +1,24 @@
 package com.interswitch.smartmoveserver.model.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class TerminalDto {
 
-    private String TerminalName;
+    @JsonProperty("TerminalName")
+    private String terminalName;
 
-    private String TransportMode;
+    @JsonProperty("TransportMode")
+    private String transportMode;
 
-    private String Country;
+    @JsonProperty("Country")
+    private String country;
 
-    private String State;
+    @JsonProperty("State")
+    private String state;
 
-    private String Lga;
-
-    private boolean enabled;
+    @JsonProperty("LGA")
+    private String lga;
 }

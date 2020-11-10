@@ -184,7 +184,7 @@ public class UserController {
     @PostMapping("/upload")
     public String doUserUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
         try {
-            boolean succeeded = userService.upload(file, principal);
+            boolean succeeded = userService.upload(file, principal.getName());
             redirectAttributes.addFlashAttribute("uploaded", succeeded);
             return "redirect:/users/get";
         } catch (Exception ex) {

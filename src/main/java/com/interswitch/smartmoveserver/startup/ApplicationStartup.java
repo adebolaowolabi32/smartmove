@@ -1,5 +1,9 @@
 package com.interswitch.smartmoveserver.startup;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.TicketTillView;
@@ -7,6 +11,7 @@ import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.StateRepository;
 import com.interswitch.smartmoveserver.repository.TicketTillRepository;
 import com.interswitch.smartmoveserver.service.*;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -81,6 +86,7 @@ public class ApplicationStartup implements CommandLineRunner {
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
         //sendMsg();
+        //ObjectToCSV();
     }
 
 /*
@@ -267,4 +273,52 @@ public class ApplicationStartup implements CommandLineRunner {
 //        messagingService.sendSMS("2349021711733", "Hello,what's up?") ;
 //        log.info("done sending sms");
     }
+
+    public void ObjectToCSV() throws IOException {
+        File csvOutputFile = new File("fac_output.csv");
+
+        Facility fac = new Facility();
+        fac.setId(10);
+        fac.setImage("Earnest's pics");
+        fac.setName("Earnest Suru");
+
+        Facility fac2 = new Facility();
+        fac2.setId(100);
+        fac2.setImage("Naomi's pics");
+        fac2.setName("Naomi Suru");
+
+        Facility fac3 = new Facility();
+        fac2.setId(1000);
+        fac2.setImage("Ayo's pics");
+        fac2.setName("Ayo Bams");
+
+        List<Facility> list = new ArrayList<>(Arrays.asList(fac, fac2, fac3));
+
+        // create mapper and schema
+        CsvMapper mapper = new CsvMapper();
+        CsvSchema schema = mapper.schemaFor(Facility.class).withHeader();
+
+        String csv = mapper.writer(schema.withUseHeader(true)).writeValueAsString(fac);
+        log.info("CSV===>"+csv);
+        // output writer
+        ObjectWriter myObjectWriter = mapper.writer(schema);
+        FileOutputStream tempFileOutputStream = new FileOutputStream(csvOutputFile);
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(tempFileOutputStream, 1024);
+        OutputStreamWriter writerOutputStream = new OutputStreamWriter(bufferedOutputStream, "UTF-8");
+        myObjectWriter.writeValue(writerOutputStream, list);
+
+        System.out.println("Users saved to csv file under path: ");
+        System.out.println(csvOutputFile);
+    }
+
+    @Data
+    class Facility{
+        @JsonProperty("ID")
+        long id;
+        @JsonProperty("IMAGE")
+        String image;
+        @JsonProperty("NAME")
+        String name;
+    }
+
 }

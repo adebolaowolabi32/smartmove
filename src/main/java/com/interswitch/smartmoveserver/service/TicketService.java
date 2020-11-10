@@ -61,6 +61,9 @@ public class TicketService {
     private TicketTillService ticketTillService;
 
     @Autowired
+    private FeeConfigurationService feeConfigurationService;
+
+    @Autowired
     PageUtil pageUtil;
 
     public List<Terminal> getTerminals() {
@@ -100,7 +103,20 @@ public class TicketService {
         ticketDetails.setSeats(this.getAvailableSeats());
         ticketDetails.setCountries(stateService.findAllCountries());
         ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
-
+//        List<FeeConfiguration> fees = new ArrayList<>();
+//        fees.add(FeeConfiguration.builder().feeName("ID CARD FEE")
+//                .value(500)
+//                .enabled(true)
+//                .ratingMetricType(Enum.RatingMetricType.FLAT)
+//                .build());
+//
+//        fees.add(FeeConfiguration.builder().feeName("VAT FEE")
+//                .value(400)
+//                .enabled(true)
+//                .ratingMetricType(Enum.RatingMetricType.FLAT)
+//                .build());
+//
+//        ticketDetails.setFees(fees);
         return ticketDetails;
     }
 
@@ -122,14 +138,31 @@ public class TicketService {
         double totalFare = 0;
         List<Ticket> tickets = new ArrayList<>();
         List<Passenger> passengers = ticketDetails.getPassengers();
+
+//        String transportOperatorUsername = (operator.getRole()==Enum.Role.OPERATOR || operator.getRole()==Enum.Role.ISW_ADMIN) ? operator.getUsername() : operator.getOwner()!=null ? operator.getOwner().getUsername() : "";
+//        List<FeeConfiguration> feeConfigurationList = feeConfigurationService.findEnabledFeeConfigByOperatorUsername(true,transportOperatorUsername);
+//        //add FeeConfiguration list to the ticketDetails
+//        List<FeeConfiguration> fees = new ArrayList<>();
+//        fees.add(FeeConfiguration.builder().feeName("ID CARD FEE")
+//                .value(500)
+//                .enabled(true)
+//                .ratingMetricType(Enum.RatingMetricType.FLAT)
+//                .build());
+//
+//        fees.addAll(feeConfigurationList);
+//        ticketDetails.setFees(fees);
+
+        //the above line of code is on the assumption that the owner for all users(except isw admins with no owner) is the transport operator company
         log.info("Passengers: {}", passengers);
         for (Passenger pass : passengers) {
             Ticket ticket = this.populateTicket(ticketDetails, pass);
             //ticket.setTrip(ticketDetails.getTrip());
             ticket.setSchedule(ticketDetails.getSchedule());
             ticket.setFare(ticketDetails.getSchedule().getFare());
+
             totalFare += ticket.getFare();
             tickets.add(ticket);
+
             if (ticketDetails.getReturnSchedule() != null) {
                 Ticket returnTicket = this.populateTicket(ticketDetails, pass);
                 //returnTicket.setTrip(ticketDetails.getTrip());
@@ -152,7 +185,6 @@ public class TicketService {
         List<Manifest> manifests = new ArrayList<>();
         List<Passenger> passengers = ticketDetails.getPassengers();
         for (Passenger passenger : passengers) {
-            //put an asynchronous event here to run on another thread.
             Manifest manifest = this.populateManifest(ticketDetails, passenger);
             //manifest.setTrip(ticketDetails.getTrip());
             manifest.setSchedule(ticketDetails.getSchedule());
@@ -164,8 +196,8 @@ public class TicketService {
                 manifests.add(manifest1);
             }
         }
-        manifestService.saveAll(manifests);
 
+        manifestService.saveAll(manifests);
         Transaction transaction = new Transaction();
         transaction.setVehicleId(ticketDetails.getSchedule().getVehicle().getName());
         transaction.setTerminalId(String.valueOf(ticketDetails.getSchedule().getId()));
@@ -301,4 +333,34 @@ public class TicketService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket Owner not found");
     }
+
+
+    private double applyConfiguredFees(List<FeeConfiguration> feeConfigurationList,Ticket ticket ){
+        log.info("Wanna apply configured fees===>");
+        double totalFare = 0;
+
+        if (feeConfigurationList==null || feeConfigurationList.isEmpty()) {
+            log.info("No configured fees set===>");
+             totalFare = ticket.getFare();
+            return totalFare;
+        }
+
+        for (FeeConfiguration feeConfiguration : feeConfigurationList) {
+            log.info("We found "+feeConfigurationList.size()+" configured fees to be applied");
+
+            if(feeConfiguration.getRatingMetricType() == Enum.RatingMetricType.FLAT){
+                log.info("Flat fee===>"+feeConfiguration.getValue());
+                totalFare += ticket.getFare() + feeConfiguration.getValue();
+            }else if(feeConfiguration.getRatingMetricType()==Enum.RatingMetricType.PERCENT){
+                double feeAmount = (feeConfiguration.getValue() /100 ) * ticket.getFare();
+                log.info("Percent fee===>"+feeAmount);
+                totalFare += ticket.getFare() + feeAmount;
+                log.info("Total fare===>"+totalFare);
+            }
+        }
+
+        return totalFare;
+    }
+
+
 }

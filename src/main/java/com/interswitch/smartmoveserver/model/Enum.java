@@ -55,4 +55,8 @@ public class Enum {
     public enum TicketTillStatus{
         OPEN,CLOSE
     }
+
+    public enum RatingMetricType{
+        PERCENT,FLAT
+    }
 }

@@ -267,8 +267,8 @@ public class UserService {
     }
 
 
-    public boolean upload(MultipartFile file, Principal principal) throws IOException {
-        User owner = findByUsername(principal.getName());
+    public boolean upload(MultipartFile file, String principal) throws IOException {
+        User owner = findByUsername(principal);
         List<User> savedUsers = new ArrayList<>();
         if(file.getSize()>1){
             FileParser<UserDto> fileParser = new FileParser<>();

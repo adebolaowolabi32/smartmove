@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -142,8 +142,8 @@ public class CardService {
         return cardRepository.countByOwner(user);
     }
 
-    public boolean upload(MultipartFile file, Principal principal) throws IOException {
-        Optional<User> ownerOptional = userRepository.findByUsername(principal.getName());
+    public boolean upload(MultipartFile file, String principal) throws IOException {
+        Optional<User> ownerOptional = userRepository.findByUsername(principal);
         List<Card> savedCards = new ArrayList<>();
         if(file.getSize()>1){
             FileParser<CardDto> fileParser = new FileParser<>();

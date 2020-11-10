@@ -242,6 +242,21 @@
                     <hr>
                     <br>
                     <div class="row">
+
+                       <!-- <div  class="form-group col">
+                            <label class="control-label" for="feesDiv">Apply Fees</label>
+                            <div id="feesDiv" style="padding:5px;">
+                                <ul>
+                                    <li th:each="fee : ${ticketDetails.fees}">
+                                        <input type="checkbox" th:field="*{checkedFees}" th:value="${fee}" />
+                                        <label th:for="${#ids.prev('checkedFees')}"
+                                               th:text="${fee.feeName}"></label>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>-->
+
                         <div class="form-group col">
                             <label class="control-label" for="paymentMode">Payment Mode *</label>
                             <div>
@@ -253,12 +268,14 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="form-group col">
                             <label class="control-label" for="bvn">BVN</label>
 
                             <div>
                                 <input class="form-control" id="bvn" onkeyup="validateBvn()" th:field="*{bvn}">
                             </div>
+
                             <div id="bvnDiv">
                             </div>
                             <!--<label class="control-label" for="return">Return</label>
