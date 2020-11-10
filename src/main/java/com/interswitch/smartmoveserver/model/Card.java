@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Table(name = "cards")
 public class Card implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
