@@ -76,6 +76,7 @@ public class HomeController {
     public String dashboard(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
+        //fix this
         Wallet wallet = walletService.findByOwner(user.getUsername());
         Card card = cardService.findByOwner(user.getUsername());
         Long no_admins = 0L;

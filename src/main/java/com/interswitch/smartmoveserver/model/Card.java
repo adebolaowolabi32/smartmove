@@ -24,7 +24,6 @@ public class Card implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     @Column(unique=true)

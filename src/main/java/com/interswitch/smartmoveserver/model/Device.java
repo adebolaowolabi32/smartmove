@@ -35,7 +35,6 @@ public class Device implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     @NotBlank(message = "Hardware version is required.")
