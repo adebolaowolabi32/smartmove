@@ -59,4 +59,8 @@ public class Enum {
     public enum RatingMetricType{
         PERCENT,FLAT
     }
+
+    public enum FeeName{
+        VAT,ID_CARD_FEE
+    }
 }

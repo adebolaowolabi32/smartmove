@@ -24,10 +24,11 @@ public class FeeConfiguration implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @NotBlank(message="fee name is required")
-    @Column(unique=true)
-    private String feeName;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "fee name is required.")
+    private Enum.FeeName feeName;
 
+    @NotNull(message="fee value is required")
     private double value;
 
     @Enumerated(EnumType.STRING)

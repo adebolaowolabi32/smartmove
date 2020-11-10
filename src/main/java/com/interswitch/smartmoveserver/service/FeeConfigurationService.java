@@ -64,18 +64,28 @@ public class FeeConfigurationService {
         }
     }
 
-    public FeeConfiguration save(FeeConfiguration feeConfiguration) {
-        boolean exists = feeConfigurationRepository.existsByFeeName(feeConfiguration.getFeeName());
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured.",feeConfiguration.getFeeName()));
-        return feeConfigurationRepository.save(feeConfiguration);
-    }
 
+    /**
+     * This implementation is done with the assumption that only an operator(as well as ISW admin for test purposes)
+     * can create fee configuration
+     * @param feeConfiguration
+     * @param principal
+     * @return
+     */
     public FeeConfiguration save(FeeConfiguration feeConfiguration, String principal) {
-        boolean exists = feeConfigurationRepository.existsByFeeName(feeConfiguration.getFeeName());
+
+        User systemUser = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+
+        String transportOperatorUsername = (systemUser.getRole()==Enum.Role.OPERATOR || systemUser.getRole()==Enum.Role.ISW_ADMIN) ?
+                systemUser.getUsername() : systemUser.getOwner()!=null ? systemUser.getOwner().getUsername() : "";
+
+        boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName().name(),transportOperatorUsername);
+
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured.",feeConfiguration.getFeeName()));
+
         if (feeConfiguration.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
-            feeConfiguration.setOwner(owner);
+             feeConfiguration.setOwner(systemUser);
+            feeConfiguration.setOperator(systemUser);
         }
         return feeConfigurationRepository.save(feeConfiguration);
     }
@@ -92,7 +102,9 @@ public class FeeConfigurationService {
 
 
     public FeeConfiguration update(FeeConfiguration feeConfiguration, String principal) {
-    FeeConfiguration feeConfig = feeConfigurationRepository.findById(feeConfiguration.getId());
+
+        FeeConfiguration feeConfig = feeConfigurationRepository.findById(feeConfiguration.getId());
+
         if (feeConfig!=null) {
 
             if (feeConfig.getOwner() == null) {

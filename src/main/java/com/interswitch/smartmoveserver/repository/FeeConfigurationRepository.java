@@ -25,6 +25,6 @@ public interface FeeConfigurationRepository extends CrudRepository<FeeConfigurat
 
     Long countByOwner(User owner);
 
-    boolean existsByFeeName(String feeName);
+    boolean existsByFeeNameAndOperatorUsername(String feeName,String operatorUsername);
 
 }

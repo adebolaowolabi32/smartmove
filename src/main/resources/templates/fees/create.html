@@ -19,15 +19,16 @@
 		<form class="card p-3" action="#" method="post"
 			  th:action="@{/fees/create}" th:object="${fee}"
 			  data-parsley-validate="true">
+
 			<div class="form-group row">
 				<label class="control-label col-sm-2" for="feeName"><b>Fee Name</b></label>
 				<div class="col-sm-10">
-					<input class="form-control"
-						   id="feeName" name="feeName" th:field="*{feeName}"
-						   required
-						   data-parsley-required-message="Please provide fee name"
-						   data-parsley-length="[3, 40]"
-						   data-parsley-length-message="Please provide a name between 3 and 40 characters long">
+					<select class="form-control" th:field="*{feeName}"  id="feeName"
+							required>
+						<option value="">Select...</option>
+						<option value="VAT">VAT</option>
+						<option value="ID_CARD_FEE">ID CARD FEE</option>
+					</select>
 					<p class="small text-danger" th:if="${#fields.hasErrors('feeName')}" th:errors="*{feeName}"></p>
 				</div>
 			</div>

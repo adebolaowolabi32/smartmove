@@ -65,8 +65,4 @@ public class TicketDetails implements Serializable {
     private LocalDate returnDate;
 
     private List<String> countries;
-//
-//    private List<FeeConfiguration> fees;
-//
-//    private FeeConfiguration [] checkedFees;
 }
