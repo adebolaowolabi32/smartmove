@@ -27,7 +27,7 @@
 						   required
 						   data-parsley-required-message="Please provide fee name"
 						   data-parsley-length="[3, 40]"
-						   data-parsley-length-message="Please provide a name between 3 and 40 characters long">
+						   data-parsley-length-message="Please provide a name between 3 and 40 characters long" disabled>
 					<p class="small text-danger" th:if="${#fields.hasErrors('feeName')}" th:errors="*{feeName}"></p>
 				</div>
 			</div>

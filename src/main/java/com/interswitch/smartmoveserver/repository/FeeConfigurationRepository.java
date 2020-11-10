@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.repository;
 
+import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.FeeConfiguration;
 import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.model.User;
@@ -25,6 +26,6 @@ public interface FeeConfigurationRepository extends CrudRepository<FeeConfigurat
 
     Long countByOwner(User owner);
 
-    boolean existsByFeeNameAndOperatorUsername(String feeName,String operatorUsername);
+    boolean existsByFeeNameAndOperatorUsername(Enum.FeeName feeName, String operatorUsername);
 
 }

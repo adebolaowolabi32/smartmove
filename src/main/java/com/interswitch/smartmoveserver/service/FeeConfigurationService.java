@@ -79,7 +79,7 @@ public class FeeConfigurationService {
         String transportOperatorUsername = (systemUser.getRole()==Enum.Role.OPERATOR || systemUser.getRole()==Enum.Role.ISW_ADMIN) ?
                 systemUser.getUsername() : systemUser.getOwner()!=null ? systemUser.getOwner().getUsername() : "";
 
-        boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName().name(),transportOperatorUsername);
+        boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName(),transportOperatorUsername);
 
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured.",feeConfiguration.getFeeName()));
 

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Tickets</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-ticket-alt mr-1"></i>
+        <span>Tickets</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Create New Booking</b></h2>
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <form class="p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
+              th:object="${ticketDetails}">
+            <div class="card">
+                <div class="card-header">
+                    <span><b>Trip Details</b></span></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure</div>
+                            <div th:text="${ticketDetails.schedule.startTerminal.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Destination</div>
+                            <div th:text="${ticketDetails.schedule.stopTerminal.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Vehicle</div>
+                            <div th:text="${ticketDetails.schedule.vehicle.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Price</div>
+                            <div><span th:text="${ticketDetails.schedule.fare}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure Date</div>
+                            <div th:text="${ticketDetails.schedule.departureDate}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Departure Time</div>
+                            <div th:text="${ticketDetails.schedule.departureTime}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Arrival Date</div>
+                            <div th:text="${ticketDetails.schedule.arrivalDate}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Estimated Arrival Time</div>
+                            <div th:text="${ticketDetails.schedule.arrivalTime}"></div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="card" th:if="${return}">
+                <div class="card-header">
+                    <span><b>Return Trip Details</b></span></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure</div>
+                            <div th:text="${ticketDetails.returnSchedule.startTerminal.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Destination</div>
+                            <div th:text="${ticketDetails.returnSchedule.stopTerminal.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Vehicle</div>
+                            <div th:text="${ticketDetails.returnSchedule.vehicle.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Price</div>
+                            <div><span th:text="${ticketDetails.returnSchedule.fare}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <div class="label-small">Departure Date</div>
+                            <div th:text="${ticketDetails.returnSchedule.departureDate}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Departure Time</div>
+                            <div th:text="${ticketDetails.returnSchedule.departureTime}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Arrival Date</div>
+                            <div th:text="${ticketDetails.returnSchedule.arrivalDate}"></div>
+                        </div>
+                        <div class="col">
+                            <div class="label-small">Estimated Arrival Time</div>
+                            <div th:text="${ticketDetails.returnSchedule.arrivalTime}"></div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="card">
+                <div class="row card-body">
+                    <div class="col">
+                        <label><b>Contact Details</b></label>
+                        <div class="form-group">
+                            <label class="control-label" for="contactEmail">Contact Email</label>
+                            <div>
+                                <input class="form-control" id="contactEmail" th:field="*{contactEmail}">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label class="control-label" for="contactMobile">Contact Mobile *</label>
+                            <div>
+                                <input class="form-control" id="contactMobile" onkeyup="validatePhoneNumber()" required
+                                       th:field="*{contactMobile}">
+                            </div>
+                            <div id="contactMobileDiv">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label><b>Next of Kin Details</b></label>
+                        <div class="form-group">
+                            <label class="control-label" for="nextOfKinName">Next Of Kin Name *</label>
+                            <div>
+                                <input class="form-control" id="nextOfKinName" required th:field="*{nextOfKinName}">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label class="control-label" for="nextOfKinMobile">Next Of Kin Mobile *</label>
+                            <div>
+                                <input class="form-control" id="nextOfKinMobile" onkeyup="validateNextOfPhone()"
+                                       required th:field="*{nextOfKinMobile}">
+                            </div>
+                            <div id="nextOfKinMobileDiv">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body" th:each="i :  ${#numbers.sequence( 1, ticketDetails.noOfPassengers)}">
+                    <hr>
+                    <br>
+                    <label><b>Passenger #<span th:text="${i}"></span></b></label>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label class="control-label" for="name">Name *</label>
+                            <div>
+                                <input class="form-control" id="name" required
+                                       th:field="*{passengers[__${i-1}__].name}">
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="gender">Gender *</label>
+                            <div>
+                                <select class="form-control" id="gender" required
+                                        th:field="*{passengers[__${i-1}__].gender}">
+                                    <option value="">Select...</option>
+                                    <option value="MALE">Male</option>
+                                    <option value="FEMALE">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="nationality">Nationality *</label>
+                            <div>
+                                <select class="form-control" id="nationality" required
+                                        th:field="*{passengers[__${i-1}__].nationality}">
+                                    <option value="">Select...</option>
+                                    <option th:each="country : ${ticketDetails.countries}" th:text="${country}"
+                                            th:value="${country}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label class="control-label" for="idCategory">ID Category *</label>
+                            <select class="form-control" id="idCategory" onchange="checkSelection()" required
+                                    th:field="*{passengers[__${i-1}__].idCategory}">
+                                <option value="">Select...</option>
+                                <option value="NATIONAL_ID">National ID</option>
+                                <option value="DRIVERS_LICENSE">Driver's License</option>
+                                <option value="INTERNATIONAL_PASSPORT">International Passport</option>
+                                <option value="VOTERS_CARD">Voters Card</option>
+                                <option value="SCHOOL_ID">School ID</option>
+                                <option value="NO_ID">No ID</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+
+                            <div id="otherIdCategoryDiv" style="display:none">
+                                <label class="control-label" for="otherIdCategory">Specify category</label>
+                                <div>
+                                    <input class="form-control" id="otherIdCategory">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="idNumber">Id Number</label>
+                            <div>
+                                <input class="form-control" id="idNumber" onkeyup="validateIdByNIMC()"
+                                       th:field="*{passengers[__${i-1}__].idNumber}">
+                            </div>
+                            <div id="idNumberDiv">
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="seatClass">Seat Class *</label>
+                            <select class="form-control" id="seatClass" required
+                                    th:field="*{passengers[__${i-1}__].seatClass}">
+                                <option value="">Select...</option>
+                                <option value="STANDARD">Standard</option>
+                                <option value="PREMIUM">Premium</option>
+                                <option value="LUXURY">Luxury</option>
+                            </select>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="seatNo">Seat *</label>
+                            <select class="form-control" id="seatNo" required
+                                    th:field="*{passengers[__${i-1}__].seatNo}">
+                                <option value="">Select...</option>
+                                <option th:each="seat : ${ticketDetails.seats}" th:text="${seat}"
+                                        th:value="${seat}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <hr>
+                    <br>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label class="control-label" for="paymentMode">Payment Mode *</label>
+                            <div>
+                                <select class="form-control" id="paymentMode" required th:field="*{paymentMode}">
+                                    <option value="">Select...</option>
+                                    <option value="CASH">Cash</option>
+                                    <option value="POS">POS</option>
+                                    <option value="TRANSFER">Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label class="control-label" for="bvn">BVN</label>
+
+                            <div>
+                                <input class="form-control" id="bvn" onkeyup="validateBvn()" th:field="*{bvn}">
+                            </div>
+                            <div id="bvnDiv">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br><br>
+            <div class="row">
+                <div class="col-sm-6"></div>
+                <div class="btn-group col-sm-6">
+                    <input class="btn btn-outline-primary btn-sized" name="_eventId_back" type="submit" value="Back"/>
+                    <a class="btn btn-outline-primary btn-sized" href="https://lagos-covid19.eclathealthcare.com/"
+                       target="_blank">Do Covid Assessment</a>
+                    <input class="btn btn-sized btn-outline-primary btn-sized" name="_eventId_next" type="submit"
+                           value="Next"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</html>
