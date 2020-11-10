@@ -10,8 +10,8 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-@Table(name = "trip_references")
-public class TripReference {
+@Table(name = "ticket_references")
+public class TicketReference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -23,4 +23,8 @@ public class TripReference {
     private User owner;
 
     private boolean enabled;
+
+    private boolean startTerminalEnabled;
+
+    private boolean stopTerminalEnabled;
 }

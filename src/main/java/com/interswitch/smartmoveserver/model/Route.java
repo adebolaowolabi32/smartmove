@@ -43,7 +43,6 @@ public class Route implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     private boolean enabled;

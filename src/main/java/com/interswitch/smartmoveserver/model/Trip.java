@@ -45,7 +45,6 @@ public class Trip implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     @Enumerated(EnumType.STRING)
