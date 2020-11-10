@@ -53,6 +53,9 @@ public class TripService {
     ScheduleRepository scheduleRepository;
 
     @Autowired
+    TripReferenceService tripReferenceService;
+
+    @Autowired
     PageUtil pageUtil;
 
     public List<Trip> findAll() {
@@ -70,7 +73,12 @@ public class TripService {
     }
 
     public Trip save(Trip trip, String principal) {
-        trip.setReferenceNo(RandomUtil.getRandomNumber(6));
+        TripReference tripReference = tripReferenceService.findByOwner(principal);
+        String prefix = "";
+        if(tripReference.isEnabled())
+            prefix = tripReference.getPrefix();
+
+        trip.setReferenceNo(prefix + RandomUtil.getRandomNumber(6));
         if(trip.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             trip.setOwner(owner);
