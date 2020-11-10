@@ -25,8 +25,8 @@
             <div class="error-content">
                 <div class="text-content">
                     <div class="h4"><i class="fas fa-exclamation-triangle red"></i> <b>Oops. An error occurred.</b></div>
-                        <b>Code: <span th:if="${status}" class="h4" th:text="${status}">500</span></b>
-                        <b>Message: <span th:if="${error}" class="h4" th:text="${error}">server_error</span>
+                        <h4><b>Code: <span th:if="${status}" th:text="${status}">500</span></b></h4>
+                        <h4><b>Message: <span th:if="${error}" th:text="${error}">server_error</span></b></h4>
                             <br>
                     <a th:href="@{/dashboard}" class="btn btn-primary btn-high create-btn">
                         <i class="fas fa-arrow-left mr-1"></i>Return to Dashboard</a>
