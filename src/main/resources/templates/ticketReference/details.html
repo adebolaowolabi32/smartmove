@@ -40,6 +40,25 @@
                             </label>
                             </span></div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4" for="startTerminalEnabled"><b>Departure Terminal</b></label>
+                        <div class="col-sm-8">
+                            <label class="switch">
+                                <input disabled id="startTerminalEnabled" name="startTerminalEnabled" th:checked="${ticketReference.startTerminalEnabled}" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                            </span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4" for="stopTerminalEnabled"><b>Destination Terminal</b></label>
+                        <div class="col-sm-8">
+                            <label class="switch">
+                                <input disabled id="stopTerminalEnabled" name="enabled" th:checked="${ticketReference.stopTerminalEnabled}" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                            </span></div>
+                    </div>
+
                 </div>
             </div>
         </div>

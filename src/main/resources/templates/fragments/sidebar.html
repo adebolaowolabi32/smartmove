@@ -106,6 +106,10 @@
                                     <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                                     <span th:text="#{tickets}">Tickets</span></a>
                                 <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
+                                   th:href="@{/ticketReference/details}">
+                                    <div class="sb-nav-link-icon"><i class="fa fa-ellipsis-h"></i></div>
+                                    <span>Ticket Reference</span></a>
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
                                    th:href="@{/refunds/get}">
                                     <div class="sb-nav-link-icon"><i class="fa fa-retweet"></i></div>
                                     <span th:text="#{refunds}">Refunds</span></a>
@@ -113,6 +117,7 @@
                                    th:href="@{/reassignTicket}">
                                     <div class="sb-nav-link-icon"><i class="fa fa-sync-alt"></i></div>
                                     <span th:text="#{reassignTicket}">Reassign Ticket</span></a>
+
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicketTill" aria-expanded="false" aria-controls="collapseTicketTill">
