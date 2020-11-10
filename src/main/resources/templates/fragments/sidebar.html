@@ -140,6 +140,11 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')" th:href="@{/reports/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             <span th:text="#{settlements}">Settlements</span></a>
+
+                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_FEE_CONFIGURATIONS')" th:href="@{/fees/get}" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+                            <span th:text="#{feeConfig}">Fee Configurations</span></a>
+
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_CONFIGURATIONS')" th:href="@{/configurations/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
                             <span th:text="#{settings}">Settings</span></a>

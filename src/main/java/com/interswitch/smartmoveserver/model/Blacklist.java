@@ -8,9 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-/*
- * Created by adebola.owolabi on 5/21/2020
- */
 @Data
 @Entity
 @Table(name = "blacklists")

@@ -55,4 +55,12 @@ public class Enum {
     public enum TicketTillStatus{
         OPEN,CLOSE
     }
+
+    public enum RatingMetricType{
+        PERCENT,FLAT
+    }
+
+    public enum FeeName{
+        VAT,ID_CARD_FEE
+    }
 }

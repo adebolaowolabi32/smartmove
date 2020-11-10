@@ -1,20 +1,28 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Document;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.dto.TripDto;
+import com.interswitch.smartmoveserver.model.dto.UserDto;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.repository.UserRepository;
+import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.RandomUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,7 +129,7 @@ public class UserService {
         user.setUsername(passportUser.getUsername());
         user.setPassword(passportUser.getPassword());
 
-        if (user.getPicture().getSize()>0) {
+        if (user.getPicture()!=null && user.getPicture().getSize()>0) {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
             user.setPictureUrl(doc.getUrl());
         }
@@ -257,4 +265,46 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
+
+
+    public boolean upload(MultipartFile file, String principal) throws IOException {
+        User owner = findByUsername(principal);
+        List<User> savedUsers = new ArrayList<>();
+        if(file.getSize()>1){
+            FileParser<UserDto> fileParser = new FileParser<>();
+            List<UserDto> userDtoList = fileParser.parseFileToEntity(file, UserDto.class);
+            userDtoList.forEach(userDto->{
+                savedUsers.add(save(mapToUser(userDto, owner),principal));
+            });
+        }
+        return savedUsers.size()>1;
+    }
+
+    private User mapToUser(UserDto userDto, User owner){
+
+        return User.builder()
+                .email(userDto.getEmail())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .mobileNo(userDto.getMobileNo())
+                .password(userDto.getPassword())
+                .role(convertToRoleEnum(userDto.getRole()))
+                .tillStatus(Enum.TicketTillStatus.OPEN)
+                .enabled(isEnabled(userDto.getEnabled()))
+                .owner(owner)
+                .build();
+    }
+
+    private Enum.Role convertToRoleEnum(String role){
+        //  ISW_ADMIN, REGULATOR, OPERATOR, EXECUTIVE, SERVICE_PROVIDER, INSPECTOR, TICKETER, VEHICLE_OWNER, AGENT, DRIVER, COMMUTER
+        return Enum.Role.valueOf(role.toUpperCase());
+    }
+
+    private boolean isEnabled(String enabledStatus){
+        if(enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true")){
+            return true;
+        }
+        return false;
+    }
+
 }
