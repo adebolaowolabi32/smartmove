@@ -103,8 +103,8 @@ public class CardService {
         return cardRepository.findByPan(cardNumber).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
     }
 
-    public Card findByOwner(long owner) {
-        Optional<User> user = userRepository.findById(owner);
+    public Card findByOwner(String owner) {
+        Optional<User> user = userRepository.findByUsername(owner);
         if(user.isPresent())
             return cardRepository.findByOwner(user.get()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
