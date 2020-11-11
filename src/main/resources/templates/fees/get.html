@@ -35,6 +35,7 @@
 					<th>Rating metric</th>
 					<th>Description</th>
 					<th>Active</th>
+					<th>Owner</th>
 					<th>View details</th>
 					<th>Remove</th>
 				</tr>
@@ -52,6 +53,8 @@
 							<span class="slider round"></span>
 						</label>
 					</td>
+
+					<td th:text="${fee.owner != null ? fee.owner.username : ''}"></td>
 
 					<td>
 						<a class="justify-content-center" th:href="@{/fees/details/{id}(id=${fee.id})}">

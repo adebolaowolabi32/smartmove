@@ -76,12 +76,14 @@ public class FeeConfigurationController {
     public String update(Principal principal, @PathVariable("id") long id, @Valid FeeConfiguration fee,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         fee.setId(id);
+        FeeConfiguration existingFee = feeConfigurationService.findById(id,principal.getName());
 
         if (result.hasErrors()) {
-            model.addAttribute("fee", fee);
+            model.addAttribute("fee", existingFee);
             return "fees/update";
         }
 
+        fee.setFeeName(existingFee.getFeeName());
         feeConfigurationService.update(fee, principal.getName());
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/fees/details/" + id;
