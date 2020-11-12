@@ -83,7 +83,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         String templateDir = file.getPath();
 
-        resolver.setOrder(1);
         String pathToSearch = String.format("%s%s", templateDir, File.separator);
 
         System.out.println("PathToSearch===>"+pathToSearch);
