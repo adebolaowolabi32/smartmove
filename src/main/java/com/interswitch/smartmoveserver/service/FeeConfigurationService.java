@@ -74,6 +74,10 @@ public class FeeConfigurationService {
      */
     public FeeConfiguration save(FeeConfiguration feeConfiguration, String principal) {
 
+        if(feeConfiguration.getValue()<0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fee value cannot be negative");
+        }
+
         User systemUser = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
 
         String transportOperatorUsername = (systemUser.getRole()==Enum.Role.OPERATOR || systemUser.getRole()==Enum.Role.ISW_ADMIN) ?
@@ -81,7 +85,7 @@ public class FeeConfigurationService {
 
         boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName(),transportOperatorUsername);
 
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured.",feeConfiguration.getFeeName()));
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured for %s.",feeConfiguration.getFeeName(),transportOperatorUsername));
 
         if (feeConfiguration.getOwner() == null) {
              feeConfiguration.setOwner(systemUser);
@@ -102,6 +106,10 @@ public class FeeConfigurationService {
 
 
     public FeeConfiguration update(FeeConfiguration feeConfiguration, String principal) {
+
+        if(feeConfiguration.getValue()<0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fee value cannot be negative");
+        }
 
         FeeConfiguration feeConfig = feeConfigurationRepository.findById(feeConfiguration.getId());
 
@@ -130,8 +138,8 @@ public class FeeConfigurationService {
      * @param operatorUsername
      * @return
      */
-    public List<FeeConfiguration> findEnabledFeeConfigByOperatorUsername(boolean enabled,String operatorUsername){
-        return feeConfigurationRepository.findByEnabledAndOperatorUsername(enabled,operatorUsername);
+    public List<FeeConfiguration> findEnabledFeeConfigByOperatorUsername(String operatorUsername){
+        return feeConfigurationRepository.findByEnabledAndOperatorUsername(true,operatorUsername);
     }
 
     public Long countByOwner(User user) {

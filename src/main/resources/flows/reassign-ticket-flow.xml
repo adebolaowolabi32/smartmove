@@ -27,7 +27,7 @@
             <evaluate result="flowScope.schedules" expression="ticketService.getSchedules()"/>
         </on-entry>
         <transition on="makeBooking" to="confirm">
-            <evaluate result="flowScope.ticketDetails" expression="ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
+            <evaluate result="flowScope.ticketDetails" expression="ticketService.makeBooking(currentUser.name,requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
         <transition on="findBooking" to="schedule">
             <evaluate result="flowScope.scheduleBooking" expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>

@@ -2,10 +2,7 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
-import com.interswitch.smartmoveserver.model.view.Passenger;
-import com.interswitch.smartmoveserver.model.view.ReassignTicket;
-import com.interswitch.smartmoveserver.model.view.ScheduleBooking;
-import com.interswitch.smartmoveserver.model.view.TicketDetails;
+import com.interswitch.smartmoveserver.model.view.*;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
@@ -61,6 +58,9 @@ public class TicketService {
     private TicketTillService ticketTillService;
 
     @Autowired
+    private FeeConfigurationService feeConfigurationService;
+
+    @Autowired
     PageUtil pageUtil;
 
     public List<Terminal> getTerminals() {
@@ -92,7 +92,14 @@ public class TicketService {
         return scheduleBooking;
     }
 
-    public TicketDetails makeBooking(String scheduleId, int noOfPassengers) {
+    public TicketDetails makeBooking(String username,String scheduleId, int noOfPassengers) {
+
+        log.info("username===>"+username);
+        User systemUser = new User();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) //and if user is operator
+            systemUser = user.get();
+
         TicketDetails ticketDetails = new TicketDetails();
         Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
         ticketDetails.setSchedule(schedule);
@@ -101,6 +108,15 @@ public class TicketService {
         ticketDetails.setCountries(stateService.findAllCountries());
         ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
 
+        String transportOperatorUsername = (systemUser.getRole()==Enum.Role.OPERATOR || systemUser.getRole()==Enum.Role.ISW_ADMIN) ?
+                systemUser.getUsername() : systemUser.getOwner()!=null ? systemUser.getOwner().getUsername() : "";
+
+        log.info("Transport Operator username===>"+transportOperatorUsername);
+
+        List<FeeConfiguration> feeConfigurationList = feeConfigurationService.findEnabledFeeConfigByOperatorUsername(transportOperatorUsername);
+        log.info("feeConfigurationList===>"+feeConfigurationList);
+        //add FeeConfiguration list to the ticketDetails
+        ticketDetails.setFees(feeConfigurationList);
         return ticketDetails;
     }
 
@@ -122,26 +138,27 @@ public class TicketService {
         double totalFare = 0;
         List<Ticket> tickets = new ArrayList<>();
         List<Passenger> passengers = ticketDetails.getPassengers();
-        log.info("Passengers: {}", passengers);
+
         for (Passenger pass : passengers) {
             Ticket ticket = this.populateTicket(ticketDetails, pass);
             //ticket.setTrip(ticketDetails.getTrip());
             ticket.setSchedule(ticketDetails.getSchedule());
             ticket.setFare(ticketDetails.getSchedule().getFare());
-            totalFare += ticket.getFare();
+            totalFare += this.applyConfiguredFees(ticketDetails,ticket,pass);
             tickets.add(ticket);
+
             if (ticketDetails.getReturnSchedule() != null) {
                 Ticket returnTicket = this.populateTicket(ticketDetails, pass);
                 //returnTicket.setTrip(ticketDetails.getTrip());
                 returnTicket.setSchedule(ticketDetails.getReturnSchedule());
                 returnTicket.setFare(ticketDetails.getReturnSchedule().getFare());
-                totalFare += returnTicket.getFare();
+                totalFare += this.applyConfiguredFees(ticketDetails,returnTicket,pass);
                 tickets.add(returnTicket);
             }
         }
+        log.info("AppliedFeeDetails==>"+ticketDetails.getAppliedFees());
         ticketDetails.setTickets(tickets);
         ticketDetails.setTotalFare(totalFare);
-
         return ticketDetails;
     }
 
@@ -300,4 +317,38 @@ public class TicketService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket Owner not found");
     }
+
+
+    private double applyConfiguredFees(TicketDetails ticketDetails,Ticket ticket,Passenger passenger ){
+        List<FeeConfiguration> feeConfigurationList = ticketDetails.getFees();
+        List<FeeDetails> feeDetailList = new ArrayList<>();
+        double totalFare = ticket.getFare();;
+
+        if (feeConfigurationList==null || feeConfigurationList.isEmpty()) {
+             return totalFare;
+        }
+
+        for (FeeConfiguration feeConfiguration : feeConfigurationList) {
+            if(feeConfiguration.getFeeName()==Enum.FeeName.ID_CARD_FEE && passenger.getIdCategory()!=Enum.IdCategory.NO_ID){
+                //do not apply ID-CARD-FEE
+                continue;
+             }else{
+                log.info("feeConfiguration getFeeName ===>"+feeConfiguration.getFeeName().name()+"CustomName::"+feeConfiguration.getFeeName().getCustomName());
+                if(feeConfiguration.getRatingMetricType() == Enum.RatingMetricType.FLAT){
+                    feeDetailList.add(new FeeDetails(feeConfiguration.getFeeName().getCustomName(),feeConfiguration.getValue()));
+                    totalFare +=feeConfiguration.getValue();
+                }else if(feeConfiguration.getRatingMetricType()==Enum.RatingMetricType.PERCENT){
+                    double feeAmount = (feeConfiguration.getValue() /100 ) * ticket.getFare();
+                    feeDetailList.add(new FeeDetails(feeConfiguration.getFeeName().getCustomName(),feeAmount));
+                    totalFare +=feeAmount;
+
+                }
+            }
+        }
+
+        ticketDetails.setAppliedFees(feeDetailList);
+        return totalFare;
+    }
+
+
 }
