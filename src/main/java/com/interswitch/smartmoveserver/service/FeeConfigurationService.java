@@ -6,6 +6,7 @@ import com.interswitch.smartmoveserver.repository.FeeConfigurationRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class FeeConfigurationService {
 
@@ -107,17 +109,17 @@ public class FeeConfigurationService {
 
     public FeeConfiguration update(FeeConfiguration feeConfiguration, String principal) {
 
+        log.info("Logging fee config update===>"+feeConfiguration);
+
         if(feeConfiguration.getValue()<0){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fee value cannot be negative");
         }
 
-        FeeConfiguration feeConfig = feeConfigurationRepository.findById(feeConfiguration.getId());
+        if (feeConfiguration!=null) {
 
-        if (feeConfig!=null) {
-
-            if (feeConfig.getOwner() == null) {
+            if (feeConfiguration.getOwner() == null) {
                 User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
-                feeConfig.setOwner(owner);
+                feeConfiguration.setOwner(owner);
             }
             return feeConfigurationRepository.save(feeConfiguration);
         }

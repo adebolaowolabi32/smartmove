@@ -26,7 +26,6 @@ public class FeeConfiguration implements Serializable {
     private long id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "fee name is required.")
     private Enum.FeeName feeName;
 
     @NotNull(message="fee value is required")

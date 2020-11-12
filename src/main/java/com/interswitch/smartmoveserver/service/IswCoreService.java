@@ -144,7 +144,6 @@ public class IswCoreService {
                 permissions.add("CREATE_TICKET");
                 permissions.add("CREATE_FEE_CONFIGURATION");
 
-
                 permissions.add("VIEW_AGENT_DETAILS");
                 permissions.add("VIEW_DEVICE_DETAILS");
                 permissions.add("VIEW_READER_DETAILS");
@@ -229,6 +228,9 @@ public class IswCoreService {
                 permissions.add("VIEW_WALLET_DETAILS");
 
                 permissions.add("UPDATE_WALLET");
+
+                permissions.add("VIEW_OWNER_LIST");
+
                 return permissions;
             }
             case EXECUTIVE:
