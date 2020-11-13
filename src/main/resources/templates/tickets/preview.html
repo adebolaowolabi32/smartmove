@@ -187,29 +187,29 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row">
-                            <div style="margin:5px;padding:25px;">
-                                <div class="row">
-                                    <div class="text-muted"
-                                         style="font-weight:normal;font-size:10px; font-family:Arial">TICKET
-                                        REFERENCE
-                                    </div>
+                        <div style="padding:10px 10px 10px 20px;">
+                            <div class="row">
+                                <div class="text-muted"
+                                     style="font-weight:normal;font-size:10px; font-family:Arial">FARE
                                 </div>
-                                <div class="row">
-                                    <div style="font-weight:bold;font-size:15px; font-family:Arial"
-                                         th:text="${ticket.referenceNo}">AKT412682
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div style="font-weight:bold;font-size:15px; font-family:Arial">
+                                    <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
+                                    <span th:text="${ticket.schedule.fare}"></span></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div style="padding:10px 10px 10px 20px;">
+                            <div class="row">
+                                <div class="text-muted"
+                                     style="font-weight:normal;font-size:10px; font-family:Arial">TICKET
+                                    REFERENCE
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="text-muted"
-                                         style="font-weight:normal;font-size:10px; font-family:Arial">FARE
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div style="font-weight:bold;font-size:15px; font-family:Arial">
-                                        <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
-                                        <span th:text="${ticket.schedule.fare}"></span></div>
+                            </div>
+                            <div class="row">
+                                <div style="font-weight:bold;font-size:15px; font-family:Arial"
+                                     th:text="${ticket.referenceNo}">AKT412682
                                 </div>
                             </div>
                         </div>
