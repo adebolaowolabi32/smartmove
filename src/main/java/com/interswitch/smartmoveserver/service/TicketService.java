@@ -60,8 +60,12 @@ public class TicketService {
     @Autowired
     private TicketTillService ticketTillService;
 
+    private static String PREFIX_SEPARATOR = "|";
+
     @Autowired
     PageUtil pageUtil;
+    @Autowired
+    private TicketReferenceService ticketReferenceService;
 
     public List<Terminal> getTerminals() {
         return terminalService.findAll();
@@ -124,17 +128,13 @@ public class TicketService {
         List<Passenger> passengers = ticketDetails.getPassengers();
         log.info("Passengers: {}", passengers);
         for (Passenger pass : passengers) {
-            Ticket ticket = this.populateTicket(ticketDetails, pass);
-            //ticket.setTrip(ticketDetails.getTrip());
-            ticket.setSchedule(ticketDetails.getSchedule());
-            ticket.setFare(ticketDetails.getSchedule().getFare());
+            Schedule schedule = ticketDetails.getSchedule();
+            Ticket ticket = this.populateTicket(ticketDetails, schedule, pass, username);
             totalFare += ticket.getFare();
             tickets.add(ticket);
+            Schedule returnSchedule = ticketDetails.getReturnSchedule();
             if (ticketDetails.getReturnSchedule() != null) {
-                Ticket returnTicket = this.populateTicket(ticketDetails, pass);
-                //returnTicket.setTrip(ticketDetails.getTrip());
-                returnTicket.setSchedule(ticketDetails.getReturnSchedule());
-                returnTicket.setFare(ticketDetails.getReturnSchedule().getFare());
+                Ticket returnTicket = this.populateTicket(ticketDetails, returnSchedule, pass, username);
                 totalFare += returnTicket.getFare();
                 tickets.add(returnTicket);
             }
@@ -208,7 +208,7 @@ public class TicketService {
         Schedule fromSchedule = ticket.getSchedule();
         Schedule toSchedule = ticketDetails.getSchedule();
         ticket.setSchedule(toSchedule);
-        ticket.setReferenceNo(this.getTicketReference());
+        ticket.setReferenceNo(this.getTicketReference(toSchedule, username));
         ticket.setBookingDate(DateUtil.formatDate(LocalDateTime.now()));
         this.save(ticket);
         tickets.add(ticket);
@@ -219,14 +219,17 @@ public class TicketService {
         return ticketDetails;
     }
 
-    private Ticket populateTicket(TicketDetails ticketDetails, Passenger pass) {
+    private Ticket populateTicket(TicketDetails ticketDetails, Schedule schedule, Passenger pass, String principal) {
         Ticket ticket = new Ticket();
         ticket.setOperator(ticketDetails.getOperator());
         ticket.setBookingDate(ticketDetails.getBookingDate());
         ticket.setPassengerName(pass.getName());
-        ticket.setReferenceNo(this.getTicketReference());
+        ticket.setReferenceNo(this.getTicketReference(schedule, principal));
         ticket.setSeatClass(pass.getSeatClass());
         ticket.setSeatNo(pass.getSeatNo());
+        //ticket.setTrip(ticketDetails.getTrip());
+        ticket.setSchedule(schedule);
+        ticket.setFare(schedule.getFare());
         return ticket;
     }
 
@@ -264,9 +267,20 @@ public class TicketService {
         return seats;
     }
 
-    private String getTicketReference() {
+    private String getTicketReference(Schedule schedule, String principal) {
         //get operator prefix
-        return "AKT-" + RandomUtil.getRandomNumber(6);
+        TicketReference ticketReference = ticketReferenceService.findByOwner(principal);
+        String prefix = "";
+        String startTerminal = "";
+        String stopTerminal = "";
+        if (ticketReference.isEnabled()) {
+            prefix = ticketReference.getPrefix() + PREFIX_SEPARATOR;
+            if (ticketReference.isStartTerminalEnabled())
+                startTerminal = schedule.getStartTerminal().getCode() + PREFIX_SEPARATOR;
+            if (ticketReference.isStopTerminalEnabled())
+                stopTerminal = schedule.getStopTerminal().getCode() + PREFIX_SEPARATOR;
+        }
+        return prefix + startTerminal + stopTerminal + RandomUtil.getRandomNumber(6);
     }
 
     public Ticket save(String principal, Ticket ticket) {

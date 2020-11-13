@@ -24,6 +24,7 @@ public class TripReferenceService {
 
     public TripReference save(TripReference tripReference, String principal) {
         User owner = userService.findByUsername(principal);
+        tripReference.setPrefix(tripReference.getPrefix().toUpperCase());
         tripReference.setOwner(owner);
         return tripRefRepository.save(tripReference);
     }
@@ -40,6 +41,7 @@ public class TripReferenceService {
         {
             tripReference.setId(tripReference1.getId());
             tripReference.setOwner(tripReference1.getOwner());
+            tripReference.setPrefix(tripReference.getPrefix().toUpperCase());
             return tripRefRepository.save(tripReference);
         }
         return null;
