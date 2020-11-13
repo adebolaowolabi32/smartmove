@@ -58,6 +58,8 @@ public class TripService {
     @Autowired
     PageUtil pageUtil;
 
+    private static String PREFIX_SEPARATOR = "|";
+
     public List<Trip> findAll() {
         return tripRepository.findAll();
     }
@@ -76,7 +78,7 @@ public class TripService {
         TripReference tripReference = tripReferenceService.findByOwner(principal);
         String prefix = "";
         if(tripReference.isEnabled())
-            prefix = tripReference.getPrefix();
+            prefix = tripReference.getPrefix() + PREFIX_SEPARATOR;
 
         trip.setReferenceNo(prefix + RandomUtil.getRandomNumber(6));
         if(trip.getOwner() == null) {

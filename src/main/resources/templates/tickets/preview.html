@@ -18,7 +18,7 @@
                 <div class="col-8" id="leftDiv">
                     <div class="row" id="leftDivTop">
                         <div class="col-7">
-                            <img alt="Operator Logo Not available" id="imgLogo" th:src="${ticket.operator.pictureUrl}">
+                            <img alt="Operator Logo" id="imgLogo" th:src="${ticket.operator.pictureUrl}">
                             <span th:text="${ticket.operator.firstName + ' ' + ticket.operator.lastName}">AK Transport</span>
                         </div>
                         <div class="col-5">
@@ -173,7 +173,7 @@
                              th:text="${ticket.seatClass + ' CLASS'}"></div>
                     </div>
 
-                    <div style="margin:5px;padding:25px;height:375px;">
+                    <div style="padding:25px;height:375px;">
                         <div style="padding-left:25px;">
                             <div class="row">
                                 <div class="text-muted"
@@ -187,37 +187,35 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row">
-                            <div class="col-6" style="padding:25px; height:100px;">
-                                <div class="row">
-                                    <div class="text-muted"
-                                         style="font-weight:normal;font-size:10px; font-family:Arial">TICKET
-                                        REFERENCE
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div style="font-weight:bold;font-size:15px; font-family:Arial"
-                                         th:text="${ticket.referenceNo}">AKT412682
-                                    </div>
+                        <div style="padding:10px 10px 10px 20px;">
+                            <div class="row">
+                                <div class="text-muted"
+                                     style="font-weight:normal;font-size:10px; font-family:Arial">FARE
                                 </div>
                             </div>
-
-                            <div class="col-6" style=" padding:25px;height:100px;">
-                                <div class="row">
-                                    <div class="text-muted"
-                                         style="font-weight:normal;font-size:10px; font-family:Arial">FARE
-                                    </div>
+                            <div class="row">
+                                <div style="font-weight:bold;font-size:15px; font-family:Arial">
+                                    <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
+                                    <span th:text="${ticket.schedule.fare}"></span></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div style="padding:10px 10px 10px 20px;">
+                            <div class="row">
+                                <div class="text-muted"
+                                     style="font-weight:normal;font-size:10px; font-family:Arial">TICKET
+                                    REFERENCE
                                 </div>
-                                <div class="row">
-                                    <div style="font-weight:bold;font-size:15px; font-family:Arial">
-                                        <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>
-                                        <span th:text="${ticket.schedule.fare}"></span></div>
+                            </div>
+                            <div class="row">
+                                <div style="font-weight:bold;font-size:15px; font-family:Arial"
+                                     th:text="${ticket.referenceNo}">AKT412682
                                 </div>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-6" style="padding:25px;height:100px;">
+                            <div class="col-6" style="height:100px;">
                                 <div class="row">
                                     <div class="text-muted"
                                          style="font-weight:normal;font-size:10px; font-family:Arial">BOOKING DATE

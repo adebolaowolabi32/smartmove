@@ -25,6 +25,7 @@ public class TicketReferenceService {
     public TicketReference save(TicketReference ticketReference, String principal) {
         User owner = userService.findByUsername(principal);
         ticketReference.setOwner(owner);
+        ticketReference.setPrefix(ticketReference.getPrefix().toUpperCase());
         return ticketReferenceRepository.save(ticketReference);
     }
 
@@ -35,11 +36,12 @@ public class TicketReferenceService {
 
     public TicketReference update(TicketReference ticketReference, String principal) {
         User owner = userService.findByUsername(principal);
-        TicketReference tripReference1 = ticketReferenceRepository.findByOwner(owner);
-        if (tripReference1 != null)
+        TicketReference ticketReference1 = ticketReferenceRepository.findByOwner(owner);
+        if (ticketReference1 != null)
         {
-            ticketReference.setId(tripReference1.getId());
-            ticketReference.setOwner(tripReference1.getOwner());
+            ticketReference.setId(ticketReference1.getId());
+            ticketReference.setOwner(ticketReference1.getOwner());
+            ticketReference.setPrefix(ticketReference.getPrefix().toUpperCase());
             return ticketReferenceRepository.save(ticketReference);
         }
         return null;

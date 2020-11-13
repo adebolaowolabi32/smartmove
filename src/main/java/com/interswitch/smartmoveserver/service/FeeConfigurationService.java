@@ -1,7 +1,9 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.FeeConfiguration;
+import com.interswitch.smartmoveserver.model.PageView;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.FeeConfigurationRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -34,7 +36,6 @@ public class FeeConfigurationService {
     SecurityUtil securityUtil;
 
 
-
     public List<FeeConfiguration> findAll() {
         return feeConfigurationRepository.findAll();
     }
@@ -49,8 +50,7 @@ public class FeeConfigurationService {
             if (securityUtil.isOwnedEntity(user.get().getRole())) {
                 Page<FeeConfiguration> pages = feeConfigurationRepository.findAllByOwner(pageable, user.get());
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
+            } else {
                 Page<FeeConfiguration> pages = feeConfigurationRepository.findAll(pageable);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
@@ -76,7 +76,7 @@ public class FeeConfigurationService {
      */
     public FeeConfiguration save(FeeConfiguration feeConfiguration, String principal) {
 
-        if(feeConfiguration.getValue()<0){
+        if (feeConfiguration.getValue() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fee value cannot be negative");
         }
 
@@ -87,20 +87,20 @@ public class FeeConfigurationService {
 
         boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName(),transportOperatorUsername);
 
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured for %s.",feeConfiguration.getFeeName(),transportOperatorUsername));
+        if (exists)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured for %s.", feeConfiguration.getFeeName(), transportOperatorUsername));
 
         if (feeConfiguration.getOwner() == null) {
-             feeConfiguration.setOwner(systemUser);
+            feeConfiguration.setOwner(systemUser);
             feeConfiguration.setOperator(systemUser);
         }
         return feeConfigurationRepository.save(feeConfiguration);
     }
 
-    public FeeConfiguration findById(long id,String principal) {
+    public FeeConfiguration findById(long id, String principal) {
 
         FeeConfiguration feeConfig = feeConfigurationRepository.findById(id);
-        if(feeConfig==null)
-        {
+        if(feeConfig==null) {
             new ResponseStatusException(HttpStatus.NOT_FOUND, "fee does not exist");
         }
         return feeConfig;
@@ -109,13 +109,13 @@ public class FeeConfigurationService {
 
     public FeeConfiguration update(FeeConfiguration feeConfiguration, String principal) {
 
-        log.info("Logging fee config update===>"+feeConfiguration);
+        log.info("Logging fee config update===>" + feeConfiguration);
 
-        if(feeConfiguration.getValue()<0){
+        if (feeConfiguration.getValue() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fee value cannot be negative");
         }
 
-        if (feeConfiguration!=null) {
+        if (feeConfiguration != null) {
 
             if (feeConfiguration.getOwner() == null) {
                 User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
@@ -126,8 +126,8 @@ public class FeeConfigurationService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee Configuration does not exist");
     }
 
-    public void delete(long id,String principal) {
-       FeeConfiguration feeConfiguration = feeConfigurationRepository.findById(id);
+    public void delete(long id, String principal) {
+        FeeConfiguration feeConfiguration = feeConfigurationRepository.findById(id);
         if (feeConfiguration!=null)
             feeConfigurationRepository.deleteById(id);
         else {
@@ -140,8 +140,8 @@ public class FeeConfigurationService {
      * @param operatorUsername
      * @return
      */
-    public List<FeeConfiguration> findEnabledFeeConfigByOperatorUsername(String operatorUsername){
-        return feeConfigurationRepository.findByEnabledAndOperatorUsername(true,operatorUsername);
+    public List<FeeConfiguration> findEnabledFeeConfigByOperatorUsername(String operatorUsername) {
+        return feeConfigurationRepository.findByEnabledAndOperatorUsername(true, operatorUsername);
     }
 
     public Long countByOwner(User user) {
