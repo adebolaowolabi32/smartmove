@@ -1,9 +1,11 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.annotation.Layout;
-import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.FeeConfiguration;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.service.FeeConfigurationService;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.security.Principal;
 
+@Slf4j
 @Controller
 @Layout(value = "layouts/default")
 @RequestMapping("/fees")
@@ -75,13 +78,16 @@ public class FeeConfigurationController {
     @PostMapping("/update/{id}")
     public String update(Principal principal, @PathVariable("id") long id, @Valid FeeConfiguration fee,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
         fee.setId(id);
+        FeeConfiguration existingFee = feeConfigurationService.findById(id, principal.getName());
+        fee.setFeeName(existingFee.getFeeName());
 
         if (result.hasErrors()) {
-            model.addAttribute("fee", fee);
+            log.info("there's an error with fee config update" + result.getFieldErrors());
+            model.addAttribute("fee", existingFee);
             return "fees/update";
         }
-
         feeConfigurationService.update(fee, principal.getName());
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/fees/details/" + id;

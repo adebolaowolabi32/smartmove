@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -25,7 +22,6 @@ public class FeeConfiguration implements Serializable {
     private long id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "fee name is required.")
     private Enum.FeeName feeName;
 
     @NotNull(message="fee value is required")

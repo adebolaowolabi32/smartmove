@@ -48,7 +48,7 @@
         <transition on="yes" to="schedule">
             <evaluate result="flowScope.return" expression="true"/>
             <evaluate result="flowScope.ticketDetails"
-                      expression="ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
+                      expression="ticketService.makeBooking(currentUser.name,requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
         <transition on="no" to="makeBooking"/>
     </action-state>
@@ -61,7 +61,7 @@
         </transition>
         <transition on="no" to="collect-details">
             <evaluate result="flowScope.ticketDetails"
-                      expression="ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
+                      expression="ticketService.makeBooking(currentUser.name,requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
     </action-state>
 
