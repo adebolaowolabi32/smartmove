@@ -190,6 +190,9 @@ public class TicketService {
         transaction.setMode(ticketDetails.getSchedule().getMode());
         transaction.setAmount(ticketDetails.getTotalFare());
         transaction.setTransactionDateTime(LocalDateTime.now());
+        //fields below are require to be non null,hence added empty strings
+        transaction.setCardId("");
+        transaction.setDeviceId("");
         transactionService.save(transaction);
         return ticketDetails;
     }
