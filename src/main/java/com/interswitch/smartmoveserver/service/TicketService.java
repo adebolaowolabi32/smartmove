@@ -145,13 +145,17 @@ public class TicketService {
         for (Passenger pass : passengers) {
             Schedule schedule = ticketDetails.getSchedule();
             Ticket ticket = this.populateTicket(ticketDetails, schedule, pass, username);
-            totalFare += ticket.getFare();
+
+            totalFare += this.applyConfiguredFees(ticketDetails,ticket,pass);
             tickets.add(ticket);
+
             Schedule returnSchedule = ticketDetails.getReturnSchedule();
             if (ticketDetails.getReturnSchedule() != null) {
                 Ticket returnTicket = this.populateTicket(ticketDetails, returnSchedule, pass, username);
-                totalFare += returnTicket.getFare();
+
+                totalFare += this.applyConfiguredFees(ticketDetails,returnTicket,pass);
                 tickets.add(returnTicket);
+
             }
 
         }

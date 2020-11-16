@@ -23,6 +23,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -42,8 +43,8 @@ public class User implements Serializable {
     @Length(min = 5, max = 50, message = "Last name must be between 3 and 30 characters long.")
     private String lastName;
 
-    @NotBlank(message = "Address is required.")
-    @Length(min = 5, max = 50, message = "Address must be between 8 and 50 characters long.")
+    //@NotBlank(message = "Address is required.")
+    //@Length(min = 5, max = 50, message = "Address must be between 8 and 50 characters long.")
     private String address;
 
     @Column(unique=true)

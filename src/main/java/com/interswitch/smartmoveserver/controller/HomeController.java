@@ -78,6 +78,7 @@ public class HomeController {
 
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
+
         User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
         Wallet wallet = null;
