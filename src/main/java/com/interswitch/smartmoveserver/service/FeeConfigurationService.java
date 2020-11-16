@@ -1,7 +1,9 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.FeeConfiguration;
+import com.interswitch.smartmoveserver.model.PageView;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.FeeConfigurationRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -14,10 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -36,7 +36,6 @@ public class FeeConfigurationService {
     SecurityUtil securityUtil;
 
 
-
     public List<FeeConfiguration> findAll() {
         return feeConfigurationRepository.findAll();
     }
@@ -51,8 +50,7 @@ public class FeeConfigurationService {
             if (securityUtil.isOwnedEntity(user.get().getRole())) {
                 Page<FeeConfiguration> pages = feeConfigurationRepository.findAllByOwner(pageable, user.get());
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
+            } else {
                 Page<FeeConfiguration> pages = feeConfigurationRepository.findAll(pageable);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
@@ -85,8 +83,6 @@ public class FeeConfigurationService {
 
         boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName(),transportOperatorUsername);
 
-        log.info("Fee Config Exists==>"+exists);
-
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured for %s.",feeConfiguration.getFeeName(),transportOperatorUsername));
 
         //TODO: this implementation to be adjusted with a drop-down of all operators(only to visible to isw admin)
@@ -94,16 +90,15 @@ public class FeeConfigurationService {
 
         if (feeConfiguration.getOwner() == null) {
              feeConfiguration.setOwner(systemUser);
-             feeConfiguration.setOperator(systemUser);
+            feeConfiguration.setOperator(systemUser);
         }
         return feeConfigurationRepository.save(feeConfiguration);
     }
 
-    public FeeConfiguration findById(long id,String principal) {
+    public FeeConfiguration findById(long id, String principal) {
 
         FeeConfiguration feeConfig = feeConfigurationRepository.findById(id);
-        if(feeConfig==null)
-        {
+        if(feeConfig==null) {
             new ResponseStatusException(HttpStatus.NOT_FOUND, "fee does not exist");
         }
         return feeConfig;
@@ -111,8 +106,6 @@ public class FeeConfigurationService {
 
 
     public FeeConfiguration update(FeeConfiguration feeConfiguration, String principal) {
-
-        log.info("Logging fee config update===>"+feeConfiguration);
 
         if (feeConfiguration!=null) {
 
@@ -126,8 +119,8 @@ public class FeeConfigurationService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee Configuration does not exist");
     }
 
-    public void delete(long id,String principal) {
-       FeeConfiguration feeConfiguration = feeConfigurationRepository.findById(id);
+    public void delete(long id, String principal) {
+        FeeConfiguration feeConfiguration = feeConfigurationRepository.findById(id);
         if (feeConfiguration!=null)
             feeConfigurationRepository.deleteById(id);
         else {
@@ -140,8 +133,8 @@ public class FeeConfigurationService {
      * @param operatorUsername
      * @return
      */
-    public List<FeeConfiguration> findEnabledFeeConfigByOperatorUsername(String operatorUsername){
-        return feeConfigurationRepository.findByEnabledAndOperatorUsername(true,operatorUsername);
+    public List<FeeConfiguration> findEnabledFeeConfigByOperatorUsername(String operatorUsername) {
+        return feeConfigurationRepository.findByEnabledAndOperatorUsername(true, operatorUsername);
     }
 
     public Long countByOwner(User user) {

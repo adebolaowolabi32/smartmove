@@ -28,6 +28,7 @@
 				<tr>
 					<th>Id</th>
 					<th>Name</th>
+					<th>Code</th>
 					<th>Transport Mode</th>
 					<th>Country</th>
 					<th>State</th>
@@ -42,6 +43,7 @@
 				<tr th:each="terminal : ${terminalPage.content}">
 					<td th:text="${terminal.id}"></td>
 					<td th:text="${terminal.name}"></td>
+					<td th:text="${terminal.code}"></td>
 					<td th:text="${terminal.mode}"></td>
 					<td th:text="${terminal.country}"></td>
 					<td th:text="${terminal.state}"></td>

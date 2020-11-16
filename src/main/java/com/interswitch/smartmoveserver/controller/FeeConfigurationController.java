@@ -1,7 +1,8 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.annotation.Layout;
-import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.FeeConfiguration;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.service.FeeConfigurationService;
 import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -88,11 +89,11 @@ public class FeeConfigurationController {
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         fee.setId(id);
-        FeeConfiguration existingFee = feeConfigurationService.findById(id,principal.getName());
+        FeeConfiguration existingFee = feeConfigurationService.findById(id, principal.getName());
         fee.setFeeName(existingFee.getFeeName());
 
         if (result.hasErrors()) {
-            log.info("there's an error with fee config update"+result.getFieldErrors());
+            log.info("there's an error with fee config update" + result.getFieldErrors());
             model.addAttribute("fee", existingFee);
             return "fees/update";
         }

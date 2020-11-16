@@ -49,7 +49,7 @@ public class Enum {
     }
 
     public enum IdCategory {
-        NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT, VOTERS_CARD, SCHOOL_ID, OTHER,NO_ID
+        NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT, VOTERS_CARD, SCHOOL_ID, OTHER, NO_ID
     }
 
     public enum TicketTillStatus{
@@ -61,15 +61,15 @@ public class Enum {
     }
 
     public enum FeeName{
-        VAT("VAT"),ID_CARD_FEE("ID CARD Fee");
+        VAT("VAT"), ID_CARD_FEE("ID CARD Fee");
 
         private String name;
 
-        private FeeName(String name) {
-        this.name = name;
+        FeeName(String name) {
+            this.name = name;
         }
 
-        public String  getCustomName() {
+        public String getCustomName() {
             return name;
         }
 
