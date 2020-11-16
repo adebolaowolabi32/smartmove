@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -29,6 +26,7 @@ public class FeeConfiguration implements Serializable {
     private Enum.FeeName feeName;
 
     @NotNull(message="fee value is required")
+    @Positive(message="fee value can only be a positive number")
     private double value;
 
     @Enumerated(EnumType.STRING)
