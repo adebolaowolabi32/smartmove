@@ -23,6 +23,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -42,8 +43,8 @@ public class User implements Serializable {
     @Length(min = 5, max = 50, message = "Last name must be between 3 and 30 characters long.")
     private String lastName;
 
-    @NotBlank(message = "Address is required.")
-    @Length(min = 5, max = 50, message = "Address must be between 8 and 50 characters long.")
+    //@NotBlank(message = "Address is required.")
+    //@Length(min = 5, max = 50, message = "Address must be between 8 and 50 characters long.")
     private String address;
 
     @Column(unique=true)
@@ -57,7 +58,7 @@ public class User implements Serializable {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Role is required.")
+    //@NotNull(message = "Role is required.")
     private Enum.Role role;
 
     @ManyToOne
@@ -66,8 +67,8 @@ public class User implements Serializable {
 
     private boolean enabled;
 
-    @URL(message = "Picture URL is not valid")
-    @Length(max = 300, message = "Picture URL must be less than 300 characters long")
+    //@URL(message = "Picture URL is not valid")
+    //@Length(max = 300, message = "Picture URL must be less than 300 characters long")
     private String pictureUrl;
 
     private transient MultipartFile picture;

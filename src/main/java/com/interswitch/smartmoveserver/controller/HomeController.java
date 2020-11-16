@@ -78,6 +78,7 @@ public class HomeController {
 
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
+
         User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
         Wallet wallet = null;
@@ -87,7 +88,7 @@ public class HomeController {
             wallet = walletService.findByOwner(user.getUsername());
             card = cardService.findByOwner(user.getUsername());
         }catch(Exception ex ){
-           log.info("An Error happened in Home Controller ===>"+ex.getMessage());
+           log.info("Caught An Error which happened in Home Controller ===>"+ex.getMessage());
         }
 
         Long no_admins = 0L;
