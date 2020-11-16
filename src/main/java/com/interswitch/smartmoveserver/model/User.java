@@ -58,7 +58,7 @@ public class User implements Serializable {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Role is required.")
+    //@NotNull(message = "Role is required.")
     private Enum.Role role;
 
     @ManyToOne
@@ -67,8 +67,8 @@ public class User implements Serializable {
 
     private boolean enabled;
 
-    @URL(message = "Picture URL is not valid")
-    @Length(max = 300, message = "Picture URL must be less than 300 characters long")
+    //@URL(message = "Picture URL is not valid")
+    //@Length(max = 300, message = "Picture URL must be less than 300 characters long")
     private String pictureUrl;
 
     private transient MultipartFile picture;
