@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -25,6 +25,7 @@ public class FeeConfiguration implements Serializable {
     private Enum.FeeName feeName;
 
     @NotNull(message="fee value is required")
+    @Positive(message="fee value can only be a positive number")
     private double value;
 
     @Enumerated(EnumType.STRING)

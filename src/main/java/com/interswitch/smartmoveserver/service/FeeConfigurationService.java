@@ -76,10 +76,6 @@ public class FeeConfigurationService {
      */
     public FeeConfiguration save(FeeConfiguration feeConfiguration, String principal) {
 
-        if (feeConfiguration.getValue() < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fee value cannot be negative");
-        }
-
         User systemUser = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
 
         String transportOperatorUsername = (systemUser.getRole()==Enum.Role.OPERATOR || systemUser.getRole()==Enum.Role.ISW_ADMIN) ?
@@ -87,11 +83,13 @@ public class FeeConfigurationService {
 
         boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName(),transportOperatorUsername);
 
-        if (exists)
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured for %s.", feeConfiguration.getFeeName(), transportOperatorUsername));
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured for %s.",feeConfiguration.getFeeName(),transportOperatorUsername));
+
+        //TODO: this implementation to be adjusted with a drop-down of all operators(only to visible to isw admin)
+        // from which one will select and create fee configs for transport operators/owners
 
         if (feeConfiguration.getOwner() == null) {
-            feeConfiguration.setOwner(systemUser);
+             feeConfiguration.setOwner(systemUser);
             feeConfiguration.setOperator(systemUser);
         }
         return feeConfigurationRepository.save(feeConfiguration);
@@ -109,17 +107,12 @@ public class FeeConfigurationService {
 
     public FeeConfiguration update(FeeConfiguration feeConfiguration, String principal) {
 
-        log.info("Logging fee config update===>" + feeConfiguration);
-
-        if (feeConfiguration.getValue() < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Fee value cannot be negative");
-        }
-
-        if (feeConfiguration != null) {
+        if (feeConfiguration!=null) {
 
             if (feeConfiguration.getOwner() == null) {
                 User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
                 feeConfiguration.setOwner(owner);
+                feeConfiguration.setOperator(owner);
             }
             return feeConfigurationRepository.save(feeConfiguration);
         }

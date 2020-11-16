@@ -4,6 +4,7 @@ import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.FeeConfiguration;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.service.FeeConfigurationService;
+import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class FeeConfigurationController {
 
     @Autowired
     private PageUtil pageUtil;
+
+    @Autowired
+    ErrorResponseUtil errorResponseUtil;
 
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
@@ -57,9 +61,14 @@ public class FeeConfigurationController {
 
     @PostMapping("/create")
     public String create(Principal principal, @Valid FeeConfiguration feeConfiguration, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
+        log.info("Entered controller...");
         if (result.hasErrors()) {
+            log.info("has Entered controller error..."+errorResponseUtil.getErrorMessages(result));
             model.addAttribute("fee", feeConfiguration);
-            return "fees/create";
+            String message = errorResponseUtil.getErrorMessages(result).contains("Failed to convert property value of type 'java.lang.String")?"Fee value only accept numbers and not texts." :"Unacceptable data format for one of the fields is used,please check and retry.";
+            redirectAttributes.addFlashAttribute("error", message);
+            return "redirect:/fees/create";
         }
 
         FeeConfiguration savedFee = feeConfigurationService.save(feeConfiguration, principal.getName());
