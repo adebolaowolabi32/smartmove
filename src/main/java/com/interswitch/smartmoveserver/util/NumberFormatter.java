@@ -12,8 +12,8 @@ public class NumberFormatter {
         String integerPart = "#";
         String decimalPart = ".";
 
-        for (int i=1;i<=decimalPlaces;i++) {
-            decimalPart.concat("#");
+        for (int i=0;i<decimalPlaces;i++) {
+            decimalPart = decimalPart.concat("#");
         }
 
         String decimalNumberPattern = integerPart.concat(decimalPart);
