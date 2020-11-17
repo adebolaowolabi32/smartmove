@@ -208,13 +208,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col" id="idNumberDiv">
+                        <div class="form-group col" id="idNumberSuperDiv">
                             <label class="control-label" for="idNumber">Id Number</label>
                             <div>
                                 <input class="form-control" id="idNumber" onkeyup="validateIdByNIMC()"
                                        th:field="*{passengers[__${i-1}__].idNumber}">
                             </div>
-                            <div>
+                            <div id="idNumberDiv">
                             </div>
                         </div>
                         <div class="form-group col">

@@ -6,6 +6,7 @@ import com.interswitch.smartmoveserver.model.view.*;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
+import com.interswitch.smartmoveserver.util.NumberFormatter;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -296,7 +297,7 @@ public class TicketService {
         String prefix = "";
         String startTerminal = "";
         String stopTerminal = "";
-        if (ticketReference.isEnabled()) {
+        if (ticketReference!=null && ticketReference.isEnabled()) {
             prefix = ticketReference.getPrefix() + PREFIX_SEPARATOR;
             if (ticketReference.isStartTerminalEnabled())
                 startTerminal = schedule.getStartTerminal().getCode() + PREFIX_SEPARATOR;
@@ -356,13 +357,12 @@ public class TicketService {
             } else {
                 log.info("feeConfiguration getFeeName ===>" + feeConfiguration.getFeeName().name() + "CustomName::" + feeConfiguration.getFeeName().getCustomName());
                 if (feeConfiguration.getRatingMetricType() == Enum.RatingMetricType.FLAT) {
-                    feeDetailList.add(new FeeDetails(feeConfiguration.getFeeName().getCustomName(), feeConfiguration.getValue()));
+                    feeDetailList.add(new FeeDetails(feeConfiguration.getFeeName().getCustomName(), NumberFormatter.getFormatted(feeConfiguration.getValue(),2)));
                     totalFare += feeConfiguration.getValue();
                 } else if (feeConfiguration.getRatingMetricType() == Enum.RatingMetricType.PERCENT) {
                     double feeAmount = (feeConfiguration.getValue() / 100) * ticket.getFare();
-                    feeDetailList.add(new FeeDetails(feeConfiguration.getFeeName().getCustomName(), feeAmount));
+                    feeDetailList.add(new FeeDetails(feeConfiguration.getFeeName().getCustomName(),  NumberFormatter.getFormatted(feeAmount,2)));
                     totalFare += feeAmount;
-
                 }
             }
         }
