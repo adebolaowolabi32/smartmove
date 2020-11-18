@@ -33,14 +33,14 @@ public class ViewExceptionHandler {
                 .map(error -> error.getField() + FIELD_ERROR_SEPARATOR + error.getDefaultMessage())
                 .collect(Collectors.toList());
         redirectAttributes.addFlashAttribute("error", validationErrors.get(0));
-        return "redirect:" + request.getServletPath();
+        return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public String handleHttpMessageNotReadable(HttpMessageNotReadableException exception,
                                                                   HttpHeaders headers, HttpStatus status, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", exception.getLocalizedMessage());
-        return "redirect:" + request.getServletPath();
+        return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -49,7 +49,7 @@ public class ViewExceptionHandler {
         String message = (StringUtils.isNotEmpty(validationError) ?
                 "Cannot save duplicate value. The duplicate value is " + StringUtils.substringBetween(validationError, "(", ")") + "." : exception.getMessage());
         redirectAttributes.addFlashAttribute("error", message);
-        return "redirect:" + request.getServletPath();
+        return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -59,7 +59,7 @@ public class ViewExceptionHandler {
                         violation.getPropertyPath() + FIELD_ERROR_SEPARATOR + violation.getMessage())
                 .collect(Collectors.toList());
         redirectAttributes.addFlashAttribute("error", validationErrors.get(0));
-        return "redirect:" + request.getServletPath();
+        return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
     }
 
     @ExceptionHandler(ResponseStatusException.class)
@@ -67,11 +67,17 @@ public class ViewExceptionHandler {
         final HttpStatus status = exception.getStatus();
         final String localizedMessage = exception.getLocalizedMessage();
         final String path = request.getServletPath();
-        String message = (StringUtils.isNotEmpty(localizedMessage) ?
-                StringUtils.substringBetween(localizedMessage, "\"", "\"") : status.getReasonPhrase());
+        String message = "";
+        if (localizedMessage.contains("{")) {
+            message = (StringUtils.isNotEmpty(localizedMessage) ?
+                    StringUtils.substringBetween(localizedMessage, "{", "}") : status.getReasonPhrase());
+        } else {
+            message = (StringUtils.isNotEmpty(localizedMessage) ?
+                    StringUtils.substringBetween(localizedMessage, "\"", "\"") : status.getReasonPhrase());
+        }
         log.error(String.format(ERROR_MESSAGE_TEMPLATE, message, path), exception);
         redirectAttributes.addFlashAttribute("error", message);
-        return "redirect:" + path;
+        return "redirect:" + path + "?" + request.getQueryString();
     }
 
     @ExceptionHandler(Exception.class)
@@ -83,6 +89,6 @@ public class ViewExceptionHandler {
         String message = (StringUtils.isNotEmpty(localizedMessage) ? localizedMessage:status.getReasonPhrase());
         log.error(String.format(ERROR_MESSAGE_TEMPLATE, message, path), exception);
         redirectAttributes.addFlashAttribute("error", message);
-        return "redirect:" + path;
+        return "redirect:" + path + "?" + request.getQueryString();
     }
 }

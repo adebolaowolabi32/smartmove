@@ -5,12 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -31,7 +29,6 @@ public class User implements Serializable {
     @Column(unique=true)
     private String username;
 
-    @NotBlank(message = "Password is required.")
     @Length(min = 5, max = 50, message = "Password must be between 5 and 30 characters long.")
     private String password;
 
@@ -43,8 +40,7 @@ public class User implements Serializable {
     @Length(min = 5, max = 50, message = "Last name must be between 3 and 30 characters long.")
     private String lastName;
 
-    //@NotBlank(message = "Address is required.")
-    //@Length(min = 5, max = 50, message = "Address must be between 8 and 50 characters long.")
+    @Length(min = 5, max = 50, message = "Address must be between 8 and 50 characters long.")
     private String address;
 
     @Column(unique=true)

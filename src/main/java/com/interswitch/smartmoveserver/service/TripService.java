@@ -176,7 +176,6 @@ public class TripService {
         return Trip.builder()
                 .driver(driver)
                 .schedule(schedule)
-                .mode(convertToModeOfTransportEnum(tripDto.getTransportMode()))
                 .referenceNo(RandomUtil.getRandomNumber(6))
                 .vehicle(vehicle)
                 .owner(owner)

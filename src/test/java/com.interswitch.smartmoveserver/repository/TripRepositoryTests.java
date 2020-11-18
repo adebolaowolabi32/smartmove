@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.repository;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,13 +13,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
 import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -80,7 +81,6 @@ public class TripRepositoryTests {
         trip.setReferenceNo(new RandomUtil(5).nextString());
         trip.setDriver(userRepository.save(buildTestUser(Enum.Role.DRIVER)));
         trip.setFare(5000);
-        trip.setMode(Enum.TransportMode.BUS);
         vehicle = vehicleRepository.save(vehicle);
         trip.setVehicle(vehicle);
 
@@ -141,7 +141,6 @@ public class TripRepositoryTests {
                     assertThat(trp.getDriver()).isEqualTo(trip.getDriver());
                     assertThat(trp.getFare()).isEqualTo(trip.getFare());
                     assertThat(trp.getOwner()).isEqualTo(trip.getOwner());
-                    assertThat(trp.getMode()).isEqualTo(trip.getMode());
                     assertThat(trp.getReferenceNo()).isEqualTo(trip.getReferenceNo());
                     assertThat(trp.getVehicle()).isEqualTo(trip.getVehicle());
                     assertThat(trp.getSchedule()).isEqualTo(trip.getSchedule());
@@ -154,7 +153,6 @@ public class TripRepositoryTests {
         assertThat(tripFrmDb.getDriver()).isEqualTo(trip.getDriver());
         assertThat(tripFrmDb.getFare()).isEqualTo(trip.getFare());
         assertThat(tripFrmDb.getOwner()).isEqualTo(trip.getOwner());
-        assertThat(tripFrmDb.getMode()).isEqualTo(trip.getMode());
         assertThat(tripFrmDb.getReferenceNo()).isEqualTo(trip.getReferenceNo());
         assertThat(tripFrmDb.getVehicle()).isEqualTo(trip.getVehicle());
         assertThat(tripFrmDb.getSchedule()).isEqualTo(trip.getSchedule());

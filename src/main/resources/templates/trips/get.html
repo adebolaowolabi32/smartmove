@@ -33,7 +33,6 @@
                 <thead class='thead-light'>
                 <tr>
                     <th>Trip Reference ID</th>
-                    <th>Transport Mode</th>
                     <th>Driver</th>
                     <th>Vehicle</th>
                     <th>Departure Terminal</th>
@@ -49,7 +48,6 @@
                 <tbody>
                 <tr th:each="trip : ${tripPage.content}">
                     <td th:text="${trip.referenceNo}"></td>
-                    <td th:text="${trip.mode}"></td>
                     <td th:text="${trip.driver!=null ? trip.driver.firstName + ' ' + trip.driver.lastName : ''}"></td>
                     <td th:text="${trip.vehicle!=null ? trip.vehicle.name + ' - ' + trip.vehicle.regNo : '' }"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.startTerminal.name  : ''}"></td>

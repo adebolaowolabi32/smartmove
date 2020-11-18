@@ -1,9 +1,10 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.interswitch.smartmoveserver.model.*;
-import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.Schedule;
+import com.interswitch.smartmoveserver.model.Trip;
+import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.TripService;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import org.junit.jupiter.api.AfterAll;
@@ -15,20 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.List;
 
-import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
@@ -55,7 +49,6 @@ public class TripApiTests {
         trip.setReferenceNo(new RandomUtil(5).nextString());
         trip.setDriver(new User());
         trip.setFare(5000);
-        trip.setMode(Enum.TransportMode.BUS);
         trip.setVehicle(new Vehicle());
         trip.setSchedule(new Schedule());
     }

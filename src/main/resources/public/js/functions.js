@@ -536,7 +536,7 @@ function loadTransactionDetails() {
 };
 
 
-function validateBvn(){
+/*function validateBvn(){
 
     var val = document.getElementById("bvn").value;
     console.log(val);
@@ -619,7 +619,7 @@ function validateNextOfPhone(){
     document.getElementById('nextOfKinMobileDiv').innerHTML = "<em class='blink' style='color:red;'>Mobile phone number could not be validated.</em>";
     return;
 }
-};
+};*/
 
 function checkSelection(){
 var selectedCategory = document.getElementById("idCategory").selectedIndex;

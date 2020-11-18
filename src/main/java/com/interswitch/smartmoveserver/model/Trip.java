@@ -46,8 +46,4 @@ public class Trip implements Serializable {
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
-
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Transport mode is required.")
-    private Enum.TransportMode mode;
 }

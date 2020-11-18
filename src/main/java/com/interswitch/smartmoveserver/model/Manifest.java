@@ -34,7 +34,7 @@ public class Manifest implements Serializable {
     private String seatNo;
 
     @NotBlank(message = "Name is required.")
-    @Length(min = 5, max = 30, message = "Name must be between 5 and 30 characters long.")
+    @Length(min = 2, max = 30, message = "Name must be between 5 and 30 characters long.")
     private String name;
 
     @NotBlank(message = "Address is required.")

@@ -72,13 +72,13 @@
             </div>
 
             <div class="form-group row">
-                <label class="control-label col-sm-2" for="firstName"><b>Address</b></label>
+                <label class="control-label col-sm-2" for="address"><b>Address</b></label>
                 <div class="col-sm-10">
                     <input class="form-control"
                            id="address"
                            name="address"
                            required
-                           th:field="*{firstName}">
+                           th:field="*{address}">
                     <p class="small text-danger" th:errors="*{address}" th:if="${#fields.hasErrors('address')}"></p>
                 </div>
             </div>

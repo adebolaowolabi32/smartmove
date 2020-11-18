@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.*;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import org.junit.After;
@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -77,7 +76,6 @@ public class TripServiceTests {
         trip.setReferenceNo(new RandomUtil(5).nextString());
         trip.setDriver(userRepository.save(buildTestUser(com.interswitch.smartmoveserver.model.Enum.Role.DRIVER)));
         trip.setFare(5000);
-        trip.setMode(com.interswitch.smartmoveserver.model.Enum.TransportMode.BUS);
         vehicle = vehicleRepository.save(vehicle);
         trip.setVehicle(vehicle);
 
