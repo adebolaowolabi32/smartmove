@@ -632,9 +632,9 @@ else{
 }
 
 if(selectedCategory==6){
- document.getElementById("idNumberDiv").style.display = "none";
+ document.getElementById("idNumberSuperDiv").style.display = "none";
 }else{
- document.getElementById("idNumberDiv").style.display = "block";
+ document.getElementById("idNumberSuperDiv").style.display = "block";
 }
 
 }
