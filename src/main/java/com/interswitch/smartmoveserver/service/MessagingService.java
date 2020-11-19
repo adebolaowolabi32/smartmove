@@ -135,7 +135,7 @@ public class MessagingService {
 
             ResponseEntity<Integer> responseEntity = null;
             try {
-               // responseEntity = this.restTemplate.exchange(this.smsNotificationEndpoint, HttpMethod.POST, httpEntity, Integer.class);
+                // responseEntity = this.restTemplate.exchange(this.smsNotificationEndpoint, HttpMethod.POST, httpEntity, Integer.class);
                 status = responseEntity.getStatusCode().is2xxSuccessful();
             } catch (Exception ex) {
                 logger.info("" + ex);
