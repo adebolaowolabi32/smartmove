@@ -1,16 +1,12 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.PageView;
-import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.dto.TripDto;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import com.interswitch.smartmoveserver.util.RandomUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +49,9 @@ public class UserService {
 
     @Autowired
     private DocumentService documentService;
+
+    @Autowired
+    private UserSettingsService userSettingsService;
 
     @Autowired
     private PageUtil pageUtil;
@@ -97,6 +95,10 @@ public class UserService {
         boolean exists = userRepository.existsByUsername(user.getEmail());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //TODO :: see below
+        boolean makerChecker = checkForMakerChecker(user, principal);
+        if (makerChecker) {
+            return save(new PassportUser(), user, principal);
+        }
         user.setEnabled(true);
         //iswCoreService.createUser(user);
         PassportUser passportUser = passportService.findUser(user.getEmail());
@@ -108,6 +110,17 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists. Kindly ask user to login with their Quickteller credentials");
         }
         return user;
+    }
+
+    private boolean checkForMakerChecker(User user, String principal) {
+        Optional<User> creatorUser = userRepository.findByUsername(principal);
+        if (creatorUser.isPresent())
+            if (creatorUser.get().getRole().equals(Enum.Role.ISW_ADMIN)) {
+                UserSettings userSettings = userSettingsService.findByOwner(user.getOwner().getUsername());
+                //send maker checker email
+                return userSettings.isMakerCheckerEnabled();
+            }
+        return false;
     }
 
     private User saveAsAdmin(PassportUser passportUser) {
@@ -301,10 +314,7 @@ public class UserService {
     }
 
     private boolean isEnabled(String enabledStatus){
-        if(enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true")){
-            return true;
-        }
-        return false;
+        return enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true");
     }
 
 }
