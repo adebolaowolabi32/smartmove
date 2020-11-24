@@ -183,7 +183,6 @@ public class UserController {
         return "users/upload";
     }
 
-
     @PostMapping("/upload")
     public String doUserUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -195,4 +194,23 @@ public class UserController {
             return "redirect:/users/get";
         }
     }
+
+    @GetMapping("/approvals")
+    public String showApprovals(Principal principal, Model model) {
+        model.addAttribute("approvals", userService.getApprovals(principal.getName()));
+
+        return "users/approvals";
+    }
+
+    @GetMapping("/approve/{id}")
+    public String approve(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+        boolean approved = userService.approveUser(principal.getName(), id);
+
+        if (!approved) redirectAttributes.addFlashAttribute("error", "Unable to approve this user.");
+        else
+            redirectAttributes.addFlashAttribute("success", "User has been approved and account setup email has been sent.");
+
+        return "redirect:/users/approvals";
+    }
+
 }

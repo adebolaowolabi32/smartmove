@@ -52,6 +52,12 @@
                                 <a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLE_OWNERS')" th:href="@{/users/get?role=VEHICLE_OWNER}" href="#">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{vehicleOwners}">Vehicle Owners</span></a>
+                                <a class="nav-link" href="#" th:href="@{/userSettings/details}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+                                    <span>User Settings</span></a>
+                                <a class="nav-link" href="#" th:href="@{/users/approvals}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-check"></i></div>
+                                    <span>User Approvals</span></a>
                             </nav>
                         </div>
                         <!--<a class="nav-link" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')" th:href="@{/wallets/details}" href="#">

@@ -9,12 +9,10 @@ import com.interswitch.smartmoveserver.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -82,14 +80,7 @@ public class HomeController {
         User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
         Wallet wallet = null;
-        Card card =null;
-
-        try{
-            wallet = walletService.findByOwner(user.getUsername());
-            card = cardService.findByOwner(user.getUsername());
-        }catch(Exception ex ){
-           log.info("Caught An Error which happened in Home Controller ===>"+ex.getMessage());
-        }
+        Card card = null;
 
         Long no_admins = 0L;
         Long no_regulators = 0L;
@@ -129,6 +120,12 @@ public class HomeController {
             no_readers = deviceService.countByTypeAndOwner(Enum.DeviceType.READER, user);
             no_transactions = transactionService.countAll();
             //if(role == Enum.Role.AGENT ) {
+            try {
+                wallet = walletService.findByOwner(user.getUsername());
+                card = cardService.findByOwner(user.getUsername());
+            } catch (Exception ex) {
+                log.info("Caught An Error which happened in Home Controller ===>" + ex.getMessage());
+            }
             card_balance = card != null ? card.getBalance() : 0L;
             wallet_balance = wallet != null ? wallet.getBalance() : 0D;
             no_cards = cardService.countAll();

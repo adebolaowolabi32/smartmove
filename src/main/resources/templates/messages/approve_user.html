@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>New User SignUp</title>
+</head>
+<body style="font-family:'Helvetica Neue',sans-serif; margin:0;padding:0; height:100%; color: #00425F; font-weight: 400">
+<div class="wrapper" style="width:600px; margin: 0 auto;">
+    <div class="body" style="padding:40px;font-size: 14px; line-height: 20px">
+        <img alt="Interswitch Logo"
+             style="float:right" th:src="${portletUri} + '/assets/img/interswitchngnew.png'" width="150"/>
+        <div class="body-content" style="margin-top:50px; float:left">
+            <p>
+                Hello <span th:text="${owner}"></span>,
+            </p>
+
+            <p>
+                A new user has been registered for you on the <strong>Smart Move Platform</strong> platform.
+            </p>
+
+            <p>
+                <b>User Details:</b>
+            <ul>
+                <li>First Name: <span th:text="${firstName}"></span></li>
+                <li>Last Name: <span th:text="${lastName}"></span></li>
+                <li>Address: <span th:text="${address}"></span></li>
+                <li>Email: <span th:text="${email}"></span></li>
+                <li>Mobile Number: <span th:text="${mobileNo}"></span></li>
+                <li>Role: <span th:text="${role}"></span></li>
+            </ul>
+            </p>
+
+            <p>
+                To proceed with this registration, we require your approval.
+                <a th:href="${portletUri} + '/users/approvals'">Click here to approve or decline this user</a>.
+            </p>
+            <br>
+            <p>
+                Thank you. Have a great day!
+            </p>
+        </div>
+    </div>
+    <hr>
+    <br>
+    <p style="font-size=0.5rem">
+        You are receiving this message because you have enabled maker/checker in your user settings. Click
+        <a th:href="${portletUri} + '/userSettings/details'">here</a> to turn off this feature.</p>
+</div>
+</body>
+</html>

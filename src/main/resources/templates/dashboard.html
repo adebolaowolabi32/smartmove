@@ -16,7 +16,9 @@
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_REGULATORS')">
             <div class="card bg-danger text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{administrators}">Regulators</span><span class="number" th:text="${no_regulators}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{regulators}">Regulators</span><span class="number"
+                                                                                                  th:text="${no_regulators}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/users/get?role=REGULATOR}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
