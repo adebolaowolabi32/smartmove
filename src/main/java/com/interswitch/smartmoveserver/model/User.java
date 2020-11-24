@@ -30,7 +30,6 @@ public class User implements Serializable {
     @Column(unique=true)
     private String username;
 
-    @Length(min = 5, max = 30, message = "Password must be between 5 and 30 characters long.")
     private String password;
 
     @NotBlank(message = "First name is required.")
