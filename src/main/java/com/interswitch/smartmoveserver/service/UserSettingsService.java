@@ -27,7 +27,6 @@ public class UserSettingsService {
         userSettings.setOwner(owner);
         return userSettingsRepository.save(userSettings);
     }
-
     public UserSettings findByOwner(String principal) {
         User owner = userService.findByUsername(principal);
         return userSettingsRepository.findByOwner(owner);

@@ -46,8 +46,10 @@ public class ViewExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public String handleDataViolation(DataIntegrityViolationException exception, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         final String validationError = exception.getCause().getCause().getLocalizedMessage();
-        String message = (StringUtils.isNotEmpty(validationError) ?
-                "Cannot save duplicate value. The duplicate value is " + StringUtils.substringBetween(validationError, "(", ")") + "." : exception.getMessage());
+        String message = "";
+        if (StringUtils.isNotEmpty(validationError) && validationError.contains("duplicate")) {
+            message = "Cannot save duplicate value. The duplicate value is " + StringUtils.substringBetween(validationError, "(", ")") + ".";
+        } else message = validationError;
         redirectAttributes.addFlashAttribute("error", message);
         return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
     }

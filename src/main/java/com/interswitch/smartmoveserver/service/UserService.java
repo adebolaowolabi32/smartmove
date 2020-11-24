@@ -4,11 +4,13 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
+import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -16,10 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmail;
 
@@ -54,7 +55,16 @@ public class UserService {
     private UserSettingsService userSettingsService;
 
     @Autowired
+    private MessagingService messagingService;
+
+    @Autowired
+    private UserApprovalRepository userApprovalRepository;
+
+    @Autowired
     private PageUtil pageUtil;
+
+    @Value("${smartmove.url}")
+    private String portletUri;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -94,33 +104,31 @@ public class UserService {
     public User save(User user, String principal) {
         boolean exists = userRepository.existsByUsername(user.getEmail());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
-        //TODO :: see below
-        boolean makerChecker = checkForMakerChecker(user, principal);
-        if (makerChecker) {
-            return save(new PassportUser(), user, principal);
-        }
-        user.setEnabled(true);
-        //iswCoreService.createUser(user);
         PassportUser passportUser = passportService.findUser(user.getEmail());
-        if (passportUser == null) {
-            passportUser = passportService.createUser(user);
-            save(passportUser, user, principal);
-        } else {
+        if (passportUser != null) {
             save(passportUser, user, principal);
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists. Kindly ask user to login with their Quickteller credentials");
         }
-        return user;
-    }
 
-    private boolean checkForMakerChecker(User user, String principal) {
-        Optional<User> creatorUser = userRepository.findByUsername(principal);
-        if (creatorUser.isPresent())
-            if (creatorUser.get().getRole().equals(Enum.Role.ISW_ADMIN)) {
-                UserSettings userSettings = userSettingsService.findByOwner(user.getOwner().getUsername());
-                //send maker checker email
-                return userSettings.isMakerCheckerEnabled();
-            }
-        return false;
+        //TODO :: see below
+        User owner = user.getOwner();
+        boolean makerChecker = checkForMakerChecker(user, owner, principal);
+        if (makerChecker) {
+            user.setEnabled(false);
+            save(null, user, principal);
+            sendMakerCheckerEmail(user, owner);
+            UserApproval approval = new UserApproval();
+            approval.setOwner(owner);
+            approval.setUsr(user);
+            userApprovalRepository.save(approval);
+            return user;
+        }
+        passportUser = passportService.createUser(user);
+        //iswCoreService.createUser(user);
+        user.setEnabled(true);
+        save(passportUser, user, principal);
+        sendUserSetUpEmail(user, owner);
+        return user;
     }
 
     private User saveAsAdmin(PassportUser passportUser) {
@@ -131,6 +139,12 @@ public class UserService {
     }
 
     private User save(PassportUser passportUser, User user, String owner) {
+        if (passportUser == null)
+            user.setUsername(user.getEmail());
+        else {
+            user.setUsername(passportUser.getUsername());
+            user.setPassword(passportUser.getPassword());
+        }
         Enum.Role role = user.getRole();
         user.setOwner(null);
         user.setTillStatus(Enum.TicketTillStatus.OPEN);
@@ -138,10 +152,6 @@ public class UserService {
             Optional<User> ownerUser = userRepository.findByUsername(owner);
             if (ownerUser.isPresent()) user.setOwner(ownerUser.get());
         }
-
-        user.setUsername(passportUser.getUsername());
-        user.setPassword(passportUser.getPassword());
-
         if (user.getPicture()!=null && user.getPicture().getSize()>0) {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
             user.setPictureUrl(doc.getUrl());
@@ -279,7 +289,6 @@ public class UserService {
         }
     }
 
-
     public boolean upload(MultipartFile file, String principal) throws IOException {
         User owner = findByUsername(principal);
         List<User> savedUsers = new ArrayList<>();
@@ -317,4 +326,64 @@ public class UserService {
         return enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true");
     }
 
+    public List<UserApproval> getApprovals(String principal) {
+        List<UserApproval> approvals = new ArrayList<>();
+        Optional<User> owner = userRepository.findByUsername(principal);
+        if (owner.isPresent()) {
+            approvals = userApprovalRepository.findAllByOwner(owner.get());
+        }
+        return approvals;
+    }
+
+    public boolean approveUser(String principal, long id) {
+        Optional<UserApproval> userApproval = userApprovalRepository.findById(id);
+        if (userApproval.isPresent()) {
+            UserApproval approval = userApproval.get();
+            String owner = approval.getOwner() != null ? approval.getOwner().getUsername() : "";
+            if (owner.equals(principal)) {
+                approval.setApproved(true);
+                userApprovalRepository.save(approval);
+                sendUserSetUpEmail(approval.getUsr(), approval.getOwner());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkForMakerChecker(User user, User owner, String principal) {
+        Optional<User> creatorUser = userRepository.findByUsername(principal);
+        if (creatorUser.isPresent())
+            if (creatorUser.get().getRole().equals(Enum.Role.ISW_ADMIN)) {
+                UserSettings userSettings = userSettingsService.findByOwner(owner.getUsername());
+                //send maker checker email
+                if (userSettings != null) return userSettings.isMakerCheckerEnabled();
+            }
+        return false;
+    }
+
+    private void sendMakerCheckerEmail(User user, User owner) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("owner", owner.getFirstName() + " " + owner.getLastName());
+        params.put("firstName", user.getFirstName());
+        params.put("lastName", user.getLastName());
+        params.put("address", user.getAddress());
+        params.put("email", user.getEmail());
+        params.put("mobileNo", user.getMobileNo());
+        params.put("role", user.getRole());
+        params.put("portletUri", portletUri);
+
+        messagingService.sendEmail(owner.getEmail(),
+                "New User SignUp", "messages" + File.separator + "approve_user", params);
+    }
+
+    private void sendUserSetUpEmail(User user, User owner) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("owner", owner.getFirstName() + " " + owner.getLastName());
+        params.put("user", user.getFirstName() + " " + user.getLastName());
+        params.put("role", user.getRole());
+        params.put("portletUri", portletUri);
+
+        messagingService.sendEmail(user.getEmail(),
+                "New User SignUp", "messages" + File.separator + "welcome_new", params);
+    }
 }

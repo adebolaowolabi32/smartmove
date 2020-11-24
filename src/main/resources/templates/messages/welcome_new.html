@@ -7,36 +7,29 @@
 <body style="font-family:'Helvetica Neue',sans-serif; margin:0;padding:0; height:100%; color: #00425F; font-weight: 400">
 <div class="wrapper" style="width:600px; margin: 0 auto;">
     <div class="body" style="padding:40px;font-size: 14px; line-height: 20px">
-        <img th:src="@{__${mufasa}__/images/interswitchng.png}"
-             alt="Interswitch Logo" style="float:right" width="150" />
+		<img alt="Interswitch Logo"
+			 style="float:right" th:src="${portletUri} + '/assets/img/interswitchngnew.png'" width="150"/>
 
-        <div class="body-content" style="margin-top:100px; float:left">
+		<div class="body-content" style="margin-top:50px; float:left">
             <p>
-				Hello <span th:text="${userName}"></span>,
+				Hello <span th:text="${user}"></span>,
 			</p>
-
             <p>
 				An account has been created for you on the <strong>Smart Move Platform</strong> platform.
 			</p>
-			
-			<p>			
-				To access your account,<br/>
-				click <a th:href="@{${portletUri}}">here</a> or paste the following link into your browser:
-				<a th:href="@{${portletUri}}" th:text="${portletUri}"></a>
-            </p>
-			
 			<p>
-				Your account credentials are as follows:
-				<ul>
-					<li>Email: <span th:text="${emailAddress}"></span></li>
-					<li>Password: <span th:text="${password}"></span></li>
-				</ul>
-				
-				For your security, you are required to change your password after your first login.
-            </p>
-
+				User Details:
+			<ul>
+				<li>Role: <span th:text="${role}"></span></li>
+				<li>Referer: <span th:text="${owner}"></span></li>
+			</ul>
+			</p>
+			<p>
+				<a th:href="${portletUri} + '/users/approvals'">Click here </a> to finish setting up your account.
+			</p>
+			<br>
             <p>
-                Thanks, Have an awesome day!
+				Thank you. Have a great day!
             </p>
         </div>
     </div>
