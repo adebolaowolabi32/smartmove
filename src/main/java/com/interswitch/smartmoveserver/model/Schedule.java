@@ -23,7 +23,6 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message = "Fare is required.")
     private long fare;
 
     @Enumerated(EnumType.STRING)
@@ -68,7 +67,6 @@ public class Schedule implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     private boolean enabled;

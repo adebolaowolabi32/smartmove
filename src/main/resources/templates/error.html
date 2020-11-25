@@ -24,13 +24,10 @@
             <br />
             <div class="error-content">
                 <div class="text-content">
-                    <div class="h3"><i class="fas fa-exclamation-triangle"></i> <b>Oops. An error occurred.</b></div>
-                    <div th:if="${error}" class="h4">
-                        <b>Message: <span th:text="${error}">server_error</span></b>
-                    </div>
-                    <div th:if="${status}" class="h4"><b>Code:
-                        <span th:text="${status}">500</span></b>
-                    </div>
+                    <div class="h4"><i class="fas fa-exclamation-triangle red"></i> <b>Oops. An error occurred.</b></div>
+                        <h4><b>Code: <span th:if="${status}" th:text="${status}">500</span></b></h4>
+                        <h4><b>Message: <span th:if="${error}" th:text="${error}">server_error</span></b></h4>
+                            <br>
                     <a th:href="@{/dashboard}" class="btn btn-primary btn-high create-btn">
                         <i class="fas fa-arrow-left mr-1"></i>Return to Dashboard</a>
                 </div>

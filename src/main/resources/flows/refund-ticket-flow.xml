@@ -14,8 +14,7 @@
                       expression="ticketRefundService.refundTicket(currentUser.name, flowScope.refundTicket)"/>
         </transition>
         <on-exit>
-            <evaluate
-                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket refund flow')"/>
+            <evaluate expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket refund flow')"/>
         </on-exit>
     </view-state>
 

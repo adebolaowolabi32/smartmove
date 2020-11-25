@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default.html}">
+<title layout:fragment="title">Ticket Reference</title>
+<div layout:fragment="content" class="card mb-4">
+    <div class="card-header"><i class="fas fa-road mr-1"></i>
+        <span>Ticket Reference</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Create New Ticket Reference</b></h2>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+        <form class="card p-3" action="#" method="post"
+              th:action="@{/ticketReference/create}" th:object="${ticketReference}"
+              data-parsley-validate="true">
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="prefix"><b>Prefix</b></label>
+                <div class="col-sm-10">
+                    <input class="form-control" id="prefix" name="prefix" th:field="*{prefix}" required>
+                    <p class="small text-danger" th:if="${#fields.hasErrors('prefix')}" th:errors="*{prefix}"></p>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="enabled"><b>Active</b></label>
+                <div class="col-sm-10">
+                    <label class="switch">
+                        <input type="checkbox" name="enabled" id="enabled">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="startTerminalEnabled"><b>Departure Terminal</b></label>
+                <div class="col-sm-10">
+                    <label class="switch">
+                        <input type="checkbox" name="startTerminalEnabled" id="startTerminalEnabled">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="stopTerminalEnabled"><b>Destination Terminal</b></label>
+                <div class="col-sm-10">
+                    <label class="switch">
+                        <input type="checkbox" name="stopTerminalEnabled" id="stopTerminalEnabled">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-outline-primary btn-sized">Submit</button>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </form>
+    </div>
+</div>
+</html>

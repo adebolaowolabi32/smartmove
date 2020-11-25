@@ -25,12 +25,11 @@ import java.time.LocalDate;
 @Table(name = "cards")
 public class Card implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     @Column(unique=true)

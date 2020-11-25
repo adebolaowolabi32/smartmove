@@ -34,6 +34,13 @@
                     <td th:text="${ticket.schedule != null ? ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name  : ''}"></td>
                     <td th:text="${ticket.fare}"></td>
                 </tr>
+
+                <tr th:each="fee : ${ticketDetails.appliedFees}">
+                    <td></td>
+                    <td></td>
+                    <td th:text="${fee.feeName}"></td>
+                    <td th:text="${fee.amount}"></td>
+                </tr>
                 <tr>
                     <td></td>
                     <td></td>

@@ -53,7 +53,12 @@ public class TripService {
     ScheduleRepository scheduleRepository;
 
     @Autowired
+    TripReferenceService tripReferenceService;
+
+    @Autowired
     PageUtil pageUtil;
+
+    private static String PREFIX_SEPARATOR = "|";
 
     public List<Trip> findAll() {
         return tripRepository.findAll();
@@ -70,7 +75,12 @@ public class TripService {
     }
 
     public Trip save(Trip trip, String principal) {
-        trip.setReferenceNo(RandomUtil.getRandomNumber(6));
+        TripReference tripReference = tripReferenceService.findByOwner(principal);
+        String prefix = "";
+        if(tripReference.isEnabled())
+            prefix = tripReference.getPrefix() + PREFIX_SEPARATOR;
+
+        trip.setReferenceNo(prefix + RandomUtil.getRandomNumber(6));
         if(trip.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             trip.setOwner(owner);
@@ -166,7 +176,6 @@ public class TripService {
         return Trip.builder()
                 .driver(driver)
                 .schedule(schedule)
-                .mode(convertToModeOfTransportEnum(tripDto.getTransportMode()))
                 .referenceNo(RandomUtil.getRandomNumber(6))
                 .vehicle(vehicle)
                 .owner(owner)

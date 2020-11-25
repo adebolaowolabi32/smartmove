@@ -38,6 +38,8 @@ public class Terminal implements Serializable {
     @NotNull(message = "State is required.")
     private String state;
 
+    @NotBlank(message = "Code is required.")
+    @Length(min = 2, max = 10, message = "Code must be between 2 and 10 characters long.")
     private String code;
 
     @NotNull(message = "LGA is required.")
@@ -45,7 +47,6 @@ public class Terminal implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     private boolean enabled;

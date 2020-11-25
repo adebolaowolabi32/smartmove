@@ -22,10 +22,8 @@ public class Transaction implements Serializable {
 
     private String transactionId = UUID.randomUUID().toString();
 
-    @NotNull(message = "Card ID is required.")
     private String cardId;
 
-    @NotNull(message = "Device ID is required.")
     private String deviceId;
 
     @NotNull(message = "Terminal ID is required.")

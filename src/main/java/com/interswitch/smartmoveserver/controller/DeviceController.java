@@ -124,15 +124,15 @@ public class DeviceController {
     }
 
     @GetMapping("/upload")
-    public String showCardsUploadPage(Principal principal, Model model) {
+    public String showDevicesUploadPage(Principal principal, Model model) {
         return "devices/upload";
     }
 
 
     @PostMapping("/upload")
-    public String doCardsUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
+    public String doDevicesUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
         try {
-            boolean succeeded = deviceService.upload(file,principal);
+            boolean succeeded = deviceService.upload(file,principal.getName());
             redirectAttributes.addFlashAttribute("uploaded", succeeded);
             return "redirect:/devices/get";
         } catch (Exception ex) {

@@ -49,7 +49,6 @@ public class VehicleCategory implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     private int noRows;

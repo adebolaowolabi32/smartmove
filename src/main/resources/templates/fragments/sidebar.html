@@ -52,6 +52,12 @@
                                 <a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLE_OWNERS')" th:href="@{/users/get?role=VEHICLE_OWNER}" href="#">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{vehicleOwners}">Vehicle Owners</span></a>
+                                <a class="nav-link" href="#" th:href="@{/userSettings/details}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+                                    <span>User Settings</span></a>
+                                <a class="nav-link" href="#" th:href="@{/users/approvals}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-check"></i></div>
+                                    <span>User Approvals</span></a>
                             </nav>
                         </div>
                         <!--<a class="nav-link" sec:authorize="hasAuthority('VIEW_WALLET_DETAILS')" th:href="@{/wallets/details}" href="#">
@@ -72,16 +78,29 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_TERMINALS')" th:href="@{/terminals/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-memory"></i></div>
                             <span th:text="#{terminals}">Transport Terminals</span></a>
-                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_ROUTES')" th:href="@{/routes/get}" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
-                            <span th:text="#{routes}">Routes</span></a>
-                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRIPS')" th:href="@{/trips/get}" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-road"></i></div>
-                            <span th:text="#{trips}">Trips</span></a>
-                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_SCHEDULES')" th:href="@{/schedules/get}"
-                           href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
-                            <span th:text="#{schedules}">Schedules</span></a>
+
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTrip" aria-expanded="false" aria-controls="collapseUser">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                            <span>Trips and Schedules</span>
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div></a>
+                        <div class="collapse" id="collapseTrip" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_ROUTES')" th:href="@{/routes/get}" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
+                                <span th:text="#{routes}">Routes</span></a>
+                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_SCHEDULES')" th:href="@{/schedules/get}"
+                                   href="#">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
+                                    <span th:text="#{schedules}">Schedules</span></a>
+                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRIPS')" th:href="@{/trips/get}" href="#">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-road"></i></div>
+                                    <span th:text="#{trips}">Trips</span></a>
+                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRIPS')" th:href="@{/tripReference/details}" href="#">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-ellipsis-h"></i></div>
+                                    <span>Trip Reference</span></a>
+
+                            </nav>
+                        </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicket" aria-expanded="false" aria-controls="collapseUser">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             <span th:text="#{ticketManagement}">Ticket Management</span>
@@ -93,6 +112,10 @@
                                     <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                                     <span th:text="#{tickets}">Tickets</span></a>
                                 <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
+                                   th:href="@{/ticketReference/details}">
+                                    <div class="sb-nav-link-icon"><i class="fa fa-ellipsis-h"></i></div>
+                                    <span>Ticket Reference</span></a>
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
                                    th:href="@{/refunds/get}">
                                     <div class="sb-nav-link-icon"><i class="fa fa-retweet"></i></div>
                                     <span th:text="#{refunds}">Refunds</span></a>
@@ -100,6 +123,7 @@
                                    th:href="@{/reassignTicket}">
                                     <div class="sb-nav-link-icon"><i class="fa fa-sync-alt"></i></div>
                                     <span th:text="#{reassignTicket}">Reassign Ticket</span></a>
+
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicketTill" aria-expanded="false" aria-controls="collapseTicketTill">
@@ -127,6 +151,11 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')" th:href="@{/reports/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             <span th:text="#{settlements}">Settlements</span></a>
+
+                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_FEE_CONFIGURATIONS')" th:href="@{/fees/get}" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+                            <span th:text="#{feeConfig}">Fee Configurations</span></a>
+
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_CONFIGURATIONS')" th:href="@{/configurations/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
                             <span th:text="#{settings}">Settings</span></a>

@@ -1,6 +1,9 @@
 package com.interswitch.smartmoveserver.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -12,6 +15,9 @@ import java.io.Serializable;
  * @author adebola.owolabi
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "devices")
 public class Device implements Serializable {
@@ -35,7 +41,6 @@ public class Device implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-    @NotNull(message = "Owner is required.")
     private User owner;
 
     @NotBlank(message = "Hardware version is required.")

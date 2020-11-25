@@ -128,6 +128,9 @@ public class UserController {
 
         logger.info("wanna call user service to to create user");
         User savedUser = userService.save(user, principal.getName());
+
+        logger.info("user saved===>"+savedUser);
+
         redirectAttributes.addFlashAttribute("saved", true);
         redirectAttributes.addFlashAttribute("saved_message", pageUtil.buildSaveMessage(role));
         return "redirect:/users/details/" + savedUser.getId();
@@ -180,11 +183,10 @@ public class UserController {
         return "users/upload";
     }
 
-
     @PostMapping("/upload")
     public String doUserUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
         try {
-            boolean succeeded = userService.upload(file, principal);
+            boolean succeeded = userService.upload(file, principal.getName());
             redirectAttributes.addFlashAttribute("uploaded", succeeded);
             return "redirect:/users/get";
         } catch (Exception ex) {
@@ -192,4 +194,23 @@ public class UserController {
             return "redirect:/users/get";
         }
     }
+
+    @GetMapping("/approvals")
+    public String showApprovals(Principal principal, Model model) {
+        model.addAttribute("approvals", userService.getApprovals(principal.getName()));
+
+        return "users/approvals";
+    }
+
+    @GetMapping("/approve/{id}")
+    public String approve(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+        boolean approved = userService.approveUser(principal.getName(), id);
+
+        if (!approved) redirectAttributes.addFlashAttribute("error", "Unable to approve this user.");
+        else
+            redirectAttributes.addFlashAttribute("success", "User has been approved and account setup email has been sent.");
+
+        return "redirect:/users/approvals";
+    }
+
 }

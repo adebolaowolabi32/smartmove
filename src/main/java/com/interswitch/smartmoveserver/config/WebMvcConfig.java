@@ -62,4 +62,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
         viewResolver.setTemplateEngine(templateEngine());
         return viewResolver;
     }
+
 }
