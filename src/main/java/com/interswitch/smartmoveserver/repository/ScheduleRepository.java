@@ -16,7 +16,7 @@ public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 
     List<Schedule> findAll();
 
-    List<Schedule> findByOwner(User owner);
+    List<Schedule> findAllByOwner(User owner);
    /* List<Schedule> findByTerminalName(String terminalName);
 
     Page<Schedule> findByTerminalName(Pageable pageable, String terminalName);*/

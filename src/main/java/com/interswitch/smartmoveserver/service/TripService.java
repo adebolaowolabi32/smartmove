@@ -1,12 +1,8 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.TripDto;
-import com.interswitch.smartmoveserver.repository.ScheduleRepository;
 import com.interswitch.smartmoveserver.repository.TripRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
-import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
@@ -42,15 +38,6 @@ public class TripService {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    VehicleRepository vehicleRepository;
-
-    @Autowired
-    ScheduleRepository scheduleRepository;
 
     @Autowired
     TripReferenceService tripReferenceService;
@@ -96,6 +83,10 @@ public class TripService {
         return tripRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist"));
     }
 
+    public List<Trip> findByOwner(User user) {
+        return tripRepository.findAllByOwner(user);
+    }
+
     public Trip update(Trip trip) {
         Optional<Trip> existing = tripRepository.findById(trip.getId());
         if (existing.isPresent())
@@ -131,6 +122,11 @@ public class TripService {
 
     //findByVehicleRegNo, findByDriverName
 
+    public Long countByOwner(String username) {
+        User user = userService.findByUsername(username);
+        return tripRepository.countByOwner(user);
+    }
+
     public Long countAll() {
         return tripRepository.count();
     }
@@ -164,15 +160,9 @@ public class TripService {
     }
 
     private Trip mapToTrip(TripDto tripDto, User owner){
-
-        Optional<User> driverOptional = userRepository.findByEmail(tripDto.getDriverEmail());
-        User driver = driverOptional.isPresent() ? driverOptional.get() : null;
-
-        Optional<Schedule> scheduleOptional = scheduleRepository.findById(tripDto.getScheduleId());
-        Schedule schedule = scheduleOptional.isPresent() ? scheduleOptional.get() : null;
-
-        Vehicle vehicle = vehicleRepository.findByRegNo(tripDto.getVehicleNumber());
-
+        User driver = userService.findByEmail(tripDto.getDriverEmail());
+        Schedule schedule = scheduleService.findById(tripDto.getScheduleId());
+        Vehicle vehicle = vehicleService.findByRegNo(tripDto.getVehicleNumber());
         return Trip.builder()
                 .driver(driver)
                 .schedule(schedule)
@@ -180,10 +170,5 @@ public class TripService {
                 .vehicle(vehicle)
                 .owner(owner)
                 .build();
-    }
-
-    private Enum.TransportMode convertToModeOfTransportEnum(String mode){
-        // KEKE, BUS, CAR, RAIL, FERRY, RICKSHAW
-        return Enum.TransportMode.valueOf(mode.toUpperCase());
     }
 }

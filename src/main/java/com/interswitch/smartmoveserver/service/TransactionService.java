@@ -3,8 +3,8 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transaction;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.TransactionRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,7 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     public Transaction save(Transaction transaction) {
         transaction.setTransactionId(UUID.randomUUID().toString());
@@ -42,8 +42,9 @@ public class TransactionService {
     }
 
     public PageView<Transaction> findAllPaginated(int page, int size, String principal) {
+        User user = userService.findByUsername(principal);
         PageRequest pageable = PageRequest.of(page - 1, size);
-        Page<Transaction> pages = transactionRepository.findAll(pageable);
+        Page<Transaction> pages = transactionRepository.findAllByOwner(pageable, user);
         return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
@@ -53,6 +54,15 @@ public class TransactionService {
 
     public List<Transaction> find(Enum.TransactionType type) {
         return transactionRepository.findAllByType(type);
+    }
+
+    public List<Transaction> findByOwner(User owner) {
+        return transactionRepository.findAllByOwner(owner);
+    }
+
+    public Long countByOwner(String username) {
+        User user = userService.findByUsername(username);
+        return transactionRepository.countByOwner(user);
     }
 
     public Long countAll(){

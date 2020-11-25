@@ -31,7 +31,7 @@ public class CardController {
     private UserService userService;
 
     @Autowired
-    PageUtil pageUtil;
+    private PageUtil pageUtil;
 
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
@@ -54,7 +54,7 @@ public class CardController {
     public String showCreate(Principal principal, Model model) {
         Card card = new Card();
         model.addAttribute("card", card);
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("card")));
         return "cards/create";
     }
 
@@ -62,7 +62,7 @@ public class CardController {
     public String create(Principal principal, @Valid Card card, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("card", card);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("card")));
             return "cards/create";
         }
         Card savedCard = cardService.save(card, principal.getName());
@@ -74,7 +74,7 @@ public class CardController {
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
         Card card = cardService.findById(id, principal.getName());
         model.addAttribute("card", card);
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("card")));
         return "cards/update";
     }
 
@@ -84,7 +84,7 @@ public class CardController {
         card.setId(id);
         if (result.hasErrors()) {
             model.addAttribute("card", card);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("card")));
             return "cards/update";
         }
         cardService.update(card,principal.getName());

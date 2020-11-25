@@ -61,9 +61,9 @@ public class VehicleController {
         Vehicle vehicle = new Vehicle();
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
-        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-        model.addAttribute("categories", vehicleCategories);
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("vehicle", vehicle);
+        model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
         return "vehicles/create";
     }
 
@@ -73,9 +73,9 @@ public class VehicleController {
         if (result.hasErrors()) {
             model.addAttribute("vehicle", vehicle);
             //TODO change findAll to findAllEligible
-            List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-            model.addAttribute("categories", vehicleCategories);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("vehicle", vehicle);
+            model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
             return "vehicles/create";
         }
 
@@ -89,9 +89,9 @@ public class VehicleController {
         Vehicle vehicle = vehicleService.findById(id, principal.getName());
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
-        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-        model.addAttribute("categories", vehicleCategories);
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("vehicle", vehicle);
+        model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
         return "vehicles/update";
     }
 
@@ -103,9 +103,8 @@ public class VehicleController {
         if (result.hasErrors()) {
             //TODO change findAll to findAllEligible
             model.addAttribute("vehicle", vehicle);
-            List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-            model.addAttribute("categories", vehicleCategories);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
             return "vehicles/update";
         }
         vehicleService.update(vehicle, principal.getName());

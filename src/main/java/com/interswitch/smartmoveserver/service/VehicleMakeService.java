@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.VehicleMake;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleMakeRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
@@ -20,9 +19,6 @@ import java.util.Optional;
 public class VehicleMakeService {
     @Autowired
     VehicleMakeRepository vehicleMakeRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     SecurityUtil securityUtil;

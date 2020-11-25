@@ -71,9 +71,9 @@ public class TripController {
         Trip trip = new Trip();
         model.addAttribute("trip", trip);
         //not needed at the moment though,should be removed for performance reasons
-        model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
-        model.addAttribute("schedules", scheduleService.findAll());
-        model.addAttribute("vehicles", vehicleService.findAll());
+        model.addAttribute("drivers", userService.findAllByRole(principal.getName(), Enum.Role.DRIVER));
+        model.addAttribute("schedules", scheduleService.findByOwner(principal.getName()));
+        model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
         return "trips/create";
     }
 
@@ -81,9 +81,9 @@ public class TripController {
     public String create(Principal principal, @Valid Trip trip, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
-            model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
-            model.addAttribute("schedules", scheduleService.findAll());
-            model.addAttribute("vehicles", vehicleService.findAll());
+            model.addAttribute("drivers", userService.findAllByRole(principal.getName(), Enum.Role.DRIVER));
+            model.addAttribute("schedules", scheduleService.findByOwner(principal.getName()));
+            model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
             return "trips/create";
         }
 
@@ -96,9 +96,9 @@ public class TripController {
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
         Trip trip = tripService.findById(id, principal.getName());
         model.addAttribute("trip", trip);
-        model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
-        model.addAttribute("schedules", scheduleService.findAll());
-        model.addAttribute("vehicles", vehicleService.findAll());
+        model.addAttribute("drivers", userService.findAllByRole(principal.getName(), Enum.Role.DRIVER));
+        model.addAttribute("schedules", scheduleService.findByOwner(principal.getName()));
+        model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
         return "trips/update";
     }
 
@@ -110,9 +110,9 @@ public class TripController {
 
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
-            model.addAttribute("drivers", userService.findAllByRole(Enum.Role.DRIVER));
-            model.addAttribute("schedules", scheduleService.findAll());
-            model.addAttribute("vehicles", vehicleService.findAll());
+            model.addAttribute("drivers", userService.findAllByRole(principal.getName(), Enum.Role.DRIVER));
+            model.addAttribute("schedules", scheduleService.findByOwner(principal.getName()));
+            model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
             return "trips/update";
         }
 

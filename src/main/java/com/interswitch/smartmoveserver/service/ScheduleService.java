@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +33,7 @@ public class ScheduleService {
     VehicleCategoryService vehicleCategoryService;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     PageUtil pageUtil;
@@ -55,25 +54,31 @@ public class ScheduleService {
         Duration duration = Duration.between(start, stop);
         schedule.setDuration(String.valueOf(duration.getSeconds() / 60 / 60));
         if (schedule.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userService.findByUsername(principal);
             schedule.setOwner(owner);
         }
         return scheduleRepository.save(buildSchedule(schedule));
     }
 
     public Schedule findById(long id) {
-        return scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule does not exist"));
+        Optional<Schedule> schedule = scheduleRepository.findById(id);
+        return schedule.get();
     }
 
     public Schedule findById(long id, String principal) {
         return scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule does not exist"));
     }
 
+    public List<Schedule> findByOwner(String username) {
+        User owner = userService.findByUsername(username);
+        return scheduleRepository.findAllByOwner(owner);
+    }
+
     public Schedule update(Schedule schedule, String principal) {
         Optional<Schedule> existing = scheduleRepository.findById(schedule.getId());
         if (existing.isPresent()){
             if (schedule.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userService.findByUsername(principal);
                 schedule.setOwner(owner);
             }
             return scheduleRepository.save(buildSchedule(schedule));

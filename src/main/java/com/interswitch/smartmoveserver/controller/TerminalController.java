@@ -66,7 +66,7 @@ public class TerminalController {
         model.addAttribute("terminal", terminal);
         model.addAttribute("countries", stateService.findAllCountries());
         model.addAttribute("states", stateService.findAll());
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("terminal")));
         return "terminals/create";
     }
 
@@ -76,7 +76,7 @@ public class TerminalController {
             model.addAttribute("terminal", terminal);
             model.addAttribute("countries", stateService.findAllCountries());
             model.addAttribute("states", stateService.findAll());
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("terminal")));
             return "terminals/create";
         }
 
@@ -91,7 +91,7 @@ public class TerminalController {
         model.addAttribute("terminal", terminal);
         model.addAttribute("countries", stateService.findAllCountries());
         model.addAttribute("states", stateService.findAll());
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("terminal")));
         return "terminals/update";
     }
 
@@ -103,7 +103,7 @@ public class TerminalController {
             model.addAttribute("terminal", terminal);
             model.addAttribute("countries", stateService.findAllCountries());
             model.addAttribute("states", stateService.findAll());
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("terminal")));
             return "terminals/update";
         }
         terminalService.update(terminal, principal.getName());

@@ -68,9 +68,9 @@ public class ScheduleController {
         Schedule schedule = new Schedule();
         model.addAttribute("schedule", schedule);
         //not needed at the moment though,should be removed for performance reasons
-        model.addAttribute("owners", userService.findAll());
-        model.addAttribute("terminals", terminalService.findAll());
-        model.addAttribute("vehicles", vehicleCategoryService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("schedule")));
+        model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+        model.addAttribute("vehicles", vehicleCategoryService.findByOwner(principal.getName()));
         return "schedules/create";
     }
 
@@ -78,9 +78,9 @@ public class ScheduleController {
     public String create(Principal principal, @Valid Schedule schedule, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("schedule", schedule);
-            model.addAttribute("owners", userService.findAll());
-            model.addAttribute("terminals", terminalService.findAll());
-            model.addAttribute("vehicles", vehicleCategoryService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("schedule")));
+            model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+            model.addAttribute("vehicles", vehicleCategoryService.findByOwner(principal.getName()));
             return "schedules/create";
         }
 
@@ -93,9 +93,9 @@ public class ScheduleController {
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
         Schedule schedule = scheduleService.findById(id, principal.getName());
         model.addAttribute("schedule", schedule);
-        model.addAttribute("owners", userService.findAll());
-        model.addAttribute("terminals", terminalService.findAll());
-        model.addAttribute("vehicles", vehicleCategoryService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("schedule")));
+        model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+        model.addAttribute("vehicles", vehicleCategoryService.findByOwner(principal.getName()));
         return "schedules/update";
     }
 
@@ -106,9 +106,9 @@ public class ScheduleController {
 
         if (result.hasErrors()) {
             model.addAttribute("schedule", schedule);
-            model.addAttribute("owners", userService.findAll());
-            model.addAttribute("terminals", terminalService.findAll());
-            model.addAttribute("vehicles", vehicleCategoryService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("schedule")));
+            model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+            model.addAttribute("vehicles", vehicleCategoryService.findByOwner(principal.getName()));
             return "schedules/update";
         }
 

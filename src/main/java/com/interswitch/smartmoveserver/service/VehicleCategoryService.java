@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.*;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleCategoryRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
@@ -30,7 +29,7 @@ public class VehicleCategoryService {
     VehicleModelService vehicleModelService;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     DocumentService documentService;
@@ -50,7 +49,7 @@ public class VehicleCategoryService {
         boolean exists = vehicleCategoryRepository.existsByName(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Category with name: " + name + " already exists");
         if(vehicleCategory.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userService.findByUsername(principal);
             vehicleCategory.setOwner(owner);
         }
         if (vehicleCategory.getPicture().getSize() > 0) {
@@ -70,12 +69,17 @@ public class VehicleCategoryService {
 
     //findAllByMode
 
+    public List<VehicleCategory> findByOwner(String username) {
+        User owner = userService.findByUsername(username);
+        return vehicleCategoryRepository.findAllByOwner(owner);
+    }
+
     public VehicleCategory update(VehicleCategory vehicleCategory, String principal) {
         Optional<VehicleCategory> existing = vehicleCategoryRepository.findById(vehicleCategory.getId());
         if(existing.isPresent())
         {
             if(vehicleCategory.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userService.findByUsername(principal);
                 vehicleCategory.setOwner(owner);
             }
             if (vehicleCategory.getPicture().getSize() > 0) {
@@ -106,13 +110,10 @@ public class VehicleCategoryService {
 
     public PageView<VehicleCategory> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if(!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
-
+        User user = userService.findByUsername(principal);
         if(owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, user.get());
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             else {
@@ -122,10 +123,8 @@ public class VehicleCategoryService {
         }
         else {
             if(securityUtil.isOwner(principal, owner)){
-                Optional<User> ownerUser = userRepository.findById(owner);
-                if(!ownerUser.isPresent())
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, ownerUser.get());
+                User ownerUser = userService.findById(owner);
+                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, ownerUser);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");

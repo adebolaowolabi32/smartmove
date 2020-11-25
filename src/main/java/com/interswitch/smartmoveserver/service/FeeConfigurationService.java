@@ -5,7 +5,6 @@ import com.interswitch.smartmoveserver.model.FeeConfiguration;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.FeeConfigurationRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +16,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
 public class FeeConfigurationService {
 
     @Autowired
-    private UserRepository userRepository;
+    private FeeConfigurationRepository feeConfigurationRepository;
 
     @Autowired
-    private FeeConfigurationRepository feeConfigurationRepository;
+    private UserService userService;
 
     @Autowired
     PageUtil pageUtil;
@@ -42,13 +40,11 @@ public class FeeConfigurationService {
 
     public PageView<FeeConfiguration> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if (!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+        User user = userService.findByUsername(principal);
 
         if (owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                Page<FeeConfiguration> pages = feeConfigurationRepository.findAllByOwner(pageable, user.get());
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<FeeConfiguration> pages = feeConfigurationRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             } else {
                 Page<FeeConfiguration> pages = feeConfigurationRepository.findAll(pageable);
@@ -56,10 +52,8 @@ public class FeeConfigurationService {
             }
         } else {
             if (securityUtil.isOwner(principal, owner)) {
-                Optional<User> ownerUser = userRepository.findById(owner);
-                if (!ownerUser.isPresent())
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                Page<FeeConfiguration> pages = feeConfigurationRepository.findAllByOwner(pageable, ownerUser.get());
+                User ownerUser = userService.findById(owner);
+                Page<FeeConfiguration> pages = feeConfigurationRepository.findAllByOwner(pageable, ownerUser);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
@@ -76,10 +70,9 @@ public class FeeConfigurationService {
      */
     public FeeConfiguration save(FeeConfiguration feeConfiguration, String principal) {
 
-        User systemUser = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
-
-        String transportOperatorUsername = (systemUser.getRole()==Enum.Role.OPERATOR || systemUser.getRole()==Enum.Role.ISW_ADMIN) ?
-                systemUser.getUsername() : systemUser.getOwner()!=null ? systemUser.getOwner().getUsername() : "";
+        User systemUser = userService.findByUsername(principal);
+        String transportOperatorUsername = (systemUser.getRole() == Enum.Role.OPERATOR || systemUser.getRole() == Enum.Role.ISW_ADMIN) ?
+                systemUser.getUsername() : systemUser.getOwner() != null ? systemUser.getOwner().getUsername() : "";
 
         boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName(),transportOperatorUsername);
 
@@ -98,8 +91,8 @@ public class FeeConfigurationService {
     public FeeConfiguration findById(long id, String principal) {
 
         FeeConfiguration feeConfig = feeConfigurationRepository.findById(id);
-        if(feeConfig==null) {
-            new ResponseStatusException(HttpStatus.NOT_FOUND, "fee does not exist");
+        if (feeConfig == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee does not exist.");
         }
         return feeConfig;
     }
@@ -110,13 +103,13 @@ public class FeeConfigurationService {
         if (feeConfiguration!=null) {
 
             if (feeConfiguration.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userService.findByUsername(principal);
                 feeConfiguration.setOwner(owner);
                 feeConfiguration.setOperator(owner);
             }
             return feeConfigurationRepository.save(feeConfiguration);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee Configuration does not exist");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee Configuration does not exist.");
     }
 
     public void delete(long id, String principal) {
@@ -124,15 +117,10 @@ public class FeeConfigurationService {
         if (feeConfiguration!=null)
             feeConfigurationRepository.deleteById(id);
         else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee configuration does not exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee configuration does not exist.");
         }
     }
 
-    /**
-     *
-     * @param operatorUsername
-     * @return
-     */
     public List<FeeConfiguration> findEnabledFeeConfigByOperatorUsername(String operatorUsername) {
         return feeConfigurationRepository.findByEnabledAndOperatorUsername(true, operatorUsername);
     }
