@@ -3,7 +3,6 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.model.Blacklist;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.repository.BlacklistRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,9 +19,6 @@ import java.util.Optional;
 public class BlacklistService {
     @Autowired
     BlacklistRepository blacklistRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     public PageView<Blacklist> findAllPaginated(int page, int size) {
         PageRequest pageable = PageRequest.of(page - 1, size);

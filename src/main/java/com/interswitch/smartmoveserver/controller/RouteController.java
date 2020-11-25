@@ -61,20 +61,19 @@ public class RouteController {
     public String showCreate(Principal principal, Model model) {
         Route route = new Route();
         model.addAttribute("route", route);
-        model.addAttribute("owners", userService.findAll());
-        model.addAttribute("terminals", terminalService.findAll());
-        model.addAttribute("vehicles", vehicleService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("route")));
+        model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+        model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
         return "routes/create";
     }
 
     @PostMapping("/create")
     public String create(Principal principal, @Valid Route route, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-
         if (result.hasErrors()) {
             model.addAttribute("route", route);
-            model.addAttribute("owners", userService.findAll());
-            model.addAttribute("terminals", terminalService.findAll());
-            model.addAttribute("vehicles", vehicleService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("route")));
+            model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+            model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
             return "routes/create";
         }
 
@@ -87,9 +86,9 @@ public class RouteController {
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
         Route route = routeService.findById(id, principal.getName());
         model.addAttribute("route", route);
-        model.addAttribute("owners", userService.findAll());
-        model.addAttribute("terminals", terminalService.findAll());
-        model.addAttribute("vehicles", vehicleService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("route")));
+        model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+        model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
         return "routes/update";
     }
 
@@ -99,9 +98,9 @@ public class RouteController {
         route.setId(id);
         if (result.hasErrors()) {
             model.addAttribute("route", route);
-            model.addAttribute("owners", userService.findAll());
-            model.addAttribute("terminals", terminalService.findAll());
-            model.addAttribute("vehicles", vehicleService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("route")));
+            model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+            model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
             return "routes/update";
         }
         routeService.update(route, principal.getName());

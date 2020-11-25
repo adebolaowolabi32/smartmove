@@ -118,7 +118,7 @@ public class HomeController {
             no_routes = routeService.countByOwner(user);
             no_validators = deviceService.countByTypeAndOwner(Enum.DeviceType.VALIDATOR, user);
             no_readers = deviceService.countByTypeAndOwner(Enum.DeviceType.READER, user);
-            no_transactions = transactionService.countAll();
+            no_transactions = transactionService.countByOwner(username);
             //if(role == Enum.Role.AGENT ) {
             try {
                 wallet = walletService.findByOwner(user.getUsername());
@@ -128,8 +128,8 @@ public class HomeController {
             }
             card_balance = card != null ? card.getBalance() : 0L;
             wallet_balance = wallet != null ? wallet.getBalance() : 0D;
-            no_cards = cardService.countAll();
-            no_transfers = transferService.countAll();
+            no_cards = cardService.countByOwner(username);
+            no_transfers = transferService.countByOwner(username);
             //}
         }
         else {

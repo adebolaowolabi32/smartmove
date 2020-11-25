@@ -55,7 +55,7 @@ public class DeviceController {
     public String showCreate(Principal principal, Model model) {
         Device device = new Device();
         model.addAttribute("device", device);
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("device")));
         return "devices/create";
     }
 
@@ -63,7 +63,7 @@ public class DeviceController {
     public String create(Principal principal, @Valid Device device, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("device", device);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("device")));
             return "devices/create";
         }
         Device savedDevice = deviceService.save(device, principal.getName());
@@ -75,7 +75,7 @@ public class DeviceController {
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
         Device device = deviceService.findById(id, principal.getName());
         model.addAttribute("device", device);
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("device")));
         return "devices/update";
     }
 
@@ -85,7 +85,7 @@ public class DeviceController {
         device.setId(id);
         if (result.hasErrors()) {
             model.addAttribute("device", device);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("device")));
             return "devices/update";
         }
         deviceService.update(device, principal.getName());

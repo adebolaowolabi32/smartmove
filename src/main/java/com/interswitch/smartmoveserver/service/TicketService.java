@@ -4,7 +4,6 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.*;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
@@ -20,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /*
@@ -34,7 +32,7 @@ public class TicketService {
     private TicketRepository ticketRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private ManifestService manifestService;
@@ -75,15 +73,10 @@ public class TicketService {
     }
 
     public ScheduleBooking findBooking(String username, ScheduleBooking scheduleBooking) {
-        User operator = new User();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) //and if user is operator
-            operator = user.get();
-        //List<Schedule> schedules = scheduleService.findByOwner);
         LocalDate returnDate = scheduleBooking.getReturnDate();
         if (returnDate != null) scheduleBooking.setRoundTrip(true);
         //make sure to search by operator
-        List<Schedule> schedules = scheduleService.findAll();
+        List<Schedule> schedules = scheduleService.findByOwner(username);
         List<Schedule> scheduleResults = schedules.stream()
                 .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName()
                         .equals(scheduleBooking.getStopTerminal()) && s.getDepartureDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
@@ -96,13 +89,7 @@ public class TicketService {
     }
 
     public TicketDetails makeBooking(String username, String scheduleId, int noOfPassengers) {
-
-        log.info("username===>" + username);
-        User systemUser = new User();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) //and if user is operator
-            systemUser = user.get();
-
+        User user = userService.findByUsername(username);
         TicketDetails ticketDetails = new TicketDetails();
         Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
         ticketDetails.setSchedule(schedule);
@@ -111,8 +98,8 @@ public class TicketService {
         ticketDetails.setCountries(stateService.findAllCountries());
         ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
 
-        String transportOperatorUsername = (systemUser.getRole() == Enum.Role.OPERATOR || systemUser.getRole() == Enum.Role.ISW_ADMIN) ?
-                systemUser.getUsername() : systemUser.getOwner() != null ? systemUser.getOwner().getUsername() : "";
+        String transportOperatorUsername = (user.getRole() == Enum.Role.OPERATOR || user.getRole() == Enum.Role.ISW_ADMIN) ?
+                user.getUsername() : user.getOwner() != null ? user.getOwner().getUsername() : "";
 
         log.info("Transport Operator username===>" + transportOperatorUsername);
 
@@ -133,10 +120,7 @@ public class TicketService {
         //generate tickets from details
         String bookingDate = DateUtil.formatDate(LocalDateTime.now());
         ticketDetails.setBookingDate(bookingDate);
-        User operator = new User();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) //and if user is operator
-            operator = user.get();
+        User operator = userService.findByUsername(username);
         ticketDetails.setOperator(operator);
         double totalFare = 0;
         List<Ticket> tickets = new ArrayList<>();
@@ -201,17 +185,12 @@ public class TicketService {
     }
 
     public ScheduleBooking reassignTicket(String username, ReassignTicket reassignTicket) {
-        User operator = new User();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) //and if user is operator
-            operator = user.get();
         ScheduleBooking scheduleBooking = new ScheduleBooking();
         Ticket ticket = findByReferenceNo(reassignTicket.getReferenceNo().trim());
         if (ticket != null) {
             Schedule schedule = ticket.getSchedule();
             reassignTicket.setTicket(ticket);
-            //List<Schedule> schedules = scheduleService.findByOwner);
-            List<Schedule> schedules = scheduleService.findAll();
+            List<Schedule> schedules = scheduleService.findByOwner(username);
             List<Schedule> scheduleResults = schedules.stream()
                     .filter(s -> s.getStartTerminal().getName().equals(schedule.getStartTerminal().getName()) && s.getStopTerminal().getName()
                             .equals(schedule.getStopTerminal().getName()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
@@ -222,10 +201,6 @@ public class TicketService {
     }
 
     public TicketDetails confirmReassignment(String username, ReassignTicket reassignTicket, TicketDetails ticketDetails) {
-        User operator = new User();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) //and if user is operator
-            operator = user.get();
         List<Ticket> tickets = new ArrayList<>();
         Ticket ticket = reassignTicket.getTicket();
         Schedule fromSchedule = ticket.getSchedule();
@@ -308,8 +283,8 @@ public class TicketService {
 
 
     public Ticket save(String principal, Ticket ticket) {
-        Optional<User> owner = userRepository.findByUsername(principal);
-        if (owner.isPresent()) ticket.setOperator(owner.get());
+        User owner = userService.findByUsername(principal);
+        ticket.setOperator(owner);
         return ticketRepository.save(ticket);
     }
 
@@ -331,12 +306,9 @@ public class TicketService {
 
     public PageView<Ticket> findAllByOperator(int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if (user.isPresent()) {
-            Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, user.get());
-            return new PageView<>(pages.getTotalElements(), pages.getContent());
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket Owner not found");
+        User user = userService.findByUsername(principal);
+        Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, user);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
 

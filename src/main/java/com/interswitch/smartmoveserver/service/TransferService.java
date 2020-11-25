@@ -26,11 +26,13 @@ public class TransferService {
     private WalletTransferRepository transferRepository;
 
     @Autowired
-    PageUtil pageUtil;
-    @Autowired
     private UserService userService;
+
     @Autowired
     private WalletService walletService;
+
+    @Autowired
+    PageUtil pageUtil;
 
     public Transfer save(Transfer transfer) {
         return transferRepository.save(transfer);
@@ -49,6 +51,13 @@ public class TransferService {
     public Long countAll() {
         return transferRepository.count();
     }
+
+    public Long countByOwner(String username) {
+        User user = userService.findByUsername(username);
+        if (user != null) return transferRepository.countByOwner(user);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+    }
+
 
    /* public Page<Transfer> findAllTransfers(Principal principal, Long owner, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);

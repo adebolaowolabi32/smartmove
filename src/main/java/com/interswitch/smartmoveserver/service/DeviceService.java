@@ -3,11 +3,8 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.DeviceDto;
-import com.interswitch.smartmoveserver.model.dto.UserDto;
 import com.interswitch.smartmoveserver.model.view.FundDevice;
 import com.interswitch.smartmoveserver.repository.DeviceRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
-import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
@@ -34,10 +31,7 @@ public class DeviceService {
     private DeviceRepository deviceRepository;
 
     @Autowired
-    private VehicleRepository vehicleRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private WalletService walletService;
@@ -53,13 +47,10 @@ public class DeviceService {
 
     public PageView<Device> findAllPaginatedByType(Long owner, Enum.DeviceType type, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if (!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
-
+        User user = userService.findByUsername(principal);
         if (owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                Page<Device> pages = deviceRepository.findAllByTypeAndOwner(pageable, type, user.get());
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<Device> pages = deviceRepository.findAllByTypeAndOwner(pageable, type, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             else {
@@ -68,10 +59,8 @@ public class DeviceService {
             }
         } else {
             if (securityUtil.isOwner(principal, owner)) {
-                Optional<User> ownerUser = userRepository.findById(owner);
-                if (!ownerUser.isPresent())
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                Page<Device> pages = deviceRepository.findAllByTypeAndOwner(pageable, type, ownerUser.get());
+                User ownerUser = userService.findById(owner);
+                Page<Device> pages = deviceRepository.findAllByTypeAndOwner(pageable, type, ownerUser);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
 
             }
@@ -81,13 +70,11 @@ public class DeviceService {
 
     public PageView<Device> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if (!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+        User user = userService.findByUsername(principal);
 
         if (owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                Page<Device> pages = deviceRepository.findAllByOwner(pageable, user.get());
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<Device> pages = deviceRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             else {
@@ -96,10 +83,8 @@ public class DeviceService {
             }
         } else {
             if (securityUtil.isOwner(principal, owner)) {
-                Optional<User>ownerUser = userRepository.findById(owner);
-                if (!ownerUser.isPresent())
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                Page<Device> pages = deviceRepository.findAllByOwner(pageable, ownerUser.get());
+                User ownerUser = userService.findById(owner);
+                Page<Device> pages = deviceRepository.findAllByOwner(pageable, ownerUser);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
@@ -119,7 +104,7 @@ public class DeviceService {
         boolean exists = deviceRepository.existsByName(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Device with name: " + name + " already exists");
         if(device.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userService.findByUsername(principal);
             device.setOwner(owner);
         }
         return deviceRepository.save(device);
@@ -141,7 +126,7 @@ public class DeviceService {
         Optional<Device> existing = deviceRepository.findById(device.getId());
         if(existing.isPresent()){
             if(device.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userService.findByUsername(principal);
                 device.setOwner(owner);
             }
             return deviceRepository.save(device);
@@ -160,6 +145,7 @@ public class DeviceService {
 
     public String fundDevice(String principal, FundDevice fundDevice) {
         double amount = fundDevice.getAmount();
+        User owner = userService.findByUsername(principal);
         Wallet wallet = walletService.findByOwner(principal);
         Device device = findById(fundDevice.getDeviceId(), principal);
         double deviceBalance = device.getBalance();
@@ -176,6 +162,7 @@ public class DeviceService {
             transfer1.setRecipient("Device - " + fundDevice.getDeviceId());
             transfer1.setWallet(wallet);
             transfer1.setTransferDateTime(LocalDateTime.now());
+            transfer1.setOwner(owner);
             transferService.save(transfer1);
         }
         return "Insufficient funds";
@@ -219,13 +206,13 @@ public class DeviceService {
     }
 
     public boolean upload(MultipartFile file, String principal) throws IOException {
-        Optional<User> ownerOptional = userRepository.findByUsername(principal);
+        User owner = userService.findByUsername(principal);
         List<Device> savedDevices = new ArrayList<>();
         if(file.getSize()>1){
             FileParser<DeviceDto> fileParser = new FileParser<>();
             List<DeviceDto> deviceDtoList = fileParser.parseFileToEntity(file, DeviceDto.class);
-            deviceDtoList.forEach(deviceDto->{
-                savedDevices.add(save(mapToDevice(deviceDto, ownerOptional.isPresent()? ownerOptional.get() : null),principal));
+            deviceDtoList.forEach(deviceDto -> {
+                savedDevices.add(save(mapToDevice(deviceDto, owner), principal));
             });
         }
         return savedDevices.size()>1;
@@ -249,10 +236,7 @@ public class DeviceService {
     }
 
     private boolean isEnabled(String enabledStatus){
-        if(enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true")){
-            return true;
-        }
-        return false;
+        return enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true");
     }
 
     private Enum.DeviceStatus convertToDeviceStatus(String status){

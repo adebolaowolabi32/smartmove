@@ -4,7 +4,6 @@ import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.TerminalRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class TerminalService {
     TerminalRepository terminalRepository;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     SecurityUtil securityUtil;
@@ -38,15 +37,17 @@ public class TerminalService {
         return terminalRepository.findAll();
     }
 
+    public List<Terminal> findByOwner(String username) {
+        User owner = userService.findByUsername(username);
+        return terminalRepository.findAllByOwner(owner);
+    }
+
     public PageView<Terminal> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if (!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
-
+        User user = userService.findByUsername(principal);
         if (owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                Page<Terminal> pages = terminalRepository.findAllByOwner(pageable, user.get());
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<Terminal> pages = terminalRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             else {
@@ -55,10 +56,8 @@ public class TerminalService {
             }
         } else {
             if (securityUtil.isOwner(principal, owner)) {
-                Optional<User> ownerUser = userRepository.findById(owner);
-                if (!ownerUser.isPresent())
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                Page<Terminal> pages = terminalRepository.findAllByOwner(pageable, ownerUser.get());
+                User ownerUser = userService.findById(owner);
+                Page<Terminal> pages = terminalRepository.findAllByOwner(pageable, ownerUser);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
@@ -70,7 +69,7 @@ public class TerminalService {
         boolean exists = terminalRepository.existsByName(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Terminal with name: " + name + " already exists");
         if(terminal.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userService.findByUsername(principal);
             terminal.setOwner(owner);
         }
         return terminalRepository.save(terminal);
@@ -88,7 +87,7 @@ public class TerminalService {
         Optional<Terminal> existing = terminalRepository.findById(terminal.getId());
         if(existing.isPresent()){
             if(terminal.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userService.findByUsername(principal);
                 terminal.setOwner(owner);
             }
             return terminalRepository.save(terminal);

@@ -4,9 +4,6 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.ManifestDto;
 import com.interswitch.smartmoveserver.repository.ManifestRepository;
-import com.interswitch.smartmoveserver.repository.ScheduleRepository;
-import com.interswitch.smartmoveserver.repository.SeatRepository;
-import com.interswitch.smartmoveserver.repository.TripRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -39,13 +36,7 @@ public class ManifestService {
     ScheduleService scheduleService;
 
     @Autowired
-    SeatRepository seatRepository;
-
-    @Autowired
-    TripRepository tripRepository;
-
-    @Autowired
-    ScheduleRepository scheduleRepository;
+    SeatService seatService;
 
     @Autowired
     PageUtil pageUtil;
@@ -58,8 +49,6 @@ public class ManifestService {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         Page<Manifest> pages = manifestRepository.findAll(pageable);
         return new PageView<>(pages.getTotalElements(), pages.getContent());
-
-
     }
 
     public PageView<Manifest> findPaginatedManifestByTripId(int page, int size, long tripId) {
@@ -172,9 +161,9 @@ public class ManifestService {
     private Manifest mapToManifest(ManifestDto dto){
         return Manifest.builder()
                 .address(dto.getAddress())
-                .boarded( (dto.getBoarded().startsWith("T") || dto.getBoarded().startsWith("t") ) ? true : false)
+                .boarded(dto.getBoarded().startsWith("T") || dto.getBoarded().startsWith("t"))
                 .bvn(dto.getBvn())
-                .completed((dto.getCompleted().startsWith("T") || dto.getCompleted().startsWith("t") ) ? true : false)
+                .completed(dto.getCompleted().startsWith("T") || dto.getCompleted().startsWith("t"))
                 .contactEmail(dto.getContactEmail())
                 .gender(dto.getGender())
                 .id(0)

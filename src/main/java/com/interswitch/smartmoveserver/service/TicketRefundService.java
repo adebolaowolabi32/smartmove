@@ -22,10 +22,10 @@ public class TicketRefundService {
     PageUtil pageUtil;
 
     @Autowired
-    private TicketService ticketService;
+    private TicketRefundRepository refundRepository;
 
     @Autowired
-    private TicketRefundRepository refundRepository;
+    private TicketService ticketService;
 
     @Autowired
     private ManifestService manifestService;
