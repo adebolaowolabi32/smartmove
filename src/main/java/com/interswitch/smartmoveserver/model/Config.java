@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +14,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "systemConfigurations")
-public class Config implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Config extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

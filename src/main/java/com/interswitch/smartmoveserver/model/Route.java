@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +15,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "routes")
-public class Route implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Route extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

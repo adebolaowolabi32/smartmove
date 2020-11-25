@@ -1,7 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
-
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 /**
@@ -10,7 +10,8 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "wallets")
-public class Wallet {
+@EntityListeners(AuditingEntityListener.class)
+public class Wallet extends  Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

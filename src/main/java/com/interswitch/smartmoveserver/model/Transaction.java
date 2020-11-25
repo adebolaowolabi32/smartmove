@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,7 +16,8 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "transactions")
-public class Transaction implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Transaction extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
