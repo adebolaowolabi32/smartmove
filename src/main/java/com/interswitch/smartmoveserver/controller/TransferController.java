@@ -52,7 +52,7 @@ public class TransferController {
     public String transfer(Principal principal, Model model) {
         Transfer transfer = new Transfer();
         model.addAttribute("transfer", transfer);
-        model.addAttribute("recipients", userService.findAllByRole(Enum.Role.AGENT));
+        model.addAttribute("recipients", userService.findAllByRole(principal.getName(), Enum.Role.AGENT));
         return "transfers/transfer";
     }
 
