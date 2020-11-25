@@ -123,10 +123,10 @@ public class UserService {
             userApprovalRepository.save(approval);
             return user;
         }
-        passportUser = passportService.createUser(user);
+        //passportUser = passportService.createUser(user);
         //iswCoreService.createUser(user);
         user.setEnabled(true);
-        save(passportUser, user, principal);
+        save(null, user, principal);
         sendUserSetUpEmail(user, owner);
         return user;
     }
