@@ -170,6 +170,9 @@ public class IswCoreService {
                 permissions.add("VIEW_TICKET_DETAILS");
                 permissions.add("VIEW_TICKET_TILL");
 
+                permissions.add("VIEW_AUDIT_TRAIL");
+
+
                 permissions.add("UPDATE_CARD");
                 permissions.add("UPDATE_AGENT");
                 permissions.add("UPDATE_DEVICE");

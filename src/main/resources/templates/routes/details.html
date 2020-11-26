@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layouts/default.html}">
+	  layout:decorate="~{layouts/default.html}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <title layout:fragment="title">Routes</title>
 <div layout:fragment="content" class="card mb-4">
 	<div class="card-header"><i class="fas fa-route mr-1"></i><span>Routes</span></div>
@@ -65,6 +66,31 @@
 							</span></div>
 					</div>
 				</div>
+
+					<div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
+						<div class="form-group row">
+							<label class="col-sm-4" for="createdBy"><b>Created By</b></label>
+							<div class="col-sm-8"><span id="createdBy" th:text="${route.createdBy!=null? route.createdBy : 'Unknown'}"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="createdDate"><b>Created Date</b></label>
+							<div class="col-sm-8"><span id="createdDate" th:text="${route.createdDate !=null ? route.createdDate : 'Unknown'}"></span>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-4" for="LastModifiedBy"><b>Last Modified By</b></label>
+							<div class="col-sm-8"><span id="LastModifiedBy" th:text="${route.lastModifiedBy !=null ? route.lastModifiedBy : 'Unknown'}"></span></div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-4" for="LastModifiedDate"><b>Last Modified Date</b></label>
+							<div class="col-sm-8"><span id="LastModifiedDate" th:text="${route.lastModifiedDate!=null? route.lastModifiedDate : 'Unknown'}"></span></div>
+						</div>
+					</div>
+
+
 				</div>
 			</div>
 		</div>

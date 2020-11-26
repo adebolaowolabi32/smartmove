@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <title layout:fragment="title">Fees</title>
 <div class="card mb-4" layout:fragment="content">
     <div class="card-header"><i class="fas fa-memory mr-1"></i><span>Fees</span></div>
@@ -62,7 +64,31 @@
 
                     </div>
 
+                    <div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="createdBy"><b>Created By</b></label>
+                            <div class="col-sm-8"><span id="createdBy" th:text="${fee.createdBy!=null ? fee.createdBy :'Unknown'}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="createdDate"><b>Created Date</b></label>
+                            <div class="col-sm-8"><span id="createdDate" th:text="${fee.createdDate!=null?fee.createdDate:'Unknown'}"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="LastModifiedBy"><b>Last Modified By</b></label>
+                            <div class="col-sm-8"><span id="LastModifiedBy" th:text="${fee.lastModifiedBy!=null ? fee.lastModifiedBy :'Unknown' }"></span></div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="LastModifiedDate"><b>Last Modified Date</b></label>
+                            <div class="col-sm-8"><span id="LastModifiedDate" th:text="${fee.lastModifiedDate!=null ? fee.lastModifiedDate :'Unknown'}"></span></div>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
         </div>
     </div>

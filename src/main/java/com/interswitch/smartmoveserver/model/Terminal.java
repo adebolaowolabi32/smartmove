@@ -51,5 +51,7 @@ public class Terminal extends Auditable<String> implements Serializable {
     @JoinColumn(name = "owner")
     private User owner;
 
+    private String location;
+
     private boolean enabled;
 }
