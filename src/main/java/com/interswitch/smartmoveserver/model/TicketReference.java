@@ -2,8 +2,10 @@ package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /*
  * Created by adebola.owolabi on 11/5/2020
@@ -11,7 +13,8 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "ticket_references")
-public class TicketReference {
+@EntityListeners(AuditingEntityListener.class)
+public class TicketReference extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

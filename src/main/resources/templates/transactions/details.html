@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layouts/default.html}">
+	  layout:decorate="~{layouts/default.html}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <title layout:fragment="title">Transactions</title>
 <div layout:fragment="content" class="card mb-4">
 	<div class="card-header"><i class="fas fa-list mr-1"></i><span>Transactions</span></div>
@@ -64,6 +65,31 @@
 								<span id="transactiondate" th:text="${transaction.transactionDateTime}"></span></div>
 						</div>
 					</div>
+
+					<div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
+						<div class="form-group row">
+							<label class="col-sm-4" for="createdBy"><b>Created By</b></label>
+							<div class="col-sm-8"><span id="createdBy" th:text="${transaction.createdBy!=null?transaction.createdBy :'Unknown'}"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="createdDate"><b>Created Date</b></label>
+							<div class="col-sm-8"><span id="createdDate" th:text="${transaction.createdDate!=null?transaction.createdDate:'Unknown'}"></span>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-4" for="LastModifiedBy"><b>Last Modified By</b></label>
+							<div class="col-sm-8"><span id="LastModifiedBy" th:text="${transaction.lastModifiedBy!=null?transaction.lastModifiedBy : 'Unknown'}"></span></div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-4" for="LastModifiedDate"><b>Last Modified Date</b></label>
+							<div class="col-sm-8"><span id="LastModifiedDate" th:text="${transaction.lastModifiedDate!=null?transaction.lastModifiedDate:'Unknown'}"></span></div>
+						</div>
+					</div>
+
+
 				</div>
 			</div>
 		</div>

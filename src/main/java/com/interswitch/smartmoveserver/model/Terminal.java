@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +20,8 @@ import java.io.Serializable;
 @Builder
 @Entity
 @Table(name = "terminals")
-public class Terminal implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Terminal extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -48,6 +50,8 @@ public class Terminal implements Serializable {
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
+
+    private String location;
 
     private boolean enabled;
 }

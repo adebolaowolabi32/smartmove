@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -15,7 +16,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name="fee_configurations")
-public class FeeConfiguration implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class FeeConfiguration extends Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

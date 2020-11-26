@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default.html}">
+      layout:decorate="~{layouts/default.html}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <title layout:fragment="title">Ticket Reference</title>
 <div layout:fragment="content" class="card mb-4">
     <div class="card-header"><i class="fas fa-bus mr-1"></i><span>Ticket Reference</span></div>
@@ -25,7 +26,10 @@
             </div>
             <div th:if="${ticketReference}">
                 <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{ticketReference.saved.message} : (${updated} ? #{ticketReference.updated.message} : false))"></div>
+
                 <div class="card p-3">
+
+                <div class="col">
                     <div class="form-group row">
                         <label class="control-label col-sm-4" for="prefix"><b>Prefix</b></label>
                         <div class="col-sm-8">
@@ -58,8 +62,33 @@
                             </label>
                             </span></div>
                     </div>
+                </div>
+
+                    <div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
+                    <div class="form-group row">
+                        <label class="col-sm-4" for="createdBy"><b>Created By</b></label>
+                        <div class="col-sm-8"><span id="createdBy" th:text="${ticketReference.createdBy!=null?ticketReference.createdBy : 'Unknown'}"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4" for="createdDate"><b>Created Date</b></label>
+                        <div class="col-sm-8"><span id="createdDate" th:text="${ticketReference.createdDate!=null?ticketReference.createdDate:'Unknown'}"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4" for="LastModifiedBy"><b>Last Modified By</b></label>
+                        <div class="col-sm-8"><span id="LastModifiedBy" th:text="${ticketReference.lastModifiedBy!=null?ticketReference.lastModifiedBy : 'Unknown'}"></span></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4" for="LastModifiedDate"><b>Last Modified Date</b></label>
+                        <div class="col-sm-8"><span id="LastModifiedDate" th:text="${ticketReference.lastModifiedDate!=null?ticketReference.lastModifiedDate : 'Unknown'}"></span></div>
+                    </div>
+                </div>
 
                 </div>
+
             </div>
         </div>
     </div>

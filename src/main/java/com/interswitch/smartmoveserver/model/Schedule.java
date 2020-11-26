@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -18,7 +19,8 @@ import java.time.LocalTime;
 @Data
 @Entity
 @Table(name = "schedules")
-public class Schedule implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Schedule extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

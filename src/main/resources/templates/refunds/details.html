@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <title layout:fragment="title">Ticket Refunds</title>
 <div class="card mb-4" layout:fragment="content">
     <div class="card-header"><i class="fas fa-retweet mr-1"></i><span>Ticket Refunds</span></div>
@@ -60,6 +61,30 @@
                                     <span id="reason" th:text="${refund.reason}"></span></div>
                             </div>
                         </div>
+
+                        <div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
+                            <div class="form-group row">
+                                <label class="col-sm-4" for="createdBy"><b>Created By</b></label>
+                                <div class="col-sm-8"><span id="createdBy" th:text="${refund.createdBy!=null?refund.createdBy:'Unknown'}"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4" for="createdDate"><b>Created Date</b></label>
+                                <div class="col-sm-8"><span id="createdDate" th:text="${refund.createdDate!=null? refund.createdDate : 'Unknown'}"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-4" for="LastModifiedBy"><b>Last Modified By</b></label>
+                                <div class="col-sm-8"><span id="LastModifiedBy" th:text="${refund.lastModifiedBy!=null?refund.lastModifiedBy : 'Unknown'}"></span></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-4" for="LastModifiedDate"><b>Last Modified Date</b></label>
+                                <div class="col-sm-8"><span id="LastModifiedDate" th:text="${refund.lastModifiedDate!=null ? refund.lastModifiedDate : 'Unknown' }"></span></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

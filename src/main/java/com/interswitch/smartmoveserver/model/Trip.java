@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,8 @@ import java.io.Serializable;
 @Builder
 @Entity
 @Table(name = "trips")
-public class Trip implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Trip extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -46,4 +48,8 @@ public class Trip implements Serializable {
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Transport mode is required.")
+    private Enum.TransportMode mode;
 }

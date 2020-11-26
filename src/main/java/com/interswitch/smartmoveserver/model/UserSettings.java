@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
@@ -10,7 +11,9 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "user_settings")
-public class UserSettings {
+
+@EntityListeners(AuditingEntityListener.class)
+public class UserSettings extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

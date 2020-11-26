@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <title layout:fragment="title">User Settings</title>
 <div class="card mb-4" layout:fragment="content">
     <div class="card-header"><i class="fas fa-cogs mr-1"></i><span>User Settings</span></div>
@@ -27,7 +28,9 @@
             </div>
             <div th:if="${userSettings}">
                 <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{userSettings.saved.message} : (${updated} ? #{userSettings.updated.message} : false))"></div>
+
                 <div class="card p-3">
+                <div class="col">
                     <div class="form-group row">
                         <label class="col-sm-4" for="makerCheckerEnabled"><b>Enable Maker Checker For All
                             Users</b></label>
@@ -39,6 +42,31 @@
                             </label>
                             </span></div>
                     </div>
+
+                    <div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
+                            <div class="form-group row">
+                                <label class="col-sm-4" for="createdBy"><b>Created By</b></label>
+                                <div class="col-sm-8"><span id="createdBy" th:text="${userSettings.createdBy!=null?userSettings.createdBy :'Unknown'}"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4" for="createdDate"><b>Created Date</b></label>
+                                <div class="col-sm-8"><span id="createdDate" th:text="${userSettings.createdDate!=null?userSettings.createdDate:'Unknown'}"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-4" for="LastModifiedBy"><b>Last Modified By</b></label>
+                                <div class="col-sm-8"><span id="LastModifiedBy" th:text="${userSettings.lastModifiedBy!=null?userSettings.lastModifiedBy : 'Unknown'}"></span></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-4" for="LastModifiedDate"><b>Last Modified Date</b></label>
+                                <div class="col-sm-8"><span id="LastModifiedDate" th:text="${userSettings.lastModifiedDate!=null?userSettings.lastModifiedDate:'Unknown'}"></span></div>
+                            </div>
+                        </div>
+                </div>
+
                 </div>
             </div>
         </div>

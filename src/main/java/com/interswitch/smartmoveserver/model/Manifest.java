@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -21,7 +22,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "manifests")
-public class Manifest implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Manifest extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -34,7 +36,7 @@ public class Manifest implements Serializable {
     private String seatNo;
 
     @NotBlank(message = "Name is required.")
-    @Length(min = 2, max = 30, message = "Name must be between 2 and 30 characters long.")
+    @Length(min = 5, max = 30, message = "Name must be between 5 and 30 characters long.")
     private String name;
 
     @NotBlank(message = "Address is required.")

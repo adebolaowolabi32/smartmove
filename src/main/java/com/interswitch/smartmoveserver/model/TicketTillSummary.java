@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
@@ -17,7 +19,8 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "ticket_till_summary")
-public class TicketTillSummary {
+@EntityListeners(AuditingEntityListener.class)
+public class TicketTillSummary extends  Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

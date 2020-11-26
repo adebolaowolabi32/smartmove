@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -23,7 +28,8 @@ import java.time.LocalDate;
 @Builder
 @Entity
 @Table(name = "cards")
-public class Card implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Card extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -49,4 +55,6 @@ public class Card implements Serializable {
     private long balance;
 
     private boolean enabled;
+
+
 }
