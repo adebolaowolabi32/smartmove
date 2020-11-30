@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,7 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "seats")
 @EntityListeners(AuditingEntityListener.class)
-public class Seat extends AuditEntity<String> implements Serializable {
+public class Seat extends  AuditEntity<String> implements Auditable<Long>,Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -31,4 +32,14 @@ public class Seat extends AuditEntity<String> implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Enum.SeatClass seatClass;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

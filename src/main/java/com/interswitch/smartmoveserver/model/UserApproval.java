@@ -1,8 +1,10 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /*
  * Created by adebola.owolabi on 11/5/2020
@@ -10,7 +12,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "user_approvals")
-public class UserApproval {
+public class UserApproval extends  AuditEntity<String> implements Auditable<Long>, Serializable  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,4 +24,14 @@ public class UserApproval {
     private User owner;
 
     private boolean approved;
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
+
 }

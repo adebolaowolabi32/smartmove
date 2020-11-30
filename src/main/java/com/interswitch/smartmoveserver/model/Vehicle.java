@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
@@ -18,7 +19,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "vehicles")
 @EntityListeners(AuditingEntityListener.class)
-public class Vehicle extends AuditEntity<String> implements Serializable {
+public class Vehicle extends  AuditEntity<String> implements Auditable<Long>,Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -51,4 +52,14 @@ public class Vehicle extends AuditEntity<String> implements Serializable {
     private transient MultipartFile picture;
 
     private boolean enabled;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

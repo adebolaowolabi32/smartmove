@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "terminals")
 @EntityListeners(AuditingEntityListener.class)
-public class Terminal extends AuditEntity<String> implements Serializable {
+public class Terminal extends  AuditEntity<String> implements Auditable<Long>,Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -54,4 +55,14 @@ public class Terminal extends AuditEntity<String> implements Serializable {
     private String location;
 
     private boolean enabled;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

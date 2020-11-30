@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.FeeConfiguration;
 import com.interswitch.smartmoveserver.model.PageView;
@@ -7,6 +8,8 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.FeeConfigurationRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,6 +71,7 @@ public class FeeConfigurationService {
      * @param principal
      * @return
      */
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public FeeConfiguration save(FeeConfiguration feeConfiguration, String principal) {
 
         User systemUser = userService.findByUsername(principal);
@@ -98,6 +102,7 @@ public class FeeConfigurationService {
     }
 
 
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public FeeConfiguration update(FeeConfiguration feeConfiguration, String principal) {
 
         if (feeConfiguration!=null) {

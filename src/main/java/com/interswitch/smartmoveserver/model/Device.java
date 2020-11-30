@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "devices")
 @EntityListeners(AuditingEntityListener.class)
-public class Device extends AuditEntity<String> implements Serializable {
+public class Device extends AuditEntity<String> implements Auditable<Long> ,Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -66,4 +66,14 @@ public class Device extends AuditEntity<String> implements Serializable {
     private Enum.DeviceStatus deviceStatus;
 
     private boolean enabled;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

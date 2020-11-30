@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "vehicle_categories")
 @EntityListeners(AuditingEntityListener.class)
-public class VehicleCategory extends AuditEntity<String> implements Serializable {
+public class VehicleCategory extends  AuditEntity<String> implements Auditable<Long>,Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -59,4 +60,14 @@ public class VehicleCategory extends AuditEntity<String> implements Serializable
 
     @NotNull(message = "Capacity is required.")
     private int capacity;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

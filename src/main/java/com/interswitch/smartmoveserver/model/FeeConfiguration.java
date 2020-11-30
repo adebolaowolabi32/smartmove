@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.io.Serializable;
 @Entity
 @Table(name="fee_configurations")
 @EntityListeners(AuditingEntityListener.class)
-public class FeeConfiguration extends AuditEntity<String> implements Serializable {
+public class FeeConfiguration extends  AuditEntity<String> implements Auditable<Long>,Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +46,15 @@ public class FeeConfiguration extends AuditEntity<String> implements Serializabl
     private User owner;
 
     private boolean enabled;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 
 }

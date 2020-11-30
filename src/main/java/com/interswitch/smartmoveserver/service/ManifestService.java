@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.ManifestDto;
@@ -7,6 +8,8 @@ import com.interswitch.smartmoveserver.repository.ManifestRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,10 +66,12 @@ public class ManifestService {
         return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Manifest save(Manifest manifest) {
         return manifestRepository.save(manifest);
     }
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Manifest save(Manifest manifest, String principal) {
         return manifestRepository.save(buildManifest(manifest));
     }
@@ -75,6 +80,7 @@ public class ManifestService {
         return manifestRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist"));
     }
 
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Manifest update(Manifest manifest) {
         Optional<Manifest> existing = manifestRepository.findById(manifest.getId());
         if (existing.isPresent())
@@ -82,6 +88,7 @@ public class ManifestService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
     }
 
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Manifest update(Manifest manifest, String principal) {
         Optional<Manifest> existing = manifestRepository.findById(manifest.getId());
         if (existing.isPresent())

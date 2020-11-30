@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "ticket_till_summary")
 @EntityListeners(AuditingEntityListener.class)
-public class TicketTillSummary extends AuditEntity<String> implements Serializable {
+public class TicketTillSummary extends  AuditEntity<String> implements Auditable<Long>,Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,5 +47,15 @@ public class TicketTillSummary extends AuditEntity<String> implements Serializab
     @ManyToOne
     @JoinColumn(name = "approver")
     private User approver;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 
 }
