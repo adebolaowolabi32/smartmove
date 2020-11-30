@@ -142,14 +142,12 @@ public class UserService {
         //setting default password for all users
         String randomDefaultPassword = new RandomUtil(8).nextString();
         user.setPassword(randomDefaultPassword);
-        log.info("Username and Password## ===>"+user.getUsername()+" and "+user.getPassword());
-        passportUser = passportService.createUser(user);
+         passportUser = passportService.createUser(user);
         //iswCoreService.createUser(user);
         user.setEnabled(true);
         save(passportUser, user, owner);
         //setting the password at this point because it was set to empty string in the previous line.
         user.setPassword(randomDefaultPassword);
-        log.info("Wanna sendUserSetupEmail===>"+user.getPassword());
         sendUserSetUpEmail(user, owner);
         return user;
     }
