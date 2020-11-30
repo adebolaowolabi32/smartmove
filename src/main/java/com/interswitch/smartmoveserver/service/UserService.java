@@ -137,6 +137,9 @@ public class UserService {
         //iswCoreService.createUser(user);
         user.setEnabled(true);
         save(passportUser, user, principal);
+        //setting the password at this point because it was set to empty string in the previous line.
+        user.setPassword(randomDefaultPassword);
+        log.info("Wanna sendUserSetupEmail===>"+user.getPassword());
         sendUserSetUpEmail(user, owner);
         return user;
     }
@@ -409,6 +412,7 @@ public class UserService {
         params.put("password", user.getPassword());
 
         log.info("Context Path 2 ===>"+portletUri);
+        log.info("Password==>"+user.getPassword());
         messagingService.sendEmail(user.getEmail(),
                 "New User SignUp", "messages" + File.separator + "welcome_new", params);
     }
