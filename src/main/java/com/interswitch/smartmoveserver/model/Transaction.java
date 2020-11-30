@@ -39,6 +39,9 @@ public class Transaction extends AuditEntity<String> implements Serializable {
 
     @NotNull(message = "Amount is required.")
     private double amount;
+
+    @ManyToOne
+    private User owner;
 /*
     private String walletBalance;
 
@@ -55,8 +58,8 @@ public class Transaction extends AuditEntity<String> implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "Transaction date time is required.")
     private LocalDateTime transactionDateTime;
-
     private String schemeName;
+
 
     private Integer schemeId;
 }

@@ -1,14 +1,11 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transfer;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
 import com.interswitch.smartmoveserver.repository.WalletTransferRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import com.interswitchng.audit.annotation.Audited;
-import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +26,8 @@ public class TransferService {
     private WalletTransferRepository transferRepository;
 
     @Autowired
-    PageUtil pageUtil;
-    @Autowired
     private UserService userService;
+
     @Autowired
     private WalletService walletService;
 

@@ -1,15 +1,15 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.Card;
+import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.*;
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.dto.CardDto;
-import com.interswitch.smartmoveserver.model.dto.TripDto;
 import com.interswitch.smartmoveserver.repository.CardRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
-import com.interswitch.smartmoveserver.util.*;
+import com.interswitch.smartmoveserver.util.DateUtil;
+import com.interswitch.smartmoveserver.util.FileParser;
+import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,7 +34,7 @@ public class CardService {
     CardRepository cardRepository;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     SecurityUtil securityUtil;
@@ -48,13 +48,11 @@ public class CardService {
 
     public PageView<Card> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if (!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+        User user = userService.findByUsername(principal);
 
         if (owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                Page<Card> pages = cardRepository.findAllByOwner(pageable, user.get());
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<Card> pages = cardRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             else {
@@ -63,10 +61,8 @@ public class CardService {
             }
         } else {
             if (securityUtil.isOwner(principal, owner)) {
-                Optional<User> ownerUser = userRepository.findById(owner);
-                if (!ownerUser.isPresent())
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                Page<Card> pages = cardRepository.findAllByOwner(pageable, ownerUser.get());
+                User ownerUser = userService.findById(owner);
+                Page<Card> pages = cardRepository.findAllByOwner(pageable, ownerUser);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
 
             }
@@ -79,7 +75,7 @@ public class CardService {
         boolean exists = cardRepository.existsByPan(pan);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "A card with this PAN: " + pan + " already exists.");
         if(card.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userService.findByUsername(principal);
             card.setOwner(owner);
         }
         return cardRepository.save(card);
@@ -90,6 +86,7 @@ public class CardService {
         card.setPan(UUID.randomUUID().toString());
         card.setExpiry(LocalDate.now().plusYears(3));
         card.setOwner(user);
+        card.setType(Enum.CardType.AGENT);
         card.setBalance(0);
         card.setEnabled(true);
         return cardRepository.save(card);
@@ -104,9 +101,9 @@ public class CardService {
     }
 
     public Card findByOwner(String owner) {
-        Optional<User> user = userRepository.findByUsername(owner);
-        if(user.isPresent())
-            return cardRepository.findByOwner(user.get()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
+        User user = userService.findByUsername(owner);
+        if (user != null)
+            return cardRepository.findByOwner(user).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist"));
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
@@ -117,7 +114,7 @@ public class CardService {
             boolean exists = cardRepository.existsByPan(pan);
             if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "A card with this PAN: " + pan + " already exists.");
             if(card.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userService.findByUsername(principal);
                 card.setOwner(owner);
             }
             return cardRepository.save(card);
@@ -138,18 +135,19 @@ public class CardService {
         return cardRepository.count();
     }
 
-    public long countByOwner(User user){
+    public Long countByOwner(String username) {
+        User user = userService.findByUsername(username);
         return cardRepository.countByOwner(user);
     }
 
     public boolean upload(MultipartFile file, String principal) throws IOException {
-        Optional<User> ownerOptional = userRepository.findByUsername(principal);
+        User owner = userService.findByUsername(principal);
         List<Card> savedCards = new ArrayList<>();
         if(file.getSize()>1){
             FileParser<CardDto> fileParser = new FileParser<>();
             List<CardDto> cardDtoList = fileParser.parseFileToEntity(file, CardDto.class);
             cardDtoList.forEach(cardDto->{
-                savedCards.add(cardRepository.save(mapToCard(cardDto, ownerOptional.isPresent() ? ownerOptional.get() : null)));
+                savedCards.add(cardRepository.save(mapToCard(cardDto, owner)));
             });
         }
         return savedCards.size()>1;
@@ -174,9 +172,6 @@ public class CardService {
     }
 
     private boolean isEnabled(String enabledStatus){
-        if(enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true")){
-            return true;
-        }
-        return false;
+        return enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true");
     }
 }

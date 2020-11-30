@@ -29,4 +29,7 @@ public class Transfer extends AuditEntity<String> implements Serializable {
 
     @DateTimeFormat(pattern = "MMM dd yyyy HH:mm aa")
     private LocalDateTime transferDateTime;
+
+    @ManyToOne
+    private User owner;
 }

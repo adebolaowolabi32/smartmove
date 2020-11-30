@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.*;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
@@ -32,7 +31,7 @@ public class VehicleService {
     DeviceService deviceService;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     SecurityUtil securityUtil;
@@ -49,7 +48,7 @@ public class VehicleService {
         boolean exists = vehicleRepository.existsByName(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle with name: " + name + " already exists");
         if (vehicle.getOwner() == null) {
-            User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+            User owner = userService.findByUsername(principal);
             vehicle.setOwner(owner);
         }
         return vehicleRepository.save(buildVehicle(vehicle));
@@ -63,12 +62,21 @@ public class VehicleService {
         return vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle does not exist"));
     }
 
+    public Vehicle findByRegNo(String regNo) {
+        return vehicleRepository.findByRegNo(regNo);
+    }
+
+    public List<Vehicle> findByOwner(String username) {
+        User owner = userService.findByUsername(username);
+        return vehicleRepository.findAllByOwner(owner);
+    }
+
     public Vehicle update(Vehicle vehicle, String principal) {
         Optional<Vehicle> existing = vehicleRepository.findById(vehicle.getId());
 
         if (existing.isPresent()) {
             if (vehicle.getOwner() == null) {
-                User owner = userRepository.findByUsername(principal).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user does not exist"));
+                User owner = userService.findByUsername(principal);
                 vehicle.setOwner(owner);
             }
             return vehicleRepository.save(buildVehicle(vehicle));
@@ -95,13 +103,10 @@ public class VehicleService {
 
     public PageView<Vehicle> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if (!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
-
+        User user = userService.findByUsername(principal);
         if (owner == 0) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                Page<Vehicle> pages = vehicleRepository.findAllByOwner(pageable, user.get());
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<Vehicle> pages = vehicleRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             else {
@@ -110,10 +115,8 @@ public class VehicleService {
             }
         } else {
             if (securityUtil.isOwner(principal, owner)) {
-                Optional<User> ownerUser = userRepository.findById(owner);
-                if (!ownerUser.isPresent())
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                Page<Vehicle> pages = vehicleRepository.findAllByOwner(pageable, ownerUser.get());
+                User ownerUser = userService.findById(owner);
+                Page<Vehicle> pages = vehicleRepository.findAllByOwner(pageable, ownerUser);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");

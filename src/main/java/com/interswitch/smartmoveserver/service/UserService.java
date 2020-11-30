@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -74,6 +73,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<User> findOwners(List<Enum.Role> roles) {
+        List<User> users = new ArrayList<>();
+        for (Enum.Role role : roles) {
+            users.addAll(userRepository.findAllByRole(role));
+        }
+        return users;
+    }
+
     public PageView<User> findAllPaginated(int page, int size, String principal) {
         PageRequest pageable = PageRequest.of(page - 1, size);
         Page<User> pages = userRepository.findAll(pageable);
@@ -108,19 +115,22 @@ public class UserService {
     public User save(User user, String principal) {
         boolean exists = userRepository.existsByUsername(user.getEmail());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+        User owner = user.getOwner();
+        if (owner == null) {
+            owner = findByUsername(principal);
+        }
         PassportUser passportUser = passportService.findUser(user.getEmail());
         if (passportUser != null) {
-            save(passportUser, user, principal);
+            save(passportUser, user, owner);
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists. Kindly ask user to login with their Quickteller credentials");
         }
 
         //TODO :: see below
-        User owner = user.getOwner();
         boolean makerChecker = checkForMakerChecker(user, owner, principal);
         if (makerChecker) {
             user.setEnabled(false);
             //save the user on smartmove db
-            save(null, user, principal);
+            save(null, user, owner);
             sendMakerCheckerEmail(user, owner);
             UserApproval approval = new UserApproval();
             approval.setOwner(owner);
@@ -136,7 +146,7 @@ public class UserService {
         passportUser = passportService.createUser(user);
         //iswCoreService.createUser(user);
         user.setEnabled(true);
-        save(passportUser, user, principal);
+        save(passportUser, user, owner);
         //setting the password at this point because it was set to empty string in the previous line.
         user.setPassword(randomDefaultPassword);
         log.info("Wanna sendUserSetupEmail===>"+user.getPassword());
@@ -151,7 +161,7 @@ public class UserService {
         return save(passportUser, user, null);
     }
 
-    private User save(PassportUser passportUser, User user, String owner) {
+    private User save(PassportUser passportUser, User user, User owner) {
         if (passportUser == null)
             user.setUsername(user.getEmail());
         else {
@@ -162,8 +172,7 @@ public class UserService {
         user.setOwner(null);
         user.setTillStatus(Enum.TicketTillStatus.OPEN);
         if (!role.equals(Enum.Role.ISW_ADMIN)) {
-            Optional<User> ownerUser = userRepository.findByUsername(owner);
-            if (ownerUser.isPresent()) user.setOwner(ownerUser.get());
+            user.setOwner(owner);
         }
         if (user.getPicture()!=null && user.getPicture().getSize()>0) {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
@@ -190,12 +199,66 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
     }
 
-    public List<User> findAllByRole(Enum.Role role) {
-        return userRepository.findAllByRole(role);
+    public List<User> findAllByRole(String principal, Enum.Role role) {
+        Optional<User> user = userRepository.findByUsername(principal);
+        if (!user.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+
+        if (securityUtil.isOwnedEntity(role)) {
+            if (securityUtil.isOwnedEntity(user.get().getRole())) {
+                return userRepository.findAllByRoleAndOwner(role, user.get());
+            } else {
+                return userRepository.findAllByRole(role);
+            }
+        } else {
+            if (securityUtil.isOwnedEntity(user.get().getRole()))
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+            return userRepository.findAllByRole(role);
+        }
+    }
+
+    public PageView<User> findAllPaginatedByRole(String principal, long owner, Enum.Role role, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        Optional<User> user = userRepository.findByUsername(principal);
+        if (!user.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(role)) {
+                if (securityUtil.isOwnedEntity(user.get().getRole())) {
+                    Page<User> pages = userRepository.findAllByRoleAndOwner(pageable, role, user.get());
+                    return new PageView<>(pages.getTotalElements(), pages.getContent());
+                } else {
+                    Page<User> pages = userRepository.findAllByRole(pageable, role);
+                    return new PageView<>(pages.getTotalElements(), pages.getContent());
+                }
+            } else {
+                if (securityUtil.isOwnedEntity(user.get().getRole()))
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+                Page<User> pages = userRepository.findAllByRole(pageable, role);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+        } else {
+            if (securityUtil.isOwnedEntity(role)) {
+                if (securityUtil.isOwner(principal, owner)) {
+                    Optional<User> ownerUser = userRepository.findById(owner);
+                    if (!ownerUser.isPresent())
+                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
+                    Page<User> pages = userRepository.findAllByRoleAndOwner(pageable, role, ownerUser.get());
+                    return new PageView<>(pages.getTotalElements(), pages.getContent());
+                }
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
     }
 
     public User findOrCreateByUsername(String username) {
@@ -261,43 +324,6 @@ public class UserService {
             if (securityUtil.isOwnedEntity(role)) {
                 if (securityUtil.isOwner(principal, owner.getId())) {
                     return userRepository.countByRoleAndOwner(role, owner);
-                }
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
-            }
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
-        }
-    }
-
-    public PageView<User> findAllPaginatedByRole(String principal, long owner, Enum.Role role, int page, int size) {
-        PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Optional<User> user = userRepository.findByUsername(principal);
-        if (!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
-
-        if (owner == 0) {
-            if (securityUtil.isOwnedEntity(role)) {
-                if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                    Page<User> pages = userRepository.findAllByRoleAndOwner(pageable, role, user.get());
-                    return new PageView<>(pages.getTotalElements(), pages.getContent());
-                }
-                else {
-                    Page<User> pages = userRepository.findAllByRole(pageable, role);
-                    return new PageView<>(pages.getTotalElements(), pages.getContent());
-                }
-            } else {
-                if (securityUtil.isOwnedEntity(user.get().getRole()))
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
-                Page<User> pages = userRepository.findAllByRole(pageable, role);
-                return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-        } else {
-            if (securityUtil.isOwnedEntity(role)) {
-                if (securityUtil.isOwner(principal, owner)) {
-                    Optional<User> ownerUser = userRepository.findById(owner);
-                    if (!ownerUser.isPresent())
-                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                    Page<User> pages = userRepository.findAllByRoleAndOwner(pageable, role, ownerUser.get());
-                    return new PageView<>(pages.getTotalElements(), pages.getContent());
                 }
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
             }
@@ -396,8 +422,6 @@ public class UserService {
         params.put("role", user.getRole());
         params.put("portletUri", portletUri);
 
-        log.info("Context Path===>"+portletUri);
-
         messagingService.sendEmail(owner.getEmail(),
                 "New User SignUp", "messages" + File.separator + "approve_user", params);
     }
@@ -411,8 +435,6 @@ public class UserService {
         params.put("username", user.getUsername());
         params.put("password", user.getPassword());
 
-        log.info("Context Path 2 ===>"+portletUri);
-        log.info("Password==>"+user.getPassword());
         messagingService.sendEmail(user.getEmail(),
                 "New User SignUp", "messages" + File.separator + "welcome_new", params);
     }

@@ -69,7 +69,7 @@ public class VehicleCategoryController {
         VehicleCategory vehicleCategory = new VehicleCategory();
         model.addAttribute("vehicleCategory", vehicleCategory);
         //TODO change findAll to findAllEligible
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
         model.addAttribute("makes",  vehicleMakeService.findAll());
         model.addAttribute("models", vehicleModelService.findAll());
         return "vehicleCategories/create";
@@ -82,7 +82,7 @@ public class VehicleCategoryController {
             //TODO change findAll to findAllEligible
             model.addAttribute("makes",  vehicleMakeService.findAll());
             model.addAttribute("models", vehicleModelService.findAll());
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
             return "vehicleCategories/create";
         }
         VehicleCategory savedVehicleCategory = vehicleCategoryService.save(vehicleCategory, principal.getName());
@@ -97,7 +97,7 @@ public class VehicleCategoryController {
         //TODO change findAll to findAllEligible
         model.addAttribute("makes",  vehicleMakeService.findAll());
         model.addAttribute("models", vehicleModelService.findAll());
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
         return "vehicleCategories/update";
     }
 
@@ -110,7 +110,7 @@ public class VehicleCategoryController {
             model.addAttribute("vehicleCategory", vehicleCategory);
             model.addAttribute("makes",  vehicleMakeService.findAll());
             model.addAttribute("models", vehicleModelService.findAll());
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
             return "vehicleCategories/update";
         }
         vehicleCategoryService.update(vehicleCategory, principal.getName());

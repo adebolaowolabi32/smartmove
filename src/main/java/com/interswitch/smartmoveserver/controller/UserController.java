@@ -85,9 +85,9 @@ public class UserController {
         model.addAttribute("terminals_no", terminalService.countByOwner(user));
         model.addAttribute("routes_no", routeService.countByOwner(user));
         model.addAttribute("devices_no", deviceService.countByOwner(user));
-        model.addAttribute("transactions_no", transactionService.countAll());
+        model.addAttribute("transactions_no", transactionService.countByOwner(user.getUsername()));
         model.addAttribute("settlements_no", 0);
-        model.addAttribute("cards_no", cardService.countByOwner(user));
+        model.addAttribute("cards_no", cardService.countByOwner(user.getUsername()));
         model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
         model.addAttribute("user", user);
         model.addAttribute("isOwned", securityUtil.isOwnedEntity(user.getRole()));
@@ -105,8 +105,7 @@ public class UserController {
         model.addAttribute("user", user);
         //TODO change findAll to findAllEligible
         model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
-        model.addAttribute("owners", userService.findAll());
-
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
         return "users/create";
     }
 
@@ -122,7 +121,7 @@ public class UserController {
             model.addAttribute("user", user);
             //TODO change findAll to findAllEligible
             model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
             return "users/create";
         }
 
@@ -137,10 +136,11 @@ public class UserController {
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
         User user = userService.findById(id, principal.getName());
-        model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
+        Enum.Role role = user.getRole();
+        model.addAttribute("title", pageUtil.buildTitle(role));
         model.addAttribute("user", user);
         //TODO change findAll to findAllEligible
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
         model.addAttribute("isOwned", securityUtil.isOwnedEntity(user.getRole()));
         return "users/update";
     }
@@ -155,7 +155,7 @@ public class UserController {
             model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
             model.addAttribute("title", pageUtil.buildTitle(role));
             model.addAttribute("user", existing);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
             return "users/update";
         }
         userService.update(user, principal.getName());
