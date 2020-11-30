@@ -50,6 +50,14 @@ public class TransferService {
         return transferRepository.count();
     }
 
+
+    public Long countByOwner(String username) {
+        User user = userService.findByUsername(username);
+        if (user != null) return transferRepository.countByOwner(user);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
+    }
+
+
    /* public Page<Transfer> findAllTransfers(Principal principal, Long owner, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         Optional<Wallet> existing = walletRepository.findById(owner);
