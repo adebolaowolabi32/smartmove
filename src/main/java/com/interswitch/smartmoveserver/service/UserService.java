@@ -386,7 +386,6 @@ public class UserService {
                     //setting default password for all users
                     User user = approval.getUsr();
                     user.setPassword(new RandomUtil(8).nextString());
-                    log.info("Username and Password ===>"+user.getUsername()+" and "+user.getPassword());
                     PassportUser passportUser = passportService.createUser(user);
                     user.setEnabled(true);
                     if(passportUser!=null) userRepository.save(user);
