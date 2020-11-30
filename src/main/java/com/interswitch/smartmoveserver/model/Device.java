@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "devices")
 @EntityListeners(AuditingEntityListener.class)
-public class Device extends Auditable<String> implements Serializable {
+public class Device extends AuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -65,5 +66,4 @@ public class Device extends Auditable<String> implements Serializable {
     private Enum.DeviceStatus deviceStatus;
 
     private boolean enabled;
-
 }

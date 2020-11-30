@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "routes")
 @EntityListeners(AuditingEntityListener.class)
-public class Route extends Auditable<String> implements Serializable {
+public class Route extends AuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

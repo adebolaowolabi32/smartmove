@@ -8,7 +8,9 @@ import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.RandomUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -27,6 +30,7 @@ import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmai
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Service
 public class UserService {
 
@@ -115,6 +119,7 @@ public class UserService {
         boolean makerChecker = checkForMakerChecker(user, owner, principal);
         if (makerChecker) {
             user.setEnabled(false);
+            //save the user on smartmove db
             save(null, user, principal);
             sendMakerCheckerEmail(user, owner);
             UserApproval approval = new UserApproval();
@@ -123,6 +128,11 @@ public class UserService {
             userApprovalRepository.save(approval);
             return user;
         }
+
+        //setting default password for all users
+        String randomDefaultPassword = new RandomUtil(8).nextString();
+        user.setPassword(randomDefaultPassword);
+        log.info("Username and Password## ===>"+user.getUsername()+" and "+user.getPassword());
         passportUser = passportService.createUser(user);
         //iswCoreService.createUser(user);
         user.setEnabled(true);
@@ -156,6 +166,9 @@ public class UserService {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
             user.setPictureUrl(doc.getUrl());
         }
+
+        //setting password as empty string here as we don't want to store passwords on smartmove
+        user.setPassword("");
         userRepository.save(user);
         if (role.equals(Enum.Role.AGENT)) {
             walletService.autoCreateForUser(user);
@@ -342,8 +355,16 @@ public class UserService {
             String owner = approval.getOwner() != null ? approval.getOwner().getUsername() : "";
             if (owner.equals(principal)) {
                 approval.setApproved(true);
-                userApprovalRepository.save(approval);
-                sendUserSetUpEmail(approval.getUsr(), approval.getOwner());
+                if(userApprovalRepository.save(approval).isApproved()){
+                    //setting default password for all users
+                    User user = approval.getUsr();
+                    user.setPassword(new RandomUtil(8).nextString());
+                    log.info("Username and Password ===>"+user.getUsername()+" and "+user.getPassword());
+                    PassportUser passportUser = passportService.createUser(user);
+                    user.setEnabled(true);
+                    if(passportUser!=null) userRepository.save(user);
+                    sendUserSetUpEmail(user, approval.getOwner());
+                }
                 return true;
             }
         }
@@ -372,6 +393,8 @@ public class UserService {
         params.put("role", user.getRole());
         params.put("portletUri", portletUri);
 
+        log.info("Context Path===>"+portletUri);
+
         messagingService.sendEmail(owner.getEmail(),
                 "New User SignUp", "messages" + File.separator + "approve_user", params);
     }
@@ -382,7 +405,10 @@ public class UserService {
         params.put("user", user.getFirstName() + " " + user.getLastName());
         params.put("role", user.getRole());
         params.put("portletUri", portletUri);
+        params.put("username", user.getUsername());
+        params.put("password", user.getPassword());
 
+        log.info("Context Path 2 ===>"+portletUri);
         messagingService.sendEmail(user.getEmail(),
                 "New User SignUp", "messages" + File.separator + "welcome_new", params);
     }

@@ -17,10 +17,10 @@ import java.io.Serializable;
 @Entity
 @Table(name="fee_configurations")
 @EntityListeners(AuditingEntityListener.class)
-public class FeeConfiguration extends Auditable<String> implements Serializable {
+public class FeeConfiguration extends AuditEntity<String> implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Enumerated(EnumType.STRING)

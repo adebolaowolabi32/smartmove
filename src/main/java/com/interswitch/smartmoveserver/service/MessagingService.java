@@ -3,7 +3,6 @@ package com.interswitch.smartmoveserver.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.Gson;
 import com.interswitch.dtos.ApiMessageType;
 import com.interswitch.dtos.EmailPayload;
 import com.interswitch.dtos.MessageApi;
@@ -25,17 +24,21 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class MessagingService {
+
     private final String SENDER_EMAIL = "support@interswitchgroup.com";
+
     @Autowired
     private SpringTemplateEngine templateEngine;
+
     @Value("${isw.post.office.appId}")
     private String appIdOnPostOffice;
-    @Autowired
-    private Gson gson;
+
     @Autowired
     private PassportService passportService;
+
     @Autowired
     private PostmanService postmanService;
+
     private ObjectMapper objectMapper;
 
     public MessagingService(ObjectMapper objectMapper) {

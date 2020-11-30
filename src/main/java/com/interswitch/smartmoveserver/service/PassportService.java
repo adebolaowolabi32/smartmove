@@ -23,6 +23,7 @@ import java.util.Map;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Service
 public class PassportService {
 
@@ -40,6 +41,7 @@ public class PassportService {
 
     public PassportUser createUser(User user){
         PassportUser passportUser = buildUser(user);
+        log.info("Passport Request====>"+passportUser);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
@@ -88,6 +90,7 @@ public class PassportService {
         passportUser.setMobileNo(user.getMobileNo());
         passportUser.setPassword(user.getPassword());
         passportUser.setEnabled(user.isEnabled());
+        passportUser.setFirstLogin(true);
         return passportUser;
     }
 
@@ -107,6 +110,7 @@ public class PassportService {
         PassportUser passportUser = mapper.convertValue(response, PassportUser.class);
         if(passportUser.getUsername() == null)
             return null;
+        log.info("RetrivePassportUser==>"+passportUser);
         return passportUser;
     }
 }

@@ -20,7 +20,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "documents")
 @EntityListeners(AuditingEntityListener.class)
-public class Document extends Auditable<String> implements Serializable {
+public class Document extends AuditEntity<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "transfers")
 @EntityListeners(AuditingEntityListener.class)
-public class Transfer extends Auditable<String>  implements Serializable {
+public class Transfer extends AuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
