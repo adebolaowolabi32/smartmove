@@ -7,7 +7,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -20,7 +19,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "schedules")
 @EntityListeners(AuditingEntityListener.class)
-public class Schedule extends Auditable<String> implements Serializable {
+public class Schedule extends AuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

@@ -8,7 +8,9 @@ import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.RandomUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -27,11 +29,9 @@ import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmai
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Service
 public class UserService {
-
-    @Value("${smartmove.url}")
-    private String portletUri;
 
     @Autowired
     private UserRepository userRepository;
@@ -65,6 +65,9 @@ public class UserService {
 
     @Autowired
     private PageUtil pageUtil;
+
+    @Value("${smartmove.url}")
+    private String portletUri;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -126,6 +129,7 @@ public class UserService {
         boolean makerChecker = checkForMakerChecker(user, owner, principal);
         if (makerChecker) {
             user.setEnabled(false);
+            //save the user on smartmove db
             save(null, user, owner);
             sendMakerCheckerEmail(user, owner);
             UserApproval approval = new UserApproval();
@@ -134,10 +138,16 @@ public class UserService {
             userApprovalRepository.save(approval);
             return user;
         }
-        //passportUser = passportService.createUser(user);
+
+        //setting default password for all users
+        String randomDefaultPassword = new RandomUtil(8).nextString();
+        user.setPassword(randomDefaultPassword);
+         passportUser = passportService.createUser(user);
         //iswCoreService.createUser(user);
         user.setEnabled(true);
-        save(null, user, owner);
+        save(passportUser, user, owner);
+        //setting the password at this point because it was set to empty string in the previous line.
+        user.setPassword(randomDefaultPassword);
         sendUserSetUpEmail(user, owner);
         return user;
     }
@@ -166,6 +176,9 @@ public class UserService {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
             user.setPictureUrl(doc.getUrl());
         }
+
+        //setting password as empty string here as we don't want to store passwords on smartmove
+        user.setPassword("");
         userRepository.save(user);
         if (role.equals(Enum.Role.AGENT)) {
             walletService.autoCreateForUser(user);
@@ -369,8 +382,16 @@ public class UserService {
             String owner = approval.getOwner() != null ? approval.getOwner().getUsername() : "";
             if (owner.equals(principal)) {
                 approval.setApproved(true);
-                userApprovalRepository.save(approval);
-                sendUserSetUpEmail(approval.getUsr(), approval.getOwner());
+                if(userApprovalRepository.save(approval).isApproved()){
+                    //setting default password for all users
+                    User user = approval.getUsr();
+                    user.setPassword(new RandomUtil(8).nextString());
+                    log.info("Username and Password ===>"+user.getUsername()+" and "+user.getPassword());
+                    PassportUser passportUser = passportService.createUser(user);
+                    user.setEnabled(true);
+                    if(passportUser!=null) userRepository.save(user);
+                    sendUserSetUpEmail(user, approval.getOwner());
+                }
                 return true;
             }
         }
@@ -409,6 +430,8 @@ public class UserService {
         params.put("user", user.getFirstName() + " " + user.getLastName());
         params.put("role", user.getRole());
         params.put("portletUri", portletUri);
+        params.put("username", user.getUsername());
+        params.put("password", user.getPassword());
 
         messagingService.sendEmail(user.getEmail(),
                 "New User SignUp", "messages" + File.separator + "welcome_new", params);

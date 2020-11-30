@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Auditable<T> {
+public abstract class AuditEntity<T> {
 
     @CreatedBy
     private T createdBy;

@@ -22,10 +22,12 @@
 			<ul>
 				<li>Role: <span th:text="${role}"></span></li>
 				<li>Referer: <span th:text="${owner}"></span></li>
+			    <li>Username: <span th:text="${owner}"></span></li>
+			    <li>Default Password: <span th:text="${password}"></span></li>
 			</ul>
 			</p>
 			<p>
-				<a th:href="${portletUri} + '/users/approvals'">Click here </a> to finish setting up your account.
+				<a th:href="${portletUri}">Click here </a> to sign-in and change your password.
 			</p>
 			<br>
             <p>

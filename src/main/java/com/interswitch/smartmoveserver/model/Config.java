@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "systemConfigurations")
 @EntityListeners(AuditingEntityListener.class)
-public class Config extends Auditable<String> implements Serializable {
+public class Config extends AuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

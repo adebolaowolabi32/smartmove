@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "user_settings")
 
 @EntityListeners(AuditingEntityListener.class)
-public class UserSettings extends Auditable<String> {
+public class UserSettings extends AuditEntity<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

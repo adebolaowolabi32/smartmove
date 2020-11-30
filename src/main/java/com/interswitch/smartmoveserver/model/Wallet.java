@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "wallets")
 @EntityListeners(AuditingEntityListener.class)
-public class Wallet extends  Auditable<String> {
+public class Wallet extends AuditEntity<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

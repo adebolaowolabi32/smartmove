@@ -9,16 +9,29 @@ import com.interswitch.smartmoveserver.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author adebola.owolabi
@@ -68,6 +81,10 @@ public class HomeController {
 
     @Value("${passport.logout.uri}")
     String logoutUri;
+
+    @Autowired
+    IswCoreService coreService;
+
 
     @GetMapping(value = {"/", "/index", "/home"})
     public String home(Model model) {
@@ -187,9 +204,53 @@ public class HomeController {
         return "redirect:" + logoutUri;
     }
 
+
     @GetMapping("/setCurrency")
     public String setCurrency(Model model, @RequestParam(defaultValue = "NGN") String currency, @RequestParam(defaultValue = "/") String path, HttpSession session) {
         session.setAttribute("currency", currency);
         return "redirect:" + path;
     }
+
+
+    @GetMapping("/signup")
+    public String signup(Model model, @RequestParam("code") String code, RedirectAttributes redirectAttributes) {
+
+//        log.info("user code===>" + code);
+//
+//        log.info("Passport===>"+passportService.getAccessToken());
+//
+//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken("username", "password");
+//        authToken.setDetails(new WebAuthenticationDetails(request));
+//
+//
+//        //use the code to get the user object
+//
+//        if(code.equalsIgnoreCase("1010")){
+//
+//            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+//
+//            User user = userService.findOrCreateByUsername("earnest.suru");
+//
+//            List<String> permissions = coreService.getPermissions(user);
+//
+//            for (String permission : permissions) {
+//                mappedAuthorities.add(new SimpleGrantedAuthority(permission));
+//            }
+//
+//            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, mappedAuthorities);
+//
+//            authentication.setAuthenticated(true);
+//
+//            log.info("Authentication===>"+authentication);
+//
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//            log.info("IsAuthenticated===>"+ SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+//
+//            return "redirect:" + "/dashboard";
+//        }
+
+        return "signup";
+    }
+
 }

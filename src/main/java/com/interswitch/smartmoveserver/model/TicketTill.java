@@ -11,7 +11,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +19,7 @@ import java.util.Date;
 @Entity
 @Table(name = "ticket_till")
 @EntityListeners(AuditingEntityListener.class)
-public class TicketTill extends Auditable<String> implements Serializable {
+public class TicketTill extends AuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

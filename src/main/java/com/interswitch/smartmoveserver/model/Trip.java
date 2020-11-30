@@ -20,7 +20,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "trips")
 @EntityListeners(AuditingEntityListener.class)
-public class Trip extends Auditable<String> implements Serializable {
+public class Trip extends AuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

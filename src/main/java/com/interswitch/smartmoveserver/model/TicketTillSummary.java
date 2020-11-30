@@ -10,8 +10,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +18,7 @@ import java.util.Date;
 @Entity
 @Table(name = "ticket_till_summary")
 @EntityListeners(AuditingEntityListener.class)
-public class TicketTillSummary extends  Auditable<String> implements Serializable {
+public class TicketTillSummary extends AuditEntity<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

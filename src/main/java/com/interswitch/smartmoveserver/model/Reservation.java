@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "reservations")
 @EntityListeners(AuditingEntityListener.class)
-public class Reservation extends Auditable<String> implements Serializable {
+public class Reservation extends AuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
