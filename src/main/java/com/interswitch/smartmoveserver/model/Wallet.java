@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "wallets")
 @EntityListeners(AuditingEntityListener.class)
-public class Wallet extends  AuditEntity<String> implements Auditable<Long>, Serializable {
+public class Wallet extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

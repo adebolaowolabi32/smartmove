@@ -1,8 +1,8 @@
 package com.interswitch.smartmoveserver.model;
 
-import com.interswitchng.audit.model.Auditable;
 import com.interswitchng.audit.model.AuditableAction;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -12,8 +12,8 @@ import java.time.Instant;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "audit_records")
-public class AuditRecord {
+@Table(name = "audit_trails")
+public class AuditTrail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,6 +22,10 @@ public class AuditRecord {
     @Enumerated(EnumType.STRING)
     private AuditableAction action;
     private String actor;
+    @ManyToOne
+    @JoinColumn(name = "owner")
+    private User owner;
     private Instant actionDate;
+    private String actionTimeStamp;
     private String description;
 }

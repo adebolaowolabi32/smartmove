@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "ticket_till_summary")
 @EntityListeners(AuditingEntityListener.class)
-public class TicketTillSummary extends  AuditEntity<String> implements Auditable<Long>,Serializable {
+public class TicketTillSummary extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

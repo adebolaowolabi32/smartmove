@@ -400,6 +400,7 @@ public class IswCoreService {
                 permissions.add("VIEW_SCHEDULES");
                 permissions.add("VIEW_TICKETS");
                 permissions.add("VIEW_FEE_CONFIGURATIONS");
+                permissions.add("VIEW_AUDIT_TRAIL");
 
                 permissions.add("CREATE_AGENT");
                 permissions.add("CREATE_DEVICE");

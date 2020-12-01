@@ -26,7 +26,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "cards")
 @EntityListeners(AuditingEntityListener.class)
-public class Card extends  AuditEntity<String> implements Auditable<Long>,Serializable {
+public class Card extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

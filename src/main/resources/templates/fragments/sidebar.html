@@ -159,6 +159,11 @@
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_CONFIGURATIONS')" th:href="@{/configurations/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
                             <span th:text="#{settings}">Settings</span></a>
+
+                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" th:href="@{/audit-trails/get}" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
+                            <span th:text="#{auditTrails}">Audit Trails</span></a>
+
                         <a class="nav-link" sec:authorize="hasAuthority('VIEW_BLACKLISTS')" th:href="@{/blacklists/get}" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-ban"></i></div>
                             <span th:text="#{blacklists}">Blacklists</span></a>

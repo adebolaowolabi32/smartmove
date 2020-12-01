@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "vehicles")
 @EntityListeners(AuditingEntityListener.class)
-public class Vehicle extends  AuditEntity<String> implements Auditable<Long>,Serializable {
+public class Vehicle extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

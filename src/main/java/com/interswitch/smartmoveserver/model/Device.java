@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "devices")
 @EntityListeners(AuditingEntityListener.class)
-public class Device extends AuditEntity<String> implements Auditable<Long> ,Serializable {
+public class Device extends AbstractAuditEntity<String> implements Auditable<Long> ,Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

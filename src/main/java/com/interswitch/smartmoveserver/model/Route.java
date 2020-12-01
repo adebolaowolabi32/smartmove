@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "routes")
 @EntityListeners(AuditingEntityListener.class)
-public class Route extends  AuditEntity<String> implements Auditable<Long>,Serializable{
+public class Route extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

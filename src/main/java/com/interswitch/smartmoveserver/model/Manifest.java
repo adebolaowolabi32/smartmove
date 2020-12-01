@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "manifests")
 @EntityListeners(AuditingEntityListener.class)
-public class Manifest extends  AuditEntity<String> implements Auditable<Long>,Serializable {
+public class Manifest extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
