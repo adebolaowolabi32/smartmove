@@ -24,7 +24,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class User extends  AuditEntity<String> implements Auditable<Long>,Serializable {
+public class User extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

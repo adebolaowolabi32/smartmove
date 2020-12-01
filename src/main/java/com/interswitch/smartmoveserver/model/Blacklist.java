@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "blacklists")
 @EntityListeners(AuditingEntityListener.class)
-public class Blacklist extends AuditEntity<String> implements Serializable {
+public class Blacklist extends AbstractAuditEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
