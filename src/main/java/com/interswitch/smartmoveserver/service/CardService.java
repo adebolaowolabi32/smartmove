@@ -130,6 +130,7 @@ public class CardService {
     }
 
 
+    @Audited(auditableAction = AuditableAction.DELETE, auditableActionClass = AuditableActionStatusImpl.class)
     public void delete(long id, String principal) {
         Optional<Card> existing = cardRepository.findById(id);
         if(existing.isPresent())

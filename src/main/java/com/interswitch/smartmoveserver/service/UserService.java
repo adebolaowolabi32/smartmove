@@ -432,6 +432,7 @@ public class UserService {
     }
 
     private void sendUserSetUpEmail(User user, User owner) {
+
         Map<String, Object> params = new HashMap<>();
         params.put("owner", owner.getFirstName() + " " + owner.getLastName());
         params.put("user", user.getFirstName() + " " + user.getLastName());
