@@ -1,10 +1,13 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.TransactionRepository;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,11 +30,13 @@ public class TransactionService {
     @Autowired
     UserService userService;
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Transaction save(Transaction transaction) {
         transaction.setTransactionId(UUID.randomUUID().toString());
         return transactionRepository.save(transaction);
     }
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Transaction save(Transaction transaction, String principal) {
         transaction.setTransactionId(UUID.randomUUID().toString());
         return transactionRepository.save(transaction);

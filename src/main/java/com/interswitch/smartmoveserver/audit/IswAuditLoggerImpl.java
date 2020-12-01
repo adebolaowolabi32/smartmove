@@ -19,30 +19,43 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 @Component
-public class MongoAuditLogger implements AuditLogger {
+public class IswAuditLoggerImpl {
 
     @Autowired
     private AuditRecordRepository auditRecordRepository;
 
-    @Async
-    @Override
+    private final ExecutorService executorService;
+
+    public IswAuditLoggerImpl() {
+        this.executorService = Executors.newFixedThreadPool(10);
+    }
+
     public void log(Auditable auditable, String actor, Set<String> domainCodes, AuditableAction auditableAction) {
+
+        executorService.submit(() -> {
             try {
+                log.info("Inside log implementation,auditable value ===>"+auditable);
                 AuditRecord audit = new AuditRecord();
-                audit.setResource(auditable.getAuditableName());
+                audit.setResource(auditable.getAuditableName().toLowerCase());
                 audit.setResourceId((Long) auditable.getAuditableId());
                 //audit.setAuditable(auditable);
                 audit.setAction(auditableAction);
                 audit.setActor(actor);
                 audit.setActionDate(Instant.now());
-                audit.setDescription(actor +" "+auditableAction.name().concat("ed").toUpperCase() +""+auditable.getAuditableName()+"");
+                audit.setDescription(actor +" "+auditableAction.name().concat("d").toLowerCase() +" "+auditable.getAuditableName().toLowerCase()+" ");
 
-               log.info("wanna log to audit trail===>"+audit);
-                auditRecordRepository.save(audit);
+                log.info("wanna log to audit trail inside log===>"+audit);
+
+                if(audit.getResourceId()>0) {
+                    auditRecordRepository.save(audit);
+                }
 
             } catch (Throwable throwable) {
                 log.error("Exception logging audit record", throwable);
             }
+
+        });
+
 
     }
 }

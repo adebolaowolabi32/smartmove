@@ -98,11 +98,13 @@ public class DeviceService {
         return deviceRepository.findAll();
     }
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Device save(Device device) {
         return deviceRepository.save(device);
     }
 
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Device save(Device device, String principal) {
         String name = device.getName();
         boolean exists = deviceRepository.existsByName(name);
@@ -126,6 +128,7 @@ public class DeviceService {
         return deviceRepository.findAllByType(type);
     }
 
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Device update(Device device, String principal) {
         Optional<Device> existing = deviceRepository.findById(device.getId());
         if(existing.isPresent()){

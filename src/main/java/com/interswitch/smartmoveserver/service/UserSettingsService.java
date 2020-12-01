@@ -1,8 +1,11 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.UserSettings;
 import com.interswitch.smartmoveserver.repository.UserSettingsRepository;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,8 @@ public class UserSettingsService {
         return userSettingsRepository.findAll();
     }
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public UserSettings save(UserSettings userSettings, String principal) {
         User owner = userService.findByUsername(principal);
         userSettings.setOwner(owner);
@@ -32,6 +37,8 @@ public class UserSettingsService {
         return userSettingsRepository.findByOwner(owner);
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public UserSettings update(UserSettings userSettings, String principal) {
         User owner = userService.findByUsername(principal);
         UserSettings userSettings1 = userSettingsRepository.findByOwner(owner);

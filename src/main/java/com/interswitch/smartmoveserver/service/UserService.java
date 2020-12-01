@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
@@ -10,6 +11,8 @@ import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -112,6 +115,7 @@ public class UserService {
     //if principal is admin user.owner must be populated
     //if not, bounce request
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public User save(User user, String principal) {
         boolean exists = userRepository.existsByUsername(user.getEmail());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
@@ -273,6 +277,8 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You do not have permission to this resource");
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public User update(User user, String principal) {
         Optional<User> existingUser = userRepository.findById(user.getId());
         if (existingUser.isPresent()) {
@@ -375,6 +381,8 @@ public class UserService {
         return approvals;
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public boolean approveUser(String principal, long id) {
         Optional<UserApproval> userApproval = userApprovalRepository.findById(id);
         if (userApproval.isPresent()) {
@@ -424,6 +432,7 @@ public class UserService {
     }
 
     private void sendUserSetUpEmail(User user, User owner) {
+
         Map<String, Object> params = new HashMap<>();
         params.put("owner", owner.getFirstName() + " " + owner.getLastName());
         params.put("user", user.getFirstName() + " " + user.getLastName());

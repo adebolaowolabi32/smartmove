@@ -1,8 +1,11 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -48,6 +51,7 @@ public class ScheduleService {
         return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Schedule save(Schedule schedule, String principal) {
         LocalDateTime start = LocalDateTime.of(schedule.getDepartureDate(), schedule.getDepartureTime());
         LocalDateTime stop = LocalDateTime.of(schedule.getArrivalDate(), schedule.getArrivalTime());
@@ -74,6 +78,8 @@ public class ScheduleService {
         return scheduleRepository.findAllByOwner(owner);
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Schedule update(Schedule schedule, String principal) {
         Optional<Schedule> existing = scheduleRepository.findById(schedule.getId());
         if (existing.isPresent()){

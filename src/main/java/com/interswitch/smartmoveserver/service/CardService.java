@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.PageView;
@@ -10,6 +11,8 @@ import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -70,6 +73,8 @@ public class CardService {
         }
     }
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Card save(Card card, String principal) {
         String pan = card.getPan();
         boolean exists = cardRepository.existsByPan(pan);
@@ -107,6 +112,8 @@ public class CardService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Card update(Card card, String principal) {
         Optional<Card> existing = cardRepository.findById(card.getId());
         if(existing.isPresent()){
@@ -122,6 +129,8 @@ public class CardService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Card does not exist");
     }
 
+
+    @Audited(auditableAction = AuditableAction.DELETE, auditableActionClass = AuditableActionStatusImpl.class)
     public void delete(long id, String principal) {
         Optional<Card> existing = cardRepository.findById(id);
         if(existing.isPresent())

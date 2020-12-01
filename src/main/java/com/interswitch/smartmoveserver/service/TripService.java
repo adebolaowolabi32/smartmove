@@ -1,11 +1,14 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.TripDto;
 import com.interswitch.smartmoveserver.repository.TripRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,10 +60,12 @@ public class TripService {
         return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Trip save(Trip trip) {
         return tripRepository.save(trip);
     }
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Trip save(Trip trip, String principal) {
         TripReference tripReference = tripReferenceService.findByOwner(principal);
         String prefix = "";
@@ -87,6 +92,8 @@ public class TripService {
         return tripRepository.findAllByOwner(user);
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Trip update(Trip trip) {
         Optional<Trip> existing = tripRepository.findById(trip.getId());
         if (existing.isPresent())
@@ -97,6 +104,8 @@ public class TripService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip does not exist");
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Trip update(Trip trip, String principal) {
         Optional<Trip> existing = tripRepository.findById(trip.getId());
         if (existing.isPresent())

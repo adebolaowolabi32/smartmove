@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "trips")
 @EntityListeners(AuditingEntityListener.class)
-public class Trip extends AuditEntity<String> implements Serializable {
+public class Trip extends  AuditEntity<String> implements Auditable<Long>,Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -52,4 +53,14 @@ public class Trip extends AuditEntity<String> implements Serializable {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Transport mode is required.")
     private Enum.TransportMode mode;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

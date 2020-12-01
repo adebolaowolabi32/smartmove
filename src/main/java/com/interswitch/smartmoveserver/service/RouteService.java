@@ -1,10 +1,13 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.RouteRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,6 +64,8 @@ public class RouteService {
         }
     }
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Route save(Route route) {
         long id = route.getId();
         boolean exists = routeRepository.existsById(id);
@@ -68,6 +73,8 @@ public class RouteService {
         return routeRepository.save(route);
     }
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Route save(Route route, String principal) {
         String name = route.getName();
         Terminal startTerminal = terminalService.findById(route.getStartTerminalId());
@@ -94,6 +101,8 @@ public class RouteService {
         return routeRepository.findAllByType(type);
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Route update(Route route, String principal) {
         Optional<Route> existing = routeRepository.findById(route.getId());
         if (existing.isPresent()) {

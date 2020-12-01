@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,21 @@ import java.io.Serializable;
 @Entity
 @Table(name = "vehicle_makes")
 @EntityListeners(AuditingEntityListener.class)
-public class VehicleMake extends AuditEntity<String> implements Serializable {
+public class VehicleMake extends  AuditEntity<String> implements Auditable<Long>,Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(unique=true)
     private String name;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

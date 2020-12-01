@@ -221,5 +221,11 @@
             <version>${isw-audit.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <version>4.0.5.Final</version>
+        </dependency>
+
     </dependencies>
 </project>

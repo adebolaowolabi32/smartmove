@@ -1,11 +1,14 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.TerminalRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,6 +67,8 @@ public class TerminalService {
         }
     }
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Terminal save(Terminal terminal, String principal) {
         String name = terminal.getName();
         boolean exists = terminalRepository.existsByName(name);
@@ -83,6 +88,7 @@ public class TerminalService {
         return terminalRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist"));
     }
 
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Terminal update(Terminal terminal, String principal) {
         Optional<Terminal> existing = terminalRepository.findById(terminal.getId());
         if(existing.isPresent()){

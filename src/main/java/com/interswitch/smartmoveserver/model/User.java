@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class User extends AuditEntity<String> implements Serializable {
+public class User extends  AuditEntity<String> implements Auditable<Long>,Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,4 +74,14 @@ public class User extends AuditEntity<String> implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Enum.TicketTillStatus tillStatus = Enum.TicketTillStatus.OPEN;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

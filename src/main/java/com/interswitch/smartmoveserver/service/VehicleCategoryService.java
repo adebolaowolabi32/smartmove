@@ -1,9 +1,12 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.VehicleCategoryRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +47,8 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findAll();
     }
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory save(VehicleCategory vehicleCategory, String principal) {
         String name = vehicleCategory.getName();
         boolean exists = vehicleCategoryRepository.existsByName(name);
@@ -74,6 +79,8 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findAllByOwner(owner);
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory update(VehicleCategory vehicleCategory, String principal) {
         Optional<VehicleCategory> existing = vehicleCategoryRepository.findById(vehicleCategory.getId());
         if(existing.isPresent())

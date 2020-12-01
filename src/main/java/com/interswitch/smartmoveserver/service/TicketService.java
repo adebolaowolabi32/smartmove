@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.*;
@@ -7,6 +8,8 @@ import com.interswitch.smartmoveserver.repository.TicketRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -149,6 +152,8 @@ public class TicketService {
         return ticketDetails;
     }
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
         Iterable<Ticket> savedTicketsIterable = ticketRepository.saveAll(ticketDetails.getTickets());
         //this is an asynchronous event here running on another thread.
@@ -200,6 +205,8 @@ public class TicketService {
         return scheduleBooking;
     }
 
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public TicketDetails confirmReassignment(String username, ReassignTicket reassignTicket, TicketDetails ticketDetails) {
         List<Ticket> tickets = new ArrayList<>();
         Ticket ticket = reassignTicket.getTicket();

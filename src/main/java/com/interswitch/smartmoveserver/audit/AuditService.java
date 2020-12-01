@@ -4,7 +4,6 @@ import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitchng.audit.annotation.AuditDomain;
 import com.interswitchng.audit.annotation.AuditDomains;
 import com.interswitchng.audit.annotation.Audited;
-import com.interswitchng.audit.logger.AuditLogger;
 import com.interswitchng.audit.model.Auditable;
 import com.interswitchng.audit.model.AuditableAction;
 import com.interswitchng.audit.service.AuditActorService;
@@ -18,6 +17,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -31,12 +31,14 @@ import java.util.*;
 public class AuditService implements AuditableService {
 
     private final AuditActorService auditActorService;
-    private final AuditLogger auditLogger;
+
+    @Autowired
+    private IswAuditLoggerImpl auditLogger;
+
     private final HashMap<Class, AuditableActionStatus> actionStatusMap;
 
-    public AuditService(AuditActorService auditActorService, AuditLogger auditLogger) {
+    public AuditService(AuditActorService auditActorService) {
         this.auditActorService = auditActorService;
-        this.auditLogger = auditLogger;
         actionStatusMap = new HashMap<>();
     }
 
@@ -72,6 +74,7 @@ public class AuditService implements AuditableService {
                     auditables.clear();
                     auditables.addAll(returned);
                 }
+                log.info("Auditables before pushing===>"+auditables);
                 pushAuditables(auditables, action);
             }
         } catch (Throwable throwable) {
@@ -117,7 +120,9 @@ public class AuditService implements AuditableService {
 
     private void pushAuditables(List<Auditable> auditables, AuditableAction auditableAction) {
         for (Auditable auditable : auditables) {
+            log.info("Wanna log audit trail===>"+auditable);
             auditLogger.log(auditable, auditActorService.getActor(), getDomainCodes(auditable), auditableAction);
+            log.info("finished calling log audit trail===>"+auditable);
         }
     }
 
