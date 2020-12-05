@@ -225,4 +225,13 @@ public class UserController {
         return "redirect:/users/approvals";
     }
 
+    @GetMapping("/decline/{id}")
+    public String decline(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+        boolean declined = userService.declineUser(principal.getName(), id);
+
+        if (!declined) redirectAttributes.addFlashAttribute("error", "Unable to decline this user.");
+        else
+            redirectAttributes.addFlashAttribute("success", "User request declined successfully.");
+        return "redirect:/users/approvals";
+    }
 }

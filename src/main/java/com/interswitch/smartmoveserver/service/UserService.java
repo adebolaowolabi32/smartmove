@@ -126,6 +126,7 @@ public class UserService {
             UserApproval approval = new UserApproval();
             approval.setOwner(owner);
             approval.setUsr(user);
+            approval.setSignUpType(Enum.SignUpType.CREATED_BY_ADMIN);
             userApprovalRepository.save(approval);
             return user;
         }
@@ -169,6 +170,7 @@ public class UserService {
             UserApproval approval = new UserApproval();
             approval.setOwner(owner);
             approval.setUsr(user);
+            approval.setSignUpType(Enum.SignUpType.SELF_SIGNUP);
             userApprovalRepository.save(approval);
             sendMakerCheckerEmail(user, owner);
             return "Your sign up was successful and we've sent an email to your referer. You'll receive an email once they approve.";
@@ -419,6 +421,20 @@ public class UserService {
                     }
                 }
                 return true;
+            }
+        }
+        return false;
+    }
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
+    public boolean declineUser(String principal, long id) {
+        Optional<UserApproval> userApproval = userApprovalRepository.findById(id);
+        if (userApproval.isPresent()) {
+            UserApproval approval = userApproval.get();
+            String owner = approval.getOwner() != null ? approval.getOwner().getUsername() : "";
+            if (owner.equals(principal)) {
+                approval.setDeclined(true);
+                return userApprovalRepository.save(approval).isDeclined();
             }
         }
         return false;

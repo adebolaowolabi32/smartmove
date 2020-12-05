@@ -25,6 +25,8 @@ public class UserApproval extends AbstractAuditEntity<String> implements Auditab
 
     private boolean approved;
 
+    private boolean declined;
+
     private Enum.SignUpType signUpType;
 
     @Override
