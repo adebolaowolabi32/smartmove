@@ -54,9 +54,6 @@
                             </div>
                         </div>
                         <div class="form-group row" th:if="${isOwned}">
-                            <img alt="Operator Logo" id="profilePic" src="${user.pictureUrl}">
-                        </div>
-                        <div class="form-group row" th:if="${isOwned}">
                             <label class="control-label col-sm-4" for="regulators"><b>Regulators</b></label>
                             <div class="col-sm-8">
                                 <span id="regulators" th:text="${regulators_no}"></span> &emsp;
@@ -74,8 +71,6 @@
                                    th:if="${operators_no}"> <i class='far fa-eye'></i></a>
                             </div>
                         </div>
-                    </div>
-                    <div class="col">
                         <div class="form-group row" th:if="${isOwned}">
                             <label class="control-label col-sm-4" for="ticketers"><b>Ticketers</b></label>
                             <div class="col-sm-8">
@@ -94,6 +89,8 @@
                                         class='far fa-eye'></i></a>
                             </div>
                         </div>
+                    </div>
+                    <div class="col">
                         <div class="form-group row" th:if="${isOwned}">
                             <label class="control-label col-sm-4" for="devices"><b>Devices</b></label>
                             <div class="col-sm-8">
@@ -149,7 +146,6 @@
                                     <i class='far fa-eye'></i></a>
                             </div>
                         </div>
-                        <br>
                         <div class="form-group row">
                             <label class="col-sm-4" for="enabled"><b>Active</b></label>
                             <div class="col-sm-8">
@@ -160,6 +156,10 @@
                                 </label>
                                 </span>
                             </div>
+                        </div>
+                        <br>
+                        <div class="form-group row" th:if="${isOwned}">
+                            <img alt="Upload a logo" id="profilePic" src="${user.pictureUrl}">
                         </div>
                     </div>
                     <div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
