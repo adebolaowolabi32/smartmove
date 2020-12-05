@@ -24,6 +24,9 @@ public class UserApproval extends AbstractAuditEntity<String> implements Auditab
     private User owner;
 
     private boolean approved;
+
+    private Enum.SignUpType signUpType;
+
     @Override
     public Long getAuditableId() {
         return this.getId();

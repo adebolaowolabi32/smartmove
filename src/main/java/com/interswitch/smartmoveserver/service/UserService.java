@@ -5,6 +5,7 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
+import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
@@ -84,12 +85,6 @@ public class UserService {
         return users;
     }
 
-    public PageView<User> findAllPaginated(int page, int size, String principal) {
-        PageRequest pageable = PageRequest.of(page - 1, size);
-        Page<User> pages = userRepository.findAll(pageable);
-        return new PageView<>(pages.getTotalElements(), pages.getContent());
-    }
-
     public void setUp(User user) {
         Optional<User> exists = userRepository.findByUsername(user.getUsername());
         if (exists.isPresent()) return;
@@ -103,18 +98,10 @@ public class UserService {
         }
     }
 
-    public void setUpS(User user) {
-        Optional<User> exists = userRepository.findByUsername(user.getUsername());
-        if (exists.isPresent()) return;
-        else {
-            userRepository.save(user);
-        }
-    }
     //if user role is admin, user.owner must be null
     //else must have value
     //if principal is admin user.owner must be populated
     //if not, bounce request
-
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public User save(User user, String principal) {
         boolean exists = userRepository.existsByUsername(user.getEmail());
@@ -162,6 +149,33 @@ public class UserService {
         user.setEnabled(true);
         return save(passportUser, user, null);
     }
+
+    public String selfSignUp(UserRegistration userRegistration, String principal) {
+        boolean exists = userRepository.existsByUsername(principal);
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "You already exist as a SmartMove user.");
+        PassportUser passportUser = passportService.findUser(principal);
+        if (passportUser != null) {
+            User owner = findByUsername(userRegistration.getOwner());
+            User user = User.builder()
+                    .firstName(passportUser.getFirstName())
+                    .lastName(passportUser.getLastName())
+                    .mobileNo(passportUser.getMobileNo())
+                    .email(passportUser.getEmail())
+                    .owner(owner)
+                    .role(userRegistration.getRole())
+                    .address(userRegistration.getAddress())
+                    .enabled(false).build();
+            save(passportUser, user, owner);
+            UserApproval approval = new UserApproval();
+            approval.setOwner(owner);
+            approval.setUsr(user);
+            userApprovalRepository.save(approval);
+            sendMakerCheckerEmail(user, owner);
+            return "Your sign up was successful and we've sent an email to your referer. You'll receive an email once they approve.";
+        }
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists. Kindly ask user to login with their Quickteller credentials");
+    }
+
 
     private User save(PassportUser passportUser, User user, User owner) {
         if (passportUser == null)
@@ -282,15 +296,14 @@ public class UserService {
     public User update(User user, String principal) {
         Optional<User> existingUser = userRepository.findById(user.getId());
         if (existingUser.isPresent()) {
+            User existing = existingUser.get();
             if (user.getPicture().getSize()>0) {
                 Document doc = documentService.saveDocument(new Document(user.getPicture()));
-                user.setPictureUrl(doc.getUrl());
+                existing.setPictureUrl(doc.getUrl());
             }
-            if(user.getOwner() == null) {
-                User owner = findByUsername(principal);
-                user.setOwner(owner);
-            }
-            return userRepository.save(user);
+            existing.setAddress(user.getAddress());
+            existing.setEnabled(user.isEnabled());
+            return userRepository.save(existing);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
     }
@@ -391,13 +404,19 @@ public class UserService {
             if (owner.equals(principal)) {
                 approval.setApproved(true);
                 if(userApprovalRepository.save(approval).isApproved()){
-                    //setting default password for all users
-                    User user = approval.getUsr();
-                    user.setPassword(new RandomUtil(8).nextString());
-                    PassportUser passportUser = passportService.createUser(user);
-                    user.setEnabled(true);
-                    if(passportUser!=null) userRepository.save(user);
-                    sendUserSetUpEmail(user, approval.getOwner());
+                    if (approval.getSignUpType() == Enum.SignUpType.CREATED_BY_ADMIN) {
+                        User user = approval.getUsr();
+                        user.setPassword(new RandomUtil(8).nextString());
+                        PassportUser passportUser = passportService.createUser(user);
+                        user.setEnabled(true);
+                        if (passportUser != null) userRepository.save(user);
+                        sendUserSetUpEmail(user, approval.getOwner());
+                    } else if (approval.getSignUpType() == Enum.SignUpType.SELF_SIGNUP) {
+                        User user = approval.getUsr();
+                        user.setEnabled(true);
+                        userRepository.save(user);
+                        sendUserSetUpEmail(user, approval.getOwner());
+                    }
                 }
                 return true;
             }

@@ -25,7 +25,6 @@
                     <th>Email Address</th>
                     <th>Mobile Number</th>
                     <th>Role</th>
-                    <th>Signup Type</th>
                     <th>Approve</th>
                 </tr>
                 </thead>
@@ -38,7 +37,6 @@
                     <td th:text="${approval.usr.email}"></td>
                     <td th:text="${approval.usr.mobileNo}"></td>
                     <td th:text="${approval.usr.role}"></td>
-                    <td th:text="${approval.signUpType}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/users/approve/{id}(id=${approval.id})}">
                             <button class="btn btn-outline-primary btn-sized" th:disabled="${approval.approved}"

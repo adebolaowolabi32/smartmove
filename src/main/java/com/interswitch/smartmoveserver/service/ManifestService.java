@@ -121,6 +121,10 @@ public class ManifestService {
         return manifestRepository.findByScheduleIdAndName(scheduleId, name);
     }
 
+    public List<Manifest> findByScheduleId(long scheduleId) {
+        return manifestRepository.findAllByScheduleId(scheduleId);
+    }
+
     public Iterable<Manifest> saveAll(List<Manifest> manifests) {
         return manifestRepository.saveAll(manifests);
     }

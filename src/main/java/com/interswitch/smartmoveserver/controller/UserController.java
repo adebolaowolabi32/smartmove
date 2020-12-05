@@ -109,6 +109,20 @@ public class UserController {
         return "users/create";
     }
 
+
+    @GetMapping("/created")
+    public String showCreated(Principal principal, @RequestParam("role") Enum.Role role, Model model) {
+        //TODO:: need to handle method level user permissions specific to each role
+        User user = new User();
+        user.setRole(role);
+        model.addAttribute("title", pageUtil.buildTitle(role));
+        model.addAttribute("user", user);
+        //TODO change findAll to findAllEligible
+        model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
+        return "users/create";
+    }
+
     @PostMapping("/create")
     public String create(Principal principal, @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 

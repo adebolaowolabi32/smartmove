@@ -53,7 +53,7 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     @Column(unique=true)
     @NotBlank(message = "Email address is required.")
-    @Length(min = 5, max = 30, message = "Email address must be between 5 and 30 characters long.")
+    @Length(min = 5, max = 50, message = "Email address must be between 5 and 30 characters long.")
     private String email;
 
     @Enumerated(EnumType.STRING)
