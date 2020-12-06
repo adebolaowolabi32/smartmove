@@ -75,7 +75,7 @@ public class HomeController {
     private String logoutUri;
 
     @Value("${passport.sign-up-url}")
-    private String pasportSignUpUrl;
+    private String passportSignUpUrl;
 
     @Value("${spring.security.oauth2.client.registration.passport.client-id}")
     private String clientId;
@@ -92,8 +92,7 @@ public class HomeController {
 
     @GetMapping(value = {"/", "/index", "/home"})
     public String home(Model model) {
-        pasportSignUpUrl = pasportSignUpUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl + "/signup";
-        model.addAttribute("pasportSignUpUrl", pasportSignUpUrl);
+        model.addAttribute("passportSignUpUrl", passportSignUpUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl + "/signup");
         return "index";
     }
 
