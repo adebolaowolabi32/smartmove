@@ -288,9 +288,9 @@ public class UserService {
         if (passportUser != null) {
             if (isInterswitchEmail(passportUser.getEmail()))
                 return saveAsAdmin(passportUser);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You do not have permission to this resource");
+            return passportService.buildUser(passportUser);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You do not have permission to this resource");
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to this resource");
     }
 
 
