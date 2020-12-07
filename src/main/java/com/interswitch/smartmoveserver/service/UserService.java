@@ -388,7 +388,11 @@ public class UserService {
         List<UserApproval> approvals = new ArrayList<>();
         Optional<User> owner = userRepository.findByUsername(principal);
         if (owner.isPresent()) {
-            approvals = userApprovalRepository.findAllByOwner(owner.get());
+            User user = owner.get();
+            if (user.getRole() != Enum.Role.ISW_ADMIN)
+                approvals = userApprovalRepository.findAllByOwner(user);
+            else
+                approvals = userApprovalRepository.findAll();
         }
         return approvals;
     }
