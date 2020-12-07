@@ -152,8 +152,9 @@ public class UserService {
     }
 
     public String selfSignUp(UserRegistration userRegistration, String principal) {
-        boolean exists = userRepository.existsByUsername(principal);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "You already exist as a SmartMove user.");
+        User exists = findByUsername(principal);
+        if (exists != null && exists.getRole() != null)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You already exist as a SmartMove user.");
         PassportUser passportUser = passportService.findUser(principal);
         if (passportUser != null) {
             User owner = findByUsername(userRegistration.getOwner());
