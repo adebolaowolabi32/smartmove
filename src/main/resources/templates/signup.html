@@ -22,9 +22,15 @@
 <div class="row">
     <div class="col"></div>
     <div class="col">
-        <div class="card p-3" style="margin-top:100px;">
-            <img alt="Interswitch Logo"
-                 style="padding-bottom:40px;" th:src="@{'/assets/img/interswitchngnew.png'}" width="150"/>
+        <div style="padding:100px 0 40px 0;text-align:center;">
+            <img alt="Interswitch Logo" th:src="@{'/assets/img/interswitchngnew.png'}"/>
+        </div>
+        <div style="font-size:0.9rem;text-align:center;">
+            Sign up for your Smartmove account. <a class="js-scroll-trigger" th:href="@{/}">Learn more.</a>
+        </div>
+        <br>
+        <div class="card p-3">
+            <br><br>
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
             <div th:replace="fragments/alert-success :: alert-success (message=${message})"></div>
 
@@ -60,13 +66,15 @@
                         <p class="small text-danger" th:errors="*{address}" th:if="${#fields.hasErrors('address')}"></p>
                     </div>
                 </div>
-                <button class="btn btn-outline-primary btn-sized" type="submit">Sign Up</button>
-                <div>
+                <br>
+                <button class="btn btn-primary btn-sized" style="background-color:#00425f" type="submit">Sign Up
+                </button>
+                <br>
+                <div style="font-size:0.9rem;text-align:center;">
                     Already have an account? <a class="js-scroll-trigger" th:href="@{/oauth/authorize/passport}">Sign
                     In</a>
                 </div>
             </form>
-
         </div>
     </div>
     <div class="col"></div>
