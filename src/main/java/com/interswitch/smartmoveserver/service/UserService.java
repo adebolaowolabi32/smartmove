@@ -403,8 +403,10 @@ public class UserService {
         Optional<UserApproval> userApproval = userApprovalRepository.findById(id);
         if (userApproval.isPresent()) {
             UserApproval approval = userApproval.get();
+            User loggedInUser = findByUsername(principal);
             String owner = approval.getOwner() != null ? approval.getOwner().getUsername() : "";
-            if (owner.equals(principal)) {
+
+            if (owner.equals(principal) || loggedInUser.getRole() == Enum.Role.ISW_ADMIN) {
                 approval.setApproved(true);
                 if(userApprovalRepository.save(approval).isApproved()){
                     if (approval.getSignUpType() == Enum.SignUpType.CREATED_BY_ADMIN) {
