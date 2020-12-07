@@ -152,21 +152,16 @@ public class UserService {
     }
 
     public String selfSignUp(UserRegistration userRegistration, String principal) {
-        User exists = findByUsername(principal);
-        if (exists != null && exists.getRole() != null)
+        User user = findByUsername(principal);
+        if (user != null && user.getRole() != null)
             throw new ResponseStatusException(HttpStatus.CONFLICT, "You already exist as a SmartMove user.");
         PassportUser passportUser = passportService.findUser(principal);
         if (passportUser != null) {
             User owner = findByUsername(userRegistration.getOwner());
-            User user = User.builder()
-                    .firstName(passportUser.getFirstName())
-                    .lastName(passportUser.getLastName())
-                    .mobileNo(passportUser.getMobileNo())
-                    .email(passportUser.getEmail())
-                    .owner(owner)
-                    .role(userRegistration.getRole())
-                    .address(userRegistration.getAddress())
-                    .enabled(false).build();
+            user.setRole(userRegistration.getRole());
+            user.setAddress(userRegistration.getAddress());
+            user.setOwner(owner);
+            user.setEnabled(false);
             save(passportUser, user, owner);
             UserApproval approval = new UserApproval();
             approval.setOwner(owner);
