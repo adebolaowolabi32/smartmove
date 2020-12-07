@@ -288,7 +288,8 @@ public class UserService {
         if (passportUser != null) {
             if (isInterswitchEmail(passportUser.getEmail()))
                 return saveAsAdmin(passportUser);
-            return passportService.buildUser(passportUser);
+
+            return userRepository.save(passportService.buildUser(passportUser));
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to this resource");
     }
