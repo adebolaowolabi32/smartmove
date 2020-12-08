@@ -36,6 +36,7 @@ public class FeeConfigurationController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
+        log.info("Owner val for fee config===>"+owner);
         PageView<FeeConfiguration> feeConfigurationPageViewPage = feeConfigurationService.findAllPaginated(owner, page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(feeConfigurationPageViewPage));
         model.addAttribute("feeConfigPage", feeConfigurationPageViewPage);

@@ -115,7 +115,7 @@ public class TerminalController {
     public String delete(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
 
         Terminal terminal = terminalService.findById(id, principal.getName());
-        terminalService.delete(id, principal.getName());
+        terminalService.auditedDelete(id, principal.getName());
         User owner = terminal.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
+import com.interswitch.smartmoveserver.model.GenericModel;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
@@ -109,6 +110,19 @@ public class TerminalService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
         }
     }
+
+    @Audited(auditableAction = AuditableAction.DELETE, auditableActionClass = AuditableActionStatusImpl.class)
+    public Terminal auditedDelete(long id, String principal) {
+        Optional<Terminal> existing = terminalRepository.findById(id);
+        if(existing.isPresent()) {
+            terminalRepository.deleteById(id);
+            return new GenericModel<Terminal>(existing.get()).getEntity();
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
+        }
+    }
+
 
     public Long countByOwner(User user){
         return terminalRepository.countByOwner(user);

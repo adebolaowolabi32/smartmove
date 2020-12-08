@@ -181,7 +181,6 @@ public class HomeController {
         Date dateobj = new Date();
         model.addAttribute("time_date", format.format(dateobj));
         return "dashboard";
-
     }
 
     @GetMapping("/smlogout")
