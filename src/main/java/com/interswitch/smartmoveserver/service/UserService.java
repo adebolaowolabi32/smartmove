@@ -437,10 +437,11 @@ public class UserService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public boolean declineUser(String principal, long id) {
         Optional<UserApproval> userApproval = userApprovalRepository.findById(id);
+        User loggedInUser = findByUsername(principal);
         if (userApproval.isPresent()) {
             UserApproval approval = userApproval.get();
             String owner = approval.getOwner() != null ? approval.getOwner().getUsername() : "";
-            if (owner.equals(principal)) {
+            if (owner.equals(principal) || loggedInUser.getRole() == Enum.Role.ISW_ADMIN) {
                 approval.setDeclined(true);
                 return userApprovalRepository.save(approval).isDeclined();
             }
