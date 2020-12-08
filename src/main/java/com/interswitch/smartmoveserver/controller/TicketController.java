@@ -37,7 +37,7 @@ public class TicketController {
                          @RequestParam(defaultValue = "10") int size) {
 
         User user = userService.findByUsername(principal.getName());
-        PageView<Ticket> ticketPage = ticketService.findAllByOperator(page, size, principal.getName());
+        PageView<Ticket> ticketPage = ticketService.findAllByOperator(owner, page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
         model.addAttribute("ticketPage", ticketPage);
         model.addAttribute("status",user.getTillStatus().name());

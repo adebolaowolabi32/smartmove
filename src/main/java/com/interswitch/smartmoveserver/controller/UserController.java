@@ -109,6 +109,20 @@ public class UserController {
         return "users/create";
     }
 
+
+    @GetMapping("/created")
+    public String showCreated(Principal principal, @RequestParam("role") Enum.Role role, Model model) {
+        //TODO:: need to handle method level user permissions specific to each role
+        User user = new User();
+        user.setRole(role);
+        model.addAttribute("title", pageUtil.buildTitle(role));
+        model.addAttribute("user", user);
+        //TODO change findAll to findAllEligible
+        model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
+        return "users/create";
+    }
+
     @PostMapping("/create")
     public String create(Principal principal, @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
@@ -211,4 +225,13 @@ public class UserController {
         return "redirect:/users/approvals";
     }
 
+    @GetMapping("/decline/{id}")
+    public String decline(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+        boolean declined = userService.declineUser(principal.getName(), id);
+
+        if (!declined) redirectAttributes.addFlashAttribute("error", "Unable to decline this user.");
+        else
+            redirectAttributes.addFlashAttribute("success", "User request declined successfully.");
+        return "redirect:/users/approvals";
+    }
 }

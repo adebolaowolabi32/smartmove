@@ -8,6 +8,7 @@ import com.interswitch.smartmoveserver.repository.TicketRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +19,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /*
@@ -58,12 +62,20 @@ public class TicketService {
     @Autowired
     private TicketTillService ticketTillService;
 
+    @Autowired
+    private MessagingService messagingService;
+
     private static String PREFIX_SEPARATOR = "|";
 
     @Autowired
     private TicketReferenceService ticketReferenceService;
+
     @Autowired
-    PageUtil pageUtil;
+    private SecurityUtil securityUtil;
+
+    @Autowired
+    private PageUtil pageUtil;
+
     @Autowired
     private FeeConfigurationService feeConfigurationService;
 
@@ -152,7 +164,6 @@ public class TicketService {
         return ticketDetails;
     }
 
-
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
         Iterable<Ticket> savedTicketsIterable = ticketRepository.saveAll(ticketDetails.getTickets());
@@ -186,6 +197,7 @@ public class TicketService {
         transaction.setCardId("");
         transaction.setDeviceId("");
         transactionService.save(transaction);
+        sendTicketToUserEmail(ticketDetails);
         return ticketDetails;
     }
 
@@ -311,13 +323,26 @@ public class TicketService {
         return ticketRepository.findByReferenceNo(ref);
     }
 
-    public PageView<Ticket> findAllByOperator(int page, int size, String principal) {
+    public PageView<Ticket> findAllByOperator(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         User user = userService.findByUsername(principal);
-        Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, user);
-        return new PageView<>(pages.getTotalElements(), pages.getContent());
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, user);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            } else {
+                Page<Ticket> pages = ticketRepository.findAll(pageable);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, ownerUser);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
-
 
     private double applyConfiguredFees(TicketDetails ticketDetails, Ticket ticket, Passenger passenger) {
         List<FeeConfiguration> feeConfigurationList = ticketDetails.getFees();
@@ -350,5 +375,12 @@ public class TicketService {
         return totalFare;
     }
 
+    private void sendTicketToUserEmail(TicketDetails ticketDetails) {
 
+        Map<String, Object> params = new HashMap<>();
+        params.put("ticketDetails", ticketDetails);
+
+        messagingService.sendEmail(ticketDetails.getContactEmail(),
+                "Your Trip Reservation", "tickets" + File.separator + "preview", params);
+    }
 }

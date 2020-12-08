@@ -18,9 +18,9 @@ public class TripApi {
     TripService tripService;
 
     @GetMapping(produces = "application/json")
-    private PageView<Trip> findAll(@RequestParam(defaultValue = "1") int page,
-                               @RequestParam(defaultValue = "10") int size) {
-        return tripService.findAllPaginated(page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private PageView<Trip> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "10") int size) {
+        return tripService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

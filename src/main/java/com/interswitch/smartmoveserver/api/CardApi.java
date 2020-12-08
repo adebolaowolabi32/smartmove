@@ -21,9 +21,9 @@ public class CardApi {
     CardService cardService;
 
     @GetMapping(produces = "application/json")
-    private PageView<Card> findAll(@RequestParam(defaultValue = "1") int page,
-                               @RequestParam(defaultValue = "10") int size) {
-        return cardService.findAllPaginated(0L, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private PageView<Card> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "10") int size) {
+        return cardService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

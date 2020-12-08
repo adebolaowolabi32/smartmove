@@ -20,9 +20,9 @@ public class VehicleCategoryApi {
     VehicleCategoryService vehicleCategoryService;
 
     @GetMapping(produces = "application/json")
-    private PageView<VehicleCategory> findAll(@RequestParam(defaultValue = "1") int page,
-                                          @RequestParam(defaultValue = "10") int size) {
-        return vehicleCategoryService.findAllPaginated(0L, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private PageView<VehicleCategory> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                              @RequestParam(defaultValue = "10") int size) {
+        return vehicleCategoryService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

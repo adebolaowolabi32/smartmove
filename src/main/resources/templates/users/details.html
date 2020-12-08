@@ -80,8 +80,6 @@
                                    th:if="${ticketers_no}"> <i class='far fa-eye'></i></a>
                             </div>
                         </div>
-                    </div>
-                    <div class="col">
                         <div class="form-group row" th:if="${isOwned}">
                             <label class="control-label col-sm-4" for="agents"><b>Agents</b></label>
                             <div class="col-sm-8">
@@ -91,6 +89,8 @@
                                         class='far fa-eye'></i></a>
                             </div>
                         </div>
+                    </div>
+                    <div class="col">
                         <div class="form-group row" th:if="${isOwned}">
                             <label class="control-label col-sm-4" for="devices"><b>Devices</b></label>
                             <div class="col-sm-8">
@@ -146,7 +146,6 @@
                                     <i class='far fa-eye'></i></a>
                             </div>
                         </div>
-                        <br>
                         <div class="form-group row">
                             <label class="col-sm-4" for="enabled"><b>Active</b></label>
                             <div class="col-sm-8">
@@ -158,12 +157,11 @@
                                 </span>
                             </div>
                         </div>
+                        <br>
+                        <div class="form-group row" th:if="${isOwned}">
+                            <img alt="Upload a logo" id="profilePic" src="${user.pictureUrl}">
+                        </div>
                     </div>
-                    <div class="col">
-                        <img alt="Operator Logo" id="profilePic" src="${user.pictureUrl}">
-                    </div>
-
-
                     <div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
                         <div class="form-group row">
                             <label class="col-sm-4" for="createdBy"><b>Created By</b></label>

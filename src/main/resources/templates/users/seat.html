@@ -25,9 +25,7 @@
                     <th>Email Address</th>
                     <th>Mobile Number</th>
                     <th>Role</th>
-                    <th>Signup Type</th>
                     <th>Approve</th>
-                    <th>Decline</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,20 +37,10 @@
                     <td th:text="${approval.usr.email}"></td>
                     <td th:text="${approval.usr.mobileNo}"></td>
                     <td th:text="${approval.usr.role}"></td>
-                    <td th:text="${approval.signUpType}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/users/approve/{id}(id=${approval.id})}">
-                            <button class="btn btn-outline-primary btn-sized"
-                                    th:disabled="${approval.approved or approval.declined}"
+                            <button class="btn btn-outline-primary btn-sized" th:disabled="${approval.approved}"
                                     th:text="${approval.approved ? 'Approved' : 'Approve'}" type="button">Approve
-                            </button>
-                        </a>
-                    </td>
-                    <td>
-                        <a class="justify-content-center" th:href="@{/users/decline/{id}(id=${approval.id})}">
-                            <button class="btn btn-outline-danger btn-sized"
-                                    th:disabled="${approval.approved or approval.declined}"
-                                    th:text="${approval.declined ? 'Declined' : 'Decline'}" type="button">Decline
                             </button>
                         </a>
                     </td>
