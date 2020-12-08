@@ -139,8 +139,7 @@ public class UserController {
             return "users/create";
         }
 
-        logger.info("wanna call user service to to create user");
-        User savedUser = userService.save(user, principal.getName());
+        User savedUser = userService.create(user, principal.getName());
 
         redirectAttributes.addFlashAttribute("saved", true);
         redirectAttributes.addFlashAttribute("saved_message", pageUtil.buildSaveMessage(role));

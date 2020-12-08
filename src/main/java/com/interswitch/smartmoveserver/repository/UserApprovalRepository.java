@@ -12,5 +12,6 @@ import java.util.List;
 public interface UserApprovalRepository extends CrudRepository<UserApproval, Long> {
     List<UserApproval> findAllByOwner(User owner);
 
+    UserApproval findByUsr(User usr);
     List<UserApproval> findAll();
 }
