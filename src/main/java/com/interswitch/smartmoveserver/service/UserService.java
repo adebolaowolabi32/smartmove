@@ -495,12 +495,12 @@ public class UserService {
         params.put("password", user.getPassword());
         if (owner == null) {
             messagingService.sendEmail(user.getEmail(),
-                    "New User SignUp", "messages" + File.separator + "welcome", params);
+                    "User SignUp Approved", "messages" + File.separator + "welcome", params);
         } else {
             String ownerName = owner.getFirstName() + " " + owner.getLastName();
             params.put("owner", ownerName);
             messagingService.sendEmail(user.getEmail(),
-                    "New User SignUp", "messages" + File.separator + "welcome_new", params);
+                    "User SignUp Approved", "messages" + File.separator + "welcome_new", params);
         }
     }
 
@@ -513,8 +513,7 @@ public class UserService {
         params.put("role", user.getRole());
         params.put("portletUri", portletUri);
         params.put("username", user.getUsername());
-        params.put("password", user.getPassword());
         messagingService.sendEmail(user.getEmail(),
-                "New User SignUp", "messages" + File.separator + "declined_user", params);
+                "User SignUp Declined", "messages" + File.separator + "declined_user", params);
     }
 }
