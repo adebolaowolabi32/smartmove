@@ -69,7 +69,7 @@ public class MessagingService {
             log.info("Sent email to => " + recipient);
             log.info("Email Message => " + message);
         } catch (PostmanException | JsonProcessingException | TimeoutException ex) {
-            log.error("An error happened while trying to send email with isw-post-office==>" + ex.getLocalizedMessage());
+            throw new RuntimeException("An error happened while trying to send email with isw-post-office =>" + ex.getLocalizedMessage());
         }
     }
 }
