@@ -413,6 +413,7 @@ public class UserService {
 
             if (owner.equals(principal) || loggedInUser.getRole() == Enum.Role.ISW_ADMIN) {
                 approval.setApproved(true);
+                approval.setDeclined(false);
                 if(userApprovalRepository.save(approval).isApproved()){
                     if (approval.getSignUpType() == Enum.SignUpType.CREATED_BY_ADMIN) {
                         User user = approval.getUsr();
@@ -427,8 +428,9 @@ public class UserService {
                         userRepository.save(user);
                         sendUserSetUpEmail(user, approval.getOwner());
                     }
+                    return true;
                 }
-                return true;
+                return false;
             }
         }
         return false;
@@ -443,7 +445,15 @@ public class UserService {
             String owner = approval.getOwner() != null ? approval.getOwner().getUsername() : "";
             if (owner.equals(principal) || loggedInUser.getRole() == Enum.Role.ISW_ADMIN) {
                 approval.setDeclined(true);
-                return userApprovalRepository.save(approval).isDeclined();
+                approval.setApproved(false);
+                if (userApprovalRepository.save(approval).isDeclined()) {
+                    User user = approval.getUsr();
+                    user.setEnabled(false);
+                    userRepository.save(user);
+                    sendDeclinedUserEmail(user, approval.getOwner());
+                    return true;
+                }
+                return false;
             }
         }
         return false;
@@ -478,14 +488,33 @@ public class UserService {
     private void sendUserSetUpEmail(User user, User owner) {
 
         Map<String, Object> params = new HashMap<>();
-        params.put("owner", owner.getFirstName() + " " + owner.getLastName());
         params.put("user", user.getFirstName() + " " + user.getLastName());
         params.put("role", user.getRole());
         params.put("portletUri", portletUri);
         params.put("username", user.getUsername());
         params.put("password", user.getPassword());
+        if (owner == null) {
+            messagingService.sendEmail(user.getEmail(),
+                    "New User SignUp", "messages" + File.separator + "welcome", params);
+        } else {
+            String ownerName = owner.getFirstName() + " " + owner.getLastName();
+            params.put("owner", ownerName);
+            messagingService.sendEmail(user.getEmail(),
+                    "New User SignUp", "messages" + File.separator + "welcome_new", params);
+        }
+    }
 
+    private void sendDeclinedUserEmail(User user, User owner) {
+
+        Map<String, Object> params = new HashMap<>();
+        String ownerName = owner != null ? owner.getFirstName() + " " + owner.getLastName() : "Smartmove";
+        params.put("owner", ownerName);
+        params.put("user", user.getFirstName() + " " + user.getLastName());
+        params.put("role", user.getRole());
+        params.put("portletUri", portletUri);
+        params.put("username", user.getUsername());
+        params.put("password", user.getPassword());
         messagingService.sendEmail(user.getEmail(),
-                "New User SignUp", "messages" + File.separator + "welcome_new", params);
+                "New User SignUp", "messages" + File.separator + "declined_user", params);
     }
 }
