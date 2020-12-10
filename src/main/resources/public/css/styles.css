@@ -15745,18 +15745,23 @@ body {
         font-size:15px;
         font-family:Arial;
     }
+
     .right-handed {
         float:right;
     }
+
     .link-black {
         color: black;
     }
+
     .wallet-bg {
         background-color: #F0F0F0;
     }
+
     .wallet-body {
          border-radius: 10px 10px 10px 10px;
     }
+
     .form-control {
            display: block;
            width: 80%;
@@ -15772,6 +15777,7 @@ body {
            border-radius: 0.25rem;
            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
          }
+
      .form-control-full {
             width: 100%;
          }
@@ -15785,9 +15791,11 @@ body {
     .text-content {
         text-align: center;
     }
+
     .red {
         color: red;
     }
+
     .inline {
         display: inline;
     }

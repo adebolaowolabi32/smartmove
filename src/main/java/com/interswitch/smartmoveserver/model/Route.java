@@ -4,10 +4,10 @@ import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 
 /**
@@ -41,7 +41,7 @@ public class Route extends AbstractAuditEntity<String> implements Auditable<Long
 
     private String stopTerminalName;
 
-    @NotBlank(message = "Price is required.")
+    @Positive(message = "only positive values allowed for price")
     private long price;
 
     @ManyToOne
