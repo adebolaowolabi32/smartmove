@@ -74,8 +74,4 @@ public class Enum {
         }
 
     }
-
-    public enum SignUpType {
-        CREATED_BY_ADMIN, SELF_SIGNUP
-    }
 }

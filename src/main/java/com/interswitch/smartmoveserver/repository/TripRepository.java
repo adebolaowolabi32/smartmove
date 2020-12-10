@@ -19,8 +19,6 @@ public interface TripRepository extends CrudRepository<Trip, Long> {
 
     List<Trip> findByVehicleRegNo(String vehicleRegNo);
 
-    Page<Trip> findAllByOwner(Pageable pageable, User owner);
-
     Page<Trip> findAll(Pageable pageable);
 
     List<Trip> findAll();

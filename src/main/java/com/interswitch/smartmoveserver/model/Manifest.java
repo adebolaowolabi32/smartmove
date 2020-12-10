@@ -65,7 +65,7 @@ public class Manifest extends AbstractAuditEntity<String> implements Auditable<L
     private String contactMobile;
 
     @NotBlank(message = "Contact email is required.")
-    @Length(min = 5, max = 50, message = "Contact email must be between 5 and 30 characters long.")
+    @Length(min = 5, max = 30, message = "Contact email must be between 5 and 30 characters long.")
     private String contactEmail;
 
     @NotBlank(message = "Next of Kin name is required.")

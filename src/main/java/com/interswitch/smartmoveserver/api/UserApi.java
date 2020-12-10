@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -22,15 +21,15 @@ public class UserApi {
     private UserService userService;
 
     @GetMapping(produces = "application/json")
-    public PageView<User> findAll(@RequestParam("role") Enum.Role role, @RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
-                                  @RequestParam(defaultValue = "10") int size) {
-        return userService.findAllPaginatedByRole(JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()), owner, role, page, size);
+    public PageView<User> findAll(@RequestParam(defaultValue = "1") int page,
+                              @RequestParam(defaultValue = "10") int size) {
+        return userService.findAllPaginated(page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private void create(@Validated @RequestBody User user) {
-        userService.create(user, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private void save(@Validated @RequestBody User user) {
+        userService.save(user, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

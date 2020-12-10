@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
-import java.util.stream.Stream;
 
 /**
  * @author adebola.owolabi
@@ -273,11 +272,5 @@ public class PageUtil {
         }
         return roles;
     }
-
-    public List<Enum.Role> getRoles() {
-        return Stream.of(Enum.Role.values())
-                .collect(Collectors.toList());
-    }
-
 
 }

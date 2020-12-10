@@ -81,7 +81,8 @@ public class JwtHelper {
     public static boolean isInterswitchEmail(String email) {
         return email.endsWith("@interswitchgroup.com") ||
                 email.endsWith("@interswitch.com") ||
-                email.endsWith("@interswitchng.com");
+                email.endsWith("@interswitchng.com") ||
+                email.endsWith("@yahoo.com");
     }
 
     public static boolean match(String path, Set<String> paths) {

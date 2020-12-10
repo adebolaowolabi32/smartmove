@@ -4,7 +4,6 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -14,19 +13,6 @@ public class SecurityUtil {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Value("${passport.logout.url}")
-    private String passportLogoutUrl;
-
-    @Value("${passport.signup-url}")
-    private String passportSignUpUrl;
-
-    @Value("${spring.security.oauth2.client.registration.passport.client-id}")
-    private String clientId;
-
-    @Value("${smartmove.url}")
-    private String smartmoveUrl;
-
 
     public boolean isOwner(String username, Long owner){
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -44,13 +30,5 @@ public class SecurityUtil {
 
     public boolean isOperator(User user) {
         return user.getRole() == Enum.Role.OPERATOR;
-    }
-
-    public String getPassportSignUpUrl() {
-        return passportSignUpUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl + "/signup";
-    }
-
-    public String getPassportLogoutUrl() {
-        return passportLogoutUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl;
     }
 }

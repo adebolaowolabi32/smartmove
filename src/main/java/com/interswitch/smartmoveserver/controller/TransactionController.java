@@ -30,7 +30,7 @@ public class TransactionController {
     public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        PageView<Transaction> transactionPage = transactionService.findAllPaginated(owner, page, size, principal.getName());
+        PageView<Transaction> transactionPage = transactionService.findAllPaginated(page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(transactionPage));
         model.addAttribute("transactionPage", transactionPage);
         return "transactions/get";

@@ -59,7 +59,7 @@
 			<div class="form-group row">
 				<label class="control-label col-sm-2" for="owner"><b>Owner</b></label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{owner}"  id="owner">
+					<select class="form-control" th:field="*{owner}"  id="owner" required>
 						<option value="">Select ...</option>
 						<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 					</select>

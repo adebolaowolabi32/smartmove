@@ -1,0 +1,248 @@
+{
+	"data": [
+    {
+      "id": "1",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    },
+	{
+      "id": "2",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "3",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Reader",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "",
+	  "ftype": "",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "4",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }{
+      "id": "1",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "5",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }{
+      "id": "6",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "7",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }{
+      "id": "8",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "9",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "10",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "11",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }{
+      "id": "12",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }{
+      "id": "13",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "14",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "15",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "16",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "17",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+	{
+      "id": "18",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }{
+      "id": "19",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }{
+      "id": "20",
+      "name": "My device",
+      "deviceId": "B000123456",
+      "type": "Validator",
+      "vhardware": "12.09.45",
+      "vsoftware": "1.0.1",
+	  "tPeriod": "240",
+	  "gpsPeriod": "120",
+	  "ftype": "Fixed",
+	  "statusP": "Enabled"
+    }
+  ]}

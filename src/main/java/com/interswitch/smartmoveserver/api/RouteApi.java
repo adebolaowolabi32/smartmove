@@ -20,10 +20,10 @@ public class RouteApi {
     RouteService routeService;
 
     @GetMapping(produces = "application/json")
-    private PageView<Route> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
-                                    @RequestParam(defaultValue = "10") int size) {
+    private PageView<Route> findAll(@RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "10") int size) {
 
-        return routeService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+        return routeService.findAllPaginated(0L, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

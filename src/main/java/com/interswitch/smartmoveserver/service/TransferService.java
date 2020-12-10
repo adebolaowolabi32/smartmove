@@ -31,19 +31,15 @@ public class TransferService {
     @Autowired
     private WalletService walletService;
 
-    @Autowired
-    private PageUtil pageUtil;
 
     public Transfer save(Transfer transfer) {
         return transferRepository.save(transfer);
     }
 
-    public PageView<Transfer> findAllPaginated(int page, int size, String principal) {
-        PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        User user = userService.findByUsername(principal);
-        Page<Transfer> pages = transferRepository.findAllByOwner(pageable, user);
+    public PageView<Transfer> findAllPaginated(int page, int size) {
+        PageRequest pageable = PageRequest.of(page - 1, size);
+        Page<Transfer> pages = transferRepository.findAll(pageable);
         return new PageView<>(pages.getTotalElements(), pages.getContent());
-
     }
 
     public Transfer findById(long id) {
@@ -54,11 +50,32 @@ public class TransferService {
         return transferRepository.count();
     }
 
+
     public Long countByOwner(String username) {
         User user = userService.findByUsername(username);
         if (user != null) return transferRepository.countByOwner(user);
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
     }
+
+
+   /* public Page<Transfer> findAllTransfers(Principal principal, Long owner, int page, int size) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        Optional<Wallet> existing = walletRepository.findById(owner);
+        if(existing.isPresent()){
+            Wallet wallet = existing.get();
+            return transferRepository.findByWallet(pageable, wallet);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
+    }
+
+    public Long countTransfers(Principal principal, User owner){
+        Optional<Wallet> existing = walletRepository.findByOwner(owner);
+        if(existing.isPresent()){
+            Wallet wallet = existing.get();
+            return transferRepository.countByWallet(wallet);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
+    }*/
 
     public String transfer(Transfer transfer, String principal) {
         User user = userService.findByUsername(principal);

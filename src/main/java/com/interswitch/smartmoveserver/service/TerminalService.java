@@ -68,6 +68,7 @@ public class TerminalService {
         }
     }
 
+
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Terminal save(Terminal terminal, String principal) {
         String name = terminal.getName();

@@ -14,8 +14,6 @@ public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 
     Page<Schedule> findAll(Pageable pageable);
 
-    Page<Schedule> findAllByOwner(Pageable pageable, User owner);
-
     List<Schedule> findAll();
 
     List<Schedule> findAllByOwner(User owner);
