@@ -34,7 +34,7 @@
             <div th:replace="fragments/alert-success :: alert-success (message=${message})"></div>
 
             <form action="#" data-parsley-validate="true" method="post"
-                  style="padding:30px 0 20px 0;" th:action="${'/signup'}" th:object="${user}">
+                  style="padding:20px 0 20px 0;" th:action="${'/signup'}" th:object="${user}">
                 <div class="form-group row">
                     <label class="control-label col-sm-3" for="role"><b>Role</b></label>
                     <div class="col-sm-9">

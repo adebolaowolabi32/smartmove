@@ -38,10 +38,15 @@ public class UserLoginInterceptor extends HandlerInterceptorAdapter {
         Principal principal = request.getUserPrincipal();
         if (principal != null) {
             User user = userService.findByUsername(principal.getName());
-            if (user != null && user.isEnabled())
-                return true;
-            response.sendRedirect("/smlogout");
-            return false;
+            if (user != null) {
+                if (user.getRole() == null) {
+                    response.sendRedirect("/signup");
+                    return false;
+                } else if (!user.isEnabled()) {
+                    response.sendRedirect("/smlogout");
+                    return false;
+                } else return true;
+            }
         }
         return false;
     }

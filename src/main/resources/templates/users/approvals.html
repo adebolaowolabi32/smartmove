@@ -43,7 +43,7 @@
                     <td>
                         <a class="justify-content-center" th:href="@{/users/approve/{id}(id=${approval.id})}">
                             <button class="btn btn-outline-primary btn-sized"
-                                    th:disabled="${approval.approved or approval.declined}"
+                                    th:disabled="${approval.approved}"
                                     th:text="${approval.approved ? 'Approved' : 'Approve'}" type="button">Approve
                             </button>
                         </a>
@@ -51,7 +51,7 @@
                     <td>
                         <a class="justify-content-center" th:href="@{/users/decline/{id}(id=${approval.id})}">
                             <button class="btn btn-outline-danger btn-sized"
-                                    th:disabled="${approval.approved or approval.declined}"
+                                    th:disabled="${approval.declined}"
                                     th:text="${approval.declined ? 'Declined' : 'Decline'}" type="button">Decline
                             </button>
                         </a>

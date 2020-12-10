@@ -32,15 +32,21 @@ public class ViewExceptionHandler {
                 .stream()
                 .map(error -> error.getField() + FIELD_ERROR_SEPARATOR + error.getDefaultMessage())
                 .collect(Collectors.toList());
-        redirectAttributes.addFlashAttribute("error", validationErrors.get(0));
-        return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
+        final String path = request.getServletPath();
+        String error = validationErrors.get(0);
+        log.error(String.format(ERROR_MESSAGE_TEMPLATE, error, path), exception);
+        redirectAttributes.addFlashAttribute("error", error);
+        return "redirect:" + path + "?" + request.getQueryString();
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public String handleHttpMessageNotReadable(HttpMessageNotReadableException exception,
                                                                   HttpHeaders headers, HttpStatus status, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("error", exception.getLocalizedMessage());
-        return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
+        final String path = request.getServletPath();
+        String error = exception.getLocalizedMessage();
+        log.error(String.format(ERROR_MESSAGE_TEMPLATE, error, path), exception);
+        redirectAttributes.addFlashAttribute("error", error);
+        return "redirect:" + path + "?" + request.getQueryString();
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -50,8 +56,10 @@ public class ViewExceptionHandler {
         if (StringUtils.isNotEmpty(validationError) && validationError.contains("duplicate")) {
             message = "Cannot save duplicate value. The duplicate value is " + StringUtils.substringBetween(validationError, "(", ")") + ".";
         } else message = validationError;
+        final String path = request.getServletPath();
+        log.error(String.format(ERROR_MESSAGE_TEMPLATE, message, path), exception);
         redirectAttributes.addFlashAttribute("error", message);
-        return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
+        return "redirect:" + path + "?" + request.getQueryString();
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -60,7 +68,10 @@ public class ViewExceptionHandler {
                 map(violation ->
                         violation.getPropertyPath() + FIELD_ERROR_SEPARATOR + violation.getMessage())
                 .collect(Collectors.toList());
-        redirectAttributes.addFlashAttribute("error", validationErrors.get(0));
+        final String path = request.getServletPath();
+        String error = validationErrors.get(0);
+        log.error(String.format(ERROR_MESSAGE_TEMPLATE, error, path), exception);
+        redirectAttributes.addFlashAttribute("error", error);
         return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
     }
 
