@@ -33,6 +33,8 @@ public class Seat extends AbstractAuditEntity<String> implements Auditable<Long>
     @Enumerated(EnumType.STRING)
     private Enum.SeatClass seatClass;
 
+    private boolean available;
+
     @Override
     public Long getAuditableId() {
         return this.getId();
