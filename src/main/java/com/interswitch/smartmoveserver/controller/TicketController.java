@@ -59,6 +59,14 @@ public class TicketController {
         return "tickets/create";
     }
 
+    @GetMapping("/show-seat")
+    public String showSeatSelection(Principal principal, Model model) {
+        Ticket ticket = new Ticket();
+        model.addAttribute("ticket", ticket);
+        model.addAttribute("owners", userService.findAll());
+        return "tickets/seat-selection";
+    }
+
     @PostMapping("/create")
     public String create(Principal principal, @Valid Ticket ticket, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
