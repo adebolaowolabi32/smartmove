@@ -13,10 +13,12 @@
             <evaluate result="flowScope.terminals" expression="ticketService.getTerminals()"/>
             <evaluate result="flowScope.schedules" expression="ticketService.getSchedules()"/>
         </on-entry>
+
         <transition on="findBooking" to="schedule">
             <evaluate result="flowScope.scheduleBooking"
                       expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
         </transition>
+
         <on-exit>
             <evaluate
                     expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket book flow')"/>
@@ -32,7 +34,9 @@
             <evaluate result="flowScope.scheduleBooking"
                       expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
         </transition>
+
         <transition on="makeBooking" to="showReturnSchedule"/>
+
         <on-exit>
             <evaluate
                     expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket schedule flow')"/>
