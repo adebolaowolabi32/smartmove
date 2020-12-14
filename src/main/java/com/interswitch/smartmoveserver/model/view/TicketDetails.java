@@ -71,4 +71,6 @@ public class TicketDetails implements Serializable {
     private List<FeeConfiguration> fees;
 
     private List<FeeDetails> appliedFees;
+
+    private String seatsData;
 }
