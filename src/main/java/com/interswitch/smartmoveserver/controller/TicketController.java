@@ -1,5 +1,4 @@
 package com.interswitch.smartmoveserver.controller;
-
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Ticket;
 import com.interswitch.smartmoveserver.model.User;
@@ -12,10 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.validation.Valid;
 import java.security.Principal;
-
 /*
  * Created by adebola.owolabi on 7/27/2020
  */
@@ -24,18 +21,14 @@ import java.security.Principal;
 public class TicketController {
     @Autowired
     private TicketService ticketService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     PageUtil pageUtil;
-
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-
         User user = userService.findByUsername(principal.getName());
         PageView<Ticket> ticketPage = ticketService.findAllByOperator(page, size, principal.getName());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
@@ -43,14 +36,12 @@ public class TicketController {
         model.addAttribute("status",user.getTillStatus().name());
         return "tickets/get";
     }
-
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
         Ticket ticket = ticketService.findById(id);
         model.addAttribute("ticket", ticket);
         return "tickets/details";
     }
-
     @GetMapping("/create")
     public String showCreate(Principal principal, Model model) {
         Ticket ticket = new Ticket();
@@ -58,7 +49,6 @@ public class TicketController {
         model.addAttribute("owners", userService.findAll());
         return "tickets/create";
     }
-
     @GetMapping("/show-seat")
     public String showSeatSelection(Principal principal, Model model) {
         Ticket ticket = new Ticket();
@@ -66,7 +56,6 @@ public class TicketController {
         model.addAttribute("owners", userService.findAll());
         return "tickets/seat-selection";
     }
-
     @PostMapping("/create")
     public String create(Principal principal, @Valid Ticket ticket, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -74,7 +63,6 @@ public class TicketController {
             model.addAttribute("owners", userService.findAll());
             return "tickets/create";
         }
-
         Ticket savedTicket = ticketService.save(principal.getName(), ticket);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/tickets/details/" + savedTicket.getId();
