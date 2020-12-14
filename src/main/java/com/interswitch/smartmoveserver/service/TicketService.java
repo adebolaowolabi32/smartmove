@@ -104,7 +104,7 @@ public class TicketService {
         //setting seat list
         Set<Seat> seats = new HashSet<>();
 
-            for(int i=1;i<=5;i++){
+            for(int i=1;i<=20;i++){
                 Seat seat  = new Seat();
                 seat.setSeatNo(String.valueOf(i));
                 seat.setAvailable(true);
