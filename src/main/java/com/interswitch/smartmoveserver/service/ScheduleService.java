@@ -2,10 +2,13 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.repository.ScheduleRepository;
+import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,14 +19,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /*
  * Created by adebola.owolabi on 8/7/2020
  */
+@Slf4j
 @Service
-@Transactional
 public class ScheduleService {
 
     @Autowired
@@ -41,6 +46,9 @@ public class ScheduleService {
     @Autowired
     PageUtil pageUtil;
 
+    @Autowired
+    SeatRepository seatRepository;
+
     public List<Schedule> findAll() {
         return scheduleRepository.findAll();
     }
@@ -57,12 +65,17 @@ public class ScheduleService {
         LocalDateTime stop = LocalDateTime.of(schedule.getArrivalDate(), schedule.getArrivalTime());
         Duration duration = Duration.between(start, stop);
         schedule.setDuration(String.valueOf(duration.getSeconds() / 60 / 60));
+
+        //create seats for this schedule from the info in vehicle category
+        schedule.setSeats(createSeatFromVehicleCategory(schedule.getVehicle()));
+
         if (schedule.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             schedule.setOwner(owner);
         }
         return scheduleRepository.save(buildSchedule(schedule));
     }
+
 
     public Schedule findById(long id) {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
@@ -102,7 +115,9 @@ public class ScheduleService {
     }
 
     private Schedule buildSchedule(Schedule schedule) {
+
         VehicleCategory vehicleCategory = schedule.getVehicle();
+
         if(vehicleCategory != null)
             schedule.setVehicle(vehicleCategoryService.findById(vehicleCategory.getId()));
 
@@ -114,5 +129,32 @@ public class ScheduleService {
         if(stopTerminal != null)
             schedule.setStopTerminal(terminalService.findById(stopTerminal.getId()));
         return schedule;
+    }
+
+    private Set<Seat> createSeatFromVehicleCategory(VehicleCategory vehicleCategory) {
+
+        log.info("Hello,calling createSeatFromVehicleCategory");
+
+        Set<Seat> seats = new HashSet<>();
+
+        if(vehicleCategory!=null){
+            int noColumns = vehicleCategory.getNoColumns();
+            int noRows  = vehicleCategory.getNoRows();
+            int capacity = vehicleCategory.getCapacity();
+
+            for(int i=1;i<=capacity;i++){
+
+                Seat seat  = new Seat();
+                seat.setSeatNo(String.valueOf(i));
+                seat.setAvailable(true);
+                Seat createdSeat = seatRepository.save(seat);
+                log.info("creating seat==>"+i+"====>"+createdSeat);
+                seats.add(createdSeat);
+            }
+            return seats;
+        }
+
+        return  seats;
+
     }
 }

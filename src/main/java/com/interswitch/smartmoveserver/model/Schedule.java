@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 /*
  * Created by adebola.owolabi on 8/7/2020
@@ -72,6 +73,11 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
     private User owner;
 
     private boolean enabled;
+
+    @Column(name="seats",nullable = true)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seat")
+    Set<Seat> seats;
 
     @Override
     public Long getAuditableId() {

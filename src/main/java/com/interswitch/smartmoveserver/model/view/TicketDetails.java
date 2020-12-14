@@ -48,6 +48,8 @@ public class TicketDetails implements Serializable {
 
     private List<String> seats;
 
+    private List<Seat> seatList;
+
     private double totalFare;
 
     private LocalDate departure;

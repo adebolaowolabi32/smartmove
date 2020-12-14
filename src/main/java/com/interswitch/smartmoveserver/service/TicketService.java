@@ -21,7 +21,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /*
@@ -98,6 +100,19 @@ public class TicketService {
         ticketDetails.setSchedule(schedule);
         ticketDetails.setNoOfPassengers(noOfPassengers);
         ticketDetails.setSeats(this.getAvailableSeats());
+
+        //setting seat list
+        Set<Seat> seats = new HashSet<>();
+
+            for(int i=1;i<=5;i++){
+                Seat seat  = new Seat();
+                seat.setSeatNo(String.valueOf(i));
+                seat.setAvailable(true);
+                log.info("creating seat==>"+i+"====>"+seat);
+                seats.add(seat);
+            }
+            //new ArrayList<>(schedule.getSeats())
+        ticketDetails.setSeatList(new ArrayList<>(seats));
         ticketDetails.setCountries(stateService.findAllCountries());
         ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
 

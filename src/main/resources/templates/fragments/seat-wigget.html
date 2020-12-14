@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="seat-wigget">
+    <form class="p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
+          th:object="${ticketDetails}">
     <div th:class="${{1 &lt; 30} ? 'col-sm-6 mx-auto' : 'col-sm-8 mx-auto'}">
         <div class="card mb-8">
             <div class="card-body">
@@ -26,9 +28,10 @@
                     <div class="outerSeatContainer">
                         <div class="innerSeatContainer">
                             <div class="seatContainer"
-                                 th:each="no :  ${#numbers.sequence( 1, 30)}">
-                                <div class="seatLabel" th:text="${no}" th:id="${no}" onclick="seatBooking(this.id)" th:style="${no}% 2 == 0 ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                 th:each="seat : ${ticketDetails.seatList}">
+                                <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.seatNo}% 2 == 0 ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -54,5 +57,6 @@
             </div>
         </div>
     </div>
+    </form>
 </div>
 </html>

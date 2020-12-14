@@ -139,6 +139,7 @@ public class VehicleCategoryService {
     }
 
     private VehicleCategory buildVehicleCategory(VehicleCategory vehicleCategory) {
+
         VehicleMake vehicleMake = vehicleCategory.getMake();
         if(vehicleMake != null)
             vehicleCategory.setMake(vehicleMakeService.findById(vehicleMake.getId()));
@@ -146,6 +147,18 @@ public class VehicleCategoryService {
         VehicleModel vehicleModel = vehicleCategory.getModel();
         if(vehicleModel != null)
             vehicleCategory.setModel(vehicleModelService.findById(vehicleModel.getId()));
+
+        int capacity =  vehicleCategory.getCapacity();
+        int noColumns = vehicleCategory.getNoColumns();
+        int noRows = capacity % noColumns  == 0 ? Math.round(capacity/noColumns) : (getIntegerPart(capacity/noColumns) + 1) ;
+        vehicleCategory.setNoRows(noRows);
+
         return vehicleCategory;
+    }
+
+    private static int getIntegerPart(float value) {
+        float fractionalPart = value % 1;
+        float integralPart = value - fractionalPart;
+        return  Math.round(integralPart);
     }
 }

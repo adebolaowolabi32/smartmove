@@ -107,7 +107,6 @@ public class ManifestServiceTests {
         vehicle.setCategory(vehicleCategory);
         vehicle = vehicleRepository.save(vehicle);
 
-        seat.setVehicle(vehicle);
         seat = seatRepository.save(seat);
         manifest.setSeat(seat);
 
