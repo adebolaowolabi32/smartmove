@@ -66,6 +66,9 @@ public class ScheduleService {
         Duration duration = Duration.between(start, stop);
         schedule.setDuration(String.valueOf(duration.getSeconds() / 60 / 60));
 
+        //create seats for this schedule from the info in vehicle category
+        schedule.setSeats(createSeatFromVehicleCategory(schedule.getVehicle()));
+
         if (schedule.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             schedule.setOwner(owner);
@@ -128,5 +131,30 @@ public class ScheduleService {
         return schedule;
     }
 
+    private Set<Seat> createSeatFromVehicleCategory(VehicleCategory vehicleCategory) {
 
+        log.info("Hello,calling createSeatFromVehicleCategory");
+
+        Set<Seat> seats = new HashSet<>();
+
+        if(vehicleCategory!=null){
+            int noColumns = vehicleCategory.getNoColumns();
+            int noRows  = vehicleCategory.getNoRows();
+            int capacity = vehicleCategory.getCapacity();
+
+            for(int i=1;i<=capacity;i++){
+
+                Seat seat  = new Seat();
+                seat.setSeatNo(String.valueOf(i));
+                seat.setAvailable(true);
+                Seat createdSeat = seatRepository.save(seat);
+                log.info("creating seat==>"+i+"====>"+createdSeat);
+                seats.add(createdSeat);
+            }
+            return seats;
+        }
+
+        return  seats;
+
+    }
 }

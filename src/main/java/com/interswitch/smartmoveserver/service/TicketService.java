@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -97,10 +98,23 @@ public class TicketService {
         TicketDetails ticketDetails = new TicketDetails();
         Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
         ticketDetails.setSchedule(schedule);
+        ticketDetails.setNoOfPassengers(noOfPassengers);
+        ticketDetails.setSeats(this.getAvailableSeats());
 
-        Set<Seat> seats = schedule.getVehicle().getSeats();
-        ticketDetails.setSeats(new ArrayList<>(seats));
+        //setting seat list
+        Set<Seat> seats = new HashSet<>();
+
+        for(int i=1;i<=20;i++){
+            Seat seat  = new Seat();
+            seat.setSeatNo(String.valueOf(i));
+            seat.setAvailable(true);
+            log.info("creating seat==>"+i+"====>"+seat);
+            seats.add(seat);
+        }
+        //new ArrayList<>(schedule.getSeats())
+        ticketDetails.setSeatList(new ArrayList<>(seats));
         ticketDetails.setCountries(stateService.findAllCountries());
+        ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
 
         String transportOperatorUsername = (user.getRole() == Enum.Role.OPERATOR || user.getRole() == Enum.Role.ISW_ADMIN) ?
                 user.getUsername() : user.getOwner() != null ? user.getOwner().getUsername() : "";
@@ -114,12 +128,13 @@ public class TicketService {
         return ticketDetails;
     }
 
-    public TicketDetails setPassengerDetails(TicketDetails ticketDetails){
-//        log.info("ticketDetails===>"+ticketDetails);
-//        log.info("calling setPassengerDetails,seatData===>"+seatData);
-        int noOfPassengers = ticketDetails.getSeats().size();
-        ticketDetails.setNoOfPassengers(noOfPassengers);
-        ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
+    public TicketDetails setPassengerDetails(TicketDetails ticketDetails,String seatData){
+        log.info("calling setPassengerDetails===>");
+        String [] seatNumbers = seatData.split(",");
+        int numberOfPassengers = seatNumbers.length;
+        log.info("Number of passengers===>"+numberOfPassengers);
+        ticketDetails.setNoOfPassengers(numberOfPassengers);
+        ticketDetails.setPassengers(this.initializePassengerList(numberOfPassengers));
         log.info("finished calling setPassengerDetails===>");
         return ticketDetails;
     }
