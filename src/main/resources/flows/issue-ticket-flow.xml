@@ -46,6 +46,7 @@
 
     </view-state>
 
+
     <action-state id="showReturnSchedule">
         <on-entry>
             <evaluate
@@ -72,8 +73,7 @@
 <!--        </transition>-->
 
         <transition on="no" to="makeBooking">
-            <evaluate
-                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on NO ... transitioning to seat selection')"/>
+            <evaluate expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on NO ... transitioning to seat selection')"/>
 
         </transition>
 
@@ -81,15 +81,32 @@
 
     <action-state id="makeBooking">
         <evaluate expression="flowScope.return"/>
+
         <transition on="yes" to="seat-selection">
             <evaluate result="flowScope.ticketDetails"
                       expression="ticketService.makeReturnBooking(flowScope.ticketDetails, requestParameters.scheduleId)"/>
         </transition>
+
         <transition on="no" to="seat-selection">
             <evaluate result="flowScope.ticketDetails"
                       expression="ticketService.makeBooking(currentUser.name,requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
+
     </action-state>
+
+    <view-state id="seat-selection" view="tickets/seat-selection" model="flowScope.ticketDetails">
+        <on-entry>
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Entering seat selection flow')"/>
+        </on-entry>
+
+        <transition on="selectSeat" to="collect-details">
+            <evaluate result="flowScope.ticketDetails"
+                      expression="ticketService.setPassengerDetails(flowScope.ticketDetails)"/>
+        </transition>
+
+    </view-state>
+
 
     <view-state id="collect-details" view="tickets/collect-details" model="flowScope.ticketDetails">
         <transition on="next" to="confirmation">
@@ -99,12 +116,6 @@
         <transition on="back" to="schedule"/>
     </view-state>
 
-    <view-state id="seat-selection" view="tickets/seat-selection" model="flowScope.ticketDetails">
-        <on-entry>
-            <evaluate
-                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Entering seat selection flow')"/>
-        </on-entry>
-    </view-state>
 
     <view-state id="confirmation" view="tickets/confirmation" model="flowScope.ticketDetails">
         <transition on="confirmBooking" to="preview">

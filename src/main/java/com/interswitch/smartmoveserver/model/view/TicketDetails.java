@@ -26,8 +26,7 @@ public class TicketDetails implements Serializable {
     private String startTerminalName;
     private String stopTerminalName;
     private int noOfPassengers;
-    private List<String> seats;
-    private List<Seat> seatList;
+    private List<Seat> seats;
     private double totalFare;
     private LocalDate departure;
     private List<Passenger> passengers;

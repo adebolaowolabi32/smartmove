@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.VehicleCategoryRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
@@ -14,8 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author adebola.owolabi
@@ -39,6 +42,9 @@ public class VehicleCategoryService {
 
     @Autowired
     SecurityUtil securityUtil;
+
+    @Autowired
+    SeatRepository seatRepository;
 
     @Autowired
     PageUtil pageUtil;
@@ -153,6 +159,18 @@ public class VehicleCategoryService {
         int noRows = capacity % noColumns  == 0 ? Math.round(capacity/noColumns) : (getIntegerPart(capacity/noColumns) + 1) ;
         vehicleCategory.setNoRows(noRows);
 
+        Set<Seat> seats = new HashSet<>();
+
+            for(int i=1;i<=capacity;i++){
+
+                Seat seat  = new Seat();
+                seat.setSeatNo(String.valueOf(i));
+                seat.setAvailable(true);
+                Seat createdSeat = seatRepository.save(seat);
+                seats.add(createdSeat);
+            }
+
+        vehicleCategory.setSeats(seats);
         return vehicleCategory;
     }
 

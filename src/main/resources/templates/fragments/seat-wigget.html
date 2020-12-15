@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="seat-wigget">
+
     <form class="p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
           th:object="${ticketDetails}">
+
         <div th:class="${{1 &lt; 30} ? 'col-sm-6 mx-auto' : 'col-sm-8 mx-auto'}">
         <div class="card mb-8">
             <div class="card-body">
@@ -27,10 +29,9 @@
                 <div class="vehicleMainContainer mb-3">
                     <div class="outerSeatContainer">
                         <div class="innerSeatContainer">
-                            <div class="seatContainer"
-                                 th:each="seat : ${ticketDetails.seatList}">
-                                <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
-                            </div>
+                            <input type="text" class="seatContainer"
+                                 th:each="seat : ${ticketDetails.seats}"/>
+                                <div class="seatLabel" th:field="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
 
                         </div>
                     </div>
@@ -51,14 +52,20 @@
                 </div>
                 <hr th:style="'opacity: 0.5;height: 1px;border: 0 none;margin-right: auto;margin-left: auto;background-color:#C8D2DF;'"/>
                 <span th:style="'display:flex;justify-content:flex-end;'">
-                 <input  id="captureData"
-                        th:field="*{seatsData}"  th:style="'display:none'">
-                <button type="submit"  class="btn btn-primary"
-                        th:disabled="${'true'}" id="seatButton"> <span>Capture passenger details </span> </button>
+
+                    <input  id="captureData" type="hidden" name="seatsData"
+                        th:field="${ticketDetails.seatsData}"  th:style="'display:none'">
+
+                    <br><br>
+
+                    <input class="btn btn-primary" id="seatButton" name="_eventId_selectSeat" type="submit"
+                           th:disabled="${'true'}"  value="Capture Passenger Details"/>
+
             </span>
             </div>
         </div>
     </div>
+
     </form>
 </div>
 </html>

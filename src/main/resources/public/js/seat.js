@@ -46,5 +46,6 @@ function seatBooking(id){
 }
 }
 
+console.log("SeatNumberSize===>"+seatNumber.length)
 }
 
