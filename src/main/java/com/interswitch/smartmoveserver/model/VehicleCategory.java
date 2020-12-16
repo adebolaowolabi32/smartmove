@@ -1,3 +1,4 @@
+
 package com.interswitch.smartmoveserver.model;
 
 import com.interswitchng.audit.model.Auditable;

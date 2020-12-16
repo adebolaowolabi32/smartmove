@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.VehicleCategoryRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
@@ -14,8 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author adebola.owolabi
@@ -41,6 +44,9 @@ public class VehicleCategoryService {
     SecurityUtil securityUtil;
 
     @Autowired
+    SeatRepository seatRepository;
+
+    @Autowired
     PageUtil pageUtil;
 
     public List<VehicleCategory> findAll() {
@@ -61,7 +67,9 @@ public class VehicleCategoryService {
             Document doc = documentService.saveDocument(new Document(vehicleCategory.getPicture()));
             vehicleCategory.setPictureUrl(doc.getUrl());
         }
-        return vehicleCategoryRepository.save(buildVehicleCategory(vehicleCategory));
+
+        VehicleCategory vehicle =  vehicleCategoryRepository.save(buildVehicleCategory(vehicleCategory));
+        return createSeats(vehicle);
     }
 
     public VehicleCategory findById(long id) {
@@ -160,5 +168,20 @@ public class VehicleCategoryService {
         float fractionalPart = value % 1;
         float integralPart = value - fractionalPart;
         return  Math.round(integralPart);
+    }
+
+    private VehicleCategory createSeats(VehicleCategory vehicle){
+        Set<Seat> seats = new HashSet<>();
+
+        for(int i=1;i<=vehicle.getCapacity();i++){
+            Seat seat  = new Seat();
+            seat.setSeatNo(i);
+            seat.setAvailable(true);
+            seat.setVehicle(vehicle);
+            Seat createdSeat = seatRepository.save(seat);
+            seats.add(createdSeat);
+        }
+
+        return vehicle;
     }
 }

@@ -145,7 +145,7 @@ public class ScheduleService {
             for(int i=1;i<=capacity;i++){
 
                 Seat seat  = new Seat();
-                seat.setSeatNo(String.valueOf(i));
+                seat.setSeatNo(i);
                 seat.setAvailable(true);
                 Seat createdSeat = seatRepository.save(seat);
                 log.info("creating seat==>"+i+"====>"+createdSeat);

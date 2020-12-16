@@ -1,3 +1,4 @@
+
 package com.interswitch.smartmoveserver.model;
 
 import com.interswitchng.audit.model.Auditable;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /*
@@ -25,7 +27,7 @@ public class Seat extends AbstractAuditEntity<String> implements Auditable<Long>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String seatNo;
+    private int seatNo;
 
     private int rowNo;
 
@@ -35,6 +37,12 @@ public class Seat extends AbstractAuditEntity<String> implements Auditable<Long>
     private Enum.SeatClass seatClass;
 
     private boolean available;
+
+    private boolean picked;
+
+    @ManyToOne
+    @NotNull
+    private VehicleCategory vehicle;
 
     @Override
     public Long getAuditableId() {

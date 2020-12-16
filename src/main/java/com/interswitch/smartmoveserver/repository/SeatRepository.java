@@ -1,3 +1,4 @@
+
 package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Seat;
@@ -10,5 +11,5 @@ public interface SeatRepository extends CrudRepository<Seat, Long> {
 
       List<Seat> findAll();
       Seat findById(String seatId);
+      Set<Seat> findByVehicleId(long id);
 }
-
