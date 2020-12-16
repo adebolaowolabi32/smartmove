@@ -102,6 +102,9 @@ public class TicketService {
         Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
         ticketDetails.setSchedule(schedule);
 
+        ticketDetails.setNoOfPassengers(noOfPassengers);
+      ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
+
         Set<Seat> seats = seatRepository.findByVehicleId(schedule.getVehicle().getId());
         ticketDetails.setSeats(new ArrayList<>(seats));
         ticketDetails.setCountries(stateService.findAllCountries());
@@ -119,11 +122,12 @@ public class TicketService {
     }
 
     public TicketDetails setPassengerDetails(TicketDetails ticketDetails){
+
 //        log.info("ticketDetails===>"+ticketDetails);
 //        log.info("calling setPassengerDetails,seatData===>"+seatData);
         int noOfPassengers = ticketDetails.getSeats().size();
-        ticketDetails.setNoOfPassengers(noOfPassengers);
-        ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
+        //ticketDetails.setNoOfPassengers(noOfPassengers);
+        //ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
         log.info("finished calling setPassengerDetails===>");
         return ticketDetails;
     }

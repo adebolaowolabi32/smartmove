@@ -27,7 +27,7 @@
                     <div class="outerSeatContainer">
                         <div class="innerSeatContainer">
                             <div class="seatContainer"
-                                 th:each="seat : ${ticketDetails.seatList}">
+                                 th:each="seat : ${ticketDetails.seats}">
                                 <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
                             </div>
 
@@ -55,7 +55,7 @@
 
 
                     <div>
-                       <a th:href="@{${flowExecutionUrl} + '&_eventId=selectSeat&seatData=' + ${ticketDetails.seatsData}}"
+                       <a th:href="@{${flowExecutionUrl} + '&_eventId=selectSeat'}"
                           class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Capture details</a>
                     </div>
 

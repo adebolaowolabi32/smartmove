@@ -102,7 +102,7 @@
 
         <transition on="selectSeat" to="collect-details">
             <evaluate result="flowScope.ticketDetails"
-                      expression="ticketService.setPassengerDetails(flowScope.ticketDetails, requestParameters.seatData)"/>
+                      expression="ticketService.setPassengerDetails(flowScope.ticketDetails)"/>
         </transition>
 
     </view-state>
