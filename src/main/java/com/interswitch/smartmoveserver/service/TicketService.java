@@ -122,10 +122,9 @@ public class TicketService {
     }
 
     public TicketDetails setPassengerDetails(TicketDetails ticketDetails){
-
-//        log.info("ticketDetails===>"+ticketDetails);
-//        log.info("calling setPassengerDetails,seatData===>"+seatData);
-        int noOfPassengers = ticketDetails.getSeats().size();
+          //log.info("ticketDetails===>"+ticketDetails);
+         //log.info("calling setPassengerDetails,seatData===>"+seatData);
+         //int noOfPassengers = ticketDetails.getSeats().size();
         //ticketDetails.setNoOfPassengers(noOfPassengers);
         //ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
         log.info("finished calling setPassengerDetails===>");
