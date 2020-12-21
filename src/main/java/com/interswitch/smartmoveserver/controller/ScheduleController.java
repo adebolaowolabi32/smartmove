@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @Layout(value = "layouts/default")
@@ -28,7 +29,7 @@ public class ScheduleController {
     private UserService userService;
 
     @Autowired
-    private TerminalService terminalService;
+    private RouteService routeService;
 
     @Autowired
     private ManifestService manifestService;
@@ -43,9 +44,11 @@ public class ScheduleController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        PageView<Schedule> schedulePage = scheduleService.findAllPaginated(page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(schedulePage));
-        model.addAttribute("schedulePage", schedulePage);
+        //TODO:: Implement server side pagination
+        //PageView<Schedule> schedulePage = scheduleService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(schedulePage));
+        List<Schedule> schedules = scheduleService.findAll(owner, principal.getName());
+        model.addAttribute("schedules", schedules);
         return "schedules/get";
     }
 
@@ -69,7 +72,7 @@ public class ScheduleController {
         model.addAttribute("schedule", schedule);
         //not needed at the moment though,should be removed for performance reasons
         model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("schedule")));
-        model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+        model.addAttribute("routes", routeService.findAll(0L, principal.getName()));
         model.addAttribute("vehicles", vehicleCategoryService.findByOwner(principal.getName()));
         return "schedules/create";
     }
@@ -79,7 +82,7 @@ public class ScheduleController {
         if (result.hasErrors()) {
             model.addAttribute("schedule", schedule);
             model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("schedule")));
-            model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+            model.addAttribute("routes", routeService.findAll(0L, principal.getName()));
             model.addAttribute("vehicles", vehicleCategoryService.findByOwner(principal.getName()));
             return "schedules/create";
         }
@@ -94,7 +97,7 @@ public class ScheduleController {
         Schedule schedule = scheduleService.findById(id, principal.getName());
         model.addAttribute("schedule", schedule);
         model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("schedule")));
-        model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+        model.addAttribute("routes", routeService.findAll(0L, principal.getName()));
         model.addAttribute("vehicles", vehicleCategoryService.findByOwner(principal.getName()));
         return "schedules/update";
     }
@@ -107,7 +110,7 @@ public class ScheduleController {
         if (result.hasErrors()) {
             model.addAttribute("schedule", schedule);
             model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("schedule")));
-            model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+            model.addAttribute("routes", routeService.findAll(0L, principal.getName()));
             model.addAttribute("vehicles", vehicleCategoryService.findByOwner(principal.getName()));
             return "schedules/update";
         }

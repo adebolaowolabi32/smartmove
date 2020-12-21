@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transfer;
 import com.interswitch.smartmoveserver.service.TransferService;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -15,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -35,9 +35,11 @@ public class TransferController {
     public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                           Model model, @RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "10") int size) {
-        PageView<Transfer> transferPage = transferService.findAllPaginated(page, size);
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(transferPage));
-        model.addAttribute("transferPage", transferPage);
+        //TODO:: Implement server side pagination
+        //PageView<Transfer> transferPage = transferService.findAllPaginated(page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(transferPage));
+        List<Transfer> transfers = transferService.findAll(principal.getName());
+        model.addAttribute("transfers", transfers);
         return "transfers/get";
     }
 
@@ -52,7 +54,7 @@ public class TransferController {
     public String transfer(Principal principal, Model model) {
         Transfer transfer = new Transfer();
         model.addAttribute("transfer", transfer);
-        model.addAttribute("recipients", userService.findAllByRole(principal.getName(), Enum.Role.AGENT));
+        model.addAttribute("recipients", userService.findAllByRole(principal.getName(), 0L, Enum.Role.AGENT));
         return "transfers/transfer";
     }
 

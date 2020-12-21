@@ -2,11 +2,9 @@ package com.interswitch.smartmoveserver.model;
 
 import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -23,26 +21,24 @@ public class Route extends AbstractAuditEntity<String> implements Auditable<Long
     private long id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Type is required.")
-    private Enum.TransportMode type;
+    @NotNull(message = "Mode is required.")
+    private Enum.TransportMode mode;
 
     @Column(unique=true)
-    @NotBlank(message = "Name is required.")
-    @Length(min = 5, max = 50, message = "Name must be between 5 and 30 characters long.")
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "startTerminal")
     @NotNull(message = "Start terminal is required.")
-    private Long startTerminalId;
+    private Terminal startTerminal;
 
-    private String startTerminalName;
-
+    @ManyToOne
+    @JoinColumn(name = "stopTerminal")
     @NotNull(message = "Stop terminal is required.")
-    private Long stopTerminalId;
+    private Terminal stopTerminal;
 
-    private String stopTerminalName;
-
-    @NotBlank(message = "Price is required.")
-    private long price;
+    @NotNull(message = "Fare is required.")
+    private long fare;
 
     @ManyToOne
     @JoinColumn(name = "owner")

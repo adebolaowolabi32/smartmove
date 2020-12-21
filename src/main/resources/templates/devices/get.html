@@ -23,7 +23,7 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{device.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+			<table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
 				<thead class='thead-light'>
 				<tr>
 					<th>Id</th>
@@ -37,7 +37,7 @@
 				</tr>
 				</thead>
 				<tbody>
-				<tr th:each="device : ${devicePage.content}">
+				<tr th:each="device : ${devices}">
 					<td th:text="${device.id}"></td>
 					<td th:text="${device.name}"></td>
 					<td th:text="${device.deviceId}"></td>
@@ -45,18 +45,19 @@
 					<td th:text="${device.owner != null ? device.owner.username : ''}"></td>
 					<td>
 						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${device.enabled}" disabled>
+							<input disabled id="enabled" name="enabled" th:checked="${device.enabled}" type="checkbox">
 							<span class="slider round"></span>
 						</label>
 					</td>
 					<td>
 						<a class="justify-content-center" th:href="@{/devices/details/{id}(id=${device.id})}">
-							<button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
+							<button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
 						</a>
 					</td>
 					<td>
 						<a class="justify-content-center" th:href="@{/devices/delete/{id}(id=${device.id})}">
-							<button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
+							<button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+							</button>
 						</a>
 					</td>
 				</tr>

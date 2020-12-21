@@ -53,6 +53,43 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findAll();
     }
 
+    public List<VehicleCategory> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return vehicleCategoryRepository.findAllByOwner(user);
+            } else {
+                return vehicleCategoryRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return vehicleCategoryRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
+    public PageView<VehicleCategory> findAllPaginated(Long owner, int page, int size, String principal) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, user);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            } else {
+                Page<VehicleCategory> pages = vehicleCategoryRepository.findAll(pageable);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, ownerUser);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory save(VehicleCategory vehicleCategory, String principal) {
@@ -121,29 +158,6 @@ public class VehicleCategoryService {
 
     public long countAll(){
         return vehicleCategoryRepository.count();
-    }
-
-    public PageView<VehicleCategory> findAllPaginated(Long owner, int page, int size, String principal) {
-        PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        User user = userService.findByUsername(principal);
-        if(owner == 0) {
-            if (securityUtil.isOwnedEntity(user.getRole())) {
-                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, user);
-                return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
-                Page<VehicleCategory> pages = vehicleCategoryRepository.findAll(pageable);
-                return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-        }
-        else {
-            if(securityUtil.isOwner(principal, owner)){
-                User ownerUser = userService.findById(owner);
-                Page<VehicleCategory> pages = vehicleCategoryRepository.findAllByOwner(pageable, ownerUser);
-                return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
-        }
     }
 
     private VehicleCategory buildVehicleCategory(VehicleCategory vehicleCategory) {

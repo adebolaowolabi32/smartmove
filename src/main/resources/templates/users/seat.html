@@ -19,41 +19,28 @@
             <table cellspacing="0" class="table responsive-table" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
-                    <th>Id</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Address</th>
                     <th>Email Address</th>
                     <th>Mobile Number</th>
                     <th>Role</th>
-                    <th>Signup Type</th>
                     <th>Approve</th>
-                    <th>Decline</th>
                 </tr>
                 </thead>
                 <tbody>
+
                 <tr th:each="approval : ${approvals}">
-                    <td th:text="${approval.id}"></td>
                     <td th:text="${approval.usr.firstName}"></td>
                     <td th:text="${approval.usr.lastName}"></td>
                     <td th:text="${approval.usr.address}"></td>
                     <td th:text="${approval.usr.email}"></td>
                     <td th:text="${approval.usr.mobileNo}"></td>
                     <td th:text="${approval.usr.role}"></td>
-                    <td th:text="${approval.signUpType}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/users/approve/{id}(id=${approval.id})}">
-                            <button class="btn btn-outline-primary btn-sized"
-                                    th:disabled="${approval.approved}"
+                            <button class="btn btn-outline-primary btn-sized" th:disabled="${approval.approved}"
                                     th:text="${approval.approved ? 'Approved' : 'Approve'}" type="button">Approve
-                            </button>
-                        </a>
-                    </td>
-                    <td>
-                        <a class="justify-content-center" th:href="@{/users/decline/{id}(id=${approval.id})}">
-                            <button class="btn btn-outline-danger btn-sized"
-                                    th:disabled="${approval.declined}"
-                                    th:text="${approval.declined ? 'Declined' : 'Decline'}" type="button">Decline
                             </button>
                         </a>
                     </td>

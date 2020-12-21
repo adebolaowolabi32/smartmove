@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.*;
 import com.interswitch.smartmoveserver.util.RandomUtil;
@@ -100,19 +99,7 @@ public class TripServiceTests {
         schedule.setDepartureDate(LocalDate.now());
         schedule.setDepartureTime(LocalTime.now());
         schedule.setArrivalTime(schedule.getDepartureTime().plusHours(5));
-
-        schedule.setStartTerminal(Terminal.builder()
-                .country("Nigera").state("Lagos").code("LAG")
-                .lga("Alimosho").owner(buildTestUser())
-                .name("LAGOS TERMINAL 1").mode(com.interswitch.smartmoveserver.model.Enum.TransportMode.BUS)
-                .build());
-
-        schedule.setStopTerminal(Terminal.builder()
-                .country("Nigera").state("Lagos").code("LAG")
-                .lga("Agege").owner(buildTestUser())
-                .name("LAGOS TERMINAL 2").mode(Enum.TransportMode.BUS)
-                .build());
-
+        schedule.setRoute(new Route());
         trip.setSchedule(scheduleRepository.save(schedule));
 
     }

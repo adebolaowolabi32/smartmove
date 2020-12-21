@@ -23,7 +23,7 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{config.saved.message} : (${updated} ? #{config.updated.message} : (${deleted} ? #{config.deleted.message} : false)))"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+			<table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
 				<thead class='thead-light'>
 				<tr>
 					<th>Id</th>
@@ -38,8 +38,10 @@
 					<td th:text="${configuration.name}"></td>
 					<td th:text="${configuration.value}"></td>
 					<td>
-						<a class="justify-content-center" th:href="@{/configurations/delete/{id}(id=${configuration.id})}">
-							<button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
+						<a class="justify-content-center"
+						   th:href="@{/configurations/delete/{id}(id=${configuration.id})}">
+							<button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+							</button>
 						</a>
 					</td>
 				</tr>

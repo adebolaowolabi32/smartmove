@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
@@ -19,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -65,11 +65,13 @@ public class UserController {
                          @RequestParam(required = false, defaultValue = "0") Long owner,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
-        PageView<User> userPage = userService.findAllPaginatedByRole(principal.getName(), owner, role, page, size);
-        model.addAttribute("title", pageUtil.buildTitle(role));
+        //TODO:: Implement server side pagination
+        //PageView<User> userPage = userService.findAllPaginatedByRole(principal.getName(), owner, role, page, size);
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
+        List<User> users = userService.findAllByRole(principal.getName(), owner, role);
         model.addAttribute("role", role);
-        model.addAttribute("userPage", userPage);
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
+        model.addAttribute("title", pageUtil.buildTitle(role));
+        model.addAttribute("users", users);
         model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
         return "users/get";
     }

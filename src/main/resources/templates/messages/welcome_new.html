@@ -15,17 +15,18 @@
 				Hello <span th:text="${user}"></span>,
 			</p>
             <p>
-				An account has been created for you on the <strong>Smart Move Platform</strong> platform.
+				An account has been created for you on the <strong>Smart Move Platform</strong>.
 			</p>
 			<p>
 				User Details:
 			<ul>
 				<li>Role: <span th:text="${role}"></span></li>
-				<li>Referer: <span th:text="${owner}"></span></li>
-			    <li>Username: <span th:text="${username}"></span></li>
-			    <li>Default Password: <span th:text="${password}"></span></li>
+				<li>Referrer: <span th:text="${owner}"></span></li>
+				<li>Username: <span th:text="${username}"></span></li>
+				<li>Default Password: <span th:text="${password}"></span></li>
 			</ul>
 			</p>
+			<br>
 			<p>
 				<a th:href="${portletUri}">Click here </a> to sign-in and change your password.
 			</p>

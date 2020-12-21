@@ -23,42 +23,45 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{vehicleCategory.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
 				<thead class='thead-light'>
-				<tr>
-					<th>Id</th>
-					<th>Transport Mode</th>
-					<th>Name</th>
-					<th>Make</th>
-					<th>Model</th>
-					<th>Color</th>
-					<th>Capacity</th>
-					<th>Owner</th>
-					<th>View Details</th>
-					<th>Remove</th>
-				</tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Transport Mode</th>
+                    <th>Name</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Color</th>
+                    <th>Capacity</th>
+                    <th>Owner</th>
+                    <th>View Details</th>
+                    <th>Remove</th>
+                </tr>
 				</thead>
 				<tbody>
-				<tr th:each="vehicleCategory : ${vehicleCategoryPage.content}">
-					<td th:text="${vehicleCategory.id}"></td>
-					<td th:text="${vehicleCategory.mode}"></td>
-					<td th:text="${vehicleCategory !=null ? vehicleCategory.name : ''}"></td>
-					<td th:text="${vehicleCategory.make !=null ? vehicleCategory.make.name : '' }"></td>
-					<td th:text="${vehicleCategory.model !=null ? vehicleCategory.model.name : ''}"></td>
-					<td th:text="${vehicleCategory !=null ? vehicleCategory.color : ''}"></td>
-					<td th:text="${vehicleCategory.capacity}"></td>
-					<td th:text="${vehicleCategory.owner != null ? vehicleCategory.owner.username : ''}"></td>
-					<td>
-						<a class="justify-content-center" th:href="@{/vehicleCategories/details/{id}(id=${vehicleCategory.id})}">
-							<button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
-						</a>
-					</td>
-					<td>
-						<a class="justify-content-center" th:href="@{/vehicleCategories/delete/{id}(id=${vehicleCategory.id})}">
-							<button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
-						</a>
-					</td>
-				</tr>
+                <tr th:each="vehicleCategory : ${vehicleCategories}">
+                    <td th:text="${vehicleCategory.id}"></td>
+                    <td th:text="${vehicleCategory.mode}"></td>
+                    <td th:text="${vehicleCategory !=null ? vehicleCategory.name : ''}"></td>
+                    <td th:text="${vehicleCategory.make !=null ? vehicleCategory.make.name : '' }"></td>
+                    <td th:text="${vehicleCategory.model !=null ? vehicleCategory.model.name : ''}"></td>
+                    <td th:text="${vehicleCategory !=null ? vehicleCategory.color : ''}"></td>
+                    <td th:text="${vehicleCategory.capacity}"></td>
+                    <td th:text="${vehicleCategory.owner != null ? vehicleCategory.owner.username : ''}"></td>
+                    <td>
+                        <a class="justify-content-center"
+                           th:href="@{/vehicleCategories/details/{id}(id=${vehicleCategory.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="justify-content-center"
+                           th:href="@{/vehicleCategories/delete/{id}(id=${vehicleCategory.id})}">
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
 				</tbody>
 			</table>
 		</div>

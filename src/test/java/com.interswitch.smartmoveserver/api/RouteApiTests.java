@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Route;
+import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.RouteService;
 import org.junit.jupiter.api.BeforeAll;
@@ -46,11 +47,11 @@ public class RouteApiTests {
         long id = 10000023;
         route.setId(id);
         route.setName("my_route");
-        route.setType(Enum.TransportMode.RAIL);
+        route.setMode(Enum.TransportMode.RAIL);
         route.setOwner(new User());
-        route.setStartTerminalId(123L);
-        route.setStopTerminalId(345L);
-        route.setPrice(500);
+        route.setStartTerminal(new Terminal());
+        route.setStopTerminal(new Terminal());
+        route.setFare(500);
         route.setEnabled(true);
     }
 

@@ -25,7 +25,7 @@
                 </div>
             </div>
             <br>
-            <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
                     <th>Ticket Reference</th>
@@ -39,7 +39,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="refund : ${refundPage.content}">
+                <tr th:each="refund : ${refunds}">
                     <td th:text="${refund.ticket.referenceNo}"></td>
                     <td th:text="${refund.ticket.passengerName}"></td>
                     <td th:text="${refund.ticket.schedule.startTerminal.name + ' - ' + refund.ticket.schedule.stopTerminal.name}"></td>

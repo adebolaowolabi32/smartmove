@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -40,6 +41,11 @@ public class TransferService {
         PageRequest pageable = PageRequest.of(page - 1, size);
         Page<Transfer> pages = transferRepository.findAll(pageable);
         return new PageView<>(pages.getTotalElements(), pages.getContent());
+    }
+
+    public List<Transfer> findAll(String principal) {
+        User user = userService.findByUsername(principal);
+        return transferRepository.findAllByOwner(user);
     }
 
     public Transfer findById(long id) {

@@ -12,6 +12,8 @@ public interface AuditTrailRepository extends CrudRepository<AuditTrail, Long> {
 
     List<AuditTrail> findAll();
 
+    List<AuditTrail> findAllByOwner(User owner);
+
     Page<AuditTrail> findAll(Pageable pageable);
 
     AuditTrail findById(long feeConfigId);

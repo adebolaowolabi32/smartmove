@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/default.html}">
-<title layout:fragment="title">Audit trails</title>
+<title layout:fragment="title">Fees</title>
 <div layout:fragment="content" class="card mb-4" style="border:none">
-	<div class="card-header"><i class="fas fa-road mr-1"></i><span>Audit trails</span></div>
+	<div class="card-header"><i class="fas fa-road mr-1"></i><span>Fees</span></div>
 	<div class="card-body">
 		<div class="table-wrapper">
 			<div class="table-title">
@@ -27,30 +27,22 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{fee.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+            <table cellspacing="0" class="table responsive-table" id="dataTable" width="100%">
 				<thead class='thead-light'>
-				<tr>
-					<th>Actor</th>
-					<th>Owner</th>
-					<th>Description</th>
-					<th>Action</th>
-					<th>Date/Time</th>
-				</tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                    <th>Date/Time</th>
+                </tr>
 				</thead>
 				<tbody>
-				<tr th:each="audit : ${auditTrailPage.content}">
-					<td>
-						<div th:text="${audit.actor}"></div>
-					</td>
-					<td>
-						<div th:text="${audit.owner!=null ? audit.owner.firstName+' '+audit.owner.lastName : 'Unknown'}"></div>
-						<div th:text="${audit.owner!=null ? audit.owner.role : '' }" ></div>
-					</td>
-					<td th:text="${audit.description}"></td>
-					<td th:text="${audit.action}"></td>
-					<td th:text="${audit.actionTimeStamp}"></td>
-
-				</tr>
+                <tr th:each="audit : ${auditTrails}">
+                    <td th:text="${audit.actor}"></td>
+                    <td th:text="${audit.description}"></td>
+                    <td th:text="${audit.action}"></td>
+                    <td th:text="${audit.actionTimeStamp}"></td>
+                </tr>
 				</tbody>
 			</table>
 		</div>

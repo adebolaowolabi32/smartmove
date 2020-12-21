@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.annotation.Layout;
 import com.interswitch.smartmoveserver.model.FeeConfiguration;
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.service.FeeConfigurationService;
 import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -16,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -36,10 +36,11 @@ public class FeeConfigurationController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        log.info("Owner val for fee config===>"+owner);
-        PageView<FeeConfiguration> feeConfigurationPageViewPage = feeConfigurationService.findAllPaginated(owner, page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(feeConfigurationPageViewPage));
-        model.addAttribute("feeConfigPage", feeConfigurationPageViewPage);
+        //TODO:: Implement server side pagination
+        //PageView<FeeConfiguration> feeConfigurationPageViewPage = feeConfigurationService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(feeConfigurationPageViewPage));
+        List<FeeConfiguration> feeConfigurations = feeConfigurationService.findAll(owner, principal.getName());
+        model.addAttribute("feeConfigs", feeConfigurations);
         return "fees/get";
     }
 

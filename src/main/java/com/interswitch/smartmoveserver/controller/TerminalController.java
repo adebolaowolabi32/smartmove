@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.StateService;
@@ -41,9 +40,11 @@ public class TerminalController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        PageView<Terminal> terminalPage = terminalService.findAllPaginated(owner, page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(terminalPage));
-        model.addAttribute("terminalPage", terminalPage);
+        //TODO:: Implement server side pagination
+        //PageView<Terminal> terminalPage = terminalService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(terminalPage));
+        List<Terminal> terminals = terminalService.findAll(owner, principal.getName());
+        model.addAttribute("terminals", terminals);
         return "terminals/get";
     }
 

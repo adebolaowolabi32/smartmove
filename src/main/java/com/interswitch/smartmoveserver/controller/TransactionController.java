@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.service.TransactionService;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -30,9 +30,11 @@ public class TransactionController {
     public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        PageView<Transaction> transactionPage = transactionService.findAllPaginated(page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(transactionPage));
-        model.addAttribute("transactionPage", transactionPage);
+        //TODO:: Implement server side pagination
+        //PageView<Transaction> transactionPage = transactionService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(transactionPage));
+        List<Transaction> transactions = transactionService.findAll(owner, principal.getName());
+        model.addAttribute("transactions", transactions);
         return "transactions/get";
     }
 

@@ -7,6 +7,7 @@ import com.interswitch.smartmoveserver.repository.TripRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.RandomUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class TripService {
     TripReferenceService tripReferenceService;
 
     @Autowired
+    SecurityUtil securityUtil;
+
+    @Autowired
     PageUtil pageUtil;
 
     private static String PREFIX_SEPARATOR = "|";
@@ -54,10 +58,42 @@ public class TripService {
         return tripRepository.findAll();
     }
 
-    public PageView<Trip> findAllPaginated(int page, int size, String principal) {
+    public List<Trip> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return tripRepository.findAllByOwner(user);
+            } else {
+                return tripRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return tripRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
+    public PageView<Trip> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        Page<Trip> pages = tripRepository.findAll(pageable);
-        return new PageView<>(pages.getTotalElements(), pages.getContent());
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<Trip> pages = tripRepository.findAllByOwner(pageable, user);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            } else {
+                Page<Trip> pages = tripRepository.findAll(pageable);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                Page<Trip> pages = tripRepository.findAllByOwner(pageable, ownerUser);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
