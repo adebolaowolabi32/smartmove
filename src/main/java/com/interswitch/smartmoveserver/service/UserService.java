@@ -216,21 +216,34 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
     }
 
-    public List<User> findAllByRole(String principal, Enum.Role role) {
+    public List<User> findAllByRole(String principal, long owner, Enum.Role role) {
         Optional<User> user = userRepository.findByUsername(principal);
         if (!user.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
 
-        if (securityUtil.isOwnedEntity(role)) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                return userRepository.findAllByRoleAndOwner(role, user.get());
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(role)) {
+                if (securityUtil.isOwnedEntity(user.get().getRole())) {
+                    return userRepository.findAllByRoleAndOwner(role, user.get());
+                } else {
+                    return userRepository.findAllByRole(role);
+                }
             } else {
+                if (securityUtil.isOwnedEntity(user.get().getRole()))
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
                 return userRepository.findAllByRole(role);
             }
         } else {
-            if (securityUtil.isOwnedEntity(user.get().getRole()))
+            if (securityUtil.isOwnedEntity(role)) {
+                if (securityUtil.isOwner(principal, owner)) {
+                    Optional<User> ownerUser = userRepository.findById(owner);
+                    if (!ownerUser.isPresent())
+                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
+                    return userRepository.findAllByRoleAndOwner(role, ownerUser.get());
+                }
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
-            return userRepository.findAllByRole(role);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
 
@@ -495,12 +508,12 @@ public class UserService {
         params.put("password", user.getPassword());
         if (owner == null) {
             messagingService.sendEmail(user.getEmail(),
-                    "New User SignUp", "messages" + File.separator + "welcome", params);
+                    "User SignUp Approved", "messages" + File.separator + "welcome", params);
         } else {
             String ownerName = owner.getFirstName() + " " + owner.getLastName();
             params.put("owner", ownerName);
             messagingService.sendEmail(user.getEmail(),
-                    "New User SignUp", "messages" + File.separator + "welcome_new", params);
+                    "User SignUp Approved", "messages" + File.separator + "welcome_new", params);
         }
     }
 
@@ -513,8 +526,7 @@ public class UserService {
         params.put("role", user.getRole());
         params.put("portletUri", portletUri);
         params.put("username", user.getUsername());
-        params.put("password", user.getPassword());
         messagingService.sendEmail(user.getEmail(),
-                "New User SignUp", "messages" + File.separator + "declined_user", params);
+                "User SignUp Declined", "messages" + File.separator + "declined_user", params);
     }
 }

@@ -32,7 +32,7 @@ public class ScheduleService {
     ScheduleRepository scheduleRepository;
 
     @Autowired
-    TerminalService terminalService;
+    RouteService routeService;
 
     @Autowired
     VehicleCategoryService vehicleCategoryService;
@@ -48,6 +48,23 @@ public class ScheduleService {
 
     public List<Schedule> findAll() {
         return scheduleRepository.findAll();
+    }
+
+    public List<Schedule> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return scheduleRepository.findAllByOwner(user);
+            } else {
+                return scheduleRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return scheduleRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
 
     public PageView<Schedule> findAllPaginated(Long owner, int page, int size, String principal) {
@@ -128,13 +145,9 @@ public class ScheduleService {
         if(vehicleCategory != null)
             schedule.setVehicle(vehicleCategoryService.findById(vehicleCategory.getId()));
 
-        Terminal startTerminal = schedule.getStartTerminal();
-        if(startTerminal != null)
-            schedule.setStartTerminal(terminalService.findById(startTerminal.getId()));
-
-        Terminal stopTerminal = schedule.getStopTerminal();
-        if(stopTerminal != null)
-            schedule.setStopTerminal(terminalService.findById(stopTerminal.getId()));
+        Route route = schedule.getRoute();
+        if (route != null)
+            schedule.setRoute(routeService.findById(route.getId()));
         return schedule;
     }
 }

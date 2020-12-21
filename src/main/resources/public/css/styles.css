@@ -15416,378 +15416,384 @@ body {
 }
 
 .table-wrapper {
-        background: #fff;
-        padding: 20px 25px;
-        margin: 30px auto;
-		border-radius: 3px;
-        box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    }
-	.table-title .btn {
-		float: right;
-		color: #333;
-    	background-color: #fff;
-		border-radius: 3px;
-		border: none;
-		outline: none !important;
-		margin-bottom: -2%;
-		font-size: 0.8rem;
-		margin: 1%;
-	}
-	.table-title .btn:hover {
-    	background-color: #566787;
-	}
+    background: #fff;
+    padding: 20px 25px;
+    margin: 30px auto;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.table-title .btn {
+    float: right;
+    color: #333;
+    background-color: #fff;
+    border-radius: 3px;
+    border: none;
+    outline: none !important;
+    margin-bottom: -2%;
+    font-size: 0.8rem;
+    margin: 1%;
+}
+.table-title .btn:hover {
+    background-color: #566787;
+}
 
-	.table-title {
-		color: #fff;
-		background: #03567c;
-		padding: 15px 15px 15px 15px;
-		#margin: 0px 0px 20px 0px;
-		border-radius: 3px 3px 0 0;
-    }
-    .table-title h2 {
-		font-size: 24px;
-	}
-	.table-title .tabbed {
-        padding-left: 50px;
-    }
-    table.table tr th, table.table tr td {
-        border-color: #e9e9e9;
-		padding: 12px 15px;
-		vertical-align: middle;
-    }
-	table.table tr th:first-child {
-		width: 60px;
-	}
-	table.table tr th:last-child {
-		width: 80px;
-	}
-    table.table-striped tbody tr:nth-of-type(odd) {
-    	background-color: #fcfcfc;
-	}
-	table.table-striped.table-hover tbody tr:hover {
-		background: #f5f5f5;
-	}
-    table.table th i {
-        font-size: 13px;
-        margin: 0 5px;
-        cursor: pointer;
-    }
-	table.table td a {
-		font-weight: bold;
-		color: #566787;
-		display: inline-block;
-		text-decoration: none;
-	}
-	table.table td a:hover {
-		color: #2196F3;
-	}
-	table.table td a.view {
-		width: 30px;
-		height: 30px;
-		color: #2196F3;
-		border: 2px solid;
-		border-radius: 30px;
-		text-align: center;
-    }
-    table.table td a.view i {
-        font-size: 22px;
-		margin: 2px 0 0 1px;
-    }
-	table.table .avatar {
-		border-radius: 50%;
-		vertical-align: middle;
-		margin-right: 10px;
-	}
-	.status {
-		font-size: 30px;
-		margin: 2px 2px 0 0;
-		display: inline-block;
-		vertical-align: middle;
-		line-height: 10px;
-	}
-    .text-success {
-        color: #10c469;
-    }
-    .text-info {
-        color: #62c9e8;
-    }
-    .text-warning {
-        color: #FFC107;
-    }
-    .text-danger {
-        color: #ff5b5b;
-    }
-    .pagination {
-        float: right;
-        margin: 0 0 5px;
-    }
-    .pagination li a {
-        border: none;
-        font-size: 13px;
-        min-width: 30px;
-        min-height: 30px;
-        color: #999;
-        margin: 0 2px;
-        line-height: 30px;
-        border-radius: 2px !important;
-        text-align: center;
-        padding: 0 6px;
-    }
-    .pagination li a:hover {
-        color: #666;
-    }
-    .pagination li.active a {
-        background: #03A9F4;
-    }
-    .pagination li.active a:hover {
-        background: #0397d6;
-    }
-	.pagination li.disabled i {
-        color: #ccc;
-    }
-    .pagination li i {
-        font-size: 16px;
-        padding-top: 6px
-    }
-    .select2-container .select2-selection--single{
-        height:34px !important;
-    }
-    .select2-container--default .select2-selection--single{
-             border: 1px solid #ccc !important;
-         border-radius: 0px !important;
-    }
-    .hint-text {
-        float: left;
-        margin-top: 10px;
-        font-size: 13px;
-    }
-	.padded {
-		  padding: 0px 20px 50px 20px;
-	}
-	.form-group span {
-	    font-weight: 400;
-        font-size: 1rem;
-	}
-	.card-body .heavy {
-	    font-weight:bold;
-	    font-size: 20px
-	}
-	.number {
-	    float:right;
-	}
-	.full-height {
-        height: 100%;
-    }
-    label {
-        font-weight: 400;
-        font-size: 1rem;
-    }
-    .card p-3 span {
-        font-weight: 400;
-        font-size: 1rem;
-    }
-    .card-sizing {
-        width: 350px;
-        height: 210px;
-    }
-    .card-status {
-        font-weight: 300;
-        font-size: 0.9rem;
-        color: green;
-        float: right;
-    }
-    .balance-time {
-        font-weight: 300;
-        font-size: 0.8rem;
-    }
-    .dark-text {
-        font-weight: 400;
-        font-size: 1rem;
-        color: #014260;
-    }
-    .dark-text-big {
-        font-weight: 500;
-        font-size: 1.6rem;
-        color: black;
-    }
-    .icon-blue {
-        color: #014260;
-    }
-    .title-text {
-        font-size: 1.1rem;
-    }
+.table-title {
+    color: #fff;
+    background: #03567c;
+    padding: 15px 15px 15px 15px;
+    #margin: 0px 0px 20px 0px;
+    border-radius: 3px 3px 0 0;
+}
+.table-title h2 {
+    font-size: 24px;
+}
+.table-title .tabbed {
+    padding-left: 50px;
+}
+table.table tr th, table.table tr td {
+    border-color: #e9e9e9;
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+table.table tr th:first-child {
+    width: 60px;
+}
+table.table tr th:last-child {
+    width: 80px;
+}
+table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fcfcfc;
+}
+table.table-striped.table-hover tbody tr:hover {
+    background: #f5f5f5;
+}
+table.table th i {
+    font-size: 13px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+table.table td a {
+    font-weight: bold;
+    color: #566787;
+    display: inline-block;
+    text-decoration: none;
+}
+table.table td a:hover {
+    color: #2196F3;
+}
+table.table td a.view {
+    width: 30px;
+    height: 30px;
+    color: #2196F3;
+    border: 2px solid;
+    border-radius: 30px;
+    text-align: center;
+}
+table.table td a.view i {
+    font-size: 22px;
+    margin: 2px 0 0 1px;
+}
+table.table .avatar {
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+.status {
+    font-size: 30px;
+    margin: 2px 2px 0 0;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 10px;
+}
+.text-success {
+    color: #10c469;
+}
+.text-info {
+    color: #62c9e8;
+}
+.text-warning {
+    color: #FFC107;
+}
+.text-danger {
+    color: #ff5b5b;
+}
+.pagination {
+    float: right;
+    margin: 0 0 5px;
+}
+.pagination li a {
+    border: none;
+    font-size: 13px;
+    min-width: 30px;
+    min-height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 2px !important;
+    text-align: center;
+    padding: 0 6px;
+}
+.pagination li a:hover {
+    color: #666;
+}
+.pagination li.active a {
+    background: #03A9F4;
+}
+.pagination li.active a:hover {
+    background: #0397d6;
+}
+.pagination li.disabled i {
+    color: #ccc;
+}
+.pagination li i {
+    font-size: 16px;
+    padding-top: 6px
+}
+.select2-container .select2-selection--single{
+    height:34px !important;
+}
+.select2-container--default .select2-selection--single{
+         border: 1px solid #ccc !important;
+     border-radius: 0px !important;
+}
+.hint-text {
+    float: left;
+    margin-top: 10px;
+    font-size: 13px;
+}
+.padded {
+      padding: 0px 20px 50px 20px;
+}
+.form-group span {
+    font-weight: 400;
+    font-size: 1rem;
+}
+.card-body .heavy {
+    font-weight:bold;
+    font-size: 20px
+}
+.number {
+    float:right;
+}
+.full-height {
+    height: 100%;
+}
+label {
+    font-weight: 400;
+    font-size: 1rem;
+}
+.card p-3 span {
+    font-weight: 400;
+    font-size: 1rem;
+}
+.card-sizing {
+    width: 350px;
+    height: 210px;
+}
+.card-status {
+    font-weight: 300;
+    font-size: 0.9rem;
+    color: green;
+    float: right;
+}
+.balance-time {
+    font-weight: 300;
+    font-size: 0.8rem;
+}
+.dark-text {
+    font-weight: 400;
+    font-size: 1rem;
+    color: #014260;
+}
+.dark-text-big {
+    font-weight: 500;
+    font-size: 1.6rem;
+    color: black;
+}
+.icon-blue {
+    color: #014260;
+}
+.title-text {
+    font-size: 1.1rem;
+}
 
-   .btn-sized {
-        height:47px;
-        width:100%;
-    }
-   .label-small {
-       font-weight: 500;
-       font-size: 0.8rem;
-   }
-   .text-small {
-          font-weight: 300;
-          font-size: 0.6rem;
-      }
-   .amt-big {
-        font-weight: 600;
-        font-size: 2rem;
-   }
-   .list-group-item {
-        padding: 20px 20px 50px 20px;
-   }
-   .spaced {
-        padding: 50px;
-   }
-   .dotted-line {
-        border-top: dotted 2px;
-        color: #333; /* old IE */
-        background-color: #333; /* Modern Browsers */
-   }
+.btn-sized {
+    height:47px;
+    width:100%;
+}
+.label-small {
+   font-weight: 500;
+   font-size: 0.8rem;
+}
+.text-small {
+      font-weight: 300;
+      font-size: 0.6rem;
+  }
+.amt-big {
+    font-weight: 600;
+    font-size: 2rem;
+}
+.list-group-item {
+    padding: 20px 20px 50px 20px;
+}
+.spaced {
+    padding: 50px;
+}
+.dotted-line {
+    border-top: dotted 2px;
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}
 
-   .boarding-pass-body{
-     border:2px inset grey;
-     border-radius: 30px 30px 30px 30px;
-     margin:4%;
-   }
+.boarding-pass-body{
+ border:2px inset grey;
+ border-radius: 30px 30px 30px 30px;
+ margin:4%;
+}
 
-   #leftDiv{
-   border-right:2px dotted grey;
-   height:445px;
-   }
+#leftDiv{
+border-right:2px dotted grey;
+height:445px;
+}
 
-   #rightDiv{
-     height:445px;
-   }
+#rightDiv{
+ height:445px;
+}
 
-   #leftDivTop{
-   border-bottom:2px solid grey;
-   height:70px;
-   }
+#leftDivTop{
+border-bottom:2px solid grey;
+height:70px;
+}
 
-   #imgLogo{
-       width:50px;
-       height:50px;
-    }
+#imgLogo{
+   width:50px;
+   height:50px;
+}
 
-   #qrCode {
-       width:100px;
-       height:100px;
-   }
+#qrCode {
+   width:100px;
+   height:100px;
+}
 
-   #vehiclePicture {
-        width:250px;
-        height:150px;
-   }
+#vehiclePicture {
+    width:250px;
+    height:150px;
+}
 
-   #vehiclePic, #profilePic {
-           width:300px;
-           height:200px;
-   }
+#vehiclePic, #profilePic {
+       width:300px;
+       height:200px;
+}
 
-    #leftDivTopSeatClass{
-        color:#311b92;
-        margin-top:6px;
-        position:absolute;
-        right:50%;
-        font-weight:bold;
-    }
+#leftDivTopSeatClass{
+    color:#311b92;
+    margin-top:6px;
+    position:absolute;
+    right:50%;
+    font-weight:bold;
+}
 
-    #travelDetailsDiv{
-        border-bottom:2px solid grey;
-        height:240px;
-    }
+#travelDetailsDiv{
+    border-bottom:2px solid grey;
+    height:240px;
+}
 
-    #departureDetailsDiv{
-        padding:30px;
-    }
+#departureDetailsDiv{
+    padding:30px;
+}
 
-    .arrival_departure_text{
-        font-weight:bold;
-        font-size:10px;
-        font-family:Arial;
-    }
+.arrival_departure_text{
+    font-weight:bold;
+    font-size:10px;
+    font-family:Arial;
+}
 
-    .arrival_departure_date{
-         font-weight:normal;
-         font-size:10px;
-         font-family:Arial;
-    }
+.arrival_departure_date{
+     font-weight:normal;
+     font-size:10px;
+     font-family:Arial;
+}
 
-    .arrival_departure_time{
-        font-weight:bold;
-        font-size:15px;
-        font-family:Arial;
-    }
+.arrival_departure_time{
+    font-weight:bold;
+    font-size:15px;
+    font-family:Arial;
+}
 
-    .big_text{
-        text-transform:uppercase;
-        color:#4d2c91;
-        font-weight:900;
-        font-size:40px;
-        font-family:Arial;
-    }
+.big_text{
+    text-transform:uppercase;
+    color:#4d2c91;
+    font-weight:900;
+    font-size:40px;
+    font-family:Arial;
+}
 
-    #travelTimeDiv{
-        margin-left:15px;
-        font-weight:bold;
-        font-size:15px;
-        text-align:center;
-        font-family:Arial;
-    }
+#travelTimeDiv{
+    margin-left:15px;
+    font-weight:bold;
+    font-size:15px;
+    text-align:center;
+    font-family:Arial;
+}
 
-    #travelDiv{
-        margin-top:10%;
-    }
+#travelDiv{
+    margin-top:10%;
+}
 
-    .arrival_departure_address{
-        font-weight:bold;
-        font-size:15px;
-        font-family:Arial;
-    }
-    .right-handed {
-        float:right;
-    }
-    .link-black {
-        color: black;
-    }
-    .wallet-bg {
-        background-color: #F0F0F0;
-    }
-    .wallet-body {
-         border-radius: 10px 10px 10px 10px;
-    }
-    .form-control {
-           display: block;
-           width: 80%;
-           height: calc(1.5em + 0.75rem + 2px);
-           padding: 0.375rem 0.75rem;
-           font-size: 1rem;
-           font-weight: 400;
-           line-height: 1.5;
-           color: #495057;
-           background-color: #fff;
-           background-clip: padding-box;
-           border: 1px solid #ced4da;
-           border-radius: 0.25rem;
-           transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-         }
-     .form-control-full {
-            width: 100%;
-         }
+.arrival_departure_address{
+    font-weight:bold;
+    font-size:15px;
+    font-family:Arial;
+}
+.right-handed {
+    float:right;
+}
+.link-black {
+    color: black;
+}
+.wallet-bg {
+    background-color: #F0F0F0;
+}
+.wallet-body {
+     border-radius: 10px 10px 10px 10px;
+}
+.form-control {
+       display: block;
+       width: 80%;
+       height: calc(1.5em + 0.75rem + 2px);
+       padding: 0.375rem 0.75rem;
+       font-size: 1rem;
+       font-weight: 400;
+       line-height: 1.5;
+       color: #495057;
+       background-color: #fff;
+       background-clip: padding-box;
+       border: 1px solid #ced4da;
+       border-radius: 0.25rem;
+       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+     }
+ .form-control-full {
+        width: 100%;
+     }
 
-    .ticket-till-tiles{
-      height:100px;
-      border:1px solid grey;
-      border-radius: 10px 10px 10px 10px;
-    }
+.ticket-till-tiles{
+  height:100px;
+  border:1px solid grey;
+  border-radius: 10px 10px 10px 10px;
+}
 
-    .text-content {
-        text-align: center;
-    }
-    .red {
-        color: red;
-    }
-    .inline {
-        display: inline;
-    }
+.text-content {
+    text-align: center;
+}
+.red {
+    color: red;
+}
+.inline {
+    display: inline;
+}
+.responsive-table {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Blacklist;
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.service.BlacklistService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -14,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /*
  * Created by adebola.owolabi on 5/21/2020
@@ -33,9 +33,11 @@ public class BlacklistController {
         @GetMapping("/get")
         public String getAll(Principal principal, Model model, @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "10") int size) {
-            PageView<Blacklist> blacklistPage = blacklistService.findAllPaginated(page, size);
-            model.addAttribute("pageNumbers", pageUtil.getPageNumber(blacklistPage));
-            model.addAttribute("blacklistPage", blacklistPage);
+            //TODO:: Implement server side pagination
+            //PageView<Blacklist> blacklistPage = blacklistService.findAllPaginated(page, size);
+            //model.addAttribute("pageNumbers", pageUtil.getPageNumber(blacklistPage));
+            List<Blacklist> blacklists = blacklistService.findAll();
+            model.addAttribute("blacklists", blacklists);
             return "blacklists/get";
         }
 

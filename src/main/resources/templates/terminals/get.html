@@ -23,49 +23,51 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{terminal.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
 				<thead class='thead-light'>
-				<tr>
-					<th>Id</th>
-					<th>Name</th>
-					<th>Code</th>
-					<th>Transport Mode</th>
-					<th>Country</th>
-					<th>State</th>
-					<th>Lga</th>
-					<th>Owner</th>
-					<th>Active</th>
-					<th>View Details</th>
-					<th>Remove</th>
-				</tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Transport Mode</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>Lga</th>
+                    <th>Owner</th>
+                    <th>Active</th>
+                    <th>View Details</th>
+                    <th>Remove</th>
+                </tr>
 				</thead>
 				<tbody>
-				<tr th:each="terminal : ${terminalPage.content}">
-					<td th:text="${terminal.id}"></td>
-					<td th:text="${terminal.name}"></td>
-					<td th:text="${terminal.code}"></td>
-					<td th:text="${terminal.mode}"></td>
-					<td th:text="${terminal.country}"></td>
-					<td th:text="${terminal.state}"></td>
-					<td th:text="${terminal.lga}"></td>
-					<td th:text="${terminal.owner != null ? terminal.owner.username : ''}"></td>
-					<td>
-						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${terminal.enabled}" disabled>
-							<span class="slider round"></span>
-						</label>
-					</td>
-					<td>
-						<a class="justify-content-center" th:href="@{/terminals/details/{id}(id=${terminal.id})}">
-							<button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
-						</a>
-					</td>
-					<td>
-						<a class="justify-content-center" th:href="@{/terminals/delete/{id}(id=${terminal.id})}">
-							<button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
-						</a>
-					</td>
-				</tr>
+                <tr th:each="terminal : ${terminals}">
+                    <td th:text="${terminal.id}"></td>
+                    <td th:text="${terminal.name}"></td>
+                    <td th:text="${terminal.code}"></td>
+                    <td th:text="${terminal.mode}"></td>
+                    <td th:text="${terminal.country}"></td>
+                    <td th:text="${terminal.state}"></td>
+                    <td th:text="${terminal.lga}"></td>
+                    <td th:text="${terminal.owner != null ? terminal.owner.username : ''}"></td>
+                    <td>
+                        <label class="switch">
+                            <input disabled id="enabled" name="enabled" th:checked="${terminal.enabled}"
+                                   type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/terminals/details/{id}(id=${terminal.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/terminals/delete/{id}(id=${terminal.id})}">
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
 				</tbody>
 			</table>
 		</div>

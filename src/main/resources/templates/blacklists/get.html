@@ -23,7 +23,7 @@
             <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{blacklist.saved.message} : (${deleted} ? #{blacklist.deleted.message} : false))"></div>
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-            <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table class="table  responsive-table" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
                     <th>Id</th>
@@ -34,18 +34,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="blacklist : ${blacklistPage.content}">
+                <tr th:each="blacklist : ${blacklists}">
                     <td th:text="${blacklist.id}"></td>
                     <td th:text="${blacklist.identifier}"></td>
                     <td th:text="${blacklist.type}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/blacklists/details/{id}(id=${blacklist.id})}">
-                            <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
                     <td>
                         <a class="justify-content-center" th:href="@{/blacklists/remove/{id}(id=${blacklist.id})}">
-                            <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
                         </a>
                     </td>
                 </tr>

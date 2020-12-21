@@ -40,7 +40,8 @@
                         <div class="form-group row">
                             <label class="col-sm-4" for="trip"><b>Trip</b></label>
                             <div class="col-sm-8">
-                                <span id="trip" th:text="${ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name}"></span>
+                                <span id="trip"
+                                      th:text="${ticket.schedule.route.startTerminal.name + ' - ' + ticket.schedule.route.stopTerminal.name}"></span>
                             </div>
                         </div>
                     </div>

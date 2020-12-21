@@ -28,7 +28,7 @@
                 </div>
             </div>
             <br>
-            <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
                     <th>Ticket Reference</th>
@@ -45,10 +45,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="ticket : ${ticketPage.content}">
+                <tr th:each="ticket : ${tickets}">
                     <td th:text="${ticket.referenceNo}"></td>
                     <td th:text="${ticket.passengerName}"></td>
-                    <td th:text="${ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name}"></td>
+                    <td th:text="${ticket.schedule.route.startTerminal.name + ' - ' + ticket.schedule.route.stopTerminal.name}"></td>
                     <td th:text="${ticket.schedule.departureDate + ' ' + ticket.schedule.departureTime}"></td>
                     <td th:text="${ticket.schedule.vehicle.name}"></td>
                     <td th:text="${ticket.seatNo}"></td>
@@ -57,7 +57,8 @@
                     <td th:text="${ticket.bookingDate}"></td>
                     <td>
                         <label class="switch">
-                            <input type="checkbox" id="refunded" name="refunded" th:checked="${ticket.refunded}" disabled>
+                            <input disabled id="refunded" name="refunded" th:checked="${ticket.refunded}"
+                                   type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </td>

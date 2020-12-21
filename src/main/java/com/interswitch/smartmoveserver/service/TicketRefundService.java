@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /*
  * Created by adebola.owolabi on 7/27/2020
@@ -67,7 +68,12 @@ public class TicketRefundService {
         return refundRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket Refund not found"));
     }
 
-    public PageView<TicketRefund> findAllByOperator(int page, int size, String principal) {
+    public List<TicketRefund> findAllByOwner(String principal) {
+        User user = userService.findByUsername(principal);
+        return refundRepository.findAllByOperator(user);
+    }
+
+    public PageView<TicketRefund> findAllByOwner(int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         User user = userService.findByUsername(principal);
         Page<TicketRefund> pages = refundRepository.findAllByOperator(pageable, user);

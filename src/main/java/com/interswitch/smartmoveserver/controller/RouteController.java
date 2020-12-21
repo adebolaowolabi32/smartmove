@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.RouteService;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -44,9 +44,11 @@ public class RouteController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        PageView<Route> routePage = routeService.findAllPaginated(owner, page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
-        model.addAttribute("routePage", routePage);
+        //TODO:: Implement server side pagination
+        //PageView<Route> routePage = routeService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
+        List<Route> routes = routeService.findAll(owner, principal.getName());
+        model.addAttribute("routes", routes);
         return "routes/get";
     }
 
@@ -62,7 +64,7 @@ public class RouteController {
         Route route = new Route();
         model.addAttribute("route", route);
         model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("route")));
-        model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+        model.addAttribute("terminals", terminalService.findAll(0L, principal.getName()));
         model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
         return "routes/create";
     }
@@ -72,7 +74,7 @@ public class RouteController {
         if (result.hasErrors()) {
             model.addAttribute("route", route);
             model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("route")));
-            model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+            model.addAttribute("terminals", terminalService.findAll(0L, principal.getName()));
             model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
             return "routes/create";
         }
@@ -87,7 +89,7 @@ public class RouteController {
         Route route = routeService.findById(id, principal.getName());
         model.addAttribute("route", route);
         model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("route")));
-        model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+        model.addAttribute("terminals", terminalService.findAll(0L, principal.getName()));
         model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
         return "routes/update";
     }
@@ -99,7 +101,7 @@ public class RouteController {
         if (result.hasErrors()) {
             model.addAttribute("route", route);
             model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("route")));
-            model.addAttribute("terminals", terminalService.findByOwner(principal.getName()));
+            model.addAttribute("terminals", terminalService.findAll(0L, principal.getName()));
             model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
             return "routes/update";
         }

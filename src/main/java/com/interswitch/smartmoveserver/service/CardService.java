@@ -49,6 +49,24 @@ public class CardService {
         return cardRepository.findAll();
     }
 
+    public List<Card> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return cardRepository.findAllByOwner(user);
+            } else {
+                return cardRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return cardRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
     public PageView<Card> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         User user = userService.findByUsername(principal);
@@ -72,7 +90,6 @@ public class CardService {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
-
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Card save(Card card, String principal) {

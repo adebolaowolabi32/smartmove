@@ -30,19 +30,19 @@
 								<span id="name" th:text="${route.name}"></span></div>
 						</div>
 						<div class="form-group row">
-							<label class="col-sm-4" for="type"><b>Transport Mode</b></label>
+                            <label class="col-sm-4" for="mode"><b>Transport Mode</b></label>
 							<div class="col-sm-8">
-								<span id="type" th:text="${route.type}"></span></div>
+                                <span id="mode" th:text="${route.mode}"></span></div>
 						</div>
 						<div class="form-group row">
 							<label class="control-label col-sm-4" for="start"><b>Start Terminal</b></label>
 							<div class="col-sm-8">
-								<span id="start" th:text="${route.startTerminalName}"></span></div>
+                                <span id="start" th:text="${route.startTerminal.name}"></span></div>
 						</div>
 						<div class="form-group row">
 							<label class="control-label col-sm-4" for="stop"><b>Stop Terminal</b></label>
 							<div class="col-sm-8">
-								<span id="stop" th:text="${route.stopTerminalName}"></span></div>
+                                <span id="stop" th:text="${route.stopTerminal.name}"></span></div>
 						</div>
 					</div>
 					<div class="col">
@@ -52,8 +52,8 @@
 							<span id="owner" th:text="${route.owner != null ? route.owner.username : ''}"></span></div>
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-4" for="price"><b>Price</b></label>
-						<div class="col-sm-8"><span id="price" th:text="${route.price}"></span></div>
+                        <label class="col-sm-4" for="fare"><b>Price</b></label>
+                        <div class="col-sm-8"><span id="fare" th:text="${route.fare}"></span></div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-4" for="enabled"><b>Active</b></label>
