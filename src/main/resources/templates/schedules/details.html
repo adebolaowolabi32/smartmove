@@ -21,15 +21,15 @@
                     <div class="row">
                         <div class="col">
                             <div><b>Departure Terminal</b></div>
-                            <div th:text="${schedule.startTerminal.name}"></div>
+                            <div th:text="${schedule.route.startTerminal.name}"></div>
                         </div>
                         <div class="col">
                             <div><b>Destination Terminal</b></div>
-                            <div th:text="${schedule.stopTerminal.name}"></div>
+                            <div th:text="${schedule.route.stopTerminal.name}"></div>
                         </div>
                         <div class="col">
                             <div><b>Transport Mode</b></div>
-                            <div th:text="${schedule.mode}"></div>
+                            <div th:text="${schedule.route.mode}"></div>
                         </div>
                         <div class="col">
                             <div><b>Vehicle</b></div>
@@ -37,7 +37,8 @@
                         </div>
                         <div class="col">
                             <div><b>Fare</b></div>
-                            <div><span th:text="${schedule.fare}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
+                            <div><span th:text="${schedule.route.fare}"></span> <span
+                                    th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
                         </div>
                     </div>
                     <br>
@@ -80,7 +81,7 @@
             <br>
             <br>
             <br>
-            <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
                     <thead class='thead-light'>
                     <tr>
                         <th>SN</th>

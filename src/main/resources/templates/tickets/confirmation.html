@@ -17,7 +17,7 @@
         <br>
         <label><b> Ticket Summary </b></label>
         <br>
-        <table cellspacing="0" class="table table-bordered table-responsive" width="100%">
+        <table cellspacing="0" class="table  responsive-table" width="100%">
             <thead class='thead-light'>
                 <tr>
                     <th>Ticket Reference</th>
@@ -31,7 +31,7 @@
                 <tr th:each="ticket : ${ticketDetails.tickets}">
                     <td th:text="${ticket.referenceNo}"></td>
                     <td th:text="${ticket.passengerName}"></td>
-                    <td th:text="${ticket.schedule != null ? ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name  : ''}"></td>
+                    <td th:text="${ticket.schedule != null ? ticket.schedule.route.startTerminal.name + ' - ' + ticket.schedule.route.stopTerminal.name  : ''}"></td>
                     <td th:text="${ticket.fare}"></td>
                 </tr>
 

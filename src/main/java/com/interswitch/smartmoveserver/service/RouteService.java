@@ -42,6 +42,23 @@ public class RouteService {
         return routeRepository.findAll();
     }
 
+    public List<Route> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return routeRepository.findAllByOwner(user);
+            } else {
+                return routeRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return routeRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
     public PageView<Route> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         User user = userService.findByUsername(principal);
@@ -64,7 +81,6 @@ public class RouteService {
         }
     }
 
-
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Route save(Route route) {
         long id = route.getId();
@@ -76,48 +92,43 @@ public class RouteService {
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Route save(Route route, String principal) {
-        String name = route.getName();
-        Terminal startTerminal = terminalService.findById(route.getStartTerminalId());
-        Terminal stopTerminal = terminalService.findById(route.getStopTerminalId());
-        String startTerminalName = startTerminal.getName();
-        String stopTerminalName = stopTerminal.getName();
-        route.setStartTerminalName(startTerminalName);
-        route.setStopTerminalName(stopTerminalName);
-        route.setName(startTerminalName + " - " + stopTerminalName);
+        String startTerminalName = route.getStartTerminal().getName();
+        String stopTerminalName = route.getStopTerminal().getName();
+        String name = startTerminalName + " - " + stopTerminalName;
+        route.setName(name);
         boolean exists = routeRepository.existsByName(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route with name: " + name + " already exists");
         if (route.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             route.setOwner(owner);
         }
-        return routeRepository.save(route);
+        return routeRepository.save(buildRoute(route));
+    }
+
+    public Route findById(long id) {
+        return routeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist"));
     }
 
     public Route findById(long id, String principal) {
         return routeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist"));
     }
 
-    public List<Route> findByType(Enum.TransportMode type) {
-        return routeRepository.findAllByType(type);
+    public List<Route> findByMode(Enum.TransportMode type) {
+        return routeRepository.findAllByMode(type);
     }
-
 
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Route update(Route route, String principal) {
         Optional<Route> existing = routeRepository.findById(route.getId());
         if (existing.isPresent()) {
-            Terminal startTerminal = terminalService.findById(route.getStartTerminalId());
-            Terminal stopTerminal = terminalService.findById(route.getStopTerminalId());
-            String startTerminalName = startTerminal.getName();
-            String stopTerminalName = stopTerminal.getName();
-            route.setStartTerminalName(startTerminalName);
-            route.setStopTerminalName(stopTerminalName);
+            String startTerminalName = route.getStartTerminal().getName();
+            String stopTerminalName = route.getStopTerminal().getName();
             route.setName(startTerminalName + " - " + stopTerminalName);
             if (route.getOwner() == null) {
                 User owner = userService.findByUsername(principal);
                 route.setOwner(owner);
             }
-            return routeRepository.save(route);
+            return routeRepository.save(buildRoute(route));
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
     }
@@ -137,5 +148,16 @@ public class RouteService {
 
     public Long countAll() {
         return routeRepository.count();
+    }
+
+    private Route buildRoute(Route route) {
+        Terminal startTerminal = route.getStartTerminal();
+        if (startTerminal != null)
+            route.setStartTerminal(terminalService.findById(startTerminal.getId()));
+
+        Terminal stopTerminal = route.getStopTerminal();
+        if (stopTerminal != null)
+            route.setStopTerminal(terminalService.findById(stopTerminal.getId()));
+        return route;
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @Layout(value = "layouts/default")
@@ -45,9 +46,11 @@ public class TripController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        PageView<Trip> tripPage = tripService.findAllPaginated(owner, page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(tripPage));
-        model.addAttribute("tripPage", tripPage);
+        //TODO:: Implement server side pagination
+        //PageView<Trip> tripPage = tripService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(tripPage));
+        List<Trip> trips = tripService.findAll(owner, principal.getName());
+        model.addAttribute("trips", trips);
         return "trips/get";
     }
 
@@ -71,7 +74,7 @@ public class TripController {
         Trip trip = new Trip();
         model.addAttribute("trip", trip);
         //not needed at the moment though,should be removed for performance reasons
-        model.addAttribute("drivers", userService.findAllByRole(principal.getName(), Enum.Role.DRIVER));
+        model.addAttribute("drivers", userService.findAllByRole(principal.getName(), 0L, Enum.Role.DRIVER));
         model.addAttribute("schedules", scheduleService.findByOwner(principal.getName()));
         model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
         return "trips/create";
@@ -81,7 +84,7 @@ public class TripController {
     public String create(Principal principal, @Valid Trip trip, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
-            model.addAttribute("drivers", userService.findAllByRole(principal.getName(), Enum.Role.DRIVER));
+            model.addAttribute("drivers", userService.findAllByRole(principal.getName(), 0L, Enum.Role.DRIVER));
             model.addAttribute("schedules", scheduleService.findByOwner(principal.getName()));
             model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
             return "trips/create";
@@ -96,7 +99,7 @@ public class TripController {
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
         Trip trip = tripService.findById(id, principal.getName());
         model.addAttribute("trip", trip);
-        model.addAttribute("drivers", userService.findAllByRole(principal.getName(), Enum.Role.DRIVER));
+        model.addAttribute("drivers", userService.findAllByRole(principal.getName(), 0L, Enum.Role.DRIVER));
         model.addAttribute("schedules", scheduleService.findByOwner(principal.getName()));
         model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
         return "trips/update";
@@ -110,7 +113,7 @@ public class TripController {
 
         if (result.hasErrors()) {
             model.addAttribute("trip", trip);
-            model.addAttribute("drivers", userService.findAllByRole(principal.getName(), Enum.Role.DRIVER));
+            model.addAttribute("drivers", userService.findAllByRole(principal.getName(), 0L, Enum.Role.DRIVER));
             model.addAttribute("schedules", scheduleService.findByOwner(principal.getName()));
             model.addAttribute("vehicles", vehicleService.findByOwner(principal.getName()));
             return "trips/update";

@@ -25,21 +25,10 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long fare;
-
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Transport mode is required.")
-    private Enum.TransportMode mode;
-
     @ManyToOne
-    @JoinColumn(name = "startTerminal")
-    @NotNull(message = "Start terminal is required.")
-    private Terminal startTerminal;
-
-    @ManyToOne
-    @JoinColumn(name = "stopTerminal")
-    @NotNull(message = "Stop terminal is required.")
-    private Terminal stopTerminal;
+    @JoinColumn(name = "route")
+    @NotNull(message = "Route is required.")
+    private Route route;
 
     @ManyToOne
     @NotNull(message = "Vehicle category is required.")

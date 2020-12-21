@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Card;
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.CardService;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -16,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -37,9 +37,11 @@ public class CardController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        PageView<Card> cardPage = cardService.findAllPaginated(owner, page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(cardPage));
-        model.addAttribute("cardPage", cardPage);
+        //TODO:: Implement server side pagination
+        //PageView<Card> cardPage = cardService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(cardPage));
+        List<Card> cards = cardService.findAll(owner, principal.getName());
+        model.addAttribute("cards", cards);
         return "cards/get";
     }
 

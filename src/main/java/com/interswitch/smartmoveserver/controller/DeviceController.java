@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.Device;
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.view.FundDevice;
 import com.interswitch.smartmoveserver.service.DeviceService;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -38,9 +38,11 @@ public class DeviceController {
     public String findAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        PageView<Device> devicePage = deviceService.findAllPaginated(owner, page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(devicePage));
-        model.addAttribute("devicePage", devicePage);
+        //TODO:: Implement server side pagination
+        //PageView<Device> devicePage = deviceService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(devicePage));
+        List<Device> devices = deviceService.findAll(owner, principal.getName());
+        model.addAttribute("devices", devices);
         return "devices/get";
     }
 

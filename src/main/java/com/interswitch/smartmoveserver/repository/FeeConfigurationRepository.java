@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.FeeConfiguration;
-import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +14,8 @@ import java.util.List;
 public interface FeeConfigurationRepository extends CrudRepository<FeeConfiguration, Long> {
 
     List<FeeConfiguration> findAll();
+
+    List<FeeConfiguration> findAllByOwner(User owner);
 
     Page<FeeConfiguration> findAll(Pageable pageable);
 

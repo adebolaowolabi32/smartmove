@@ -40,9 +40,21 @@ public class TerminalService {
         return terminalRepository.findAll();
     }
 
-    public List<Terminal> findByOwner(String username) {
-        User owner = userService.findByUsername(username);
-        return terminalRepository.findAllByOwner(owner);
+    public List<Terminal> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return terminalRepository.findAllByOwner(user);
+            } else {
+                return terminalRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return terminalRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
 
     public PageView<Terminal> findAllPaginated(Long owner, int page, int size, String principal) {

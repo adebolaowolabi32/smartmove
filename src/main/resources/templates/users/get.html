@@ -23,7 +23,7 @@
 				<br>
 				<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{${deleted_message}} : false)"></div>
 				<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-				<table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+				<table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
 					<thead class='thead-light'>
 						<tr>
 							<th>Id</th>
@@ -37,7 +37,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="user : ${userPage.content}">
+					<tr th:each="user : ${users}">
 							<td th:text="${user.id}"></td>
 							<td th:text="${user.firstName}"></td>
 							<td th:text="${user.lastName}"></td>

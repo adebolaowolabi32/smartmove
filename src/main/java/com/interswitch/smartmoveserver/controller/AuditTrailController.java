@@ -1,9 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.AuditTrail;
-import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.PageView;
-import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.AuditTrailService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/audit-trails")
@@ -30,9 +28,11 @@ public class AuditTrailController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size){
-        PageView<AuditTrail> auditTrailPageView = auditTrailService.findAllPaginated(owner,  page,  size, principal.getName()) ;
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(auditTrailPageView));
-        model.addAttribute("auditTrailPage", auditTrailPageView);
+        //TODO:: Implement server side pagination
+        //PageView<AuditTrail> auditTrailPageView = auditTrailService.findAllPaginated(owner,  page,  size, principal.getName()) ;
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(auditTrailPageView));
+        List<AuditTrail> auditTrails = auditTrailService.findAll(owner, principal.getName());
+        model.addAttribute("auditTrails", auditTrails);
         return "audit-trails/get";
     }
 }

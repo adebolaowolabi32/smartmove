@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -19,6 +20,10 @@ import java.util.Optional;
 public class BlacklistService {
     @Autowired
     BlacklistRepository blacklistRepository;
+
+    public List<Blacklist> findAll() {
+        return blacklistRepository.findAll();
+    }
 
     public PageView<Blacklist> findAllPaginated(int page, int size) {
         PageRequest pageable = PageRequest.of(page - 1, size);

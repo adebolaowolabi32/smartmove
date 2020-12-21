@@ -41,6 +41,24 @@ public class FeeConfigurationService {
         return feeConfigurationRepository.findAll();
     }
 
+    public List<FeeConfiguration> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return feeConfigurationRepository.findAllByOwner(user);
+            } else {
+                return feeConfigurationRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return feeConfigurationRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
     public PageView<FeeConfiguration> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         User user = userService.findByUsername(principal);
@@ -62,7 +80,6 @@ public class FeeConfigurationService {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
-
 
     /**
      * This implementation is done with the assumption that only an operator(as well as ISW admin for test purposes)

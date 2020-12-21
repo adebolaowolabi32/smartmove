@@ -23,43 +23,44 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{card.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table cellspacing="0" class="table table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
 				<thead class='thead-light'>
-				<tr>
-					<th>Id</th>
-					<th>Type</th>
-					<th>Pan</th>
-					<th>Expiry</th>
-					<th>Owner</th>
-					<th>Active</th>
-					<th>View Details</th>
-					<th>Remove</th>
-				</tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Type</th>
+                    <th>Pan</th>
+                    <th>Expiry</th>
+                    <th>Owner</th>
+                    <th>Active</th>
+                    <th>View Details</th>
+                    <th>Remove</th>
+                </tr>
 				</thead>
 				<tbody>
-				<tr th:each="card : ${cardPage.content}">
-					<td th:text="${card.id}"></td>
-					<td th:text="${card.type}"></td>
-					<td th:text="${card.pan}"></td>
-					<td th:text="${card.expiry}"></td>
-					<td th:text="${card.owner != null ? card.owner.username : ''}"></td>
-					<td>
-						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${card.enabled}" disabled>
-							<span class="slider round"></span>
-						</label>
-					</td>
-					<td>
-						<a class="justify-content-center" th:href="@{/cards/details/{id}(id=${card.id})}">
-							<button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
-						</a>
-					</td>
-					<td>
-						<a class="justify-content-center" th:href="@{/cards/delete/{id}(id=${card.id})}">
-							<button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
-						</a>
-					</td>
-				</tr>
+                <tr th:each="card : ${cards}">
+                    <td th:text="${card.id}"></td>
+                    <td th:text="${card.type}"></td>
+                    <td th:text="${card.pan}"></td>
+                    <td th:text="${card.expiry}"></td>
+                    <td th:text="${card.owner != null ? card.owner.username : ''}"></td>
+                    <td>
+                        <label class="switch">
+                            <input disabled id="enabled" name="enabled" th:checked="${card.enabled}" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/cards/details/{id}(id=${card.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/cards/delete/{id}(id=${card.id})}">
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
 				</tbody>
 			</table>
 		</div>

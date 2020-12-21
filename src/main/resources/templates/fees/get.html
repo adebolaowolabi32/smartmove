@@ -27,48 +27,49 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{fee.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
 				<thead class='thead-light'>
-				<tr>
-					<th>Fee Name</th>
-					<th>Fee Value</th>
-					<th>Rating metric</th>
-					<th>Description</th>
-					<th>Active</th>
+                <tr>
+                    <th>Fee Name</th>
+                    <th>Fee Value</th>
+                    <th>Rating metric</th>
+                    <th>Description</th>
+                    <th>Active</th>
                     <th>Owner</th>
-					<th>View details</th>
-					<th>Remove</th>
-				</tr>
+                    <th>View details</th>
+                    <th>Remove</th>
+                </tr>
 				</thead>
 				<tbody>
-				<tr th:each="fee : ${feeConfigPage.content}">
-					<td th:text="${fee.feeName}"></td>
-					<td th:text="${fee.value}"></td>
-					<td th:text="${fee.ratingMetricType}"></td>
-					<td th:text="${fee.description}"></td>
+                <tr th:each="fee : ${feeConfigs}">
+                    <td th:text="${fee.feeName}"></td>
+                    <td th:text="${fee.value}"></td>
+                    <td th:text="${fee.ratingMetricType}"></td>
+                    <td th:text="${fee.description}"></td>
 
-					<td>
-						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${fee.enabled}" disabled>
-							<span class="slider round"></span>
-						</label>
-					</td>
+                    <td>
+                        <label class="switch">
+                            <input disabled id="enabled" name="enabled" th:checked="${fee.enabled}" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
 
                     <td th:text="${fee.owner != null ? fee.owner.username : ''}"></td>
 
                     <td>
-						<a class="justify-content-center" th:href="@{/fees/details/{id}(id=${fee.id})}">
-							<button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
-						</a>
-					</td>
+                        <a class="justify-content-center" th:href="@{/fees/details/{id}(id=${fee.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
 
-					<td>
-						<a class="justify-content-center" th:href="@{/fees/delete/{id}(id=${fee.id})}">
-							<button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
-						</a>
-					</td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/fees/delete/{id}(id=${fee.id})}">
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
+                        </a>
+                    </td>
 
-				</tr>
+                </tr>
 				</tbody>
 			</table>
 		</div>

@@ -12,9 +12,10 @@ import java.util.List;
 
 @Repository
 public interface  RouteRepository extends CrudRepository<Route, Long> {
-    List<Route> findAllByType(Enum.TransportMode type);
+    List<Route> findAllByMode(Enum.TransportMode mode);
     List<Route> findAllByOwner(User owner);
-    Page<Route> findAllByType(Pageable pageable, Enum.TransportMode type);
+
+    Page<Route> findAllByMode(Pageable pageable, Enum.TransportMode mode);
     Page<Route> findAllByOwner(Pageable pageable, User owner);
     Long countByOwner(User owner);
     Page<Route> findAll(Pageable pageable);

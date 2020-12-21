@@ -26,7 +26,7 @@
             <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{schedule.deleted.message} : false)"></div>
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-            <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
                     <th>Transport Mode</th>
@@ -45,32 +45,34 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="schedule : ${schedulePage.content}">
-                    <td th:text="${schedule.mode}"></td>
-                    <td th:text="${schedule.startTerminal!=null ? schedule.startTerminal.name : ''}"></td>
-                    <td th:text="${schedule.stopTerminal!=null ? schedule.stopTerminal.name : ''}"></td>
+                <tr th:each="schedule : ${schedules}">
+                    <td th:text="${schedule.route.mode}"></td>
+                    <td th:text="${schedule.route.startTerminal.name}"></td>
+                    <td th:text="${schedule.route.stopTerminal.name}"></td>
                     <td th:text="${schedule.vehicle!=null ? schedule.vehicle.name : '' }"></td>
                     <td th:text="${schedule.departureDate}"></td>
                     <td th:text="${schedule.departureTime}"></td>
                     <td th:text="${schedule.arrivalDate}"></td>
                     <td th:text="${schedule.arrivalTime}"></td>
-                    <td th:text="${schedule.fare}"></td>
+                    <td th:text="${schedule.route.fare}"></td>
                     <td th:text="${schedule.owner!=null ? schedule.owner.username : ''}"></td>
                     <td>
                         <label class="switch">
-                            <input type="checkbox" id="enabled" name="enabled" th:checked="${schedule.enabled}" disabled>
+                            <input disabled id="enabled" name="enabled" th:checked="${schedule.enabled}"
+                                   type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </td>
                     <td>
                         <a class="justify-content-center" th:href="@{/schedules/details/{id}(id=${schedule.id})}">
-                            <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
 
                     <td>
                         <a class="justify-content-center" th:href="@{/schedules/delete/{id}(id=${schedule.id})}">
-                            <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
                         </a>
                     </td>
 
