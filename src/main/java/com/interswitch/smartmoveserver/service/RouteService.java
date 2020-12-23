@@ -8,7 +8,6 @@ import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +21,7 @@ import java.util.Optional;
 /**
  * @author adebola.owolabi
  */
-@Slf4j
+
 @Service
 public class RouteService {
     @Autowired
@@ -136,8 +135,6 @@ public class RouteService {
     }
 
     public void delete(long id, String principal) {
-        log.info("Actor===>"+principal);
-        //delete all schedules using this route
         Optional<Route> existing = routeRepository.findById(id);
         if (existing.isPresent())
             routeRepository.deleteById(id);

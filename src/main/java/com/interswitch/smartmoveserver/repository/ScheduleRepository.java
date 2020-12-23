@@ -19,5 +19,4 @@ public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
     List<Schedule> findAll();
 
     List<Schedule> findAllByOwner(User owner);
-
 }
