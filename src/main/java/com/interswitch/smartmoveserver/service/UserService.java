@@ -26,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmail;
@@ -96,6 +97,44 @@ public class UserService {
             //iswCoreService.createUser(user);
             userRepository.save(user);
         }
+    }
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
+    public User registerUserFromAPI(User user, String principal) {
+        log.info("Principal creator===>"+principal);
+        boolean exists = userRepository.existsById(user.getId());
+        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+        //TODO :: see below
+        user.setEnabled(true);
+        //iswCoreService.createUser(user);
+        PassportUser passportUser = passportService.findUser(user.getEmail());
+        if(passportUser == null) {
+            user.setLoginFreqType(1);
+            passportUser = passportService.createUser(user);
+            saveToDb(passportUser, user, principal);
+        }
+        else{
+            saveToDb(passportUser, user, principal);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists. Kindly ask user to login with their Quickteller credentials");
+        }
+        return user;
+    }
+
+    private User saveToDb(PassportUser passportUser, User user, String owner){
+        Enum.Role role = user.getRole();
+        user.setOwner(null);
+        if(!role.equals(Enum.Role.ISW_ADMIN)) {
+            Optional<User> ownerUser = userRepository.findByUsername(owner);
+            if(ownerUser.isPresent()) user.setOwner(ownerUser.get());
+        }
+        user.setUsername(passportUser.getUsername());
+        user.setPassword(passportUser.getPassword());
+        userRepository.save(user);
+        if(role.equals(Enum.Role.AGENT)){
+            walletService.autoCreateForUser(user);
+            cardService.autoCreateForUser(user);
+        }
+        return user;
     }
 
     //if user role is admin, user.owner must be null

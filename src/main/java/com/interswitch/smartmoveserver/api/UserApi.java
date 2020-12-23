@@ -30,7 +30,7 @@ public class UserApi {
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     private void create(@Validated @RequestBody User user) {
-        userService.create(user, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+        userService.registerUserFromAPI(user, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

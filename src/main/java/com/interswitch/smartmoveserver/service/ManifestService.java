@@ -104,6 +104,7 @@ public class ManifestService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Manifest does not exist");
         }
     }
+
     public void delete(long id, String principal) {
         Optional<Manifest> existing = manifestRepository.findById(id);
         if (existing.isPresent())

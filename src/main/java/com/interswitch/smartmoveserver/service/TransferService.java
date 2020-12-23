@@ -47,6 +47,11 @@ public class TransferService {
 
     }
 
+    public List<Transfer> findAll(String principal) {
+        User user = userService.findByUsername(principal);
+        return transferRepository.findAllByOwner(user);
+    }
+
     public Transfer findById(long id) {
         return transferRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transfer does not exist"));
     }

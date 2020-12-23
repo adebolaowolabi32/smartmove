@@ -42,6 +42,7 @@ public class VehicleApi {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     private void delete(@Validated @PathVariable long id) {
         vehicleService.delete(id,JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }

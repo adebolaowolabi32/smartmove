@@ -89,7 +89,7 @@ public class PassportService {
         passportUser.setMobileNo(user.getMobileNo());
         passportUser.setPassword(user.getPassword());
         passportUser.setEnabled(user.isEnabled());
-        passportUser.setFirstLogin(true);
+        passportUser.setFirstLogin(user.getLoginFreqType()>=1 ? false : true);
         return passportUser;
     }
 

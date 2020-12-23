@@ -118,8 +118,6 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist"));
     }
 
-    //findAllByMode
-
     public List<VehicleCategory> findByOwner(String username) {
         User owner = userService.findByUsername(username);
         if (owner.getRole() == Enum.Role.ISW_ADMIN)

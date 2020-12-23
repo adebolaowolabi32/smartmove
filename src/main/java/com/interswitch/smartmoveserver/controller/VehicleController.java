@@ -1,13 +1,12 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.PageView;
-import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.Vehicle;
-import com.interswitch.smartmoveserver.model.VehicleCategory;
+import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.service.DeviceService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.service.VehicleCategoryService;
 import com.interswitch.smartmoveserver.service.VehicleService;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +21,7 @@ import java.util.List;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Controller
 @RequestMapping("/vehicles")
 public class VehicleController {
@@ -33,6 +33,9 @@ public class VehicleController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    DeviceService deviceService;
 
     @Autowired
     PageUtil pageUtil;
@@ -60,12 +63,15 @@ public class VehicleController {
 
     @GetMapping("/create")
     public String showCreate(Principal principal, Model model) {
+
         Vehicle vehicle = new Vehicle();
+        List<Device> devices = deviceService.findAll(0L, principal.getName());
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
         model.addAttribute("vehicle", vehicle);
         model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
         model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
+        model.addAttribute("devices",devices);
         return "vehicles/create";
     }
 

@@ -112,6 +112,9 @@ public class TicketService {
         ticketDetails.setSeats(new ArrayList<>(schedule.getSeats()));
         ticketDetails.setCountries(stateService.findAllCountries());
 
+        ticketDetails.setNoOfPassengers(noOfPassengers);
+        ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
+
         String transportOperatorUsername = (user.getRole() == Enum.Role.OPERATOR || user.getRole() == Enum.Role.ISW_ADMIN) ?
                 user.getUsername() : user.getOwner() != null ? user.getOwner().getUsername() : "";
 
@@ -411,7 +414,5 @@ public class TicketService {
     }
 
 
-
-}
 
 }
