@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.VehicleCategoryRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -117,13 +118,12 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist"));
     }
 
-    //findAllByMode
-
     public List<VehicleCategory> findByOwner(String username) {
         User owner = userService.findByUsername(username);
+        if (owner.getRole() == Enum.Role.ISW_ADMIN)
+            return vehicleCategoryRepository.findAll();
         return vehicleCategoryRepository.findAllByOwner(owner);
     }
-
 
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory update(VehicleCategory vehicleCategory, String principal) {
@@ -161,7 +161,6 @@ public class VehicleCategoryService {
     }
 
     private VehicleCategory buildVehicleCategory(VehicleCategory vehicleCategory) {
-
         VehicleMake vehicleMake = vehicleCategory.getMake();
         if(vehicleMake != null)
             vehicleCategory.setMake(vehicleMakeService.findById(vehicleMake.getId()));
@@ -169,12 +168,6 @@ public class VehicleCategoryService {
         VehicleModel vehicleModel = vehicleCategory.getModel();
         if(vehicleModel != null)
             vehicleCategory.setModel(vehicleModelService.findById(vehicleModel.getId()));
-
-        int capacity =  vehicleCategory.getCapacity();
-        int noColumns = vehicleCategory.getNoColumns();
-        int noRows = capacity % noColumns  == 0 ? Math.round(capacity/noColumns) : (getIntegerPart(capacity/noColumns) + 1) ;
-        vehicleCategory.setNoRows(noRows);
-
         return vehicleCategory;
     }
 

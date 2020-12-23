@@ -108,9 +108,11 @@ public class TicketService {
         TicketDetails ticketDetails = new TicketDetails();
         Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
         ticketDetails.setSchedule(schedule);
-        ticketDetails.setNoOfPassengers(noOfPassengers);
-        ticketDetails.setSeats(this.getAvailableSeats());
+        log.info("Seat Capacity ==>"+schedule.getSeats().size());
+        ticketDetails.setSeats(new ArrayList<>(schedule.getSeats()));
         ticketDetails.setCountries(stateService.findAllCountries());
+
+        ticketDetails.setNoOfPassengers(noOfPassengers);
         ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
 
         String transportOperatorUsername = (user.getRole() == Enum.Role.OPERATOR || user.getRole() == Enum.Role.ISW_ADMIN) ?
@@ -122,6 +124,17 @@ public class TicketService {
         log.info("feeConfigurationList===>" + feeConfigurationList);
         //add FeeConfiguration list to the ticketDetails
         ticketDetails.setFees(feeConfigurationList);
+        return ticketDetails;
+    }
+
+    public TicketDetails setPassengerDetails(TicketDetails ticketDetails) {
+        //log.info("ticketDetails===>"+ticketDetails);
+        //log.info("calling setPassengerDetails,seatData===>"+seatData);
+        //int noOfPassengers = ticketDetails.getSeats().size();
+        //ticketDetails.setNoOfPassengers(noOfPassengers);
+        //ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
+
+        log.info("finished calling setPassengerDetails===>");
         return ticketDetails;
     }
 
@@ -145,14 +158,14 @@ public class TicketService {
             Schedule schedule = ticketDetails.getSchedule();
             Ticket ticket = this.populateTicket(ticketDetails, schedule, pass, username);
 
-            totalFare += this.applyConfiguredFees(ticketDetails,ticket,pass);
+            totalFare += this.applyConfiguredFees(ticketDetails, ticket, pass);
             tickets.add(ticket);
 
             Schedule returnSchedule = ticketDetails.getReturnSchedule();
             if (ticketDetails.getReturnSchedule() != null) {
                 Ticket returnTicket = this.populateTicket(ticketDetails, returnSchedule, pass, username);
 
-                totalFare += this.applyConfiguredFees(ticketDetails,returnTicket,pass);
+                totalFare += this.applyConfiguredFees(ticketDetails, returnTicket, pass);
                 tickets.add(returnTicket);
 
             }
@@ -212,8 +225,7 @@ public class TicketService {
                     .filter(s -> s.getRoute().getStartTerminal().getName().equals(schedule.getRoute().getStartTerminal().getName()) && s.getRoute().getStopTerminal().getName()
                             .equals(schedule.getRoute().getStopTerminal().getName()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
             scheduleBooking.setSchedules(scheduleResults);
-        }
-        else scheduleBooking.setInvalid(true);
+        } else scheduleBooking.setInvalid(true);
         return scheduleBooking;
     }
 
@@ -400,14 +412,7 @@ public class TicketService {
         messagingService.sendEmail(ticketDetails.getContactEmail(),
                 "Your Trip Reservation", "tickets" + File.separator + "preview", params);
     }
-}
 
-    public TicketDetails setPassengerDetails(TicketDetails ticketDetails){
-          //log.info("ticketDetails===>"+ticketDetails);
-         //log.info("calling setPassengerDetails,seatData===>"+seatData);
-         //int noOfPassengers = ticketDetails.getSeats().size();
-        //ticketDetails.setNoOfPassengers(noOfPassengers);
-        //ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
-        log.info("finished calling setPassengerDetails===>");
-        return ticketDetails;
-    }
+
+
+}

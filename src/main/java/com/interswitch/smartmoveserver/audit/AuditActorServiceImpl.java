@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.audit;
 
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.UserService;
+import com.interswitch.smartmoveserver.util.JwtUtil;
 import com.interswitchng.audit.service.AuditActorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,11 +20,8 @@ public class AuditActorServiceImpl implements AuditActorService {
 
     @Override
     public String getActor() {
-        String actor = Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
-                .map(Authentication::getName).get();
-        return !actor.isEmpty() ? actor : "Unknown";
+        return JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication());
+
     }
 
     @Override

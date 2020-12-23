@@ -40,7 +40,7 @@ public class ScheduleApi {
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     private void delete(@Validated @PathVariable long id) {
         scheduleService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }

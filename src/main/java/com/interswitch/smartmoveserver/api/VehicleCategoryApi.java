@@ -42,6 +42,7 @@ public class VehicleCategoryApi {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     private void delete(@Validated @PathVariable long id) {
         vehicleCategoryService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }

@@ -268,7 +268,7 @@ public class DeviceService {
         //CONNECTED, DISCONNECTED, BATTERY_LOW, EMERGENCY
         Enum.DeviceStatus deviceStatus = null;
         try{
-             deviceStatus = Enum.DeviceStatus.valueOf(status.toUpperCase());
+            deviceStatus = Enum.DeviceStatus.valueOf(status.toUpperCase());
         }catch(IllegalArgumentException ex){
 
         }

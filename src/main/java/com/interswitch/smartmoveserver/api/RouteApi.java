@@ -43,6 +43,7 @@ public class RouteApi {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     private void delete(@Validated @PathVariable long id) {
         routeService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }

@@ -88,6 +88,7 @@ public class ScheduleService {
         }
     }
 
+
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Schedule save(Schedule schedule, String principal) {
         LocalDateTime start = LocalDateTime.of(schedule.getDepartureDate(), schedule.getDepartureTime());
