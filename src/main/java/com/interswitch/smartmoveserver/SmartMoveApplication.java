@@ -19,7 +19,7 @@ import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 @EnableScheduling
 //This below helps to enable Jpa Auditing,auditorAwareRef value bears same name auditorAware bean defined in the class
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
-//component scan base packages specified helps to scan the bean components of isw-post-office library for visibility
+//component scan base packages specified here helps to scan the bean components of isw-post-office library for visibility
 //when doing dependency injection/autowiring
 @ComponentScan(basePackages = {"com.interswitch", "com.interswitchng"})
 public class SmartMoveApplication {

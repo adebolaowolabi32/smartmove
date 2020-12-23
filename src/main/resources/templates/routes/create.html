@@ -19,41 +19,47 @@
 			  th:action="@{/routes/create}" th:object="${route}"
 			  data-parsley-validate="true">
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="type"><b>Transport Mode</b></label>
+                <label class="control-label col-sm-2" for="mode"><b>Transport Mode</b></label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{type}"  id="type" required>
+                    <select class="form-control" id="mode" required th:field="*{mode}">
 						<option value="">Select...</option>
 						<option value="BUS">Bus</option>
 						<option value="CAR">Car</option>
 						<option value="RAIL">Rail</option>
 						<option value="FERRY">Ferry</option>
-					</select></div>
+                    </select>
+                </div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="startTerminalId"><b>Start Terminal</b></label>
+                <label class="control-label col-sm-2" for="startTerminal"><b>Departure Terminal</b></label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{startTerminalId}" id="startTerminalId" required>
+                    <select class="form-control" id="startTerminal" required th:field="*{startTerminal}">
 						<option value="">Select...</option>
-						<option th:each="terminal : ${terminals}" th:value="${terminal.id}" th:text="${terminal != null ? terminal.name : ''}"></option>
+                        <option th:each="terminal : ${terminals}" th:text="${terminal != null ? terminal.name : ''}"
+                                th:value="${terminal.id}"></option>
 					</select>
-					<p class="small text-danger" th:if="${#fields.hasErrors('startTerminalId')}" th:errors="*{startTerminalId}"></p>
+                    <p class="small text-danger" th:errors="*{startTerminal}"
+                       th:if="${#fields.hasErrors('startTerminal')}"></p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+                <label class="control-label col-sm-2" for="stopTerminal"><b>Arrival Terminal</b></label>
+				<div class="col-sm-10">
+                    <select class="form-control" id="stopTerminal" required th:field="*{stopTerminal}">
+						<option value="">Select...</option>
+                        <option th:each="terminal : ${terminals}" th:text="${terminal != null ? terminal.name : ''}"
+                                th:value="${terminal.id}"></option>
+					</select>
+                    <p class="small text-danger" th:errors="*{stopTerminal}"
+                       th:if="${#fields.hasErrors('stopTerminal')}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="stopTerminalId"><b>Stop Terminal</b></label>
+                <label class="control-label col-sm-2" for="fare"><b>Price</b></label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{stopTerminalId}" id="stopTerminalId" required>
-						<option value="">Select...</option>
-						<option th:each="terminal : ${terminals}" th:value="${terminal.id}" th:text="${terminal != null ? terminal.name : ''}"></option>
-					</select>
-					<p class="small text-danger" th:if="${#fields.hasErrors('stopTerminalId')}" th:errors="*{stopTerminalId}"></p>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="control-label col-sm-2" for="price"><b>Price</b></label>
-				<div class="col-sm-10">
-					<input class="form-control" th:field="*{price}" id="price" required>
-					<p class="small text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+                    <input class="form-control" id="fare" required th:field="*{fare}">
+                    <p class="small text-danger" th:errors="*{fare}" th:if="${#fields.hasErrors('fare')}"></p>
 				</div>
 			</div>
 			<div class="form-group row">

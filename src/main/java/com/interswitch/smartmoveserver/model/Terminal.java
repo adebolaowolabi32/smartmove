@@ -27,6 +27,7 @@ public class Terminal extends AbstractAuditEntity<String> implements Auditable<L
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(unique = true)
     @NotBlank(message = "Name is required.")
     @Length(min = 5, max = 50, message = "Name must be between 5 and 30 characters long.")
     private String name;

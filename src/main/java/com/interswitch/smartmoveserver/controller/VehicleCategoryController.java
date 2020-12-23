@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.VehicleCategory;
 import com.interswitch.smartmoveserver.model.VehicleModel;
@@ -45,9 +44,11 @@ public class VehicleCategoryController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
-        PageView<VehicleCategory> vehicleCategoryPage = vehicleCategoryService.findAllPaginated(owner, page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehicleCategoryPage));
-        model.addAttribute("vehicleCategoryPage", vehicleCategoryPage);
+        //TODO:: Implement server side pagination
+        //PageView<VehicleCategory> vehicleCategoryPage = vehicleCategoryService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehicleCategoryPage));
+        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll(owner, principal.getName());
+        model.addAttribute("vehicleCategories", vehicleCategories);
         return "vehicleCategories/get";
     }
 

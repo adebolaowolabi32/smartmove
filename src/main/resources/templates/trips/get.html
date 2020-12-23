@@ -29,7 +29,7 @@
             <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{trip.deleted.message} : false)"></div>
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-            <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
                     <th>Trip Reference ID</th>
@@ -46,7 +46,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="trip : ${tripPage.content}">
+                <tr th:each="trip : ${trips}">
                     <td th:text="${trip.referenceNo}"></td>
                     <td th:text="${trip.driver!=null ? trip.driver.firstName + ' ' + trip.driver.lastName : ''}"></td>
                     <td th:text="${trip.vehicle!=null ? trip.vehicle.name + ' - ' + trip.vehicle.regNo : '' }"></td>
@@ -58,12 +58,13 @@
                     <td th:text="${trip.schedule!=null ? trip.schedule.arrivalTime  : ''}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/details/{id}(id=${trip.id})}">
-                            <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/delete/{id}(id=${trip.id})}">
-                            <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
                         </a>
                     </td>
                 </tr>

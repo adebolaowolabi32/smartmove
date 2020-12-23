@@ -27,23 +27,22 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{fee.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table responsive-table" id="dataTable" width="100%">
 				<thead class='thead-light'>
-				<tr>
-					<th>Username</th>
-					<th>Description</th>
-					<th>Action</th>
-					<th>Date/Time</th>
-				</tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                    <th>Date/Time</th>
+                </tr>
 				</thead>
 				<tbody>
-				<tr th:each="audit : ${auditTrailPage.content}">
-					<td th:text="${audit.actor}"></td>
-					<td th:text="${audit.description}"></td>
-					<td th:text="${audit.action}"></td>
-					<td th:text="${audit.actionTimeStamp}"></td>
-
-				</tr>
+                <tr th:each="audit : ${auditTrails}">
+                    <td th:text="${audit.actor}"></td>
+                    <td th:text="${audit.description}"></td>
+                    <td th:text="${audit.action}"></td>
+                    <td th:text="${audit.actionTimeStamp}"></td>
+                </tr>
 				</tbody>
 			</table>
 		</div>

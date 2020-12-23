@@ -1,3 +1,4 @@
+
 package com.interswitch.smartmoveserver.model;
 
 import com.interswitchng.audit.model.Auditable;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Set;
 
 /*
  * Created by adebola.owolabi on 8/10/2020
@@ -70,4 +72,5 @@ public class VehicleCategory extends AbstractAuditEntity<String> implements Audi
     public String getAuditableName() {
         return this.getClass().getSimpleName();
     }
+
 }

@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 /*
  * Created by adebola.owolabi on 8/7/2020
@@ -25,21 +26,10 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long fare;
-
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Transport mode is required.")
-    private Enum.TransportMode mode;
-
     @ManyToOne
-    @JoinColumn(name = "startTerminal")
-    @NotNull(message = "Start terminal is required.")
-    private Terminal startTerminal;
-
-    @ManyToOne
-    @JoinColumn(name = "stopTerminal")
-    @NotNull(message = "Stop terminal is required.")
-    private Terminal stopTerminal;
+    @JoinColumn(name = "route")
+    @NotNull(message = "Route is required.")
+    private Route route;
 
     @ManyToOne
     @NotNull(message = "Vehicle category is required.")
@@ -72,6 +62,11 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
     private User owner;
 
     private boolean enabled;
+
+    @Column(name="seats",nullable = true)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "seat")
+    Set<Seat> seats;
 
     @Override
     public Long getAuditableId() {

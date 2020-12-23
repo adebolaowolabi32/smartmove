@@ -1,0 +1,109 @@
+/* ==========================================================================
+   HTML5 Boilerplate styles - h5bp.com (generated via initializr.com)
+   ========================================================================== */
+.newHeader{
+background-color: #FFFFFF;
+}
+.iconStyle{
+color:#479FC8;
+}
+.textStyle{
+    position: absolute;
+    left: 56px;
+    font-family: Averta;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    color: #479FC8;
+}
+.horizontalContainer{
+    display: flex;
+    justify-content: space-between;
+}
+.horizontalSeat{
+width: 4.83px;
+height: 24.86px;
+background: #FFFFFF;
+border: 1px solid #5F738C;
+box-sizing: border-box;
+transform: rotate(-90deg);
+}
+.verticalSeat{
+width: 21.32px;
+height: 5.39px;
+background: #FFFFFF;
+border: 1px solid #5F738C;
+box-sizing: border-box;
+transform: rotate(-90deg);
+}
+.seat{
+max-width: 50px;
+  margin: auto;
+}
+.innerCardTextBig{
+    font-family: Averta;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    color: #5F738C;
+    }
+ .generalText{
+     font-family: Averta;
+     font-style: normal;
+     color: #5F738C;
+ }
+ .footerIconParent{
+ display:flex;
+ flex-wrap: wrap;
+ padding-left: 0;
+ }
+ @media screen and (min-width: 1263px) {
+  .footerIconParent{
+   display:flex;
+   flex-wrap: wrap;
+   padding-left: 30px;
+   }
+ }
+ .footIconChild{
+ flex-basis: content;
+ }
+.vehicleMainContainer{
+  background-image: url('../images/vehicle-layout.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  height:289px;
+  background-size: contain;
+  padding:4px;
+  padding-left: 69px;
+  display: flex;
+  flex-direction: column;
+}
+.outerSeatContainer{
+    display: flex;
+    flex-direction: row;
+    margin-top: 70px;
+    margin-left: 6px;
+}
+.innerSeatContainer{
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.seatContainer{
+   background-image: url('../images/small-seat.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  padding:4px;
+  transform: rotate(90deg);
+  width: fit-content;
+  margin-bottom: 8px;
+  margin-right: 15px;
+}
+.seatLabel{
+    width: 16px;
+    text-align: center;
+}

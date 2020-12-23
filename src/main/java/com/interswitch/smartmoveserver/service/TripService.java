@@ -58,6 +58,23 @@ public class TripService {
         return tripRepository.findAll();
     }
 
+    public List<Trip> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return tripRepository.findAllByOwner(user);
+            } else {
+                return tripRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return tripRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
     public PageView<Trip> findAllPaginated(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         User user = userService.findByUsername(principal);

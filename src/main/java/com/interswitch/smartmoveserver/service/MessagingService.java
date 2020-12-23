@@ -9,7 +9,6 @@ import com.interswitch.dtos.MessageApi;
 import com.interswitch.postman.PostmanService;
 import com.interswitch.postman.payload.PostmanException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.errors.TimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -52,6 +51,7 @@ public class MessagingService {
         try {
             Context context = new Context(Locale.ENGLISH, params);
             String message = templateEngine.process(template, context);
+            log.info("EmailMessage==>"+message);
             EmailPayload emailPayload = new EmailPayload();
             emailPayload.setContentType(MediaType.TEXT_PLAIN_VALUE);
             emailPayload.setMessage(message);
@@ -66,10 +66,8 @@ public class MessagingService {
             messageApi.setUuid(UUID.randomUUID().toString());
             messageApi.setPayload(payload);
             postmanService.postData(messageApi);
-            log.info("Sent email to => " + recipient);
-            log.info("Email Message => " + message);
-        } catch (PostmanException | JsonProcessingException | TimeoutException ex) {
-            throw new RuntimeException("An error happened while trying to send email with isw-post-office =>" + ex.getLocalizedMessage());
+        } catch (PostmanException | JsonProcessingException ex) {
+            log.error("An error happened while trying to send email with isw-post-office==>" + ex.getLocalizedMessage());
         }
     }
 }

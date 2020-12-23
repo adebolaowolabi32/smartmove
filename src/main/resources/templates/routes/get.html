@@ -25,7 +25,7 @@
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 
 
-            <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table responsive-table" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
                     <th>Id</th>
@@ -39,26 +39,27 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="route : ${routePage.content}">
+                <tr th:each="route : ${routes}">
                     <td th:text="${route.id}"></td>
                     <td th:text="${route.name}"></td>
-                    <td th:text="${route.type}"></td>
+                    <td th:text="${route.mode}"></td>
                     <td th:text="${route.owner != null ? route.owner.username : ''}"></td>
-                    <td th:text="${route.price}"></td>
+                    <td th:text="${route.fare}"></td>
                     <td>
                         <label class="switch">
-                            <input type="checkbox" id="enabled" name="enabled" th:checked="${route.enabled}" disabled>
+                            <input disabled id="enabled" name="enabled" th:checked="${route.enabled}" type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </td>
                     <td>
                         <a class="justify-content-center" th:href="@{/routes/details/{id}(id=${route.id})}">
-                            <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
                     <td>
                         <a class="justify-content-center" th:href="@{/routes/delete/{id}(id=${route.id})}">
-                            <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
                         </a>
                     </td>
                 </tr>

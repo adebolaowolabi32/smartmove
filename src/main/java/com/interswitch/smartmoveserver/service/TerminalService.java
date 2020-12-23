@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
+import com.interswitch.smartmoveserver.model.GenericModel;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
@@ -40,9 +41,21 @@ public class TerminalService {
         return terminalRepository.findAll();
     }
 
-    public List<Terminal> findByOwner(String username) {
-        User owner = userService.findByUsername(username);
-        return terminalRepository.findAllByOwner(owner);
+    public List<Terminal> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return terminalRepository.findAllByOwner(user);
+            } else {
+                return terminalRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return terminalRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
     }
 
     public PageView<Terminal> findAllPaginated(Long owner, int page, int size, String principal) {
@@ -66,6 +79,7 @@ public class TerminalService {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
+
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Terminal save(Terminal terminal, String principal) {
@@ -108,6 +122,19 @@ public class TerminalService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
         }
     }
+
+    @Audited(auditableAction = AuditableAction.DELETE, auditableActionClass = AuditableActionStatusImpl.class)
+    public Terminal auditedDelete(long id, String principal) {
+        Optional<Terminal> existing = terminalRepository.findById(id);
+        if(existing.isPresent()) {
+            terminalRepository.deleteById(id);
+            return new GenericModel<Terminal>(existing.get()).getEntity();
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
+        }
+    }
+
 
     public Long countByOwner(User user){
         return terminalRepository.countByOwner(user);

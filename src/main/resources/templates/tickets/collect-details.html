@@ -24,11 +24,11 @@
                     <div class="row">
                         <div class="col">
                             <div class="label-small">Departure</div>
-                            <div th:text="${ticketDetails.schedule.startTerminal.name}"></div>
+                            <div th:text="${ticketDetails.schedule.route.startTerminal.name}"></div>
                         </div>
                         <div class="col">
                             <div class="label-small">Destination</div>
-                            <div th:text="${ticketDetails.schedule.stopTerminal.name}"></div>
+                            <div th:text="${ticketDetails.schedule.route.stopTerminal.name}"></div>
                         </div>
                         <div class="col">
                             <div class="label-small">Vehicle</div>
@@ -36,27 +36,33 @@
                         </div>
                         <div class="col">
                             <div class="label-small">Price</div>
-                            <div><span th:text="${ticketDetails.schedule.fare}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
+                            <div><span th:text="${ticketDetails.schedule.route.fare}"></span> <span
+                                    th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
                         </div>
                     </div>
                     <br>
                     <div class="row">
+
                         <div class="col">
                             <div class="label-small">Departure Date</div>
                             <div th:text="${ticketDetails.schedule.departureDate}"></div>
                         </div>
+
                         <div class="col">
                             <div class="label-small">Departure Time</div>
                             <div th:text="${ticketDetails.schedule.departureTime}"></div>
                         </div>
+
                         <div class="col">
                             <div class="label-small">Arrival Date</div>
                             <div th:text="${ticketDetails.schedule.arrivalDate}"></div>
                         </div>
+
                         <div class="col">
                             <div class="label-small">Estimated Arrival Time</div>
                             <div th:text="${ticketDetails.schedule.arrivalTime}"></div>
                         </div>
+
                     </div>
                 </div>
                 <br>
@@ -69,11 +75,11 @@
                     <div class="row">
                         <div class="col">
                             <div class="label-small">Departure</div>
-                            <div th:text="${ticketDetails.returnSchedule.startTerminal.name}"></div>
+                            <div th:text="${ticketDetails.returnSchedule.route.startTerminal.name}"></div>
                         </div>
                         <div class="col">
                             <div class="label-small">Destination</div>
-                            <div th:text="${ticketDetails.returnSchedule.stopTerminal.name}"></div>
+                            <div th:text="${ticketDetails.returnSchedule.route.stopTerminal.name}"></div>
                         </div>
                         <div class="col">
                             <div class="label-small">Vehicle</div>
@@ -81,7 +87,8 @@
                         </div>
                         <div class="col">
                             <div class="label-small">Price</div>
-                            <div><span th:text="${ticketDetails.returnSchedule.fare}"></span> <span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
+                            <div><span th:text="${ticketDetails.returnSchedule.route.fare}"></span> <span
+                                    th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></div>
                         </div>
                     </div>
                     <br>

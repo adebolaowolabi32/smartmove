@@ -98,6 +98,24 @@ public class DeviceService {
         return deviceRepository.findAll();
     }
 
+    public List<Device> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return deviceRepository.findAllByOwner(user);
+            } else {
+                return deviceRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return deviceRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Device save(Device device) {
         return deviceRepository.save(device);
@@ -250,7 +268,7 @@ public class DeviceService {
         //CONNECTED, DISCONNECTED, BATTERY_LOW, EMERGENCY
         Enum.DeviceStatus deviceStatus = null;
         try{
-             deviceStatus = Enum.DeviceStatus.valueOf(status.toUpperCase());
+            deviceStatus = Enum.DeviceStatus.valueOf(status.toUpperCase());
         }catch(IllegalArgumentException ex){
 
         }

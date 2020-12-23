@@ -12,24 +12,26 @@
             <!--<evaluate result="viewScope.today" expression="T(com.interswitch.smartmoveserver.util.DateUtil).getTodayDate())"/>-->
             <evaluate result="flowScope.terminals" expression="ticketService.getTerminals()"/>
             <evaluate result="flowScope.schedules" expression="ticketService.getSchedules()"/>
-        </on-entry>
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Entering tickets/book flow page')"/>
 
+        </on-entry>
         <transition on="findBooking" to="schedule">
             <evaluate result="flowScope.scheduleBooking"
                       expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
         </transition>
-
         <on-exit>
             <evaluate
-                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket book flow')"/>
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving tickets/book flow page')"/>
         </on-exit>
     </view-state>
 
     <view-state id="schedule" view="tickets/schedule" model="flowScope.scheduleBooking">
         <on-entry>
             <evaluate
-                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Entering schedule flow')"/>
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Entering tickets/schedule page flow')"/>
         </on-entry>
+
         <transition on="findBooking" to="schedule">
             <evaluate result="flowScope.scheduleBooking"
                       expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
@@ -39,35 +41,72 @@
 
         <on-exit>
             <evaluate
-                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket schedule flow')"/>
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving tickets/schedule page flow')"/>
         </on-exit>
+
     </view-state>
+
 
     <action-state id="showReturnSchedule">
         <on-entry>
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('showReturnSchedule Action-state called ')"/>
+
             <set name="flowScope.roundTrip" value="flowScope.scheduleBooking.roundTrip"/>
             <evaluate result="flowScope.roundTrip" expression="flowScope.return ? false : flowScope.roundTrip"/>
         </on-entry>
         <evaluate expression="flowScope.roundTrip"/>
+
         <transition on="yes" to="schedule">
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on YES ... transitioning to schedule===>tickets/schedule ?')"/>
+
             <evaluate result="flowScope.return" expression="true"/>
             <evaluate result="flowScope.ticketDetails"
                       expression="ticketService.makeBooking(currentUser.name,requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
-        <transition on="no" to="makeBooking"/>
+
+<!--        <transition on="no" to="makeBooking">-->
+<!--            <evaluate-->
+<!--                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on NO ... transitioning to makeBooking')"/>-->
+
+<!--        </transition>-->
+
+        <transition on="no" to="makeBooking">
+            <evaluate expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on NO ... transitioning to seat selection')"/>
+
+        </transition>
+
     </action-state>
 
     <action-state id="makeBooking">
         <evaluate expression="flowScope.return"/>
-        <transition on="yes" to="collect-details">
+
+        <transition on="yes" to="seat-selection">
             <evaluate result="flowScope.ticketDetails"
                       expression="ticketService.makeReturnBooking(flowScope.ticketDetails, requestParameters.scheduleId)"/>
         </transition>
-        <transition on="no" to="collect-details">
+
+        <transition on="no" to="seat-selection">
             <evaluate result="flowScope.ticketDetails"
                       expression="ticketService.makeBooking(currentUser.name,requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
+
     </action-state>
+
+    <view-state id="seat-selection" view="tickets/seat-selection" model="flowScope.ticketDetails">
+        <on-entry>
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Entering seat selection flow')"/>
+        </on-entry>
+
+        <transition on="selectSeat" to="collect-details">
+            <evaluate result="flowScope.ticketDetails"
+                      expression="ticketService.setPassengerDetails(flowScope.ticketDetails)"/>
+        </transition>
+
+    </view-state>
+
 
     <view-state id="collect-details" view="tickets/collect-details" model="flowScope.ticketDetails">
         <transition on="next" to="confirmation">
@@ -76,6 +115,7 @@
         </transition>
         <transition on="back" to="schedule"/>
     </view-state>
+
 
     <view-state id="confirmation" view="tickets/confirmation" model="flowScope.ticketDetails">
         <transition on="confirmBooking" to="preview">
@@ -86,6 +126,7 @@
     </view-state>
 
     <view-state id="preview" view="tickets/preview" model="flowScope.ticketDetails">
+
     </view-state>
 
     <end-state id="cancel"/>

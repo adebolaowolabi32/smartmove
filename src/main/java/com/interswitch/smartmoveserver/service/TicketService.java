@@ -93,10 +93,10 @@ public class TicketService {
         //make sure to search by operator
         List<Schedule> schedules = scheduleService.findByOwner(username);
         List<Schedule> scheduleResults = schedules.stream()
-                .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getStopTerminal().getName()
+                .filter(s -> s.getRoute().getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getRoute().getStopTerminal().getName()
                         .equals(scheduleBooking.getStopTerminal()) && s.getDepartureDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
         List<Schedule> returnScheduleResults = schedules.stream()
-                .filter(s -> s.getStartTerminal().getName().equals(scheduleBooking.getStopTerminal()) && s.getStopTerminal().getName()
+                .filter(s -> s.getRoute().getStartTerminal().getName().equals(scheduleBooking.getStopTerminal()) && s.getRoute().getStopTerminal().getName()
                         .equals(scheduleBooking.getStartTerminal()) && s.getDepartureDate().equals(scheduleBooking.getReturnDate())).collect(Collectors.toList());
         scheduleBooking.setSchedules(scheduleResults);
         scheduleBooking.setReturnSchedules(returnScheduleResults);
@@ -108,10 +108,9 @@ public class TicketService {
         TicketDetails ticketDetails = new TicketDetails();
         Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
         ticketDetails.setSchedule(schedule);
-        ticketDetails.setNoOfPassengers(noOfPassengers);
-        ticketDetails.setSeats(this.getAvailableSeats());
+        log.info("Seat Capacity ==>"+schedule.getSeats().size());
+        ticketDetails.setSeats(new ArrayList<>(schedule.getSeats()));
         ticketDetails.setCountries(stateService.findAllCountries());
-        ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
 
         String transportOperatorUsername = (user.getRole() == Enum.Role.OPERATOR || user.getRole() == Enum.Role.ISW_ADMIN) ?
                 user.getUsername() : user.getOwner() != null ? user.getOwner().getUsername() : "";
@@ -122,6 +121,17 @@ public class TicketService {
         log.info("feeConfigurationList===>" + feeConfigurationList);
         //add FeeConfiguration list to the ticketDetails
         ticketDetails.setFees(feeConfigurationList);
+        return ticketDetails;
+    }
+
+    public TicketDetails setPassengerDetails(TicketDetails ticketDetails) {
+        //log.info("ticketDetails===>"+ticketDetails);
+        //log.info("calling setPassengerDetails,seatData===>"+seatData);
+        //int noOfPassengers = ticketDetails.getSeats().size();
+        //ticketDetails.setNoOfPassengers(noOfPassengers);
+        //ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
+
+        log.info("finished calling setPassengerDetails===>");
         return ticketDetails;
     }
 
@@ -145,14 +155,14 @@ public class TicketService {
             Schedule schedule = ticketDetails.getSchedule();
             Ticket ticket = this.populateTicket(ticketDetails, schedule, pass, username);
 
-            totalFare += this.applyConfiguredFees(ticketDetails,ticket,pass);
+            totalFare += this.applyConfiguredFees(ticketDetails, ticket, pass);
             tickets.add(ticket);
 
             Schedule returnSchedule = ticketDetails.getReturnSchedule();
             if (ticketDetails.getReturnSchedule() != null) {
                 Ticket returnTicket = this.populateTicket(ticketDetails, returnSchedule, pass, username);
 
-                totalFare += this.applyConfiguredFees(ticketDetails,returnTicket,pass);
+                totalFare += this.applyConfiguredFees(ticketDetails, returnTicket, pass);
                 tickets.add(returnTicket);
 
             }
@@ -190,7 +200,7 @@ public class TicketService {
         transaction.setTerminalId(String.valueOf(ticketDetails.getSchedule().getId()));
         transaction.setOperatorId(username);
         transaction.setType(Enum.TransactionType.TICKET_SALE);
-        transaction.setMode(ticketDetails.getSchedule().getMode());
+        transaction.setMode(ticketDetails.getSchedule().getRoute().getMode());
         transaction.setAmount(ticketDetails.getTotalFare());
         transaction.setTransactionDateTime(LocalDateTime.now());
         //fields below are require to be non null,hence added empty strings
@@ -209,11 +219,10 @@ public class TicketService {
             reassignTicket.setTicket(ticket);
             List<Schedule> schedules = scheduleService.findByOwner(username);
             List<Schedule> scheduleResults = schedules.stream()
-                    .filter(s -> s.getStartTerminal().getName().equals(schedule.getStartTerminal().getName()) && s.getStopTerminal().getName()
-                            .equals(schedule.getStopTerminal().getName()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
+                    .filter(s -> s.getRoute().getStartTerminal().getName().equals(schedule.getRoute().getStartTerminal().getName()) && s.getRoute().getStopTerminal().getName()
+                            .equals(schedule.getRoute().getStopTerminal().getName()) && s.getDepartureDate().equals(schedule.getDepartureDate())).collect(Collectors.toList());
             scheduleBooking.setSchedules(scheduleResults);
-        }
-        else scheduleBooking.setInvalid(true);
+        } else scheduleBooking.setInvalid(true);
         return scheduleBooking;
     }
 
@@ -246,7 +255,7 @@ public class TicketService {
         ticket.setSeatNo(pass.getSeatNo());
         //ticket.setTrip(ticketDetails.getTrip());
         ticket.setSchedule(schedule);
-        ticket.setFare(schedule.getFare());
+        ticket.setFare(schedule.getRoute().getFare());
         return ticket;
     }
 
@@ -293,9 +302,9 @@ public class TicketService {
         if (ticketReference.isEnabled()) {
             prefix = ticketReference.getPrefix() + PREFIX_SEPARATOR;
             if (ticketReference.isStartTerminalEnabled())
-                startTerminal = schedule.getStartTerminal().getCode() + PREFIX_SEPARATOR;
+                startTerminal = schedule.getRoute().getStartTerminal().getCode() + PREFIX_SEPARATOR;
             if (ticketReference.isStopTerminalEnabled())
-                stopTerminal = schedule.getStopTerminal().getCode() + PREFIX_SEPARATOR;
+                stopTerminal = schedule.getRoute().getStopTerminal().getCode() + PREFIX_SEPARATOR;
         }
         return prefix + startTerminal + stopTerminal + RandomUtil.getRandomNumber(6);
     }
@@ -323,7 +332,7 @@ public class TicketService {
         return ticketRepository.findByReferenceNo(ref);
     }
 
-    public PageView<Ticket> findAllByOperator(Long owner, int page, int size, String principal) {
+    public PageView<Ticket> findAllByOwner(Long owner, int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         User user = userService.findByUsername(principal);
         if (owner == 0) {
@@ -339,6 +348,23 @@ public class TicketService {
                 User ownerUser = userService.findById(owner);
                 Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, ownerUser);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
+    public List<Ticket> findAllByOwner(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return ticketRepository.findAllByOperator(user);
+            } else {
+                return ticketRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return ticketRepository.findAllByOperator(ownerUser);
             }
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
@@ -383,4 +409,9 @@ public class TicketService {
         messagingService.sendEmail(ticketDetails.getContactEmail(),
                 "Your Trip Reservation", "tickets" + File.separator + "preview", params);
     }
+
+
+
+}
+
 }

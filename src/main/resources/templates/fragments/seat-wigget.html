@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="seat-wigget">
+
+    <div th:class="${{1 &lt; 30} ? 'col-sm-6 mx-auto' : 'col-sm-8 mx-auto'}">
+        <div class="card mb-8">
+            <div class="card-body">
+                <div th:style="'margin-bottom: 30px; display: flex; align-items:center;flex-direction: row;'">
+                    <img alt="seat Logo" class="img-brand" th:src="@{/images/seat.png}" th:style="'margin-right:10px;'">
+                    <span th:style="'height: auto; display: block;'">
+                     <p class="innerCardTextBig" th:style="'margin: 0; line-height:0px;'">Seat Reservation</p>
+                <small class="generalText" th:style="'margin:0;'">Choose your preferred
+                    seat(s)</small>
+                </span>
+                </div>
+                <div class="alert alert-info generalText mb-5" role="alert" th:style="'font-size:small; margin: auto;'">
+                    <div class="row">
+                        <div class="col-sm-1">
+                            <img alt="info Logo" th:src="@{/images/info-circle.png}">
+                        </div>
+                        <div class="col">
+                            <span>Due to the ongoing COVID-19 pandemic, we have new restrictions set in place to ensure your safety. In order to travel, please adhere to these restrictions and guidelines, which you can find here.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="vehicleMainContainer mb-3">
+                    <div class="outerSeatContainer">
+                        <div class="innerSeatContainer">
+                            <div class="seatContainer"
+                                 th:each="seat : ${ticketDetails.seats}">
+                                <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="footerIconParent">
+                    <div class="footIconChild">
+                        <img alt="seat Logo" class="img-brand mr-2" th:src="@{/images/small-seat.png}"><span
+                            class="generalText">Available</span>
+                    </div>
+                    <div class="footIconChild">
+                        <img alt="selected Logo" class="img-brand mr-2" th:src="@{/images/selected-seat.png}"><span
+                            class="generalText">Selected</span>
+                    </div>
+                    <div class="footIconChild">
+                        <img alt="booked Logo" class="img-brand mr-2" th:src="@{/images/booked-seat.png}"><span
+                            class="generalText">Already Booked</span>
+                    </div>
+                </div>
+                <hr th:style="'opacity: 0.5;height: 1px;border: 0 none;margin-right: auto;margin-left: auto;background-color:#C8D2DF;'"/>
+                <span th:style="'display:flex;justify-content:flex-end;'">
+                 <input  id="captureData" type="hidden"
+                         th:field="${ticketDetails.seatsData}"  th:style="'display:none'">
+
+
+                    <div>
+                       <a th:href="@{${flowExecutionUrl} + '&_eventId=selectSeat'}"
+                          class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Capture details</a>
+                    </div>
+
+<!--                    <br><br>-->
+<!--                <button type="submit"  class="btn btn-primary"-->
+<!--                        th:disabled="${'true'}" id="seatButton"> <span>Capture passenger details </span> </button>-->
+            </span>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

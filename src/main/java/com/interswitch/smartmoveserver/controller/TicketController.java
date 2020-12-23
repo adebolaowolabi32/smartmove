@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Ticket;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.TicketService;
@@ -15,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /*
  * Created by adebola.owolabi on 7/27/2020
@@ -36,10 +36,12 @@ public class TicketController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
 
+        //TODO:: Implement server side pagination
+        //PageView<Ticket> ticketPage = ticketService.findAllByOperator(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
         User user = userService.findByUsername(principal.getName());
-        PageView<Ticket> ticketPage = ticketService.findAllByOperator(owner, page, size, principal.getName());
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
-        model.addAttribute("ticketPage", ticketPage);
+        List<Ticket> tickets = ticketService.findAllByOwner(owner, principal.getName());
+        model.addAttribute("tickets", tickets);
         model.addAttribute("status",user.getTillStatus().name());
         return "tickets/get";
     }

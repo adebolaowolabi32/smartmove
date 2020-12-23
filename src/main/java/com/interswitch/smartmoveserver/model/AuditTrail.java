@@ -28,4 +28,7 @@ public class AuditTrail {
     private Instant actionDate;
     private String actionTimeStamp;
     private String description;
+    private String ipAddress;
+    private String location;
+
 }

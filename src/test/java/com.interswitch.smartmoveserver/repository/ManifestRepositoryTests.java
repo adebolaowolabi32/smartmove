@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -114,7 +113,6 @@ public class ManifestRepositoryTests {
         vehicle.setCategory(vehicleCategory);
         vehicle = vehicleRepository.save(vehicle);
 
-        seat.setVehicle(vehicle);
         seat = seatRepository.save(seat);
         manifest.setSeat(seat);
 
@@ -125,18 +123,7 @@ public class ManifestRepositoryTests {
         schedule.setDepartureTime(LocalTime.now());
         schedule.setArrivalTime(schedule.getDepartureTime().plusHours(5));
 
-        schedule.setStartTerminal(Terminal.builder()
-                .country("Nigera").state("Lagos").code("LAG")
-                .lga("Alimosho").owner(buildTestUser())
-                .name("LAGOS TERMINAL 1").mode(Enum.TransportMode.BUS)
-                .build());
-
-        schedule.setStopTerminal(Terminal.builder()
-                .country("Nigera").state("Lagos").code("LAG")
-                .lga("Agege").owner(buildTestUser())
-                .name("LAGOS TERMINAL 2").mode(Enum.TransportMode.BUS)
-                .build());
-
+        schedule.setRoute(new Route());
         savedSchedule = scheduleRepository.save(schedule);
         manifest.setSchedule(savedSchedule);
         manifest.setIdCategory(Enum.IdCategory.NATIONAL_ID);

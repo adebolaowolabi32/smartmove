@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<title layout:fragment="title">Tickets</title>
+<div layout:fragment="content">
+    <div class="card mb-4">
+        <div class="card-header newHeader horizontalContainer">
+            <i class="fas fa-bus-alt fa-2x mr-1 iconStyle"></i>
+            <span class="textStyle">Buses</span>
+            <a href="#" th:href="@{/tickets/get}" th:style="'text-decoration: none;
+      color: inherit; margin-left: auto;
+    margin-right: 4rem;'">
+            <span th:style="'font-weight: 600;
+    font-size: 23px; padding-right: 22px;'">
+                <
+        </span>
+                <span th:style="'left:auto; padding-top: 4px'" class="textStyle">Previous</span>
+            </a>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <!-- Column content -->
+            <div th:replace="fragments/seat-wigget :: seat-wigget"></div>
+        </div>
+    </div>
+</div>
+</div>
+</html>

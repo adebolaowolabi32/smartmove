@@ -1,6 +1,7 @@
 package com.interswitch.smartmoveserver.audit;
 
 import com.interswitch.smartmoveserver.model.AuditTrail;
+import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.AuditTrailRepository;
 import com.interswitch.smartmoveserver.service.UserService;
@@ -45,8 +46,9 @@ public class IswAuditLoggerImpl {
                 audit.setAction(auditableAction);
                 audit.setActor(actor);
                 User actorUser = userService.findByUsername(actor);
-                User actorOwner = actorUser.getOwner()!=null ? actorUser.getOwner() : actorUser ;
+                User actorOwner = actorUser.getOwner()!=null && (actorUser.getRole()!= Enum.Role.ISW_ADMIN || actorUser.getRole()!= Enum.Role.OPERATOR )? actorUser.getOwner() : actorUser ;
                 audit.setOwner(actorOwner);
+                log.info("owner==>"+actorOwner);
                 audit.setActionDate(Instant.now());
                 audit.setActionTimeStamp(DateUtil.formatDate(LocalDateTime.now()));
                 audit.setDescription(actor +" "+auditableAction.name().concat("d").toLowerCase() +" "+auditable.getAuditableName().toLowerCase()+" ");
