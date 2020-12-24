@@ -1,4 +1,3 @@
-
 package com.interswitch.smartmoveserver.model;
 
 import com.interswitchng.audit.model.Auditable;
@@ -62,6 +61,11 @@ public class VehicleCategory extends AbstractAuditEntity<String> implements Audi
 
     @NotNull(message = "Capacity is required.")
     private int capacity;
+
+    @Column(name="seats",nullable = true)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "seat")
+    private Set<Seat> seats;
 
     @Override
     public Long getAuditableId() {

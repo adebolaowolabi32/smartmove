@@ -4,6 +4,7 @@ import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.*;
+import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -22,10 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -63,7 +61,7 @@ public class TicketService {
     private TicketTillService ticketTillService;
 
     @Autowired
-    private MessagingService messagingService;
+    private SeatRepository seatRepository;
 
     private static String PREFIX_SEPARATOR = "|";
 
@@ -78,6 +76,9 @@ public class TicketService {
 
     @Autowired
     private FeeConfigurationService feeConfigurationService;
+
+    @Autowired
+    private MessagingService messagingService;
 
     public List<Terminal> getTerminals() {
         return terminalService.findAll();
@@ -108,12 +109,16 @@ public class TicketService {
         TicketDetails ticketDetails = new TicketDetails();
         Schedule schedule = scheduleService.findById(Long.valueOf(scheduleId));
         ticketDetails.setSchedule(schedule);
-        log.info("Seat Capacity ==>"+schedule.getSeats().size());
-        ticketDetails.setSeats(new ArrayList<>(schedule.getSeats()));
+
         ticketDetails.setCountries(stateService.findAllCountries());
 
         ticketDetails.setNoOfPassengers(noOfPassengers);
+
         ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
+
+        Set<Seat> seats = seatRepository.findByVehicleId(schedule.getVehicle().getId());
+        ticketDetails.setSeats(new ArrayList<>(seats));
+        ticketDetails.setCountries(stateService.findAllCountries());
 
         String transportOperatorUsername = (user.getRole() == Enum.Role.OPERATOR || user.getRole() == Enum.Role.ISW_ADMIN) ?
                 user.getUsername() : user.getOwner() != null ? user.getOwner().getUsername() : "";
@@ -412,7 +417,5 @@ public class TicketService {
         messagingService.sendEmail(ticketDetails.getContactEmail(),
                 "Your Trip Reservation", "tickets" + File.separator + "preview", params);
     }
-
-
 
 }

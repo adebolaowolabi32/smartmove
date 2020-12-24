@@ -20,9 +20,9 @@ public class TransactionApi {
     private TransactionService transactionService;
 
     @GetMapping(produces = "application/json")
-    public PageView<Transaction> findAll(@RequestParam(defaultValue = "1") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
-        return transactionService.findAllPaginated(page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    public PageView<Transaction> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
+        return transactionService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

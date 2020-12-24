@@ -18,9 +18,9 @@ public class ScheduleApi {
     ScheduleService scheduleService;
 
     @GetMapping(produces = "application/json")
-    private PageView<Schedule> findAll(@RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size) {
-        return scheduleService.findAllPaginated(page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private PageView<Schedule> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "10") int size) {
+        return scheduleService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

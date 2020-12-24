@@ -9,6 +9,7 @@ import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import java.util.Set;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Service
 public class VehicleCategoryService {
     @Autowired
@@ -94,12 +96,19 @@ public class VehicleCategoryService {
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory save(VehicleCategory vehicleCategory, String principal) {
+        log.info("principal===>"+principal);
         String name = vehicleCategory.getName();
         boolean exists = vehicleCategoryRepository.existsByName(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Category with name: " + name + " already exists");
         if(vehicleCategory.getOwner() == null) {
-            User owner = userService.findByUsername(principal);
-            vehicleCategory.setOwner(owner);
+            try {
+
+                User owner = userService.findByUsername(principal);
+                vehicleCategory.setOwner(owner);
+
+            }catch(ResponseStatusException ex){
+                log.info("User with username "+principal+" cannot be found in database.");
+            }
         }
         if (vehicleCategory.getPicture().getSize() > 0) {
             Document doc = documentService.saveDocument(new Document(vehicleCategory.getPicture()));
@@ -188,7 +197,8 @@ public class VehicleCategoryService {
             Seat createdSeat = seatRepository.save(seat);
             seats.add(createdSeat);
         }
-
+        vehicle.setSeats(seats);
+        vehicleCategoryRepository.save(vehicle);
         return vehicle;
     }
 }

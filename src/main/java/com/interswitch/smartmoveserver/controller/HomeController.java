@@ -4,16 +4,21 @@ import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
+import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.service.*;
+import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -65,15 +70,16 @@ public class HomeController {
     @Autowired
     private SecurityUtil securityUtil;
 
-    @Value("${passport.logout.uri}")
-    String logoutUri;
-
     @Autowired
     IswCoreService coreService;
+
+    @Autowired
+    private PageUtil pageUtil;
 
 
     @GetMapping(value = {"/", "/index", "/home"})
     public String home(Model model) {
+        model.addAttribute("passportSignUpUrl", securityUtil.getPassportSignUpUrl());
         return "index";
     }
 
@@ -181,14 +187,37 @@ public class HomeController {
         Date dateobj = new Date();
         model.addAttribute("time_date", format.format(dateobj));
         return "dashboard";
+
+    }
+
+    @GetMapping("/signup")
+    public String showSignUp(Principal principal, Model model) {
+        model.addAttribute("user", new UserRegistration());
+        model.addAttribute("roles", pageUtil.getRoles());
+        return "signup";
+    }
+
+
+    @PostMapping("/signup")
+    public String signUp(Principal principal, @Valid UserRegistration user,
+                         BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            //TODO change findAll to findAllEligible
+            model.addAttribute("user", new UserRegistration());
+            model.addAttribute("roles", pageUtil.getRoles());
+            return "signup";
+        }
+        String message = userService.selfSignUp(user, principal.getName());
+        model.addAttribute("message", message);
+        model.addAttribute("user", new UserRegistration());
+        return "signup";
     }
 
     @GetMapping("/smlogout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:" + logoutUri;
+        return "redirect:" + securityUtil.getPassportLogoutUrl();
     }
-
 
     @GetMapping("/setCurrency")
     public String setCurrency(Model model, @RequestParam(defaultValue = "NGN") String currency, @RequestParam(defaultValue = "/") String path, HttpSession session) {
