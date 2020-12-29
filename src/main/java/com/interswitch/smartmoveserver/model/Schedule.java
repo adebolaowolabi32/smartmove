@@ -63,11 +63,6 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
 
     private boolean enabled;
 
-    @Column(name="seats",nullable = true)
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "seat")
-    Set<Seat> seats;
-
     @Override
     public Long getAuditableId() {
         return this.getId();

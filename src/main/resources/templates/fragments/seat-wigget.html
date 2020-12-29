@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="seat-wigget">
 
+    <form class="p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
+          th:object="${ticketDetails}">
+
     <div th:class="${{1 &lt; 30} ? 'col-sm-6 mx-auto' : 'col-sm-8 mx-auto'}">
         <div class="card mb-8">
             <div class="card-body">
@@ -50,21 +53,26 @@
                 </div>
                 <hr th:style="'opacity: 0.5;height: 1px;border: 0 none;margin-right: auto;margin-left: auto;background-color:#C8D2DF;'"/>
                 <span th:style="'display:flex;justify-content:flex-end;'">
-                 <input  id="captureData" type="hidden"
-                         th:field="${ticketDetails.seatsData}"  th:style="'display:none'">
+                 <input  id="captureData"
+                         th:field="*{seatsData}" th:style="'display:none'">
 
 
-                    <div>
-                       <a th:href="@{${flowExecutionUrl} + '&_eventId=selectSeat'}"
-                          class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Capture details</a>
-                    </div>
+<!--                    <div>-->
+<!--                       <a th:href="@{${flowExecutionUrl} + '&_eventId=selectSeat'}"-->
+<!--                          class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Capture details</a>-->
+<!--                    </div>-->
+<!--                    -->
+                     <input class="btn btn-primary" id="seatButton" name="_eventId_selectSeat" type="submit"
+                            th:disabled="${'true'}"  value="Capture Passenger Details"/>
 
-<!--                    <br><br>-->
+
+                    <!--                    <br><br>-->
 <!--                <button type="submit"  class="btn btn-primary"-->
 <!--                        th:disabled="${'true'}" id="seatButton"> <span>Capture passenger details </span> </button>-->
             </span>
             </div>
         </div>
     </div>
+    </form>
 </div>
 </html>

@@ -12,7 +12,7 @@
         <link crossorigin="anonymous" href="#" rel="stylesheet" th:href="@{/vendor/font-awesome/css/all.min.css}"/>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
         <link th:href="@{/css/styles.css}" href="#" rel="stylesheet" crossorigin="anonymous" />
-        <div th:replace="fragments/scripts :: scripts"></div>
+        <link th:href="@{/css/seatreserve.css}" href="#" rel="stylesheet" crossorigin="anonymous" />
     </head>
     <body class="sb-nav-fixed">
         <div th:replace="fragments/topbar :: topbar"></div>
@@ -20,10 +20,19 @@
             <div id="layoutSidenav_nav">
                 <div th:replace="fragments/sidebar :: sidebar"></div>
             </div>
-            <div id="layoutSidenav_content">
+            <div th:style="'background-color: aliceblue'"  id="layoutSidenav_content">
                 <div layout:fragment="content"></div>
                 <div th:replace="fragments/footer :: footer"></div>
             </div>
         </div>
+        <div th:replace="fragments/scripts :: scripts"></div>
+        <script type="text/javascript">
+             var gearPage = document.getElementById('GearPage');
+             if(null != gearPage)
+             {
+                 gearPage.parentNode.removeChild(gearPage);
+                 document.title = "Error";
+             }
+        </script>
     </body>
 </html>
