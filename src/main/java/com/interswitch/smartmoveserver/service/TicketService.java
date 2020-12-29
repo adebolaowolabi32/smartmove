@@ -112,10 +112,6 @@ public class TicketService {
 
         ticketDetails.setCountries(stateService.findAllCountries());
 
-        ticketDetails.setNoOfPassengers(noOfPassengers);
-
-        ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
-
         Set<Seat> seats = seatRepository.findByVehicleId(schedule.getVehicle().getId());
         ticketDetails.setSeats(new ArrayList<>(seats));
         ticketDetails.setCountries(stateService.findAllCountries());
@@ -133,13 +129,12 @@ public class TicketService {
     }
 
     public TicketDetails setPassengerDetails(TicketDetails ticketDetails) {
-        //log.info("ticketDetails===>"+ticketDetails);
-        //log.info("calling setPassengerDetails,seatData===>"+seatData);
-        //int noOfPassengers = ticketDetails.getSeats().size();
-        //ticketDetails.setNoOfPassengers(noOfPassengers);
-        //ticketDetails.setPassengers(this.initializePassengerList(noOfPassengers));
 
-        log.info("finished calling setPassengerDetails===>");
+        String seatsData = ticketDetails.getSeatsData();
+        String seatNumbers[] = seatsData.split(",");
+        int noOfPassengers = seatNumbers.length;
+        ticketDetails.setNoOfPassengers(noOfPassengers);
+        ticketDetails.setPassengers(this.initializePassengerList(seatNumbers));
         return ticketDetails;
     }
 
@@ -200,6 +195,7 @@ public class TicketService {
                 manifest1.setSchedule(ticketDetails.getReturnSchedule());
                 manifests.add(manifest1);
             }
+            setPassengerSeatAsUnavailable(ticketDetails, passenger);
         }
 
         manifestService.saveAll(manifests);
@@ -285,10 +281,12 @@ public class TicketService {
         return manifest;
     }
 
-    private List<Passenger> initializePassengerList(int noOfPassengers) {
+    private List<Passenger> initializePassengerList(String seatNumbers[]) {
         List<Passenger> passengers = new ArrayList<>();
-        for (int i = 0; i < noOfPassengers; i++) {
-            passengers.add(new Passenger());
+        for (int i = 0; i < seatNumbers.length; i++) {
+            Passenger passenger = new Passenger();
+            passenger.setSeatNo(seatNumbers[i]);
+            passengers.add(passenger);
         }
         return passengers;
     }
@@ -416,6 +414,13 @@ public class TicketService {
 
         messagingService.sendEmail(ticketDetails.getContactEmail(),
                 "Your Trip Reservation", "tickets" + File.separator + "preview", params);
+    }
+
+    private void setPassengerSeatAsUnavailable(TicketDetails ticketDetails,Passenger passenger){
+       Seat seat =  seatRepository.findByVehicleIdAndSeatNo(ticketDetails.getSchedule().getVehicle().getId(),Integer.valueOf(passenger.getSeatNo()));
+        seat.setAvailable(false);
+        seat.setPicked(true);
+        seatRepository.save(seat);
     }
 
 }
