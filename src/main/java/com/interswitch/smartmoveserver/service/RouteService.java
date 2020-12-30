@@ -106,6 +106,11 @@ public class RouteService {
         route.setName(name);
         boolean exists = routeRepository.existsByName(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route with name: " + name + " already exists");
+
+        if(startTerminalName.equalsIgnoreCase(stopTerminalName)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't create route with same start and end terminal");
+        }
+
         if (route.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             route.setOwner(owner);
