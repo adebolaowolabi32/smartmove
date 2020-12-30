@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.api;
 
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Route;
+import com.interswitch.smartmoveserver.model.dto.RouteDto;
 import com.interswitch.smartmoveserver.service.RouteService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class RouteApi {
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
-    private Route save(@Validated @RequestBody Route route) {
-        return routeService.save(route, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private Route save(@Validated @RequestBody RouteDto route) {
+        return routeService.save(routeService.mapToRoute(route), JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

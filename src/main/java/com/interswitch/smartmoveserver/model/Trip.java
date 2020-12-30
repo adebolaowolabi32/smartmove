@@ -29,7 +29,6 @@ public class Trip extends AbstractAuditEntity<String> implements Auditable<Long>
     @Column(unique = true)
     private String referenceNo;
 
-    @NotNull(message = "Fare is required.")
     private long fare;
 
     @ManyToOne
@@ -50,9 +49,6 @@ public class Trip extends AbstractAuditEntity<String> implements Auditable<Long>
     @JoinColumn(name = "owner")
     private User owner;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Transport mode is required.")
-    private Enum.TransportMode mode;
 
     @Override
     public Long getAuditableId() {

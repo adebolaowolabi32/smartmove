@@ -3,11 +3,14 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.dto.RouteDto;
 import com.interswitch.smartmoveserver.repository.RouteRepository;
+import com.interswitch.smartmoveserver.repository.ScheduleRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +25,7 @@ import java.util.Optional;
  * @author adebola.owolabi
  */
 
+@Slf4j
 @Service
 public class RouteService {
     @Autowired
@@ -38,6 +42,9 @@ public class RouteService {
 
     @Autowired
     PageUtil pageUtil;
+
+    @Autowired
+    ScheduleRepository scheduleRepository;
 
     public List<Route> findAll() {
         return routeRepository.findAll();
@@ -99,11 +106,28 @@ public class RouteService {
         route.setName(name);
         boolean exists = routeRepository.existsByName(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route with name: " + name + " already exists");
+
+        if(startTerminalName.equalsIgnoreCase(stopTerminalName)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't create route with same start and end terminal");
+        }
+
         if (route.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             route.setOwner(owner);
         }
         return routeRepository.save(buildRoute(route));
+    }
+
+    public  Route mapToRoute(RouteDto routeDto){
+        Route route = new Route();
+        Terminal start = terminalService.findById(routeDto.getStartTerminalId());
+        Terminal stop = terminalService.findById(routeDto.getStopTerminalId());
+        route.setName(start + " - " + stop);
+        route.setStartTerminal(start);
+        route.setStopTerminal(stop);
+        route.setFare(routeDto.getFare());
+        route.setMode(convertToTransportModeEnum(routeDto.getTransportMode()));
+        return route;
     }
 
     public Route findById(long id) {
@@ -135,9 +159,12 @@ public class RouteService {
     }
 
     public void delete(long id, String principal) {
+
+        log.info("wanna delete route with id===>"+id);
         Optional<Route> existing = routeRepository.findById(id);
-        if (existing.isPresent())
+        if (existing.isPresent()) {
             routeRepository.deleteById(id);
+        }
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route does not exist");
         }
@@ -160,5 +187,27 @@ public class RouteService {
         if (stopTerminal != null)
             route.setStopTerminal(terminalService.findById(stopTerminal.getId()));
         return route;
+    }
+
+    //BUS, CAR, RAIL, FERRY, RICKSHAW
+    private Enum.TransportMode convertToTransportModeEnum(String name){
+
+        if(name.startsWith("BUS") || name.equalsIgnoreCase("bus")){
+            return Enum.TransportMode.BUS;
+        }
+
+        if(name.startsWith("CAR") || name.equalsIgnoreCase("car")){
+            return Enum.TransportMode.CAR;
+        }
+
+        if(name.startsWith("RAIL") || name.equalsIgnoreCase("rail")){
+            return Enum.TransportMode.RAIL;
+        }
+
+        if(name.startsWith("FERRY") || name.equalsIgnoreCase("ferry")){
+            return Enum.TransportMode.FERRY;
+        }
+
+        return Enum.TransportMode.RICKSHAW;
     }
 }

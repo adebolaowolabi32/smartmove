@@ -78,11 +78,11 @@ public class Manifest extends AbstractAuditEntity<String> implements Auditable<L
 
     @ManyToOne
     @JoinColumn(name = "trip")
+    @NotNull(message = "Trip is required.")
     private Trip trip;
 
     @ManyToOne
     @JoinColumn(name = "schedule")
-    @NotNull(message = "Schedule is required.")
     private Schedule schedule;
 
     private boolean boarded;

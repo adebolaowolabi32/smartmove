@@ -158,7 +158,7 @@ public class ManifestService {
                 manifest.setTrip(trip);
             }
             else{
-                manifest.setSchedule(schedule);
+               manifest.setSchedule(schedule);
             }
             savedManifests.add(manifestRepository.save(manifest));
         });

@@ -29,7 +29,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-4" for="mode"><b>Transport Mode</b></label>
                                 <div class="col-sm-8">
-                                    <span id="mode" th:text="${trip.schedule!=null ? trip.schedule.mode : '' }"></span>
+                                    <span id="mode" th:text="${trip.schedule!=null ? trip.schedule.route.mode : '' }"></span>
                                 </div>
                             </div>
 
@@ -54,7 +54,7 @@
                                     Terminal</b></label>
                                 <div class="col-sm-8">
                                     <span id="startTerminal"
-                                          th:text="${trip.schedule!=null ? trip.schedule.startTerminal.name : '' }"></span>
+                                          th:text="${trip.schedule!=null ? trip.schedule.route.startTerminal.name : '' }"></span>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                                 <label class="control-label col-sm-4" for="stopTerminal"><b>Arrival Terminal</b></label>
                                 <div class="col-sm-8">
                                     <span id="stopTerminal"
-                                          th:text="${trip.schedule!=null ? trip.schedule.stopTerminal.name : '' }"></span>
+                                          th:text="${trip.schedule!=null ? trip.schedule.route.stopTerminal.name : '' }"></span>
                                 </div>
                             </div>
 

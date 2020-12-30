@@ -1,8 +1,8 @@
 package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.VehicleCategoryRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -96,26 +96,27 @@ public class VehicleCategoryService {
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory save(VehicleCategory vehicleCategory, String principal) {
-        log.info("principal===>"+principal);
         String name = vehicleCategory.getName();
         boolean exists = vehicleCategoryRepository.existsByName(name);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Category with name: " + name + " already exists");
-        if(vehicleCategory.getOwner() == null) {
+        if (exists)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Category with name: " + name + " already exists");
+
+        if (vehicleCategory.getOwner() == null) {
             try {
 
                 User owner = userService.findByUsername(principal);
                 vehicleCategory.setOwner(owner);
 
-            }catch(ResponseStatusException ex){
-                log.info("User with username "+principal+" cannot be found in database.");
+            } catch (ResponseStatusException ex) {
+                log.info("User with username " + principal + " cannot be found in database.");
             }
         }
+
         if (vehicleCategory.getPicture().getSize() > 0) {
             Document doc = documentService.saveDocument(new Document(vehicleCategory.getPicture()));
             vehicleCategory.setPictureUrl(doc.getUrl());
         }
-
-        VehicleCategory vehicle =  vehicleCategoryRepository.save(buildVehicleCategory(vehicleCategory));
+        VehicleCategory vehicle = vehicleCategoryRepository.save(buildVehicleCategory(vehicleCategory));
         return createSeats(vehicle);
     }
 
@@ -137,9 +138,8 @@ public class VehicleCategoryService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory update(VehicleCategory vehicleCategory, String principal) {
         Optional<VehicleCategory> existing = vehicleCategoryRepository.findById(vehicleCategory.getId());
-        if(existing.isPresent())
-        {
-            if(vehicleCategory.getOwner() == null) {
+        if (existing.isPresent()) {
+            if (vehicleCategory.getOwner() == null) {
                 User owner = userService.findByUsername(principal);
                 vehicleCategory.setOwner(owner);
             }
@@ -154,28 +154,29 @@ public class VehicleCategoryService {
 
     public void delete(long id, String principal) {
         Optional<VehicleCategory> existing = vehicleCategoryRepository.findById(id);
-        if(existing.isPresent())
+        if (existing.isPresent())
             vehicleCategoryRepository.deleteById(id);
-        else{
+        else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist");
         }
     }
 
-    public long countByOwner(User user){
+    public long countByOwner(User user) {
         return vehicleCategoryRepository.countByOwner(user);
     }
 
-    public long countAll(){
+    public long countAll() {
         return vehicleCategoryRepository.count();
     }
 
     private VehicleCategory buildVehicleCategory(VehicleCategory vehicleCategory) {
+
         VehicleMake vehicleMake = vehicleCategory.getMake();
-        if(vehicleMake != null)
+        if (vehicleMake != null)
             vehicleCategory.setMake(vehicleMakeService.findById(vehicleMake.getId()));
 
         VehicleModel vehicleModel = vehicleCategory.getModel();
-        if(vehicleModel != null)
+        if (vehicleModel != null)
             vehicleCategory.setModel(vehicleModelService.findById(vehicleModel.getId()));
         return vehicleCategory;
     }
@@ -183,22 +184,22 @@ public class VehicleCategoryService {
     private static int getIntegerPart(float value) {
         float fractionalPart = value % 1;
         float integralPart = value - fractionalPart;
-        return  Math.round(integralPart);
+        return Math.round(integralPart);
     }
 
-    private VehicleCategory createSeats(VehicleCategory vehicle){
+    private VehicleCategory createSeats(VehicleCategory vehicle) {
+
         Set<Seat> seats = new HashSet<>();
 
-        for(int i=1;i<=vehicle.getCapacity();i++){
-            Seat seat  = new Seat();
+        for (int i = 1; i <= vehicle.getCapacity(); i++) {
+
+            Seat seat = new Seat();
             seat.setSeatNo(i);
             seat.setAvailable(true);
             seat.setVehicle(vehicle);
             Seat createdSeat = seatRepository.save(seat);
             seats.add(createdSeat);
         }
-        vehicle.setSeats(seats);
-        vehicleCategoryRepository.save(vehicle);
         return vehicle;
     }
 }

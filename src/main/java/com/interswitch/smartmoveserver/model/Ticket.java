@@ -26,15 +26,15 @@ public class Ticket extends AbstractAuditEntity<String> implements Auditable<Lon
 
     private String passengerName;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "operator")
     private User operator;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "trip")
     private Trip trip;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "schedule")
     private Schedule schedule;
 
@@ -43,7 +43,6 @@ public class Ticket extends AbstractAuditEntity<String> implements Auditable<Lon
     @Enumerated(EnumType.STRING)
     private Enum.SeatClass seatClass;
 
-    @ManyToOne
     @JoinColumn(name = "seat")
     private Seat seat;
 
