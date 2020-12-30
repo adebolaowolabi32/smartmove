@@ -94,12 +94,14 @@ public class VehicleCategoryService {
         }
     }
 
-    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
+   // @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory save(VehicleCategory vehicleCategory, String principal) {
         log.info("principal===>"+principal);
         String name = vehicleCategory.getName();
         boolean exists = vehicleCategoryRepository.existsByName(name);
+        log.info("vehicleCategoryExists ===>"+exists);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Category with name: " + name + " already exists");
+
         if(vehicleCategory.getOwner() == null) {
             try {
 
@@ -110,13 +112,19 @@ public class VehicleCategoryService {
                 log.info("User with username "+principal+" cannot be found in database.");
             }
         }
+
+        log.info("Owner is not null ===>");
+
         if (vehicleCategory.getPicture().getSize() > 0) {
             Document doc = documentService.saveDocument(new Document(vehicleCategory.getPicture()));
             vehicleCategory.setPictureUrl(doc.getUrl());
         }
 
+        log.info("wanna save vehicle category ===>");
         VehicleCategory vehicle =  vehicleCategoryRepository.save(buildVehicleCategory(vehicleCategory));
-        return createSeats(vehicle);
+        log.info("finished creating vehicle category ===>");
+
+        return  createSeats(vehicle);
     }
 
     public VehicleCategory findById(long id) {
@@ -170,6 +178,7 @@ public class VehicleCategoryService {
     }
 
     private VehicleCategory buildVehicleCategory(VehicleCategory vehicleCategory) {
+        log.info("building vehicle category");
         VehicleMake vehicleMake = vehicleCategory.getMake();
         if(vehicleMake != null)
             vehicleCategory.setMake(vehicleMakeService.findById(vehicleMake.getId()));
@@ -187,18 +196,25 @@ public class VehicleCategoryService {
     }
 
     private VehicleCategory createSeats(VehicleCategory vehicle){
+        log.info("Wanna create seat");
+
         Set<Seat> seats = new HashSet<>();
 
         for(int i=1;i<=vehicle.getCapacity();i++){
+
             Seat seat  = new Seat();
             seat.setSeatNo(i);
             seat.setAvailable(true);
             seat.setVehicle(vehicle);
+            log.info("Wanna create seat===>"+i);
             Seat createdSeat = seatRepository.save(seat);
             seats.add(createdSeat);
+            log.info("added to seat===>");
         }
+        log.info("wanna set seats for vehicle");
         vehicle.setSeats(seats);
-        vehicleCategoryRepository.save(vehicle);
+        log.info("done setting seats for vehicle,wanna call save");
+        //vehicleCategoryRepository.save(vehicle);
         return vehicle;
     }
 }

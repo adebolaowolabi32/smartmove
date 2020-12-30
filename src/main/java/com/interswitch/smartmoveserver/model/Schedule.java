@@ -26,12 +26,12 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "route")
     @NotNull(message = "Route is required.")
     private Route route;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @NotNull(message = "Vehicle category is required.")
     private VehicleCategory vehicle;
 
@@ -57,7 +57,7 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
 
     private String duration;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner")
     private User owner;
 

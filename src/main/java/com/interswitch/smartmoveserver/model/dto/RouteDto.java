@@ -10,14 +10,14 @@ public class RouteDto {
     @JsonProperty("TransportMode")
     private String  transportMode;
 
-    @JsonProperty("StartTerminalName")
-    private String startTerminalName;
+    @JsonProperty("StartTerminalId")
+    private long startTerminalId;
 
-    @JsonProperty("StopTerminalName")
-    private String stopTerminalName;
+    @JsonProperty("StopTerminalId")
+    private long stopTerminalId;
 
-    @JsonProperty("Price")
-    private long price;
+    @JsonProperty("Fare")
+    private long fare;
 
     @JsonProperty("Enabled")
     private boolean enabled;

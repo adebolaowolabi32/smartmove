@@ -65,7 +65,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataViolation(DataIntegrityViolationException exception, WebRequest request, RedirectAttributes redirectAttributes) {
-        final String validationError = exception.getCause().getCause().getLocalizedMessage();
+        final String validationError = exception.getCause().getLocalizedMessage();
         String message = (StringUtils.isNotEmpty(validationError) ?
                 "Cannot save duplicate value. The duplicate value is " + StringUtils.substringBetween(validationError, "(", ")") + "." : exception.getMessage());
         return getExceptionResponseEntity(exception, HttpStatus.BAD_REQUEST, request, Collections.singletonList(message));
