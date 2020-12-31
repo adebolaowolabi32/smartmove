@@ -63,7 +63,7 @@ public class VehicleCategory extends AbstractAuditEntity<String> implements Audi
     private int capacity;
 
     @Column(name="seats",nullable = true)
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "seat")
     private Set<Seat> seats;
 

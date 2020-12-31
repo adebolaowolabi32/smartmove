@@ -36,4 +36,5 @@ public abstract class AbstractAuditEntity<T> {
     @LastModifiedDate
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime lastModifiedDate;
+
 }

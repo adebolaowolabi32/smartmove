@@ -47,10 +47,8 @@ public class VehicleController {
         //TODO:: Implement server side pagination
         //PageView<Vehicle> vehiclePage = vehicleService.findAllPaginated(owner, page, size, principal.getName());
         //model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehiclePage));
-        PageView<Vehicle> vehiclePage = vehicleService.findAllPaginated(owner, page, size, principal.getName());
-        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll(0L, principal.getName());
-        model.addAttribute("vehiclePage", vehiclePage);
-        model.addAttribute("categories", vehicleCategories);
+        List<Vehicle> vehicles = vehicleService.findAll(owner, principal.getName());
+        model.addAttribute("vehicles", vehicles);
         return "vehicles/get";
     }
 
