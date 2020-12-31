@@ -129,6 +129,23 @@ public class VehicleService {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
+
+    public List<Vehicle> findAll(Long owner, String principal) {
+        User user = userService.findByUsername(principal);
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                return vehicleRepository.findAllByOwner(user);
+            } else {
+                return vehicleRepository.findAll();
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                return vehicleRepository.findAllByOwner(ownerUser);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
     private Vehicle buildVehicle(Vehicle vehicle) {
         VehicleCategory vehicleCategory = vehicle.getCategory();
         if(vehicleCategory != null)
