@@ -94,6 +94,8 @@ public class ScheduleService {
         LocalDateTime start = LocalDateTime.of(schedule.getDepartureDate(), schedule.getDepartureTime());
         LocalDateTime stop = LocalDateTime.of(schedule.getArrivalDate(), schedule.getArrivalTime());
         Duration duration = Duration.between(start, stop);
+        if (duration.isNegative())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Departure date must not exceed arrival date.");
         schedule.setDuration(String.valueOf(duration.getSeconds() / 60 / 60));
         if (schedule.getOwner() == null) {
             User owner = userService.findByUsername(principal);
@@ -103,8 +105,7 @@ public class ScheduleService {
     }
 
     public Schedule findById(long id) {
-        Optional<Schedule> schedule = scheduleRepository.findById(id);
-        return schedule.get();
+        return scheduleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule does not exist"));
     }
 
     public Schedule findById(long id, String principal) {
