@@ -49,7 +49,7 @@ public class ViewExceptionHandler {
         String message = "";
         if (validationError.contains("duplicate")) {
             message = "Cannot save duplicate value. The duplicate value is " + StringUtils.substringBetween(validationError, "(", ")") + ".";
-        } else if (validationError.contains("delete statement conflicted with reference"))
+        } else if (validationError.contains("DELETE"))
             message = "Cannot delete this entity because it is tied to one or more " + StringUtils.substringBetween(validationError, "dbo.", "\"") + ".";
         else message = validationError;
         redirectAttributes.addFlashAttribute("error", message);
