@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
 
 /*
  * Created by adebola.owolabi on 8/7/2020
@@ -42,7 +41,6 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @NotNull(message = "Departure time is required.")
-    @FutureOrPresent
     private LocalTime departureTime;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -52,7 +50,6 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @NotNull(message = "Arrival time is required.")
-    @Future
     private LocalTime arrivalTime;
 
     private String duration;
