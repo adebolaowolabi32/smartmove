@@ -105,9 +105,8 @@ public class TripService {
     public Trip save(Trip trip, String principal) {
         TripReference tripReference = tripReferenceService.findByOwner(principal);
         String prefix = "";
-        if(tripReference.isEnabled())
+        if (tripReference != null && tripReference.isEnabled())
             prefix = tripReference.getPrefix() + PREFIX_SEPARATOR;
-
         trip.setReferenceNo(prefix + RandomUtil.getRandomNumber(6));
         if(trip.getOwner() == null) {
             User owner = userService.findByUsername(principal);

@@ -36,7 +36,8 @@ public class TripReferenceService {
 
     public TripReference findByOwner(String principal) {
         User owner = userService.findByUsername(principal);
-        return tripRefRepository.findByOwner(owner);
+        if (owner != null) return tripRefRepository.findByOwner(owner);
+        return null;
     }
 
     public TripReference update(TripReference tripReference, String principal) {
