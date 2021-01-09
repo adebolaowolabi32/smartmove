@@ -42,7 +42,6 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @NotNull(message = "Departure time is required.")
-    @FutureOrPresent
     private LocalTime departureTime;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -52,7 +51,6 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @NotNull(message = "Arrival time is required.")
-    @Future
     private LocalTime arrivalTime;
 
     private String duration;
@@ -72,5 +70,6 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
     public String getAuditableName() {
         return this.getClass().getSimpleName();
     }
+
 
 }

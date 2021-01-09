@@ -21,11 +21,4 @@ public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 
     List<Schedule> findAllByOwner(User owner);
 
-    List<Schedule> findByRouteId(long routeId);
-
-    @Transactional
-    void deleteByRouteId(long routeId);
-
-    boolean existsByRouteId(long routeId);
-
 }

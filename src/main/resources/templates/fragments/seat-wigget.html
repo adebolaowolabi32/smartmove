@@ -28,6 +28,32 @@
                     </div>
 
 
+                    <div class="hun-Seat-Section" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}  ">
+                        <img alt="seat Logo" class="hud-Image" th:src="@{/images/seatNoHandler.png}" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}"/>
+                        <div class="hudVehicleMainContainer" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}  ">
+                            <div class="hudOuterSeatContainer">
+                                <div class="hudInnerSeatContainer ">
+                                    <div th:each="seat : ${ticketDetails.seats}">
+                                        <div th:if="${seat.seatNo==1}"  class="hudFiftySeatOne "
+                                        >
+                                            <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                        </div>
+                                        <div th:if="${seat.seatNo &lt; 100}" class="hudFiftySeatContainer">
+
+                                            <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                        </div>
+                                        <div th:if="${seat.seatNo &gt; 99}" class="hudFiftySeatContainer">
+
+                                            <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer; width: fit-content;' :'background:red;cursor: not-allowed; width:fit-content;'"></div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="mb-5" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 50 and ticketDetails.schedule.vehicle.capacity &gt; 20}  ">
                         <div th:style="'text-align:center;'">
                             <img alt="seat Logo" class="fifty-Image" th:src="@{/images/seatNoHandler.png}" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 50 and ticketDetails.schedule.vehicle.capacity &gt; 20}"/>

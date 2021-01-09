@@ -77,8 +77,7 @@ public class Manifest extends AbstractAuditEntity<String> implements Auditable<L
     private String nextOfKinMobile;
 
     @ManyToOne
-    @JoinColumn(name = "trip")
-    @NotNull(message = "Trip is required.")
+    @JoinColumn(name = "trip",nullable=true)
     private Trip trip;
 
     @ManyToOne
