@@ -53,7 +53,7 @@ public class Transaction extends AbstractAuditEntity<String> implements Auditabl
     private Enum.TransactionType type;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Transport mode is required.")
+    @NotNull(message = "Mode is required.")
     private Enum.TransportMode mode;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")

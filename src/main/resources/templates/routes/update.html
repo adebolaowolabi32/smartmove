@@ -20,7 +20,7 @@
 			  th:action="@{/routes/update/{id}(id=${route.id})}" th:object="${route}"
 			  data-parsley-validate="true">
 			<div class="form-group row">
-                <label class="control-label col-sm-2" for="mode"><b>Transport Mode</b></label>
+                <label class="control-label col-sm-2" for="mode"><b>Mode</b></label>
 				<div class="col-sm-10">
                     <select class="form-control" id="mode" required th:field="*{mode}">
                         <option value="">Select...</option>

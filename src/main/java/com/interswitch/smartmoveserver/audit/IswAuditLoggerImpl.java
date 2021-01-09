@@ -45,15 +45,16 @@ public class IswAuditLoggerImpl {
                 //audit.setAuditable(auditable);
                 audit.setAction(auditableAction);
                 audit.setActor(actor);
-                User actorUser = userService.findByUsername(actor);
-                User actorOwner = actorUser.getOwner()!=null && (actorUser.getRole()!= Enum.Role.ISW_ADMIN || actorUser.getRole()!= Enum.Role.OPERATOR )? actorUser.getOwner() : actorUser ;
-                audit.setOwner(actorOwner);
-                log.info("owner==>"+actorOwner);
+                if(!actor.isEmpty()){
+                    User actorUser = userService.findByUsername(actor);
+                    User actorOwner = actorUser.getOwner()!=null && (actorUser.getRole()!= Enum.Role.ISW_ADMIN || actorUser.getRole()!= Enum.Role.OPERATOR )? actorUser.getOwner() : actorUser ;
+                    audit.setOwner(actorOwner);
+                }
                 audit.setActionDate(Instant.now());
                 audit.setActionTimeStamp(DateUtil.formatDate(LocalDateTime.now()));
-                audit.setDescription(actor +" "+auditableAction.name().concat("d").toLowerCase() +" "+auditable.getAuditableName().toLowerCase()+" ");
+                audit.setDescription(actor + " "+ auditableAction.name().concat("d").toLowerCase() + " " + auditable.getAuditableName().toLowerCase()+" ");
 
-                log.info("wanna log to audit trail inside log===>"+audit);
+                log.info("audit trail:>" + audit);
 
                 if(audit.getResourceId()>0) {
                     auditTrailRepository.save(audit);
