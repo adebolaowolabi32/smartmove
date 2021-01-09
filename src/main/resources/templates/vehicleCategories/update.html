@@ -19,7 +19,7 @@
 			  th:action="@{/vehicleCategories/update/{id}(id=${vehicleCategory.id})}" th:object="${vehicleCategory}"
 			  data-parsley-validate="true" enctype="multipart/form-data">
 			<div class="form-group row">
-				<label class="control-label col-sm-2" for="mode"><b>Transport Mode</b></label>
+				<label class="control-label col-sm-2" for="mode"><b>Mode</b></label>
 				<div class="col-sm-10">
 					<select class="form-control" th:field="*{mode}"  id="mode" required>
 						<option value="">Select...</option>
@@ -99,7 +99,7 @@
 			<div class="form-group row">
 				<label class="control-label col-sm-2" for="owner"><b>Owner</b></label>
 				<div class="col-sm-10">
-					<select class="form-control" th:field="*{owner}"  id="owner" required>
+					<select class="form-control" th:field="*{owner}"  id="owner">
 						<option value="">Select...</option>
 						<option th:each="owner : ${owners}" th:value="${owner.id}" th:text="${owner != null ? owner.username : ''}"></option>
 					</select>

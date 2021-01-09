@@ -40,20 +40,19 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
     private String firstName;
 
     @NotBlank(message = "Last name is required.")
-    @Length(min = 2, max = 50, message = "Last name must be between 2 and 30 characters long.")
+    @Length(min = 2, max = 30, message = "Last name must be between 2 and 30 characters long.")
     private String lastName;
 
     @Length(min = 5, max = 50, message = "Address must be between 5 and 50 characters long.")
     private String address;
 
     @Column(unique=true)
-    @NotBlank(message = "Mobile number is required.")
     @Length(min = 5, max = 30, message = "Mobile number must be between 5 and 30 characters long.")
     private String mobileNo;
 
     @Column(unique=true)
     @NotBlank(message = "Email address is required.")
-    @Length(min = 5, max = 30, message = "Email address must be between 5 and 30 characters long.")
+    @Length(min = 5, max = 50, message = "Email address must be between 5 and 50 characters long.")
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -72,7 +71,7 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     private transient MultipartFile picture;
 
-    private transient int loginFreqType;
+    private int loginFreqType;
 
     @Enumerated(EnumType.STRING)
     private Enum.TicketTillStatus tillStatus = Enum.TicketTillStatus.OPEN;

@@ -23,7 +23,7 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{vehicle.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  table-responsive" id="dataTable" width="100%">
 				<thead class='thead-light'>
                 <tr>
                     <th>Id</th>

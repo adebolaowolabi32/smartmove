@@ -26,10 +26,10 @@
             <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{schedule.deleted.message} : false)"></div>
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  table-responsive" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
-                    <th>Transport Mode</th>
+                    <th>Mode</th>
                     <th>Departure Terminal</th>
                     <th>Destination Terminal</th>
                     <th>Vehicle</th>

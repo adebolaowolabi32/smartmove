@@ -25,7 +25,7 @@
 				<div class="row">
 					<div class="col">
 						<div class="form-group row">
-							<label class="col-sm-4" for="mode"><b>Transport Mode</b></label>
+							<label class="col-sm-4" for="mode"><b>Mode</b></label>
 							<div class="col-sm-8">
 								<span id="mode" th:text="${vehicleCategory.mode}"></span></div>
 						</div>
@@ -61,10 +61,6 @@
 								<span id="owner" th:text="${vehicleCategory.owner!=null ? vehicleCategory.owner.username : ''}"></span></div>
 						</div>
 					</div>
-					<div class="col">
-						<img alt="Vehicle Picture" id="vehiclePic" th:src="${vehicleCategory.pictureUrl}">
-					</div>
-
 					<div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
 						<div class="form-group row">
 							<label class="col-sm-4" for="createdBy"><b>Created By</b></label>
@@ -86,6 +82,9 @@
 							<label class="col-sm-4" for="LastModifiedDate"><b>Last Modified Date</b></label>
 							<div class="col-sm-8"><span id="LastModifiedDate" th:text="${vehicleCategory.lastModifiedDate!=null?vehicleCategory.lastModifiedDate:'Unknown'}"></span></div>
 						</div>
+					</div>
+					<div class="col">
+						<img alt="Vehicle Picture" id="vehiclePic" th:src="${vehicleCategory.pictureUrl}">
 					</div>
 				</div>
 			</div>
