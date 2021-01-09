@@ -47,9 +47,11 @@ public class ViewExceptionHandler {
     public String handleDataViolation(DataIntegrityViolationException exception, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         final String validationError = exception.getCause().getCause().getLocalizedMessage();
         String message = "";
-        if (StringUtils.isNotEmpty(validationError) && validationError.contains("duplicate")) {
+        if (validationError.contains("duplicate")) {
             message = "Cannot save duplicate value. The duplicate value is " + StringUtils.substringBetween(validationError, "(", ")") + ".";
-        } else message = validationError;
+        } else if (validationError.contains("DELETE"))
+            message = "Cannot delete this entity because it is tied to one or more " + StringUtils.substringBetween(validationError, "dbo.", "\"") + ".";
+        else message = validationError;
         redirectAttributes.addFlashAttribute("error", message);
         return "redirect:" + request.getServletPath() + "?" + request.getQueryString();
     }

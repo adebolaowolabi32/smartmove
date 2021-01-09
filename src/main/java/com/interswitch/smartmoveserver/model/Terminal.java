@@ -33,7 +33,7 @@ public class Terminal extends AbstractAuditEntity<String> implements Auditable<L
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Transport mode is required.")
+    @NotNull(message = "Mode is required.")
     private Enum.TransportMode mode;
 
     @NotNull(message = "Country is required.")

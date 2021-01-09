@@ -37,7 +37,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-2" for="owner">Owner</label>
                 <div class="col-sm-10">
-                    <select class="form-control" th:field="*{owner}" id="owner" required>
+                    <select class="form-control" th:field="*{owner}" id="owner">
                         <option value="">Select ...</option>
                         <option th:each="user : ${users}" th:value="${user.username}"
                                 th:text="${user != null ? user.username : ''}"></option>

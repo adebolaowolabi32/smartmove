@@ -28,12 +28,12 @@
                             <div th:text="${schedule.route.stopTerminal.name}"></div>
                         </div>
                         <div class="col">
-                            <div><b>Transport Mode</b></div>
-                            <div th:text="${schedule.route.mode}"></div>
-                        </div>
-                        <div class="col">
                             <div><b>Vehicle</b></div>
                             <div th:text="${schedule.vehicle.name}"></div>
+                        </div>
+                        <div class="col">
+                            <div><b>Mode</b></div>
+                            <div th:text="${schedule.route.mode}"></div>
                         </div>
                         <div class="col">
                             <div><b>Fare</b></div>
@@ -81,7 +81,7 @@
             <br>
             <br>
             <br>
-            <table cellspacing="0" class="table  responsive-table" id="dataTable" width="100%">
+            <table cellspacing="0" class="table  table-responsive" id="dataTable" width="100%">
                     <thead class='thead-light'>
                     <tr>
                         <th>SN</th>

@@ -25,7 +25,7 @@ public class VehicleCategory extends AbstractAuditEntity<String> implements Audi
     private long id;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Transport mode is required.")
+    @NotNull(message = "Mode is required.")
     private Enum.TransportMode mode;
 
     @Column(unique=true)
