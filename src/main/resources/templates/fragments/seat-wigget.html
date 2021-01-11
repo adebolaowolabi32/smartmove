@@ -28,7 +28,7 @@
                     </div>
 
 
-                    <div class="hun-Seat-Section" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}  ">
+                    <div class="hun-Seat-Section justify-content-center align-items-center" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}  ">
                         <img alt="seat Logo" class="hud-Image" th:src="@{/images/seatNoHandler.png}" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}"/>
                         <div class="hudVehicleMainContainer" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}  ">
                             <div class="hudOuterSeatContainer">
