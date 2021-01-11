@@ -305,7 +305,7 @@ public class TicketService {
         String prefix = "";
         String startTerminal = "";
         String stopTerminal = "";
-        if (ticketReference.isEnabled()) {
+        if (ticketReference!=null && ticketReference.isEnabled()) {
             prefix = ticketReference.getPrefix() + PREFIX_SEPARATOR;
             if (ticketReference.isStartTerminalEnabled())
                 startTerminal = schedule.getRoute().getStartTerminal().getCode() + PREFIX_SEPARATOR;

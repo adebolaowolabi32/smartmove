@@ -39,7 +39,7 @@
                                             <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
 
                                         </div>
-                                        <div th:if="${seat.seatNo &lt; 100}" class="hudFiftySeatContainer">
+                                        <div th:if="${seat.seatNo &lt; 100 and seat.seatNo &gt; 1 }" class="hudFiftySeatContainer">
 
                                             <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
                                         </div>
@@ -194,10 +194,10 @@
                                         <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:none;cursor: pointer;width: 28px;height:35px; margin-top: 14px;' :'background:red;cursor: not-allowed;width: 28px;height:35px; margin-top: 14px;'"></div>
 
                                     </div>
-                                    <div th:if="${seat.seatNo==1}"  class="fourSeatOne" th:style="'top:306px'">
-                                        <div class="seatLabel"  th:style=" 'background:none;cursor: pointer;width: 28px;height:35px; margin-top: 14px;' "></div>
+<!--                                    <div th:if="${seat.seatNo==1}"  class="fourSeatOne" th:style="'top:306px'">-->
+<!--                                        <div class="seatLabel"  th:style=" 'background:none;cursor: pointer;width: 28px;height:35px; margin-top: 14px;' "></div>-->
 
-                                    </div>
+<!--                                    </div>-->
                                     <div th:if="${seat.seatNo==1}" class="fourHandler">
                                         <img alt="handler"  th:src="@{/images/handler.png}" />
                                     </div>

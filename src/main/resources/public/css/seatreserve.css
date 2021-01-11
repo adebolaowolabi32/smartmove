@@ -336,8 +336,8 @@ max-width: 50px;
 }
 
 .hun-Seat-Section{
-     padding-left: 3rem;
      margin-bottom: 2rem;
+     padding-left: 8rem;
 }
 .hud-Image{
     height: fit-content;
@@ -397,9 +397,9 @@ max-width: 50px;
 
 }
 .fourHandler{
-   position: absolute;
-     left: 85px;
-     bottom: 192px;
+      position: absolute;
+      left: 134px;
+      bottom: 192px;
 }
 .fourSeatOne{
      background-image: url('../images/seat.png');
@@ -409,8 +409,8 @@ max-width: 50px;
           padding: 4px;
           transform: rotate(90deg);
               /* width: fit-content; */
-          position: absolute;
-          left: 150px;
-          top: 226px;
-          height: 71px;
+
+   position: absolute;
+   left: 150px;
+   height: 71px;
 }

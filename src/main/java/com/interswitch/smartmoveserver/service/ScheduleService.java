@@ -89,7 +89,7 @@ public class ScheduleService {
     }
 
 
-    //@Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Schedule save(Schedule schedule, String principal) {
         LocalDateTime start = LocalDateTime.of(schedule.getDepartureDate(), schedule.getDepartureTime());
         LocalDateTime stop = LocalDateTime.of(schedule.getArrivalDate(), schedule.getArrivalTime());
@@ -120,7 +120,7 @@ public class ScheduleService {
     }
 
 
-   // @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Schedule update(Schedule schedule, String principal) {
         Optional<Schedule> existing = scheduleRepository.findById(schedule.getId());
         if (existing.isPresent()){
