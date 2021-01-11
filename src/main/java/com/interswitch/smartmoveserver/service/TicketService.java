@@ -177,7 +177,7 @@ public class TicketService {
         return ticketDetails;
     }
 
-    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
+   @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
         Iterable<Ticket> savedTicketsIterable = ticketRepository.saveAll(ticketDetails.getTickets());
         //this is an asynchronous event here running on another thread.
@@ -305,7 +305,7 @@ public class TicketService {
         String prefix = "";
         String startTerminal = "";
         String stopTerminal = "";
-        if (ticketReference.isEnabled()) {
+        if (ticketReference!=null && ticketReference.isEnabled()) {
             prefix = ticketReference.getPrefix() + PREFIX_SEPARATOR;
             if (ticketReference.isStartTerminalEnabled())
                 startTerminal = schedule.getRoute().getStartTerminal().getCode() + PREFIX_SEPARATOR;

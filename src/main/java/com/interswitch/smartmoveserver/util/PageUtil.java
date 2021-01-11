@@ -17,20 +17,20 @@ import java.util.stream.Stream;
  */
 @Component
 public class PageUtil {
-    private static List<Enum.Role> ownersForAgents = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.AGENT);
-    private static List<Enum.Role> ownersForOperators = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR);
-    private static List<Enum.Role> ownersForRegulators = Arrays.asList(Enum.Role.REGULATOR);
-    private static List<Enum.Role> ownersForVehicleOwners = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR);
-    private static List<Enum.Role> ownersForDrivers = Arrays.asList(Enum.Role.OPERATOR);
-    private static List<Enum.Role> ownersForTicketers = Arrays.asList(Enum.Role.OPERATOR);
-    private static List<Enum.Role> ownersForServiceProviders = Arrays.asList(Enum.Role.REGULATOR);
-    private static List<Enum.Role> ownersForInspectors = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR);
-    private static List<Enum.Role> ownersForCards = Arrays.asList(Enum.Role.AGENT, Enum.Role.DRIVER);
-    private static List<Enum.Role> ownersForDevices = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.AGENT);
-    private static List<Enum.Role> ownersForRoutes = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR);
-    private static List<Enum.Role> ownersForSchedules = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR);
-    private static List<Enum.Role> ownersForTerminals = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR);
-    private static List<Enum.Role> ownersForVehicles = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.VEHICLE_OWNER);
+    private static List<Enum.Role> ownersForAgents = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.AGENT,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForOperators = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForRegulators = Arrays.asList(Enum.Role.REGULATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForVehicleOwners = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForDrivers = Arrays.asList(Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForTicketers = Arrays.asList(Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForServiceProviders = Arrays.asList(Enum.Role.REGULATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForInspectors = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForCards = Arrays.asList(Enum.Role.AGENT, Enum.Role.DRIVER,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForDevices = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.AGENT,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForRoutes = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForSchedules = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForTerminals = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForVehicles = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.VEHICLE_OWNER,Enum.Role.ISW_ADMIN);
 
     public <T> List<Long> getPageNumber(PageView<T> page){
         List<Long> pageNumbers = new ArrayList<>();

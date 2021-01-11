@@ -70,4 +70,5 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
         return this.getClass().getSimpleName();
     }
 
+
 }

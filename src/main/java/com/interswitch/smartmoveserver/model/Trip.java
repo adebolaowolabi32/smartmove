@@ -49,7 +49,6 @@ public class Trip extends AbstractAuditEntity<String> implements Auditable<Long>
     @JoinColumn(name = "owner")
     private User owner;
 
-
     @Override
     public Long getAuditableId() {
         return this.getId();

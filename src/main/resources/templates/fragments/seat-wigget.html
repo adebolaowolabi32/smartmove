@@ -5,74 +5,261 @@
     <form class="p-3" data-parsley-validate="true" method="post" th:action="${flowExecutionUrl}"
           th:object="${ticketDetails}">
 
-    <div th:class="${{1 &lt; 30} ? 'col-sm-6 mx-auto' : 'col-sm-8 mx-auto'}">
-        <div class="card mb-8">
-            <div class="card-body">
-                <div th:style="'margin-bottom: 30px; display: flex; align-items:center;flex-direction: row;'">
-                    <img alt="seat Logo" class="img-brand" th:src="@{/images/seat.png}" th:style="'margin-right:10px;'">
-                    <span th:style="'height: auto; display: block;'">
+        <div th:class="${{ticketDetails.schedule.vehicle.capacity&lt; 30} ? 'col-sm-6 mx-auto' : {ticketDetails.schedule.vehicle.capacity&gt; 30 and ticketDetails.schedule.vehicle.capacity &lt; 60 } ? 'col-sm-9 mx-auto': ''}">
+            <div class="card mb-8">
+                <div class="card-body">
+                    <div th:style="'margin-bottom: 30px; display: flex; align-items:center;flex-direction: row;'">
+                        <img alt="seat Logo" class="img-brand" th:src="@{/images/seat.png}" th:style="'margin-right:10px;'">
+                        <span th:style="'height: auto; display: block;'">
                      <p class="innerCardTextBig" th:style="'margin: 0; line-height:0px;'">Seat Reservation</p>
                 <small class="generalText" th:style="'margin:0;'">Choose your preferred
                     seat(s)</small>
                 </span>
-                </div>
-                <div class="alert alert-info generalText mb-5" role="alert" th:style="'font-size:small; margin: auto;'">
-                    <div class="row">
-                        <div class="col-sm-1">
-                            <img alt="info Logo" th:src="@{/images/info-circle.png}">
-                        </div>
-                        <div class="col">
-                            <span>Due to the ongoing COVID-19 pandemic, we have new restrictions set in place to ensure your safety. In order to travel, please adhere to these restrictions and guidelines, which you can find here.</span>
-                        </div>
                     </div>
-                </div>
-                <div class="vehicleMainContainer mb-3">
-                    <div class="outerSeatContainer">
-                        <div class="innerSeatContainer">
-                            <div class="seatContainer"
-                                 th:each="seat : ${ticketDetails.seats}">
-                                <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                    <div class="alert alert-info generalText mb-5" role="alert" th:style="'font-size:small; margin: auto;'">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <img alt="info Logo" th:src="@{/images/info-circle.png}">
                             </div>
-
+                            <div class="col">
+                                <span>Due to the ongoing COVID-19 pandemic, we have new restrictions set in place to ensure your safety. In order to travel, please adhere to these restrictions and guidelines, which you can find here.</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="footerIconParent">
-                    <div class="footIconChild">
-                        <img alt="seat Logo" class="img-brand mr-2" th:src="@{/images/small-seat.png}"><span
-                            class="generalText">Available</span>
+
+
+                    <div class="hun-Seat-Section justify-content-center align-items-center" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}  ">
+                        <img alt="seat Logo" class="hud-Image" th:src="@{/images/seatNoHandler.png}" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}"/>
+                        <div class="hudVehicleMainContainer" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 200 and ticketDetails.schedule.vehicle.capacity &gt; 51}  ">
+                            <div class="hudOuterSeatContainer">
+                                <div class="hudInnerSeatContainer ">
+                                    <div th:each="seat : ${ticketDetails.seats}">
+                                        <div th:if="${seat.seatNo==1}"  class="hudFiftySeatOne "
+                                        >
+                                            <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                        </div>
+                                        <div th:if="${seat.seatNo &lt; 100 and seat.seatNo &gt; 1 }" class="hudFiftySeatContainer">
+
+                                            <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                        </div>
+                                        <div th:if="${seat.seatNo &gt; 99}" class="hudFiftySeatContainer">
+
+                                            <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer; width: fit-content;' :'background:red;cursor: not-allowed; width:fit-content;'"></div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="footIconChild">
-                        <img alt="selected Logo" class="img-brand mr-2" th:src="@{/images/selected-seat.png}"><span
-                            class="generalText">Selected</span>
+                    <div class="mb-5" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 50 and ticketDetails.schedule.vehicle.capacity &gt; 20}  ">
+                        <div th:style="'text-align:center;'">
+                            <img alt="seat Logo" class="fifty-Image" th:src="@{/images/seatNoHandler.png}" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 50 and ticketDetails.schedule.vehicle.capacity &gt; 20}"/>
+                        </div>
+
+                        <div class="fifty-outer">
+                            <div class="fifty-inner">
+                                <div th:each="seat : ${ticketDetails.seats}">
+                                    <div th:if="${seat.seatNo==1}"  class="fiftySeatOne"
+                                    >
+                                        <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                    </div>
+                                    <div class="handler-image">
+                                        <img alt="handler"  th:src="@{/images/handler.png}" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 50 and ticketDetails.schedule.vehicle.capacity &gt; 20}"/>
+                                    </div>
+                                    <div th:if="!${seat.seatNo==1}" class="fiftySeatContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
                     </div>
-                    <div class="footIconChild">
-                        <img alt="booked Logo" class="img-brand mr-2" th:src="@{/images/booked-seat.png}"><span
-                            class="generalText">Already Booked</span>
+                    <div class="vehicleMainContainer mb-3" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 20 and ticketDetails.schedule.vehicle.capacity &gt; 16}  ">
+                        <div class="twentyOuterSeatContainer">
+                            <div class="twentyInnerSeatContainer">
+                                <div th:each="seat : ${ticketDetails.seats}">
+                                    <div th:if="${seat.seatNo==1}"  class="seatOne"
+                                    >
+                                        <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                    </div>
+                                    <div th:if="!${seat.seatNo==1}" class="twentySeatContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <hr th:style="'opacity: 0.5;height: 1px;border: 0 none;margin-right: auto;margin-left: auto;background-color:#C8D2DF;'"/>
-                <span th:style="'display:flex;justify-content:flex-end;'">
+                    <div class="vehicleMainContainer mb-3" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 16 and ticketDetails.schedule.vehicle.capacity &gt; 11}  ">
+                        <div class="twentyOuterSeatContainer">
+
+                            <div class="sixteenInnerSeatContainer">
+                                <div th:each="seat : ${ticketDetails.seats}">
+                                    <div th:if="${seat.seatNo==1}"  class="seatOne"
+                                    >
+                                        <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                    </div>
+                                    <div th:if="${seat.seatNo==2}"  class="seatTwo"
+                                    >
+                                        <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                    </div>
+                                    <div th:if="${seat.seatNo &gt; 2 and seat.seatNo &lt; 9}" class="sixteenSeatContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                    </div>
+                                    <div th:if="${seat.seatNo &gt; 8}" class="sixteenSeatNineContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vehicleMainContainer mb-3" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 11 and ticketDetails.schedule.vehicle.capacity &gt; 6}  ">
+                        <div class="twentyOuterSeatContainer">
+
+                            <div class="sixteenInnerSeatContainer">
+                                <div th:each="seat : ${ticketDetails.seats}">
+                                    <div th:if="${seat.seatNo==1}"  class="seatOne"
+                                    >
+                                        <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                    </div>
+                                    <div th:if="${seat.seatNo==2}"  class="seatTwo"
+                                    >
+                                        <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                    </div>
+                                    <div th:if="${seat.seatNo &gt; 2}" class="sevenSeatContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vehicleMainContainer mb-3" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 6 and ticketDetails.schedule.vehicle.capacity &gt; 4}  ">
+                        <div class="twentyOuterSeatContainer">
+
+                            <div class="sixInnerSeatContainer">
+                                <div th:each="seat : ${ticketDetails.seats}">
+                                    <div th:if="${seat.seatNo==1}"  class="seatOne"
+                                    >
+                                        <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+
+                                    </div>
+
+                                    <div th:if="${seat.seatNo == 2 || seat.seatNo == 3}" class="sixSeatContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div>
+                                <div th:each="seat : ${ticketDetails.seats}">
+                                    <div th:if="${seat.seatNo &gt;3}" class="sixLastThreeContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3" th:if="${ticketDetails.schedule.vehicle.capacity &lt;= 4 and ticketDetails.schedule.vehicle.capacity &gt; 0}  ">
+                        <div th:style="'text-align:center;'">
+                            <img alt="seat Logo" class="newFourSeaterImage" th:src="@{/images/seatNoHandler.png}"/>
+                        </div>
+                        <div class="fourOuterSeatContainer">
+
+                            <div class="fourInnerSeatContainer">
+                                <div th:each="seat : ${ticketDetails.seats}">
+                                    <div th:if="${seat.seatNo==1}"  class="fourSeatOne"
+                                    >
+                                        <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:none;cursor: pointer;width: 28px;height:35px; margin-top: 14px;' :'background:red;cursor: not-allowed;width: 28px;height:35px; margin-top: 14px;'"></div>
+
+                                    </div>
+<!--                                    <div th:if="${seat.seatNo==1}"  class="fourSeatOne" th:style="'top:306px'">-->
+<!--                                        <div class="seatLabel"  th:style=" 'background:none;cursor: pointer;width: 28px;height:35px; margin-top: 14px;' "></div>-->
+
+<!--                                    </div>-->
+                                    <div th:if="${seat.seatNo==1}" class="fourHandler">
+                                        <img alt="handler"  th:src="@{/images/handler.png}" />
+                                    </div>
+
+
+                                    <div th:if="${seat.seatNo==2}" class="fourSeatContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:none;cursor: pointer; position: absolute;top: 10px;right: 14px; width:22px; height:31px' :'background:red;cursor: not-allowed;position: absolute;top: 10px;right: 14px; width:22px;height:31px;'"></div>
+                                    </div>
+                                    <div th:if="${seat.seatNo==3}" class="fourSeatContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)"th:style="${seat.available} ? 'background:none;cursor: pointer; position: absolute;top: 10px;right: 14px; width:22px; height:31px;' :'background:red;cursor: not-allowed;position: absolute;top: 10px;right: 14px; width:22px;height:31px;'"></div>
+                                    </div>
+                                    <div th:if="${seat.seatNo==4}" class="fourSeatContainer">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:none;cursor:pointer;margin-left: 7px;margin-right: 11px;  margin-top: 8px;height: 31px;width:23px;' :'background:red;cursor: not-allowed;margin-left: 7px;margin-right: 11px;margin-top:8px;height:31px;width:23px;'"></div>
+                                    </div>
+                                </div>
+                                <div class="fourVerticalLine">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footerIconParent">
+                        <div class="footIconChild">
+                            <img alt="seat Logo" class="img-brand mr-2" th:src="@{/images/small-seat.png}"><span
+                                class="generalText">Available</span>
+                        </div>
+                        <div class="footIconChild">
+                            <img alt="selected Logo" class="img-brand mr-2" th:src="@{/images/selected-seat.png}"><span
+                                class="generalText">Selected</span>
+                        </div>
+                        <div class="footIconChild">
+                            <img alt="booked Logo" class="img-brand mr-2" th:src="@{/images/booked-seat.png}"><span
+                                class="generalText">Already Booked</span>
+                        </div>
+                    </div>
+                    <hr th:style="'opacity: 0.5;height: 1px;border: 0 none;margin-right: auto;margin-left: auto;background-color:#C8D2DF;'"/>
+                    <span th:style="'display:flex;justify-content:flex-end;'">
                  <input  id="captureData"
                          th:field="*{seatsData}" th:style="'display:none'">
 
 
-<!--                    <div>-->
-<!--                       <a th:href="@{${flowExecutionUrl} + '&_eventId=selectSeat'}"-->
-<!--                          class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Capture details</a>-->
-<!--                    </div>-->
-<!--                    -->
+                        <!--                    <div>-->
+                        <!--                       <a th:href="@{${flowExecutionUrl} + '&_eventId=selectSeat'}"-->
+                        <!--                          class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Capture details</a>-->
+                        <!--                    </div>-->
+                        <!--                    -->
                      <input class="btn btn-primary" id="seatButton" name="_eventId_selectSeat" type="submit"
                             th:disabled="${'true'}"  value="Capture Passenger Details"/>
 
 
-                    <!--                    <br><br>-->
-<!--                <button type="submit"  class="btn btn-primary"-->
-<!--                        th:disabled="${'true'}" id="seatButton"> <span>Capture passenger details </span> </button>-->
+                        <!--                    <br><br>-->
+                        <!--                <button type="submit"  class="btn btn-primary"-->
+                        <!--                        th:disabled="${'true'}" id="seatButton"> <span>Capture passenger details </span> </button>-->
             </span>
+
+                </div>
             </div>
         </div>
-    </div>
     </form>
 </div>
 </html>
