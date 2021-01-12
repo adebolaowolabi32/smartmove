@@ -18,7 +18,14 @@ function seatBooking(id){
              inputField.value=seatData;
 
         }else{
-             elem.style.background='white';
+
+           if(elem.style.background==='none'){
+
+           elem.style.background='#74C965';
+           }else{
+            elem.style.background='white';
+           }
+
              //loop through the array and search for the id:
              try{
                 for(let i=0;i<seatNumber.length;i++){

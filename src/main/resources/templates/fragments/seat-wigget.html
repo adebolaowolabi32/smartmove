@@ -104,17 +104,20 @@
 
                             <div class="sixteenInnerSeatContainer">
                                 <div th:each="seat : ${ticketDetails.seats}">
-                                    <div th:if="${seat.seatNo==1}"  class="seatOne"
-                                    >
+                                    <div th:if="${seat.seatNo==1}"  class="seatOne" th:style="'left: 60px'">
+
                                         <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
 
                                     </div>
-                                    <div th:if="${seat.seatNo==2}"  class="seatTwo"
-                                    >
+                                    <div th:if="${seat.seatNo==2}"  class="seatTwo" th:style="'left: 60px'">
                                         <div class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
 
                                     </div>
-                                    <div th:if="${seat.seatNo &gt; 2 and seat.seatNo &lt; 9}" class="sixteenSeatContainer">
+                                    <div th:if="${seat.seatNo &gt; 2 and seat.seatNo &lt; 6}" class="sixteenSeatContainer" th:style="'margin-left: 3.6rem;'">
+
+                                        <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
+                                    </div>
+                                    <div th:if="${seat.seatNo &gt; 5 and seat.seatNo &lt; 9}" class="sixteenSeatContainer">
 
                                         <div  class="seatLabel" th:text="${seat.seatNo}" th:id="${seat.seatNo}" onclick="seatBooking(this.id)" th:style="${seat.available} ? 'background:white;cursor: pointer;' :'background:red;cursor: not-allowed;'"></div>
                                     </div>
