@@ -26,7 +26,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.*;
 
 import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmail;
@@ -151,7 +150,9 @@ public class UserService {
         }
         PassportUser passportUser = passportService.findUser(user.getEmail());
         if (passportUser != null) {
-            save(passportService.buildUser(passportUser), owner);
+            User usr = passportService.buildUser(passportUser);
+            user.setUsername(usr.getUsername());
+            save(user, owner);
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists. Kindly ask user to login with their Quickteller credentials");
         }
 
