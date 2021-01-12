@@ -85,6 +85,7 @@ public class IswCoreService {
     public  List<String> getPermissions(User user) {
         List<String> permissions = new ArrayList<>();
         Enum.Role role = user.getRole();
+        if (role == null) return permissions;
         switch (role) {
             case ISW_ADMIN: {
                 permissions = new ArrayList<>();
