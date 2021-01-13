@@ -17,16 +17,18 @@ function seatBooking(id){
              let seatData=seatNumber.join();
              inputField.value=seatData;
 
-        }else{
+        }
+         if(elem.style.background==='none'){
+                    seatNumber.push(id);
+                    elem.style.background='#74C965';
+                    let seatData=seatNumber.join();
+                    inputField.value=seatData;
+                              }
+        else{
 
-           if(elem.style.background==='none'){
-           seatNumber.push(id);
-           elem.style.background='#74C965';
-           let seatData=seatNumber.join();
-           inputField.value=seatData;
-           }else{
+
             elem.style.background='white';
-           }
+
 
              //loop through the array and search for the id:
              try{
