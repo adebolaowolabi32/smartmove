@@ -12,7 +12,7 @@ function seatBooking(id){
         return this;
        }
        if(elem.style.background==='white'){
-             seatNumber.push(id)
+             seatNumber.push(id);
              elem.style.background='#74C965';
              let seatData=seatNumber.join();
              inputField.value=seatData;
@@ -20,8 +20,10 @@ function seatBooking(id){
         }else{
 
            if(elem.style.background==='none'){
-
+           seatNumber.push(id);
            elem.style.background='#74C965';
+           let seatData=seatNumber.join();
+           inputField.value=seatData;
            }else{
             elem.style.background='white';
            }
