@@ -45,6 +45,7 @@ public class IswAuditLoggerImpl {
                 //audit.setAuditable(auditable);
                 audit.setAction(auditableAction);
                 audit.setActor(actor);
+                
                 if(!actor.isEmpty()){
                     User actorUser = userService.findByUsername(actor);
                     User actorOwner = actorUser.getOwner()!=null && (actorUser.getRole()!= Enum.Role.ISW_ADMIN || actorUser.getRole()!= Enum.Role.OPERATOR )? actorUser.getOwner() : actorUser ;
