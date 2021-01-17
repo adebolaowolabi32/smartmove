@@ -71,7 +71,7 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     private transient MultipartFile picture;
 
-    private int loginFreqType;
+    private transient int loginFreqType;
 
     @Enumerated(EnumType.STRING)
     private Enum.TicketTillStatus tillStatus = Enum.TicketTillStatus.OPEN;
