@@ -29,6 +29,13 @@ public class WalletApi {
         return walletService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
+
+    @GetMapping(value = "/balance", produces = "application/json")
+    private double findByOwner(@RequestParam("username") String username) {
+        return walletService.findByOwner(username).getBalance();
+    }
+
+
     @PutMapping(produces = "application/json", consumes = "application/json")
     private Wallet update(@Validated @RequestBody Wallet wallet) {
         return walletService.update(wallet,JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
