@@ -1,4 +1,4 @@
-let seatNumber=[];
+/*`*/let seatNumber=[];
 function seatBooking(id){
 console.log(id);
  let elements = document.querySelectorAll(".seatLabel");

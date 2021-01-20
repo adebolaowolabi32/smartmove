@@ -3,9 +3,7 @@ package com.interswitch.smartmoveserver.model;
 import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -44,12 +42,6 @@ public class Vehicle extends AbstractAuditEntity<String> implements Auditable<Lo
 
     @OneToOne
     private Device device;
-
-    @URL(message = "Picture URL is not valid")
-    @Length(max = 300, message = "Picture URL must be less than 300 characters long")
-    private String pictureUrl;
-
-    private transient MultipartFile picture;
 
     private boolean enabled;
 

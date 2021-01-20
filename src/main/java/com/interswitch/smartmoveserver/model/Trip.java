@@ -29,6 +29,7 @@ public class Trip extends AbstractAuditEntity<String> implements Auditable<Long>
     @Column(unique = true)
     private String referenceNo;
 
+    //remove fare
     private long fare;
 
     @ManyToOne
