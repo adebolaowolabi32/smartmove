@@ -7,6 +7,7 @@ import com.interswitch.smartmoveserver.repository.WalletRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -47,9 +48,11 @@ public class WalletService {
     }
 
     public Wallet findByOwner(String owner) {
+
         User user = userService.findByUsername(owner);
         if (user != null)
-            return walletRepository.findByOwnerId(user.getId());
+            return walletRepository.findByOwnerId(user.getId());;
+
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
