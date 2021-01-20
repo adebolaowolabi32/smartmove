@@ -6,6 +6,7 @@ import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.repository.AuditTrailRepository;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.DateUtil;
+import com.interswitch.smartmoveserver.util.HttpRequestUtil;
 import com.interswitchng.audit.model.Auditable;
 import com.interswitchng.audit.model.AuditableAction;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,9 @@ public class IswAuditLoggerImpl {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HttpRequestUtil httpRequestUtil;
+
     private final ExecutorService executorService;
 
     public IswAuditLoggerImpl() {
@@ -45,6 +49,7 @@ public class IswAuditLoggerImpl {
                 //audit.setAuditable(auditable);
                 audit.setAction(auditableAction);
                 audit.setActor(actor);
+
                 if(!actor.isEmpty()){
                     User actorUser = userService.findByUsername(actor);
                     User actorOwner = actorUser.getOwner()!=null && (actorUser.getRole()!= Enum.Role.ISW_ADMIN || actorUser.getRole()!= Enum.Role.OPERATOR )? actorUser.getOwner() : actorUser ;
@@ -53,7 +58,6 @@ public class IswAuditLoggerImpl {
                 audit.setActionDate(Instant.now());
                 audit.setActionTimeStamp(DateUtil.formatDate(LocalDateTime.now()));
                 audit.setDescription(actor + " "+ auditableAction.name().concat("d").toLowerCase() + " " + auditable.getAuditableName().toLowerCase()+" ");
-
                 log.info("audit trail:>" + audit);
 
                 if(audit.getResourceId()>0) {

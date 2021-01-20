@@ -65,8 +65,8 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     private boolean enabled;
 
-    @URL(message = "Picture URL is not valid")
-    @Length(max = 200, message = "Picture URL must be less than 200 characters long")
+//    @URL(message = "Picture URL is not valid")
+//    @Length(max = 200, message = "Picture URL must be less than 200 characters long")
     private String pictureUrl;
 
     private transient MultipartFile picture;

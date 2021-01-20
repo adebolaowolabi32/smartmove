@@ -53,6 +53,7 @@ public class WalletService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
+
     public Wallet findByOwner(long ownerId) {
         User user = userService.findById(ownerId);
         if (user != null)

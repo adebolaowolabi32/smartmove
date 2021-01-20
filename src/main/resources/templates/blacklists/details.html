@@ -42,28 +42,6 @@
                 </div>
                 </div>
 
-                <div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="createdBy"><b>Created By</b></label>
-                        <div class="col-sm-10"><span id="createdBy" th:text="${blacklist.createdBy!=null?blacklist.createdBy :'Unknown'}"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="createdDate"><b>Created Date</b></label>
-                        <div class="col-sm-10"><span id="createdDate" th:text="${blacklist.createdDate!=null?blacklist.createdDate:'Unknown'}"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="LastModifiedBy"><b>Last Modified By</b></label>
-                        <div class="col-sm-10"><span id="LastModifiedBy" th:text="${blacklist.lastModifiedBy!=null?blacklist.lastModifiedBy : 'Unknown'}"></span></div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2" for="LastModifiedDate"><b>Last Modified Date</b></label>
-                        <div class="col-sm-10"><span id="LastModifiedDate" th:text="${blacklist.lastModifiedDate!=null?blacklist.lastModifiedDate:'Unknown'}"></span></div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -61,28 +61,7 @@
 								<span id="owner" th:text="${vehicleCategory.owner!=null ? vehicleCategory.owner.username : ''}"></span></div>
 						</div>
 					</div>
-					<div sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" class="col">
-						<div class="form-group row">
-							<label class="col-sm-4" for="createdBy"><b>Created By</b></label>
-							<div class="col-sm-8"><span id="createdBy" th:text="${vehicleCategory.createdBy!=null?vehicleCategory.createdBy :'Unknown'}"></span>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4" for="createdDate"><b>Created Date</b></label>
-							<div class="col-sm-8"><span id="createdDate" th:text="${vehicleCategory.createdDate!=null?vehicleCategory.createdDate:'Unknown'}"></span>
-							</div>
-						</div>
 
-						<div class="form-group row">
-							<label class="col-sm-4" for="LastModifiedBy"><b>Last Modified By</b></label>
-							<div class="col-sm-8"><span id="LastModifiedBy" th:text="${vehicleCategory.lastModifiedBy!=null?vehicleCategory.lastModifiedBy : 'Unknown'}"></span></div>
-						</div>
-
-						<div class="form-group row">
-							<label class="col-sm-4" for="LastModifiedDate"><b>Last Modified Date</b></label>
-							<div class="col-sm-8"><span id="LastModifiedDate" th:text="${vehicleCategory.lastModifiedDate!=null?vehicleCategory.lastModifiedDate:'Unknown'}"></span></div>
-						</div>
-					</div>
 					<div class="col">
 						<img alt="Vehicle Picture" id="vehiclePic" th:src="${vehicleCategory.pictureUrl}">
 					</div>
