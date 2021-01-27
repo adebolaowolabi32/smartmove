@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -42,11 +43,14 @@ public class ApplicationStartup implements CommandLineRunner {
     @Autowired
     StateRepository stateRepo;
 
-   @Autowired
-   TicketTillRepository ticketTillRepo;
+    @Autowired
+    TicketTillRepository ticketTillRepo;
 
-   @Autowired
-   PassportService passportService;
+    @Autowired
+    PassportService passportService;
+
+    @Autowired
+    MessagingService messagingService;
 
 
     @Override
@@ -65,9 +69,10 @@ public class ApplicationStartup implements CommandLineRunner {
 
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
+       // sendMailTest();
     }
 
-    public void loadVehicleMakesAndModels(){
+    public void loadVehicleMakesAndModels() {
         Map<String, List<String>> vehicles = new HashMap<>();
         vehicles.put("Toyota", parseToList("Coaster, Hiace, Grand Hiace, Quantum"));
         vehicles.put("Innoson", parseToList("5000, 6601, 6857, 6730, 6850, 6751"));
@@ -76,7 +81,7 @@ public class ApplicationStartup implements CommandLineRunner {
         for (Map.Entry<String, List<String>> entry : vehicles.entrySet()) {
             VehicleMake vehicleMake = new VehicleMake();
             vehicleMake.setName(entry.getKey());
-            if (!vehicleMakeService.existsByNameIgnoreCase(vehicleMake.getName())){
+            if (!vehicleMakeService.existsByNameIgnoreCase(vehicleMake.getName())) {
                 VehicleMake vehicleMake1 = vehicleMakeService.save(vehicleMake);
                 for (String model : new ArrayList<>(entry.getValue())) {
                     VehicleModel vehicleModel = new VehicleModel();
@@ -168,7 +173,7 @@ public class ApplicationStartup implements CommandLineRunner {
             for (Map.Entry<String, List<String>> entry : stateToLocalGovtMap.entrySet()) {
                 State stateDto = new State();
                 stateDto.setName(entry.getKey());
-                stateDto.setCode(entry.getKey().substring(0,3).toUpperCase());
+                stateDto.setCode(entry.getKey().substring(0, 3).toUpperCase());
                 stateDto.setLocalGovts(new ArrayList<>(entry.getValue()));
                 if (!stateRepo.existsByNameIgnoreCase(stateDto.getName()))
                     stateRepo.save(stateDto);
@@ -181,12 +186,26 @@ public class ApplicationStartup implements CommandLineRunner {
         return Arrays.asList(categoryArray);
     }
 
-    private void viewTicketTillSummary(){
-        List<TicketTillView> ticketTillViewSummaryList = ticketTillRepo.findAggregatedTicketTillByIssuanceDateAndStatus("2020-10-08",false);
-        int counter =0;
-        for (TicketTillView t:ticketTillViewSummaryList) {
+    private void viewTicketTillSummary() {
+        List<TicketTillView> ticketTillViewSummaryList = ticketTillRepo.findAggregatedTicketTillByIssuanceDateAndStatus("2020-10-08", false);
+        int counter = 0;
+        for (TicketTillView t : ticketTillViewSummaryList) {
             counter++;
         }
     }
+
+    private void sendMailTest() {
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("user", "Earnest Test");
+        params.put("username","earnesto");
+        params.put("role", "Agent");
+        params.put("portletUri", "");
+        params.put("owner", "ISW TESTING INC");
+        params.put("password", "abcxyz@123");
+
+        messagingService.sendEmail("serihbrah@gmail.com",
+                "New User SignUp", "messages" + File.separator + "approve_user", params);
+}
 
 }

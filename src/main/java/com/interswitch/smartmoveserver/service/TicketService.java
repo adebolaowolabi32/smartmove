@@ -96,9 +96,11 @@ public class TicketService {
         List<Schedule> scheduleResults = schedules.stream()
                 .filter(s -> s.getRoute().getStartTerminal().getName().equals(scheduleBooking.getStartTerminal()) && s.getRoute().getStopTerminal().getName()
                         .equals(scheduleBooking.getStopTerminal()) && s.getDepartureDate().equals(scheduleBooking.getDeparture())).collect(Collectors.toList());
+
         List<Schedule> returnScheduleResults = schedules.stream()
                 .filter(s -> s.getRoute().getStartTerminal().getName().equals(scheduleBooking.getStopTerminal()) && s.getRoute().getStopTerminal().getName()
                         .equals(scheduleBooking.getStartTerminal()) && s.getDepartureDate().equals(scheduleBooking.getReturnDate())).collect(Collectors.toList());
+
         scheduleBooking.setSchedules(scheduleResults);
         scheduleBooking.setReturnSchedules(returnScheduleResults);
         return scheduleBooking;
@@ -122,6 +124,7 @@ public class TicketService {
         log.info("Transport Operator username===>" + transportOperatorUsername);
 
         List<FeeConfiguration> feeConfigurationList = feeConfigurationService.findEnabledFeeConfigByOperatorUsername(transportOperatorUsername);
+
         log.info("feeConfigurationList===>" + feeConfigurationList);
         //add FeeConfiguration list to the ticketDetails
         ticketDetails.setFees(feeConfigurationList);
@@ -164,10 +167,8 @@ public class TicketService {
             Schedule returnSchedule = ticketDetails.getReturnSchedule();
             if (ticketDetails.getReturnSchedule() != null) {
                 Ticket returnTicket = this.populateTicket(ticketDetails, returnSchedule, pass, username);
-
                 totalFare += this.applyConfiguredFees(ticketDetails, returnTicket, pass);
                 tickets.add(returnTicket);
-
             }
 
         }
@@ -417,7 +418,7 @@ public class TicketService {
     }
 
     private void setPassengerSeatAsUnavailable(TicketDetails ticketDetails,Passenger passenger){
-       Seat seat =  seatRepository.findByVehicleIdAndSeatNo(ticketDetails.getSchedule().getVehicle().getId(),Integer.valueOf(passenger.getSeatNo()));
+        Seat seat =  seatRepository.findByVehicleIdAndSeatNo(ticketDetails.getSchedule().getVehicle().getId(),Integer.valueOf(passenger.getSeatNo()));
         seat.setAvailable(false);
         seat.setPicked(true);
         seatRepository.save(seat);

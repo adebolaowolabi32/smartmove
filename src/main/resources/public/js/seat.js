@@ -1,13 +1,12 @@
 /*`*/let seatNumber=[];
 function seatBooking(id){
-console.log(id);
  let elements = document.querySelectorAll(".seatLabel");
  let inputField= document.getElementById('captureData');
  let submitButton= document.getElementById('seatButton');
 
   for (let elem of elements) {
       if(elem.id===id){
-         console.log(elem.style.background)
+
        if(elem.style.background==='red'){
         return this;
        }
@@ -58,6 +57,5 @@ console.log(id);
 }
 }
 
-console.log("SeatNumberSize===>"+seatNumber.length)
 }
 

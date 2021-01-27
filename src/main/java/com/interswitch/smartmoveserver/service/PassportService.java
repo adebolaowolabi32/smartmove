@@ -23,6 +23,7 @@ import java.util.Map;
 /**
  * @author adebola.owolabi
  */
+
 @Slf4j
 @Service
 public class PassportService {
@@ -65,6 +66,7 @@ public class PassportService {
     }
 
     public String getAccessToken(){
+        log.info("++calling passport for access token===>");
         String auth = clientId + ":" + clientSecret;
         byte[] encodedAuth = Base64.encodeBase64(
                 auth.getBytes(Charset.forName("US-ASCII")) );
@@ -77,6 +79,7 @@ public class PassportService {
         formData.add("scope", "profile");
         ResponseEntity response = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, Object.class);
         Map<String, Object> resultToJson = (Map<String, Object>) response.getBody();
+        log.info("done calling passport for access token===>");
         return "Bearer " + resultToJson.get("access_token").toString();
     }
 

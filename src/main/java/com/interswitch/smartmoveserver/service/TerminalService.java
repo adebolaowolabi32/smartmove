@@ -135,7 +135,9 @@ public class TerminalService {
         }
     }
 
-
+    public List<Terminal> findTerminalsByOwnerId(long ownerId){
+        return terminalRepository.findByOwnerId(ownerId);
+    }
     public Long countByOwner(User user){
         return terminalRepository.countByOwner(user);
     }
