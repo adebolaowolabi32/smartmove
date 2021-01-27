@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.config;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.IswCoreService;
 import com.interswitch.smartmoveserver.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +38,7 @@ import java.util.Set;
 */
 
 
-
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -52,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
+
         http.authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**","/swf/**", "/img/**", "/assets/**", "/vendor/**",
                         "/keep-alive", "/retry", "/", "/index", "/login", "/signup","/health").permitAll()

@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author adebola.owolabi
  */
@@ -34,6 +36,11 @@ public class TerminalApi {
     @GetMapping(value = "/{id}", produces = "application/json")
     private Terminal findById(@Validated @PathVariable long id) {
         return terminalService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    }
+
+    @GetMapping(value = "/owner/{id}", produces = "application/json")
+    private List<Terminal> findByOwnerId(@Validated @PathVariable long ownerId) {
+        return terminalService.findTerminalsByOwnerId(ownerId);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")

@@ -17,5 +17,6 @@ public interface TerminalRepository extends CrudRepository<Terminal, Long>  {
     Long countByOwner(User owner);
     Page<Terminal> findAll(Pageable pageable);
     List<Terminal> findAll();
+    List<Terminal> findByOwnerId(long ownerId);
     boolean existsByName(String name);
 }

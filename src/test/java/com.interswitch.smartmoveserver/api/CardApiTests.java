@@ -44,9 +44,9 @@ public class CardApiTests {
     @BeforeAll
     public void setup() {
         card = new Card();
-        long id = 1000013;
+        long id = 1000014;
         card.setId(id);
-        card.setPan("12345678901234");
+        card.setPan("12345678901034");
         card.setBalance(40000);
         card.setOwner(new User());
         card.setExpiry(LocalDate.now().plusYears(3));
