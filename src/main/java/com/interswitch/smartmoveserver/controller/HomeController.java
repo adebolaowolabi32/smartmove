@@ -10,7 +10,6 @@ import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -71,17 +70,6 @@ public class HomeController {
     @Autowired
     private SecurityUtil securityUtil;
 
-    @Value("${passport.logout.uri}")
-    private String logoutUri;
-
-    private String passportSignUpUrl;
-
-    @Value("${spring.security.oauth2.client.registration.passport.client-id}")
-    private String clientId;
-
-    @Value("${smartmove.url}")
-    private String smartmoveUrl;
-
     @Autowired
     IswCoreService coreService;
 
@@ -91,7 +79,7 @@ public class HomeController {
 
     @GetMapping(value = {"/", "/index", "/home"})
     public String home(Model model) {
-        model.addAttribute("passportSignUpUrl", passportSignUpUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl + "/signup");
+        model.addAttribute("passportSignUpUrl", securityUtil.getPassportSignUpUrl());
         return "index";
     }
 
@@ -228,9 +216,8 @@ public class HomeController {
     @GetMapping("/smlogout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:" + logoutUri;
+        return "redirect:" + securityUtil.getPassportLogoutUrl();
     }
-
 
     @GetMapping("/setCurrency")
     public String setCurrency(Model model, @RequestParam(defaultValue = "NGN") String currency, @RequestParam(defaultValue = "/") String path, HttpSession session) {
