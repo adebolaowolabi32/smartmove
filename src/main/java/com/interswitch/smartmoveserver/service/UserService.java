@@ -256,24 +256,36 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
     }
 
-    public List<User> findAllByRole(String principal, Enum.Role role) {
+    public List<User> findAllByRole(String principal, long owner, Enum.Role role) {
         Optional<User> user = userRepository.findByUsername(principal);
         if (!user.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
 
-        if (securityUtil.isOwnedEntity(role)) {
-            if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                return userRepository.findAllByRoleAndOwner(role, user.get());
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(role)) {
+                if (securityUtil.isOwnedEntity(user.get().getRole())) {
+                    return userRepository.findAllByRoleAndOwner(role, user.get());
+                } else {
+                    return userRepository.findAllByRole(role);
+                }
             } else {
+                if (securityUtil.isOwnedEntity(user.get().getRole()))
+                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
                 return userRepository.findAllByRole(role);
             }
         } else {
-            if (securityUtil.isOwnedEntity(user.get().getRole()))
+            if (securityUtil.isOwnedEntity(role)) {
+                if (securityUtil.isOwner(principal, owner)) {
+                    Optional<User> ownerUser = userRepository.findById(owner);
+                    if (!ownerUser.isPresent())
+                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
+                    return userRepository.findAllByRoleAndOwner(role, ownerUser.get());
+                }
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
-            return userRepository.findAllByRole(role);
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
-
     public PageView<User> findAllPaginatedByRole(String principal, long owner, Enum.Role role, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         Optional<User> user = userRepository.findByUsername(principal);
