@@ -424,4 +424,26 @@ public class TicketService {
         seatRepository.save(seat);
     }
 
+    public PageView<Ticket> findAllByOperator(Long owner, int page, int size, String principal) {
+        PageRequest pageable = pageUtil.buildPageRequest(page, size);
+        User user = userService.findByUsername(principal);
+
+        if (owner == 0) {
+            if (securityUtil.isOwnedEntity(user.getRole())) {
+                Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, user);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            } else {
+                Page<Ticket> pages = ticketRepository.findAll(pageable);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+        } else {
+            if (securityUtil.isOwner(principal, owner)) {
+                User ownerUser = userService.findById(owner);
+                Page<Ticket> pages = ticketRepository.findAllByOperator(pageable, ownerUser);
+                return new PageView<>(pages.getTotalElements(), pages.getContent());
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+        }
+    }
+
 }

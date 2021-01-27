@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.api;
 
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Trip;
+import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.TripService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class TripApi {
 
     @GetMapping(produces = "application/json")
     private PageView<Trip> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size) {
+                                      @RequestParam(defaultValue = "10") int size) {
         return tripService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 

@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.api;
 
 import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.PageView;
+import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.DeviceService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ public class DeviceApi {
     private DeviceService deviceService;
 
     @GetMapping(produces = "application/json")
-    private PageView<Device> findAll(@RequestParam(defaultValue = "1") int page,
-                                 @RequestParam(defaultValue = "10") int size) {
-        return deviceService.findAllPaginated(0L, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private PageView<Device> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                      @RequestParam(defaultValue = "10") int size) {
+        return deviceService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

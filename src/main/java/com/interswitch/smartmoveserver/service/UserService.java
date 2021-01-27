@@ -176,6 +176,7 @@ public class UserService {
         passportUser = passportService.createUser(user);
         //iswCoreService.createUser(user);
         user.setUsername(passportUser.getUsername());
+        user.setPassword(passportUser.getPassword());
         save(user, owner);
         sendUserSetUpEmail(user, owner);
         return user;
@@ -255,34 +256,21 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
     }
 
-    public List<User> findAllByRole(String principal, long owner, Enum.Role role) {
+    public List<User> findAllByRole(String principal, Enum.Role role) {
         Optional<User> user = userRepository.findByUsername(principal);
         if (!user.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged in user not found");
 
-        if (owner == 0) {
-            if (securityUtil.isOwnedEntity(role)) {
-                if (securityUtil.isOwnedEntity(user.get().getRole())) {
-                    return userRepository.findAllByRoleAndOwner(role, user.get());
-                } else {
-                    return userRepository.findAllByRole(role);
-                }
+        if (securityUtil.isOwnedEntity(role)) {
+            if (securityUtil.isOwnedEntity(user.get().getRole())) {
+                return userRepository.findAllByRoleAndOwner(role, user.get());
             } else {
-                if (securityUtil.isOwnedEntity(user.get().getRole()))
-                    throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
                 return userRepository.findAllByRole(role);
             }
         } else {
-            if (securityUtil.isOwnedEntity(role)) {
-                if (securityUtil.isOwner(principal, owner)) {
-                    Optional<User> ownerUser = userRepository.findById(owner);
-                    if (!ownerUser.isPresent())
-                        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Requested user not found");
-                    return userRepository.findAllByRoleAndOwner(role, ownerUser.get());
-                }
+            if (securityUtil.isOwnedEntity(user.get().getRole()))
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
-            }
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
+            return userRepository.findAllByRole(role);
         }
     }
 

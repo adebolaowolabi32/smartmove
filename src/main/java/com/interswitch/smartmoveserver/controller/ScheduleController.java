@@ -45,10 +45,12 @@ public class ScheduleController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<Schedule> schedulePage = scheduleService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(schedulePage));
         List<Schedule> schedules = scheduleService.findAll(owner, principal.getName());
         model.addAttribute("schedules", schedules);
+
+        PageView<Schedule> schedulePage = scheduleService.findAllPaginated(owner, page, size, principal.getName());
+        model.addAttribute("pageNumbers", pageUtil.getPageNumber(schedulePage));
+        model.addAttribute("schedulePage", schedulePage);
         return "schedules/get";
     }
 

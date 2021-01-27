@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.api;
 
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
+import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.TerminalService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class TerminalApi {
     TerminalService terminalService;
 
     @GetMapping(produces = "application/json")
-    private PageView<Terminal> findAll(@RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size) {
-        return terminalService.findAllPaginated(0L, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private PageView<Terminal> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                      @RequestParam(defaultValue = "10") int size) {
+        return terminalService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")

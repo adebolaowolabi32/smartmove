@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Ticket;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.TicketService;
@@ -41,6 +42,7 @@ public class TicketController {
         //model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
         User user = userService.findByUsername(principal.getName());
         List<Ticket> tickets = ticketService.findAllByOwner(owner, principal.getName());
+        PageView<Ticket> ticketPage = ticketService.findAllByOperator(owner, page, size, principal.getName());
         model.addAttribute("tickets", tickets);
         model.addAttribute("status",user.getTillStatus().name());
         return "tickets/get";

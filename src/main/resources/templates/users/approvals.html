@@ -16,10 +16,9 @@
             <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${success})"></div>
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-            <table cellspacing="0" class="table table-responsive" id="dataTable" width="100%">
+            <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
                 <thead class='thead-light'>
                 <tr>
-                    <th>Id</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Address</th>
@@ -32,8 +31,8 @@
                 </tr>
                 </thead>
                 <tbody>
+
                 <tr th:each="approval : ${approvals}">
-                    <td th:text="${approval.id}"></td>
                     <td th:text="${approval.usr.firstName}"></td>
                     <td th:text="${approval.usr.lastName}"></td>
                     <td th:text="${approval.usr.address}"></td>

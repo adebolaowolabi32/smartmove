@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.api;
 import com.interswitch.smartmoveserver.model.FeeConfiguration;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Trip;
+import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.FeeConfigurationService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ public class FeeConfigurationApi {
     private FeeConfigurationService feeConfigurationService;
 
     @GetMapping(produces = "application/json")
-    private PageView<FeeConfiguration> findAll(@RequestParam(defaultValue = "1") int page,
-                                               @RequestParam(defaultValue = "10") int size) {
-        return feeConfigurationService.findAllPaginated(0L,page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    private PageView<FeeConfiguration> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                      @RequestParam(defaultValue = "10") int size) {
+        return feeConfigurationService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
