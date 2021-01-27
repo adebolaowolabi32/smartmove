@@ -209,7 +209,6 @@ public class UserController {
     @GetMapping("/approvals")
     public String showApprovals(Principal principal, Model model) {
         model.addAttribute("approvals", userService.getApprovals(principal.getName()));
-
         return "users/approvals";
     }
 

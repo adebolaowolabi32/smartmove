@@ -205,7 +205,7 @@ public class UserService {
                 if (ownerOptional.isPresent())
                     owner = ownerOptional.get();
                 else
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The inputted referrer does not exist on Smartmove.");
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("The referrer : %s, does not exist on Smartmove ",ownerName));
             }
             user.setRole(userRegistration.getRole());
             user.setAddress(userRegistration.getAddress());
