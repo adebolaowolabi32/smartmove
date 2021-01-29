@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 public class ScheduleSearchRequest {
 
     @Min(value=1, message = "agent owner Id is required" )
-    private long agentOwnerId;
+    private long ownerId;
 
     @NotEmpty(message = "departure point required")
     private String startTerminal;

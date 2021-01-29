@@ -110,13 +110,13 @@ public class TicketService {
     public ScheduleBooking findBookingFromApi(ScheduleSearchRequest searchRequest) {
         ScheduleBooking scheduleBooking = searchRequest.mapToScheduleBooking();
         //make sure to search by operator
-        User agentOwner;
+        User owner;
         try {
-             agentOwner = userService.findById(searchRequest.getAgentOwnerId());
-             return findBooking(agentOwner.getUsername(),scheduleBooking);
+             owner = userService.findById(searchRequest.getOwnerId());
+             return findBooking(owner.getUsername(),scheduleBooking);
         }catch(ResponseStatusException ex){
             if(ex.getStatus()==HttpStatus.NOT_FOUND){
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("the agent's owner id - %d does'nt exist on Smartmove",searchRequest.getAgentOwnerId()));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("the agent's owner id - %d does'nt exist on Smartmove",searchRequest.getOwnerId()));
             }
             return scheduleBooking;
         }
