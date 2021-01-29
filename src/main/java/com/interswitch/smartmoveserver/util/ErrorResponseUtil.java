@@ -38,7 +38,7 @@ public class ErrorResponseUtil {
 		return errorMap;
 	}
 
-	public String getErrorMessages(BindingResult result) {
+	public static String getErrorMessages(BindingResult result) {
 		return result.getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.joining(","));
 	}
 }

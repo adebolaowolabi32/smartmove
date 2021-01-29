@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -52,14 +53,18 @@ public class VehicleCategory extends AbstractAuditEntity<String> implements Audi
     @Length(max = 300, message = "Picture URL must be less than 300 characters long")
     private String pictureUrl;
 
+    @JsonIgnore
     private transient MultipartFile picture;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
 
+    @JsonIgnore
     private int noRows;
 
+    @JsonIgnore
     private int noColumns;
 
     @NotNull(message = "Capacity is required.")
@@ -70,11 +75,13 @@ public class VehicleCategory extends AbstractAuditEntity<String> implements Audi
     @JoinColumn(name = "seat")
     private Set<Seat> seats;
 
+    @JsonIgnore
     @Override
     public Long getAuditableId() {
         return this.getId();
     }
 
+    @JsonIgnore
     @Override
     public String getAuditableName() {
         return this.getClass().getSimpleName();

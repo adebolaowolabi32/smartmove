@@ -4,12 +4,15 @@ import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Schedule;
 import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.ScheduleService;
+import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/schedules")

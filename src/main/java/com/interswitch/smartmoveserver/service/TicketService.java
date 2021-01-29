@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.service;
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.request.ScheduleSearchRequest;
 import com.interswitch.smartmoveserver.model.view.*;
 import com.interswitch.smartmoveserver.repository.SeatRepository;
 import com.interswitch.smartmoveserver.repository.TicketRepository;
@@ -104,6 +105,21 @@ public class TicketService {
         scheduleBooking.setSchedules(scheduleResults);
         scheduleBooking.setReturnSchedules(returnScheduleResults);
         return scheduleBooking;
+    }
+
+    public ScheduleBooking findBookingFromApi(ScheduleSearchRequest searchRequest) {
+        ScheduleBooking scheduleBooking = searchRequest.mapToScheduleBooking();
+        //make sure to search by operator
+        User agentOwner;
+        try {
+             agentOwner = userService.findById(searchRequest.getAgentOwnerId());
+             return findBooking(agentOwner.getUsername(),scheduleBooking);
+        }catch(ResponseStatusException ex){
+            if(ex.getStatus()==HttpStatus.NOT_FOUND){
+                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("the agent's owner id - %d does'nt exist on Smartmove",searchRequest.getAgentOwnerId()));
+            }
+            return scheduleBooking;
+        }
     }
 
     public TicketDetails makeBooking(String username, String scheduleId, int noOfPassengers) {

@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model.view;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interswitch.smartmoveserver.model.Route;
 import com.interswitch.smartmoveserver.model.Schedule;
 import lombok.Data;
@@ -15,8 +16,10 @@ import java.util.List;
 @Data
 public class ScheduleBooking implements Serializable {
 
+    @JsonIgnore
     private String scheduleId;
 
+    @JsonIgnore
     private Route schedule;
 
     private String startTerminal;
@@ -29,13 +32,16 @@ public class ScheduleBooking implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate returnDate;
 
+    @JsonIgnore
     private int noOfPassengers;
 
     private List<Schedule> schedules;
 
     private List<Schedule> returnSchedules;
 
+    @JsonIgnore
     private boolean roundTrip;
 
+    @JsonIgnore
     private boolean invalid;
 }

@@ -59,11 +59,13 @@ public class Terminal extends AbstractAuditEntity<String> implements Auditable<L
 
     private boolean enabled;
 
+    @JsonIgnore
     @Override
     public Long getAuditableId() {
         return this.getId();
     }
 
+    @JsonIgnore
     @Override
     public String getAuditableName() {
         return this.getClass().getSimpleName();

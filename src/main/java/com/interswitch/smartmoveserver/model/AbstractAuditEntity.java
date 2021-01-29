@@ -27,6 +27,7 @@ public abstract class AbstractAuditEntity<T> {
     @CreatedBy
     private T createdBy;
 
+    @JsonIgnore
     @CreatedDate
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdDate;
@@ -35,6 +36,7 @@ public abstract class AbstractAuditEntity<T> {
     @LastModifiedBy
     private T lastModifiedBy;
 
+    @JsonIgnore
     @LastModifiedDate
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime lastModifiedDate;

@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -52,19 +53,23 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
     @NotNull(message = "Arrival time is required.")
     private LocalTime arrivalTime;
 
+    @JsonIgnore
     private String duration;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner")
     private User owner;
 
     private boolean enabled;
 
+    @JsonIgnore
     @Override
     public Long getAuditableId() {
         return this.getId();
     }
 
+    @JsonIgnore
     @Override
     public String getAuditableName() {
         return this.getClass().getSimpleName();
