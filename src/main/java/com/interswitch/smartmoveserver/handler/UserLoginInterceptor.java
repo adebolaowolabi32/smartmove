@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.handler;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -19,7 +20,7 @@ import java.util.List;
 @Component
 public class UserLoginInterceptor extends HandlerInterceptorAdapter {
 
-    private static List<String> excludedEndpoints = Arrays.asList("/", "/signup/?", "/smlogout/?", "/index/?", "/assets/.*", "/css/.*", "/fonts/.*", "/images/.*", "/img/.*", "/js/.*", "/sass/.*", "/scss/.*", "/vendor/.*");
+    private static List<String> excludedEndpoints = Arrays.asList("/", "/api/.*","/signup/?", "/smlogout/?", "/index/?", "/assets/.*", "/css/.*", "/fonts/.*", "/images/.*", "/img/.*", "/js/.*", "/sass/.*", "/scss/.*", "/vendor/.*");
     @Autowired
     private UserService userService;
     @Autowired

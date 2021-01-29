@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractAuditEntity<T> {
 
+    @JsonIgnore
     @CreatedBy
     private T createdBy;
 
@@ -29,6 +31,7 @@ public abstract class AbstractAuditEntity<T> {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdDate;
 
+    @JsonIgnore
     @LastModifiedBy
     private T lastModifiedBy;
 

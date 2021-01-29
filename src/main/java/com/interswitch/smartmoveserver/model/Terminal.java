@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,6 +50,7 @@ public class Terminal extends AbstractAuditEntity<String> implements Auditable<L
     @NotNull(message = "LGA is required.")
     private String lga;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
