@@ -65,7 +65,9 @@ public class UserController {
                          @Valid @RequestParam(defaultValue = "10") int size, Model model) {
         PageView<User> userPage = userService.findAllPaginatedByRole(principal.getName(), owner, role, page, size);
         model.addAttribute("title", pageUtil.buildTitle(role));
-        model.addAttribute("role", securityUtil.checkRole(role));
+        if (role.name().matches("[a-zA-Z_]+")) {
+            model.addAttribute("role", role);
+        }
         model.addAttribute("userPage", userPage);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
         model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
@@ -101,9 +103,8 @@ public class UserController {
         user.setRole(role);
         model.addAttribute("title", pageUtil.buildTitle(role));
         model.addAttribute("user", user);
-        Enum.Role userRole = role;
         //TODO change findAll to findAllEligible
-        model.addAttribute("isOwned", securityUtil.isOwnedEntity(userRole));
+        model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
         model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
         return "users/create";
     }
@@ -116,9 +117,8 @@ public class UserController {
         user.setRole(role);
         model.addAttribute("title", pageUtil.buildTitle(role));
         model.addAttribute("user", user);
-        Enum.Role userRole = role;
         //TODO change findAll to findAllEligible
-        model.addAttribute("isOwned", securityUtil.isOwnedEntity(userRole));
+        model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
         model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
         return "users/create";
     }
@@ -134,8 +134,7 @@ public class UserController {
             model.addAttribute("title", pageUtil.buildTitle(role));
             model.addAttribute("user", user);
             //TODO change findAll to findAllEligible
-            Enum.Role userRole = role;
-            model.addAttribute("isOwned", securityUtil.isOwnedEntity(userRole));
+            model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
             model.addAttribute("owners", userService.findOwners(pageUtil.getOwners(role)));
             return "users/create";
         }
