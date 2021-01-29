@@ -192,7 +192,6 @@ public class VehicleCategoryService {
         Set<Seat> seats = new HashSet<>();
 
         for (int i = 1; i <= vehicle.getCapacity(); i++) {
-
             Seat seat = new Seat();
             seat.setSeatNo(i);
             seat.setAvailable(true);

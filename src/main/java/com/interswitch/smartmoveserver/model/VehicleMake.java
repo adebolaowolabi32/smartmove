@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,11 +27,13 @@ public class VehicleMake extends AbstractAuditEntity<String> implements Auditabl
     @Column(unique=true)
     private String name;
 
+    @JsonIgnore
     @Override
     public Long getAuditableId() {
         return this.getId();
     }
 
+    @JsonIgnore
     @Override
     public String getAuditableName() {
         return this.getClass().getSimpleName();

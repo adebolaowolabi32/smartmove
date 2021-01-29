@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -45,11 +46,15 @@ public class Vehicle extends AbstractAuditEntity<String> implements Auditable<Lo
 
     private boolean enabled;
 
+
+    @JsonIgnore
     @Override
     public Long getAuditableId() {
         return this.getId();
     }
 
+
+    @JsonIgnore
     @Override
     public String getAuditableName() {
         return this.getClass().getSimpleName();

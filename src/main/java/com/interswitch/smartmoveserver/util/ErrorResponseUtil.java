@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 @Component
 public class ErrorResponseUtil {
 
+    public static String getErrorMessages(BindingResult result) {
+        return result.getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.joining(","));
+    }
+
     public Map<String, String> getErrorFieldMap(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getAllErrors().forEach((error) -> {
@@ -36,9 +40,5 @@ public class ErrorResponseUtil {
 
         errorMap.put("errors", errorMessages);
         return errorMap;
-    }
-
-    public String getErrorMessages(BindingResult result) {
-        return result.getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.joining(","));
     }
 }

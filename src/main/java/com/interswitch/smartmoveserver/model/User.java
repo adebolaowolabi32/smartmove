@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interswitchng.audit.model.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,9 +30,11 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @JsonIgnore
     @Column(unique=true)
     private String username;
 
+    @JsonIgnore
     private String password;
 
     @NotBlank(message = "First name is required.")
@@ -68,8 +71,10 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 //    @Length(max = 200, message = "Picture URL must be less than 200 characters long")
     private String pictureUrl;
 
+    @JsonIgnore
     private transient MultipartFile picture;
 
+    @JsonIgnore
     private transient int loginFreqType;
 
     @Enumerated(EnumType.STRING)

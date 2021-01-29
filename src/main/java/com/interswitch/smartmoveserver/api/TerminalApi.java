@@ -4,6 +4,7 @@ import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.service.TerminalService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/terminals")
 public class TerminalApi {
@@ -39,8 +41,8 @@ public class TerminalApi {
     }
 
     @GetMapping(value = "/owner/{id}", produces = "application/json")
-    private List<Terminal> findByOwnerId(@Validated @PathVariable long ownerId) {
-        return terminalService.findTerminalsByOwnerId(ownerId);
+    private List<Terminal> findByOwnerId(@Validated @PathVariable long id) {
+        return terminalService.findTerminalsByOwnerId(id);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")

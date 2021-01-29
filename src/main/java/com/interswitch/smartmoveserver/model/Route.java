@@ -1,5 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,17 +41,20 @@ public class Route extends AbstractAuditEntity<String> implements Auditable<Long
     @NotNull(message = "Fare is required.")
     private long fare;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
 
     private boolean enabled;
 
+    @JsonIgnore
     @Override
     public Long getAuditableId() {
         return this.getId();
     }
 
+    @JsonIgnore
     @Override
     public String getAuditableName() {
         return this.getClass().getSimpleName();
