@@ -65,11 +65,10 @@ public class UserController {
                          @Valid @RequestParam(defaultValue = "10") int size, Model model) {
         PageView<User> userPage = userService.findAllPaginatedByRole(principal.getName(), owner, role, page, size);
         model.addAttribute("title", pageUtil.buildTitle(role));
-        Enum.Role userRole = role;
-        model.addAttribute("role", userRole);
+        model.addAttribute("role", securityUtil.checkRole(role));
         model.addAttribute("userPage", userPage);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
-        model.addAttribute("isOwned", securityUtil.isOwnedEntity(userRole));
+        model.addAttribute("isOwned", securityUtil.isOwnedEntity(role));
         return "users/get";
     }
 
