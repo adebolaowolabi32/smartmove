@@ -65,6 +65,26 @@ public class SecurityUtil {
         return user.getRole() == Enum.Role.OPERATOR;
     }
 
+    public Enum.Role checkRole(Enum.Role role) {
+        Enum.Role r = null;
+        switch (role) {
+            case ISW_ADMIN:
+            case EXECUTIVE:
+            case REGULATOR:
+            case OPERATOR:
+            case VEHICLE_OWNER:
+            case AGENT:
+            case DRIVER:
+            case SERVICE_PROVIDER:
+            case INSPECTOR:
+            case TICKETER:
+            case COMMUTER:
+                return role;
+            default:
+                return null;
+        }
+    }
+
     public String getPassportSignUpUrl() {
         return passportSignUpUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl + "/signup";
     }
