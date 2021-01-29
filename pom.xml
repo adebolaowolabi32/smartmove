@@ -6,53 +6,87 @@
     <groupId>com.interswitch</groupId>
     <artifactId>smartmove</artifactId>
     <version>1.0-SNAPSHOT</version>
-  
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.5.RELEASE</version>
         <relativePath/>
     </parent>
-  
+
     <properties>
         <jquery.version>3.4.1</jquery.version>
         <bootstrap.version>4.4.1-1</bootstrap.version>
         <parsleyjs.version>2.8.1</parsleyjs.version>
         <json-path.version>2.4.0</json-path.version>
         <json-smart.version>2.3</json-smart.version>
-        <spring-security-oauth-boot.version>2.2.5.RELEASE</spring-security-oauth-boot.version>
         <thymeleaf-security.version>3.0.4.RELEASE</thymeleaf-security.version>
-        <spring-security.version>5.3.0.RELEASE</spring-security.version>
         <thymeleaf-layout.version>2.3.0</thymeleaf-layout.version>
         <spring-webflow.version>2.5.1.RELEASE</spring-webflow.version>
         <spring-webflow-js.version>2.4.8.RELEASE</spring-webflow-js.version>
+        <logback-kafka-appender.version>0.2.0-RC2</logback-kafka-appender.version>
+        <logstash-logback-encoder.version>6.4</logstash-logback-encoder.version>
         <fortify-plugin.version>1.0-SNAPSHOT</fortify-plugin.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
-	</properties>
-  <build>
-    <finalName>${project.artifactId}</finalName>
-    <plugins>
-        <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-        </plugin>
-        <plugin>
-            <groupId>org.sourceforge.fortify</groupId>
-            <artifactId>fortify-plugin</artifactId>
-            <version>${fortify-plugin.version}</version>
-        </plugin>
-        <plugin>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>${sonar-maven-plugin.version}</version>
-        </plugin>
-    </plugins>
-  </build>
+        <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+        <isw-audit.version>2.0-RELEASE</isw-audit.version>
+    </properties>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sourceforge.fortify</groupId>
+                <artifactId>fortify-plugin</artifactId>
+                <version>${fortify-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!-- attached to Maven test phase -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/jacoco-report</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -72,6 +106,17 @@
             <artifactId>mssql-jdbc</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.danielwegener</groupId>
+            <artifactId>logback-kafka-appender</artifactId>
+            <version>${logback-kafka-appender.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
@@ -80,19 +125,8 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-            <version>${spring-security-oauth-boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-client</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-jose</artifactId>
-            <version>${spring-security.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -125,6 +159,12 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -174,6 +214,41 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-java8time</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.interswitch</groupId>
+            <artifactId>isw-postoffice-sender</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.interswitchng</groupId>
+            <artifactId>isw-email-rest-sdk</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.interswitch</groupId>
+            <artifactId>isw-postoffice-sender</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.interswitchng</groupId>
+            <artifactId>isw-audit</artifactId>
+            <version>${isw-audit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <version>4.0.5.Final</version>
         </dependency>
     </dependencies>
 </project>

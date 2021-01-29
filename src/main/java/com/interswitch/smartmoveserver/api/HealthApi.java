@@ -1,8 +1,9 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.request.DeviceConnection;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -16,11 +17,5 @@ public class HealthApi {
     @GetMapping()
     public String getHealth() {
         return "I'm alive!";
-    }
-
-    @PostMapping()
-    public String sayHello(@RequestBody DeviceConnection deviceConnection) {
-        log.info("Message received from device {}", deviceConnection);
-        return "Device Connected Successfully";
     }
 }

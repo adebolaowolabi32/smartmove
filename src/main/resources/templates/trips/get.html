@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default.html}">
 <title layout:fragment="title">Trips</title>
-<div layout:fragment="content" class="card mb-4">
+<div class="card mb-4" layout:fragment="content" style="border:none">
     <div class="card-header"><i class="fas fa-road mr-1"></i><span>Trips</span></div>
     <div class="card-body">
         <div class="table-wrapper">
@@ -11,6 +11,9 @@
                     <div class="col-sm-8">
                         <h2><b><span>Trips</span></b></h2>
                     </div>
+
+                    <div th:replace="fragments/alert-success :: alert-success(message=${uploaded} ? #{trip.uploaded.message} : (${updated} ? #{trip.updated.message} : false))"></div>
+
                     <div class="col-sm-4">
                         <div class="row">
                             <a href="#" th:href="@{/trips/create}" class="btn btn-info"><i class="fas fa-plus"
@@ -18,20 +21,20 @@
                                 New</a>
                             <a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh
                                 List</a>
-                            <a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export
-                                to Excel</a>
+                            <a class="btn btn-info" href="#" th:href="@{/trips/upload}"><i aria-hidden="true"
+                                                                                           class="fas fa-file-import"></i>
+                                Import CSV </a>
                         </div>
                     </div>
                 </div>
             </div>
             <br>
-            <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{trips.deleted.message} : false)"></div>
+            <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{trip.deleted.message} : false)"></div>
             <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
             <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
                 <thead class='thead-light'>
                 <tr>
                     <th>Trip Reference ID</th>
-                    <th>Transport Mode</th>
                     <th>Driver</th>
                     <th>Vehicle</th>
                     <th>Departure Terminal</th>
@@ -45,39 +48,30 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="trip : ${tripPage.content}">
+                <tr th:each="trip : ${trips}">
                     <td th:text="${trip.referenceNo}"></td>
-                    <td th:text="${trip.mode}"></td>
                     <td th:text="${trip.driver!=null ? trip.driver.firstName + ' ' + trip.driver.lastName : ''}"></td>
                     <td th:text="${trip.vehicle!=null ? trip.vehicle.name + ' - ' + trip.vehicle.regNo : '' }"></td>
-                    <td th:text="${trip.schedule!=null ? trip.schedule.startTerminal.name  : ''}"></td>
-                    <td th:text="${trip.schedule!=null ? trip.schedule.stopTerminal.name  : ''}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.route.startTerminal.name  : ''}"></td>
+                    <td th:text="${trip.schedule!=null ? trip.schedule.route.stopTerminal.name  : ''}"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.departureDate  : ''}"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.departureTime  : ''}"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.arrivalDate  : ''}"></td>
                     <td th:text="${trip.schedule!=null ? trip.schedule.arrivalTime  : ''}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/details/{id}(id=${trip.id})}">
-                            <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
-
                     <td>
                         <a class="justify-content-center" th:href="@{/trips/delete/{id}(id=${trip.id})}">
-                            <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
                         </a>
                     </td>
-
                 </tr>
                 </tbody>
             </table>
-            <div th:if="${tripPage.totalPages > 0}" class="pagination"
-                 th:each="pageNumber : ${pageNumbers}">
-                <a th:href="@{/get(size=${tripPage.size}, page=${pageNumber})}"
-                   th:class="${pageNumber==tripPage.number + 1} ? active">
-                    <button class='btn btn-outline-default' th:text=${pageNumber}></button>
-                </a>
-            </div>
         </div>
     </div>
 </div>

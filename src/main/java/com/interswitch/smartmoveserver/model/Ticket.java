@@ -1,6 +1,8 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,7 +13,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "tickets")
-public class Ticket implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Ticket extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -40,7 +43,6 @@ public class Ticket implements Serializable {
     @Enumerated(EnumType.STRING)
     private Enum.SeatClass seatClass;
 
-    @ManyToOne
     @JoinColumn(name = "seat")
     private Seat seat;
 
@@ -49,4 +51,14 @@ public class Ticket implements Serializable {
     private String bookingDate;
 
     private boolean refunded = false;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

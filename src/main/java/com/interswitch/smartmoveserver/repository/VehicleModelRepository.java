@@ -7,11 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/*
- * Created by adebola.owolabi on 7/27/2020
- */
 @Repository
 public interface VehicleModelRepository extends CrudRepository<VehicleModel, Long> {
     List<VehicleModel> findAllByMake(VehicleMake make);
     List<VehicleModel> findAll();
+
+    boolean existsByNameIgnoreCase(String name);
 }

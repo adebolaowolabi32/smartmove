@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.service;
 
 import com.interswitch.smartmoveserver.model.State;
 import com.interswitch.smartmoveserver.repository.StateRepository;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ import java.util.Optional;
 public class StateService {
     @Autowired
     StateRepository stateRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     SecurityUtil securityUtil;

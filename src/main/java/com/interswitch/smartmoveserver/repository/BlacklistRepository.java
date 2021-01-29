@@ -6,11 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/*
- * Created by adebola.owolabi on 5/21/2020
- */
+import java.util.List;
+
 @Repository
 public interface BlacklistRepository  extends CrudRepository<Blacklist, Long> {
     Page<Blacklist> findAll(Pageable pageable);
 
+    List<Blacklist> findAll();
 }

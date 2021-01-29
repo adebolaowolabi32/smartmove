@@ -4,7 +4,6 @@ import com.interswitch.smartmoveserver.model.TicketRefund;
 import com.interswitch.smartmoveserver.service.TicketRefundService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 /*
  * Created by adebola.owolabi on 7/27/2020
@@ -29,9 +29,11 @@ public class RefundController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<TicketRefund> refundPage = refundService.findAllByOperator(principal, page, size);
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(refundPage));
-        model.addAttribute("refundPage", refundPage);
+        //TODO:: Implement server side pagination
+        //PageView<TicketRefund> refundPage = refundService.findAllByOperator(page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(refundPage));
+        List<TicketRefund> refunds = refundService.findAllByOwner(principal.getName());
+        model.addAttribute("refunds", refunds);
         return "refunds/get";
     }
 

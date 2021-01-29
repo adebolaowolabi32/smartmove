@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+<title layout:fragment="title">Fees</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-memory mr-1"></i><span>Fees</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2><b>Fee Details</b></h2>
+                    </div>
+                    <div class="col-sm-8">
+                        <a th:href="@{/fees/update/{id}(id=${fee.id})}">
+                            <button class='btn btn-outline-info' type='button'><i class='fas fa-edit'></i>Edit</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{fee.saved.message} : (${updated} ? #{fee.updated.message} : false))"></div>
+            <div class="card p-3">
+                <div class="row">
+
+                    <div class="col">
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="feeName"><b>Fee Name</b></label>
+                            <div class="col-sm-8">
+                                <span id="feeName" th:text="${fee.feeName}"></span></div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="mode"><b>Fee value</b></label>
+                            <div class="col-sm-8">
+                                <span id="value" th:text="${fee.value}"></span></div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="mode"><b>Rating Metric</b></label>
+                            <div class="col-sm-8">
+                                <span id="mode" th:text="${fee.ratingMetricType}"></span></div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="description"><b>Description</b></label>
+                            <div class="col-sm-8">
+                                <span id="description" th:text="${fee.description}"></span></div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="enabled"><b>Active</b></label>
+                            <div class="col-sm-8">
+                                <label class="switch">
+                                    <input disabled id="enabled" name="enabled" th:checked="${fee.enabled}"
+                                           type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                                </span></div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</html>

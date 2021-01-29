@@ -7,12 +7,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/*
- * Created by adebola.owolabi on 7/27/2020
- */
+import java.util.List;
+
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
     Page<Ticket> findAllByOperator(Pageable pageable, User operator);
 
+    Page<Ticket> findAll(Pageable pageable);
+
+    List<Ticket> findAllByOperator(User operator);
+
+    List<Ticket> findAll();
     Ticket findByReferenceNo(String referenceNo);
 }

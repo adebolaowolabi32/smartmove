@@ -1,11 +1,13 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.VehicleMake;
 import com.interswitch.smartmoveserver.model.VehicleModel;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.VehicleModelRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,9 +28,6 @@ public class VehicleModelService {
     VehicleMakeService vehicleMakeService;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     SecurityUtil securityUtil;
 
     @Autowired
@@ -38,9 +37,11 @@ public class VehicleModelService {
         return vehicleModelRepository.findAll();
     }
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleModel save(VehicleModel vehicleModel) {
-        long id = vehicleModel.getId();
-        boolean exists = vehicleModelRepository.existsById(id);
+        String name = vehicleModel.getName();
+        boolean exists = vehicleModelRepository.existsByNameIgnoreCase(name);
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle Model already exists");
         return vehicleModelRepository.save(vehicleModel);
     }
@@ -54,6 +55,7 @@ public class VehicleModelService {
         return vehicleModelRepository.findAllByMake(make);
     }
 
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleModel update(VehicleModel vehicleModel) {
         Optional<VehicleModel> existing = vehicleModelRepository.findById(vehicleModel.getId());
         if(existing.isPresent())

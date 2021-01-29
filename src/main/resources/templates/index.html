@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title layout:fragment="title" th:text="Index">Index</title>
+        <title th:text="Index">Index</title>
 
         <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" href="#" rel="stylesheet">
         <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" href="#" rel="stylesheet" type="text/css">
@@ -67,7 +67,7 @@
                         <br>
                         <br>
                         <div>
-                            Need an account? <a class="js-scroll-trigger" href="#">Get Started</a>
+                            Need an account? <a class="js-scroll-trigger" th:href="${passportSignUpUrl}">Get Started</a>
                         </div>
                     </div>
 
@@ -104,7 +104,9 @@
                       <img th:src="@{/assets/img/management.svg}" alt="">
                   </span>
                         <h4 class="service-heading">Vehicle and Asset Management</h4>
-                        <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                        <p class="text-muted">Manage your transportation assets and the entire process of developing,
+                            operating, maintaining, upgrading, and disposing of assets in the most cost-effective
+                            manner.</p>
                     </div>
                     <div class="col-md-4">
                   <span class="fa-stack fa-4x">
@@ -120,7 +122,8 @@
                         <img th:src="@{/assets/img/management.svg}" alt="">
                   </span>
                         <h4 class="service-heading">Route Management and Planning</h4>
-                        <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                        <p class="text-muted">Manage your routes with the highest efficiency for your fleet operations.
+                            Handle routes and mapping onto available trip paths in a cost efficient manner.</p>
                     </div>
                     <div class="col-md-4">
                   <span class="fa-stack fa-4x">

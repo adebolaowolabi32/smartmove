@@ -1,8 +1,13 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -11,21 +16,24 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "vehicles")
-public class Vehicle implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Vehicle extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(unique=true)
+    @NotBlank(message = "Name is required.")
+    @Length(min = 5, max = 50, message = "Name must be between 5 and 30 characters long.")
     private String name;
 
     @Column(unique=true)
+    @NotBlank(message = "Registration number is required.")
+    @Length(min = 5, max = 50, message = "Registration number must be between 5 and 30 characters long.")
     private String regNo;
 
-    @Enumerated(EnumType.STRING)
-    private Enum.TransportMode mode;
-
     @ManyToOne
+    @NotNull(message = "Vehicle category is required.")
     private VehicleCategory category;
 
     @ManyToOne
@@ -35,9 +43,15 @@ public class Vehicle implements Serializable {
     @OneToOne
     private Device device;
 
-    /*private String pictureUrl;
-
-    private transient MultipartFile picture;*/
-
     private boolean enabled;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

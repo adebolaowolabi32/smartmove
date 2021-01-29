@@ -35,9 +35,18 @@ public final class TestUtils {
         user.setFirstName("Alice");
         user.setLastName("Com");
         user.setRole(Enum.Role.VEHICLE_OWNER);
-        user.setEmail("alice@example.com");
-        user.setMobileNo("123456789");
-        user.setEnabled(true);
+        user.setEmail(new RandomUtil().nextString().concat("@example.com"));
+        user.setMobileNo(RandomUtil.getRandomNumber(11));
+        return user;
+    }
+
+    public static User buildTestUser(Enum.Role role) {
+        User user = new User();
+        user.setFirstName("Alice");
+        user.setLastName("Com");
+        user.setRole(role);
+        user.setEmail(new RandomUtil().nextString().concat("@example.com"));
+        user.setMobileNo(RandomUtil.getRandomNumber(11));
         return user;
     }
 

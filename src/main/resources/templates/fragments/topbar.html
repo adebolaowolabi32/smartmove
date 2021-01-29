@@ -8,84 +8,178 @@
                 <div class="input-group">
                     <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
                     <div class="input-group-append">
-                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                        <button class="btn btn-dark" type="button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </form>
             <ul class="navbar-nav ml-auto ml-md-0 m-nav__item m-topbar__user-profile m-topbar__user-profile--img m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light m-dropdown--open" m-dropdown-toggle="click" aria-expanded="true">
                 <li class="nav-item dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="m-nav__link m-dropdown__toggle"
+                       data-toggle="dropdown" href="#" id="languageDropdown" role="button">
+                        <i aria-hidden="true" class="fa fa-globe fa-2x icon-blue"></i>
+                    </a>
+
+                    <div aria-labelledby="languageDropdown" class="dropdown-menu dropdown-menu-right"
+                         style="z-index: 101;">
+                        <div class="m-dropdown__wrapper" style="z-index: 101;">
+                            <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"
+                                  style="left: auto; right: 15px;"></span>
+                            <div class="m-dropdown__inner">
+                                <div class="m-dropdown__body">
+                                    <div class="m-dropdown__content">
+                                        <ul class="m-nav m-nav--skin-light">
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link"
+                                                   th:href="${#httpServletRequest.requestURI + '?lang=en'}">
+                                                    <span class="m-nav__link-text" th:text="#{lang.eng}">English</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-nav__separator m-nav__separator--fit"></li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link"
+                                                   th:href="${#httpServletRequest.requestURI + '?lang=fr'}">
+                                                    <span class="m-nav__link-text" th:text="#{lang.fr}">French</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            &nbsp;&nbsp;
+            <ul aria-expanded="true"
+                class="navbar-nav ml-auto ml-md-0 m-nav__item m-topbar__user-profile m-topbar__user-profile--img m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light m-dropdown--open"
+                m-dropdown-toggle="click">
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="m-nav__link m-dropdown__toggle"
+                       data-toggle="dropdown" href="#" id="currencyDropdown" role="button">
+                        <i aria-hidden="true" class="fa fa-money-bill fa-2x icon-blue"></i>
+                    </a>
+
+                    <div aria-labelledby="currencyDropdown" class="dropdown-menu dropdown-menu-right"
+                         style="z-index: 101;">
+                        <div class="m-dropdown__wrapper" style="z-index: 101;">
+                            <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"
+                                  style="left: auto; right: 15px;"></span>
+                            <div class="m-dropdown__inner">
+                                <div class="m-dropdown__body">
+                                    <div class="m-dropdown__content">
+                                        <ul class="m-nav m-nav--skin-light">
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link"
+                                                   th:href="${'/setCurrency?currency=NGN&path=' + #httpServletRequest.requestURI}">
+                                                    <span class="m-nav__link-text">Nigerian Naira (NGN)</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-nav__separator m-nav__separator--fit"></li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link"
+                                                   th:href="${'/setCurrency?currency=CFC&path=' + #httpServletRequest.requestURI}">
+                                                    <span class="m-nav__link-text">Congolese Franc (CFC)</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-nav__separator m-nav__separator--fit"></li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link"
+                                                   th:href="${'/setCurrency?currency=USD&path=' + #httpServletRequest.requestURI}">
+                                                    <span class="m-nav__link-text">United States Dollar (USD)</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            &nbsp;&nbsp;
+            <ul aria-expanded="true"
+                class="navbar-nav ml-auto ml-md-0 m-nav__item m-topbar__user-profile m-topbar__user-profile--img m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light m-dropdown--open"
+                m-dropdown-toggle="click">
+                <li class="nav-item dropdown">
                     <a class="m-nav__link m-dropdown__toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img th:src="@{/assets/img/MyUser.jpg}" alt=""  width="50px" height="50px"></a>
+                        <img th:src="@{/assets/img/MyUser.jpg}" alt="" width="50px" height="50px"></a>
 
-                        <div class="dropdown-menu dropdown-menu-right" style="z-index: 101;" aria-labelledby="userDropdown">
-                            <div class="m-dropdown__wrapper" style="z-index: 101;">
-                                <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust" style="left: auto; right: 15px;"></span>
-                                <div class="m-dropdown__inner">
-                                    <div class="m-dropdown__header m--align-center" style="background: url(/Content/assets/app/media/img/misc/user_profile_bg.jpg); background-size: cover;">
-                                        <div class="m-card-user m-card-user--skin-dark">
-                                            <div class="m-card-user__pic">
-                                                <img th:src="@{/assets/img/MyUser.jpg}" alt="" width="50px" height="50px">
+                    <div aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-right" style="z-index: 101;">
+                        <div class="m-dropdown__wrapper" style="z-index: 101;">
+                            <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"
+                                  style="left: auto; right: 15px;"></span>
+                            <div class="m-dropdown__inner">
+                                <div class="m-dropdown__header m--align-center"
+                                     style="background: url(/Content/assets/app/media/img/misc/user_profile_bg.jpg); background-size: cover;">
+                                    <div class="m-card-user m-card-user--skin-dark">
+                                        <div class="m-card-user__pic">
+                                            <img alt="" height="50px" th:src="@{/assets/img/MyUser.jpg}" width="50px">
 
-                                            </div>
-                                            <div class="m-card-user__details">
-                                                <span class="m-card-user__name m--font-weight-500"> Company Name</span>
-                                                <a href="#" class="m-card-user__email m--font-weight-300 m-link">company@email.com</a>
-                                            </div>
+                                        </div>
+                                        <div class="m-card-user__details">
+                                            <span class="m-card-user__name m--font-weight-500"> Company Name</span>
+                                            <a class="m-card-user__email m--font-weight-300 m-link" href="#">company@email.com</a>
                                         </div>
                                     </div>
-                                    <div class="m-dropdown__body">
+                                </div>
+                                <div class="m-dropdown__body">
 
-                                        <div class="m-dropdown__content">
-                                            <ul class="m-nav m-nav--skin-light">
-                                                <li class="m-nav__section m--hide">
-                                                    <span class="m-nav__section-text">Section</span>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="#" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-profile-1"></i>
-                                                        <span class="m-nav__link-title">
+                                    <div class="m-dropdown__content">
+                                        <ul class="m-nav m-nav--skin-light">
+                                            <li class="m-nav__section m--hide">
+                                                <span class="m-nav__section-text">User Section</span>
+                                            </li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link" href="#">
+                                                    <i class="m-nav__link-icon flaticon-profile-1"></i>
+                                                    <span class="m-nav__link-title">
                                                             <span class="m-nav__link-wrap">
                                                                 <span class="m-nav__link-text">My Profile</span>
                                                                 <span class="m-nav__link-badge"><span class="m-badge m-badge--success">2</span></span>
                                                             </span>
                                                         </span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a data-toggle="modal" data-target="#CompanyList" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-share"></i>
-                                                        <span class="m-nav__link-text">Switch Account</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="#" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-chat-1"></i>
-                                                        <span class="m-nav__link-text">Messages</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__separator m-nav__separator--fit">
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="#" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-info"></i>
-                                                        <span class="m-nav__link-text">FAQ</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__item">
-                                                    <a href="#" class="m-nav__link">
-                                                        <i class="m-nav__link-icon flaticon-lifebuoy"></i>
-                                                        <span class="m-nav__link-text">Support</span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-nav__separator m-nav__separator--fit">
-                                                </li>
-                                                <li class="m-nav__item"><a class="dropdown-item" th:href="@{/logout}" href="#">Logout</a></li>
-                                            </ul>
-                                        </div>
+                                                </a>
+                                            </li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link" data-target="#CompanyList" data-toggle="modal">
+                                                    <i class="m-nav__link-icon flaticon-share"></i>
+                                                    <span class="m-nav__link-text">Switch Account</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link" href="#">
+                                                    <i class="m-nav__link-icon flaticon-chat-1"></i>
+                                                    <span class="m-nav__link-text">Messages</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-nav__separator m-nav__separator--fit">
+                                            </li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link" href="#">
+                                                    <i class="m-nav__link-icon flaticon-info"></i>
+                                                    <span class="m-nav__link-text">FAQ</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link" href="#">
+                                                    <i class="m-nav__link-icon flaticon-lifebuoy"></i>
+                                                    <span class="m-nav__link-text">Support</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-nav__separator m-nav__separator--fit">
+                                            </li>
+                                            <li class="m-nav__item">
+                                                <a class="m-nav__link" href="#" th:href="@{/smlogout}">
+                                                    <i class="m-nav__link-icon flaticon-lifebuoy"></i>
+                                                    <span class="m-nav__link-text">Logout</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </li>
             </ul>
         </nav>

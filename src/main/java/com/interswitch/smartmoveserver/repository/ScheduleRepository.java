@@ -9,18 +9,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/*
- * Created by adebola.owolabi on 8/7/2020
- */
 @Repository
 public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 
     Page<Schedule> findAll(Pageable pageable);
 
+    Page<Schedule> findAllByOwner(Pageable pageable, User owner);
+
     List<Schedule> findAll();
 
-    List<Schedule> findByOwner(User owner);
-   /* List<Schedule> findByTerminalName(String terminalName);
+    List<Schedule> findAllByOwner(User owner);
 
-    Page<Schedule> findByTerminalName(Pageable pageable, String terminalName);*/
 }

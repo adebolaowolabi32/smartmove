@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<title layout:fragment="title">User Settings</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-cogs mr-1"></i><span>User Settings</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h2><b>User Settings</b></h2>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="row">
+                            <a class="btn btn-info" th:href="@{/userSettings/create}" th:unless="${userSettings}"><i
+                                    aria-hidden="true" class="fas fa-plus"></i> Create</a>
+                            <a class="btn btn-info" th:href="@{/userSettings/update}" th:if="${userSettings}"><i
+                                    aria-hidden="true" class="fas fa-edit"></i> Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div th:unless="${userSettings}">
+                <br> No user settings were found.
+            </div>
+            <div th:if="${userSettings}">
+                <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{userSettings.saved.message} : (${updated} ? #{userSettings.updated.message} : false))"></div>
+
+                <div class="card p-3">
+                    <div class="col">
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="makerCheckerEnabled"><b>Enable Maker Checker For All
+                                Users</b></label>
+                            <div class="col-sm-8">
+                                <label class="switch">
+                                    <input disabled id="makerCheckerEnabled" name="makerCheckerEnabled"
+                                           th:checked="${userSettings.makerCheckerEnabled}" type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                                </span></div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,27 +1,33 @@
+
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /*
  * Created by adebola.owolabi on 7/18/2020
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "seats")
-public class Seat implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class Seat extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true)
-    private String seatId;
-
-    @ManyToOne
-    @JoinColumn(name = "vehicle")
-    private Vehicle vehicle;
+    private int seatNo;
 
     private int rowNo;
 
@@ -29,4 +35,22 @@ public class Seat implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Enum.SeatClass seatClass;
+
+    private boolean available;
+
+    private boolean picked;
+
+    @ManyToOne
+    @NotNull
+    private VehicleCategory vehicle;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

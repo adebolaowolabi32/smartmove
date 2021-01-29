@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Trips</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-road mr-1"></i>
+        <span>Ticket Till Status</span>
+    </div>
+
+    <div class="card-body">
+
+        <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+
+        <form action="#" class="card p-3" data-parsley-validate="true"
+              method="post" th:action="@{/ticket-till/close}"
+              th:object="${ticketTill}">
+
+            <div class="row">
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="ticket-till-tiles card-body ">
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">
+                                    STATUS
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="text-transform:uppercase;font-weight:bold;font-size:14px; font-family:Arial"
+                                     th:text="${status}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="ticket-till-tiles card-body ">
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">
+                                    DATE
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="text-transform:uppercase;font-weight:bold;font-size:14px; font-family:Arial"
+                                     th:text="${ticketTill!=null?ticketTill.ticketIssuanceDate : todayDate}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card-body ticket-till-tiles">
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">
+                                    TOTAL NUMBER OF TICKETS
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="text-transform:uppercase;font-weight:bold;font-size:14px; font-family:Arial"
+                                     th:text="${ticketTill!=null? ticketTill.totalNumberOfTickets : '0'}"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card-body ticket-till-tiles ">
+                        <div class="col-sm-4">
+
+                            <div class="row">
+                                <div class="text-muted" style="font-weight:normal;font-size:10px; font-family:Arial">
+                                    TOTAL AMOUNT
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div style="text-transform:uppercase;font-weight:bold;font-size:14px; font-family:Arial"
+                                     th:text="${ticketTill!=null?ticketTill.totalSoldTicketValue : '0'}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <br><br><br>
+
+            <div class="row" th:style="${status == 'CLOSE' ? 'visibility : visible' : 'visibility : hidden'}">
+
+                <div class="alert alert-warning" role="alert" style="margin:30px;">
+                    <h4 class="alert-heading">Hello!</h4>
+                    <p>Your ticket till is now closed.</p>
+                    <p>You would need approval from admin,before you can continue to sell tickets!</p>
+                </div>
+
+            </div>
+
+            <br><br><br>
+            <div class="row" th:style="${status == 'OPEN' ? 'visibility : visible' : 'visibility : hidden'}">
+
+                <div class="col-sm-2">
+                    <button class="btn btn-outline-primary btn-sized" type="submit">Close Till</button>
+                </div>
+
+                <div class="col-sm-8"></div>
+
+                <div class="col-sm-2"></div>
+
+            </div>
+
+
+        </form>
+    </div>
+</div>
+</html>

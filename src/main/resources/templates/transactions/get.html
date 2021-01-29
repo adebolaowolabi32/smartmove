@@ -26,16 +26,16 @@
 					<th>Transaction ID</th>
 					<th>Type</th>
 					<th>Mode</th>
-                    <th>Amount (&#8358;)</th>
+                    <th>Amount (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
 					<th>Terminal</th>
 					<th>Device</th>
-					<th>Operator </th>
+                    <th>Operator</th>
 					<th>Transaction Date</th>
 					<th>View Details</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr th:each="transaction : ${transactionPage.content}">
+                <tr th:each="transaction : ${transactions}">
 					<td th:text="${transaction.transactionId}"></td>
 					<td th:text="${transaction.type}"></td>
 					<td th:text="${transaction.mode}"></td>
@@ -46,17 +46,12 @@
 					<td th:text="${transaction.transactionDateTime}"></td>
 					<td>
 						<a class="justify-content-center" th:href="@{/transactions/details/{id}(id=${transaction.id})}">
-							<button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
 						</a>
 					</td>
 				</tr>
 				</tbody>
 			</table>
-			<div th:if="${transactionPage.totalPages > 0}" class="pagination"
-				 th:each="pageNumber : ${pageNumbers}">
-				<a th:href="@{/get(size=${transactionPage.size}, page=${pageNumber})}"
-				   th:class="${pageNumber==transactionPage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
-			</div>
 		</div>
 	</div>
 </div>

@@ -15,7 +15,9 @@
 							<div class="row">
 								<a href="#" th:href="${'/users/create?role=' + role}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New</a>
 								<a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
-								<a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
+								<a class="btn btn-info" href="#" th:href="@{/users/upload}"><i aria-hidden="true"
+																							   class="fas fa-file-import"></i>
+									Import CSV</a>
 							</div>
 						</div>
 					</div>
@@ -37,7 +39,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="user : ${userPage.content}">
+					<tr th:each="user : ${users}">
 							<td th:text="${user.id}"></td>
 							<td th:text="${user.firstName}"></td>
 							<td th:text="${user.lastName}"></td>
@@ -62,15 +64,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<div th:if="${userPage.totalPages > 0}" class="pagination"
-					 th:each="pageNumber : ${pageNumbers}">
-					<a th:href="@{/get(size=${userPage.size}, page=${pageNumber})}"
-					   th:class="${pageNumber==userPage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
-				</div>
 			</div>
-<!--
-            <div th:replace="@{/fragments/error} :: error"></div>
--->
         </div>
 	</div>
 </html>

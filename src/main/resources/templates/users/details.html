@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default.html}">
+      layout:decorate="~{layouts/default.html}"
+>
 <title layout:fragment="title" th:text="${title}">Users</title>
 <div layout:fragment="content" class="card mb-4">
     <div class="card-header"><i class="fas fa-user mr-1"></i><span th:text="${title}">Users</span></div>
@@ -41,6 +42,14 @@
                         <div class="form-group row">
                             <label class="col-sm-4" for="mobileNo"><b>Mobile Number</b></label>
                             <div class="col-sm-8"><span id="mobileNo" th:text="${user.mobileNo}"></span></div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="address"><b>Address</b></label>
+                            <div class="col-sm-8"><span id="address" th:text="${user.address}"></span></div>
+                        </div>
+
+                        <div class="form-group row" th:if="${isOwned}">
+                            <img alt="Operator Logo" id="profilePic" src="${user.pictureUrl}">
                         </div>
 
                         <div class="form-group row" th:if="${isOwned}">
@@ -151,9 +160,11 @@
                                            type="checkbox">
                                     <span class="slider round"></span>
                                 </label>
-                                </span></div>
+                                </span>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

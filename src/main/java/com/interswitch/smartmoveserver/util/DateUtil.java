@@ -1,9 +1,9 @@
 package com.interswitch.smartmoveserver.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,10 +12,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+@Slf4j
 public class DateUtil {
-
-    private static final Log logger = LogFactory.getLog(DateUtil.class);
-
 
     /*public static LocalDate toLocalDateFormat(Date startDate) {
         LocalDate localDateFormat = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -35,6 +33,18 @@ public class DateUtil {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
+
+
+    public static String convertToText(Date date) {
+
+        if (date == null) {
+            return "";
+        }
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        ZoneId zoneId = ZoneId.of("Africa/Lagos");
+        dateFormat.setTimeZone(TimeZone.getTimeZone(zoneId));
+        return dateFormat.format(date);
+    }*/
     public static Date convertToDate(String dateString) {
 
         SimpleDateFormat formatter1 = new SimpleDateFormat("MM/dd/yyyy");
@@ -53,27 +63,28 @@ public class DateUtil {
             }
 
         } catch (ParseException e) {
-            logger.error(e);
+            log.error("Date conversion error", e);
         }
 
         return date;
     }
 
-    public static String convertToText(Date date) {
-
-        if (date == null) {
-            return "";
-        }
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        ZoneId zoneId = ZoneId.of("Africa/Lagos");
-        dateFormat.setTimeZone(TimeZone.getTimeZone(zoneId));
-        return dateFormat.format(date);
-    }*/
-
     public static LocalDateTime textToLocalDateTime(String text) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
-        return dateTime;
+        try {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm");
+            LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
+            return dateTime;
+
+        } catch (Exception ex) {
+            return null;
+        }
+
+    }
+
+    public static LocalDate textToLocalDate(String text) {
+        LocalDate localDate = LocalDate.parse(text, DateTimeFormatter.ISO_DATE);
+        return localDate;
     }
 
     public static String formatDate(LocalDateTime dateTime) {

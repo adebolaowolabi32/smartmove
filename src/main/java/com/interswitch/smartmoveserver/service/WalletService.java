@@ -1,11 +1,12 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
-import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.repository.WalletRepository;
-import com.interswitch.smartmoveserver.repository.WalletTransferRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,20 +23,13 @@ public class WalletService {
     private WalletRepository walletRepository;
 
     @Autowired
-    private WalletTransferRepository transferRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
-    private TransferService transferService;
 
     @Autowired
     PageUtil pageUtil;
 
+
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Wallet save(Wallet wallet) {
         return walletRepository.save(wallet);
     }
@@ -48,57 +42,42 @@ public class WalletService {
         return walletRepository.save(wallet);
     }
 
-    public Wallet findById(long id) {
+    public Wallet findById(long id, String principal) {
         return walletRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist"));
     }
 
     public Wallet findByOwner(String owner) {
-        Optional<User> user = userRepository.findByUsername(owner);
-        if(user.isPresent())
-            return walletRepository.findByOwnerId(user.get().getId());
+
+        User user = userService.findByUsername(owner);
+        if (user != null)
+            return walletRepository.findByOwnerId(user.getId());
+
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
+
     public Wallet findByOwner(long ownerId) {
-        Optional<User> user = userRepository.findById(ownerId);
-        if (user.isPresent())
+        User user = userService.findById(ownerId);
+        if (user != null)
             return walletRepository.findByOwnerId(ownerId);
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner was not found");
     }
 
-    public Wallet update(Wallet wallet) {
+
+    @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
+    public Wallet update(Wallet wallet, String principal) {
         Optional<Wallet> existing = walletRepository.findById(wallet.getId());
         if(existing.isPresent())
             return walletRepository.save(wallet);
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
     }
 
-    public void delete(long id) {
+    public void delete(long id, String principal) {
         Optional<Wallet> existing = walletRepository.findById(id);
         if(existing.isPresent())
             walletRepository.deleteById(id);
         else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
         }
-    }
-
-    public void activate(long walletId) {
-        Optional<Wallet> walletOptional = walletRepository.findById(walletId);
-        if(walletOptional.isPresent()){
-            Wallet wallet = walletOptional.get();
-            wallet.setEnabled(true);
-            walletRepository.save(wallet);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
-    }
-
-    public void deactivate(long walletId) {
-        Optional<Wallet> walletOptional = walletRepository.findById(walletId);
-        if(walletOptional.isPresent()){
-            Wallet wallet = walletOptional.get();
-            wallet.setEnabled(false);
-            walletRepository.save(wallet);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet does not exist");
     }
 }

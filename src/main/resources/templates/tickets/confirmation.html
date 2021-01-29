@@ -17,13 +17,13 @@
         <br>
         <label><b> Ticket Summary </b></label>
         <br>
-        <table class="table table-bordered table-responsive-sm" width="100%" cellspacing="0">
+        <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
             <thead class='thead-light'>
                 <tr>
                     <th>Ticket Reference</th>
                     <th>Name</th>
                     <th>Departure/Arrival</th>
-                    <th>Amount (&#8358;)</th>
+                    <th>Amount (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
                 </tr>
             </thead>
 
@@ -31,8 +31,15 @@
                 <tr th:each="ticket : ${ticketDetails.tickets}">
                     <td th:text="${ticket.referenceNo}"></td>
                     <td th:text="${ticket.passengerName}"></td>
-                    <td th:text="${ticket.schedule != null ? ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name  : ''}"></td>
+                    <td th:text="${ticket.schedule != null ? ticket.schedule.route.startTerminal.name + ' - ' + ticket.schedule.route.stopTerminal.name  : ''}"></td>
                     <td th:text="${ticket.fare}"></td>
+                </tr>
+
+                <tr th:each="fee : ${ticketDetails.appliedFees}">
+                    <td></td>
+                    <td></td>
+                    <td th:text="${fee.feeName}"></td>
+                    <td th:text="${fee.amount}"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -44,7 +51,8 @@
         </table>
 
         <div class="amt-big">
-            <span>Total Amount Payable: &#8358; </span>
+            <span>Total Amount Payable: <span
+                    th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></span>
             <span th:text="${ticketDetails.totalFare}"></span>
         </div>
 

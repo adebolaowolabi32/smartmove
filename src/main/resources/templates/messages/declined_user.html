@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>Declined User</title>
+</head>
+<body style="font-family:'Helvetica Neue',sans-serif; margin:0;padding:0; height:100%; color: #00425F; font-weight: 400">
+<div class="wrapper" style="width:600px; margin: 0 auto;">
+    <div class="body" style="padding:40px;font-size: 14px; line-height: 20px">
+        <img alt="Interswitch Logo"
+             style="float:right" th:src="${portletUri} + '/assets/img/interswitchngnew.png'" width="150"/>
+
+        <div class="body-content" style="margin-top:50px; float:left">
+            <p>
+                Hello <span th:text="${user}"></span>,
+            </p>
+            <p>
+                Your request for an account on the <strong>Smart Move Platform</strong> has been declined.
+            </p>
+            <p>
+                User Details:
+            <ul>
+                <li>Username: <span th:text="${username}"></span></li>
+                <li>Role: <span th:text="${role}"></span></li>
+                <li>Referrer: <span th:text="${owner}"></span></li>
+            </ul>
+            </p>
+            <br>
+            <p>
+                Contact your referrer for more information on why your request was declined. You can also <a
+                    th:href="${portletUri + '#contactForm'}">reach out to</a>
+                an Interswitch administrator for further inquiries.
+            </p>
+            <br>
+            <p>
+                Thank you. Have a great day!
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

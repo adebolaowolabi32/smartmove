@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Approved Ticket-tills</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-road mr-1"></i><span>Approved ticket tills</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2><b><span>Approved Ticket Tills</span></b></h2>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+            <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
+                <thead class='thead-light'>
+                <tr>
+                    <th>Operator Name</th>
+                    <th>Till Opening Time</th>
+                    <th>Till Closing Time</th>
+                    <th>Date</th>
+                    <th>Total Tickets</th>
+                    <th>Total Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="tts : ${ticketTillSummaryPage.content}">
+                    <td th:text="${tts.tillOperatorName}"></td>
+                    <td th:text="${tts.tillStartTime}"></td>
+                    <td th:text="${tts.tillEndTime}"></td>
+                    <td th:text="${tts.date}"></td>
+                    <td th:text="${tts.totalSoldTickets}"></td>
+                    <td th:text="${tts.totalSoldAmount}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

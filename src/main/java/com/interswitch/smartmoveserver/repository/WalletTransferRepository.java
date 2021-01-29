@@ -1,19 +1,22 @@
 package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Transfer;
-import com.interswitch.smartmoveserver.model.Wallet;
+import com.interswitch.smartmoveserver.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/*
- * Created by adebola.owolabi on 5/19/2020
- */
+import java.util.List;
+
 @Repository
 public interface WalletTransferRepository extends CrudRepository<Transfer, Long> {
-    Page<Transfer> findByWallet(Pageable pageable, Wallet wallet);
+
+    List<Transfer> findAllByOwner(User owner);
+
+    Page<Transfer> findAllByOwner(Pageable pageable, User owner);
 
     Page<Transfer> findAll(Pageable pageable);
-    Long countByWallet(Wallet wallet);
+
+    Long countByOwner(User owner);
 }

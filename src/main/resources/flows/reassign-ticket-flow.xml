@@ -17,7 +17,8 @@
                       expression="ticketService.reassignTicket(currentUser.name, flowScope.reassignTicket)"/>
         </transition>
         <on-exit>
-            <evaluate expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Leaving ticket reassign flow')"/>
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket reassign flow')"/>
         </on-exit>
     </view-state>
 
@@ -27,13 +28,15 @@
             <evaluate result="flowScope.schedules" expression="ticketService.getSchedules()"/>
         </on-entry>
         <transition on="makeBooking" to="confirm">
-            <evaluate result="flowScope.ticketDetails" expression="ticketService.makeBooking(requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
+            <evaluate result="flowScope.ticketDetails"
+                      expression="ticketService.makeBooking(currentUser.name,requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
         <transition on="findBooking" to="schedule">
             <evaluate result="flowScope.scheduleBooking" expression="ticketService.findBooking(currentUser.name, flowScope.scheduleBooking)"/>
         </transition>
         <on-exit>
-            <evaluate expression="T(org.apache.commons.logging.LogFactory).getLog(getClass()).info('Leaving ticket reassign flow')"/>
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('Leaving ticket reassign flow')"/>
         </on-exit>
     </view-state>
 

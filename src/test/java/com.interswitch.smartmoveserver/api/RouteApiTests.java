@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Route;
+import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.RouteService;
 import org.junit.jupiter.api.BeforeAll;
@@ -46,11 +47,11 @@ public class RouteApiTests {
         long id = 10000023;
         route.setId(id);
         route.setName("my_route");
-        route.setType(Enum.TransportMode.RAIL);
+        route.setMode(Enum.TransportMode.RAIL);
         route.setOwner(new User());
-        route.setStartTerminalId(123L);
-        route.setStopTerminalId(345L);
-        route.setPrice(500);
+        route.setStartTerminal(new Terminal());
+        route.setStopTerminal(new Terminal());
+        route.setFare(500);
         route.setEnabled(true);
     }
 
@@ -67,7 +68,7 @@ public class RouteApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(routeService.update(route)).thenReturn(route);
+        when(routeService.update(route, "")).thenReturn(route);
         mvc.perform(put("/api/routes")
                 .content(new ObjectMapper().writeValueAsString(route))
                 .characterEncoding("utf-8")
@@ -90,23 +91,13 @@ public class RouteApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(routeService.findById(route.getId())).thenReturn(route);
+        when(routeService.findById(route.getId(), "")).thenReturn(route);
         mvc.perform(get("/api/routes/{id}", route.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()));
     }
-
-/*    @Test
-    public void testGetFindByRouteNumber() throws Exception {
-        when(routeService.findByOwner(route.getOwnerId())).thenReturn(Arrays.asList(route));
-        mvc.perform(get("/routes/{owner}", route.getOwnerId())
-                .characterEncoding("utf-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
-    }*/
 
     @Test
     public void testDelete() throws Exception {

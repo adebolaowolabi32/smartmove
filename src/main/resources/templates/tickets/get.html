@@ -3,8 +3,15 @@
       layout:decorate="~{layouts/default.html}">
 <title layout:fragment="title">Tickets</title>
 <div layout:fragment="content" class="card mb-4">
-    <div class="card-header"><i class="fas fa-ticket-alt mr-1"></i><span>Tickets</span></div>
+    <div class="card-header"><i class="fas fa-memory mr-1"></i><span>Tickets</span></div>
     <div class="card-body">
+
+        <div class="row" th:style="${status == 'CLOSE' ? 'display : block' : 'display : none'}">
+            <div class="alert alert-warning" role="alert" style="width:500px;margin-left:50px;">
+                <p> Your ticket till is <b>closed</b>,you can't sell ticket until after <b>approved.</b>
+                <p>
+            </div>
+        </div>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -13,9 +20,10 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="row">
-                            <a class="btn btn-info" href="#" th:href="@{/issueTicket}"><i aria-hidden="true"
-                                                                                          class="fas fa-plus"></i>
-                                Create New</a>
+
+                            <a class="btn btn-info" href="#" th:href="@{/issueTicket}"
+                               th:style="${status == 'OPEN' ? 'visibility : visible' : 'visibility : hidden'}"><i
+                                    aria-hidden="true" class="fas fa-plus"></i> Create New</a>
                             <a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
                             <a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
                         </div>
@@ -33,17 +41,17 @@
                     <th>Vehicle</th>
                     <th>Seat</th>
                     <th>Seat Class</th>
-                    <th>Fare (&#8358;)</th>
+                    <th>Fare (<span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span>)</th>
                     <th>Booking Date</th>
                     <th>Refunded</th>
                     <th>View Details</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="ticket : ${ticketPage.content}">
+                <tr th:each="ticket : ${tickets}">
                     <td th:text="${ticket.referenceNo}"></td>
                     <td th:text="${ticket.passengerName}"></td>
-                    <td th:text="${ticket.schedule.startTerminal.name + ' - ' + ticket.schedule.stopTerminal.name}"></td>
+                    <td th:text="${ticket.schedule.route.startTerminal.name + ' - ' + ticket.schedule.route.stopTerminal.name}"></td>
                     <td th:text="${ticket.schedule.departureDate + ' ' + ticket.schedule.departureTime}"></td>
                     <td th:text="${ticket.schedule.vehicle.name}"></td>
                     <td th:text="${ticket.seatNo}"></td>
@@ -52,7 +60,8 @@
                     <td th:text="${ticket.bookingDate}"></td>
                     <td>
                         <label class="switch">
-                            <input type="checkbox" id="refunded" name="refunded" th:checked="${ticket.refunded}" disabled>
+                            <input disabled id="refunded" name="refunded" th:checked="${ticket.refunded}"
+                                   type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </td>
@@ -64,13 +73,6 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:if="${ticketPage.totalPages > 0}" class="pagination"
-                 th:each="pageNumber : ${pageNumbers}">
-                <a th:href="@{/get(size=${ticketPage.size}, page=${pageNumber})}"
-                   th:class="${pageNumber==ticketPage.number + 1} ? active">
-                    <button class='btn btn-outline-default' th:text=${pageNumber}></button>
-                </a>
-            </div>
         </div>
     </div>
 </div>

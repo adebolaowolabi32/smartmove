@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.infrastructure;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -19,17 +18,16 @@ import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Component
 //TODO:: Remove passport limitation of error handling
 public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     private final String X_APPLICATION_CONTEXT = "X-Application-Context";
 
     @Override
     public boolean hasError(ClientHttpResponse httpResponse)
       throws IOException {
-        logger.info(httpResponse);
+        log.info("Remote Server Error: {}", httpResponse);
         HttpHeaders httpHeaders = httpResponse.getHeaders();
         if(httpHeaders.containsKey(X_APPLICATION_CONTEXT)){
             String applicationContextHeader = httpHeaders.get(X_APPLICATION_CONTEXT) != null ?

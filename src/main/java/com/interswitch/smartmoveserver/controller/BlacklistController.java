@@ -5,7 +5,6 @@ import com.interswitch.smartmoveserver.service.BlacklistService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /*
  * Created by adebola.owolabi on 5/21/2020
@@ -33,9 +33,11 @@ public class BlacklistController {
         @GetMapping("/get")
         public String getAll(Principal principal, Model model, @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "10") int size) {
-            Page<Blacklist> blacklistPage = blacklistService.findAllPaginated(page, size);
-            model.addAttribute("pageNumbers", pageUtil.getPageNumber(blacklistPage));
-            model.addAttribute("blacklistPage", blacklistPage);
+            //TODO:: Implement server side pagination
+            //PageView<Blacklist> blacklistPage = blacklistService.findAllPaginated(page, size);
+            //model.addAttribute("pageNumbers", pageUtil.getPageNumber(blacklistPage));
+            List<Blacklist> blacklists = blacklistService.findAll();
+            model.addAttribute("blacklists", blacklists);
             return "blacklists/get";
         }
 
@@ -65,7 +67,7 @@ public class BlacklistController {
         }
 
         @GetMapping("/remove/{id}")
-        public String remove(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+        public String remove(Principal principal, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
             blacklistService.remove(id);
             redirectAttributes.addFlashAttribute("deleted", true);
             return "redirect:/blacklists/get";

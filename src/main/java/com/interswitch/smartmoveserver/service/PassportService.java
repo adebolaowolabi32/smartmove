@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,10 +23,11 @@ import java.util.Map;
 /**
  * @author adebola.owolabi
  */
+
+@Slf4j
 @Service
 public class PassportService {
 
-    protected final Log logger = LogFactory.getLog(getClass());
     @Value("${spring.application.passport.user-url}")
     private String userUrl;
     @Value("${spring.application.passport.token-url}")
@@ -66,6 +66,7 @@ public class PassportService {
     }
 
     public String getAccessToken(){
+        log.info("++calling passport for access token===>");
         String auth = clientId + ":" + clientSecret;
         byte[] encodedAuth = Base64.encodeBase64(
                 auth.getBytes(Charset.forName("US-ASCII")) );
@@ -78,6 +79,7 @@ public class PassportService {
         formData.add("scope", "profile");
         ResponseEntity response = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, Object.class);
         Map<String, Object> resultToJson = (Map<String, Object>) response.getBody();
+        log.info("done calling passport for access token===>");
         return "Bearer " + resultToJson.get("access_token").toString();
     }
 
@@ -90,6 +92,7 @@ public class PassportService {
         passportUser.setMobileNo(user.getMobileNo());
         passportUser.setPassword(user.getPassword());
         passportUser.setEnabled(user.isEnabled());
+        passportUser.setFirstLogin(user.getLoginFreqType() < 1);
         return passportUser;
     }
 

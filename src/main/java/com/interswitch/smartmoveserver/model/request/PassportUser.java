@@ -22,4 +22,6 @@ public class PassportUser {
     private boolean enabled;
 
     private String title;
+
+    private boolean firstLogin;
 }

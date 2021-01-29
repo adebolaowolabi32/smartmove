@@ -1,14 +1,14 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Transaction;
 import com.interswitch.smartmoveserver.service.TransactionService;
+import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -19,29 +19,20 @@ public class TransactionApi {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public Transaction save(@RequestBody @Validated Transaction transaction) {
-        return transactionService.save(transaction);
-    }
-
     @GetMapping(produces = "application/json")
-    public List<Transaction> findAll() {
-        return transactionService.findAll();
+    private PageView<Transaction> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                          @RequestParam(defaultValue = "10") int size) {
+        return transactionService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public Transaction findById(@Validated @PathVariable long id) {
-        return transactionService.findById(id);
+        return transactionService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
-    @GetMapping(value = "/findByType/{type}", produces = "application/json")
-    public List<Transaction> find(@Validated @PathVariable Enum.TransactionType type) {
-        return transactionService.find(type);
-    }
-
-    @GetMapping(value = "/findByOperator/{operatorId}", produces = "application/json")
-    public List<Transaction> findByRecipient(@Validated @PathVariable String operatorId) {
-        return transactionService.findByOperator(operatorId);
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Transaction save(@RequestBody @Validated Transaction transaction) {
+        return transactionService.save(transaction, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 }

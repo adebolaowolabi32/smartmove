@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Fees</title>
+<div class="card mb-4" layout:fragment="content" style="border:none">
+    <div class="card-header"><i class="fas fa-road mr-1"></i><span>Fees</span></div>
+    <div class="card-body">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2><b><span>Fee Configurations</span></b></h2>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <a class="btn btn-info" href="#" th:href="@{/fees/create}"><i aria-hidden="true"
+                                                                                          class="fas fa-plus"></i> Add
+                                New</a>
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fas fa-sync-alt"></i> Refresh
+                                List</a>
+                            <!---  <a href="#" th:href="@{/trips/upload}" class="btn btn-info"><i class="fas fa-file-import"  aria-hidden="true"></i> Import CSV </a> --->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{fee.deleted.message} : false)"></div>
+            <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+            <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
+                <thead class='thead-light'>
+                <tr>
+                    <th>Fee Name</th>
+                    <th>Fee Value</th>
+                    <th>Rating metric</th>
+                    <th>Description</th>
+                    <th>Active</th>
+                    <th>Owner</th>
+                    <th>View details</th>
+                    <th>Remove</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="fee : ${feeConfigs}">
+                    <td th:text="${fee.feeName}"></td>
+                    <td th:text="${fee.value}"></td>
+                    <td th:text="${fee.ratingMetricType}"></td>
+                    <td th:text="${fee.description}"></td>
+
+                    <td>
+                        <label class="switch">
+                            <input disabled id="enabled" name="enabled" th:checked="${fee.enabled}" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+
+                    <td th:text="${fee.owner != null ? fee.owner.username : ''}"></td>
+
+                    <td>
+                        <a class="justify-content-center" th:href="@{/fees/details/{id}(id=${fee.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
+
+                    <td>
+                        <a class="justify-content-center" th:href="@{/fees/delete/{id}(id=${fee.id})}">
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
+                        </a>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</html>

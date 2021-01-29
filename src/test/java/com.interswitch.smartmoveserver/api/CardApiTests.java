@@ -44,9 +44,9 @@ public class CardApiTests {
     @BeforeAll
     public void setup() {
         card = new Card();
-        long id = 1000013;
+        long id = 1000014;
         card.setId(id);
-        card.setPan("12345678901234");
+        card.setPan("12345678901034");
         card.setBalance(40000);
         card.setOwner(new User());
         card.setExpiry(LocalDate.now().plusYears(3));
@@ -56,7 +56,7 @@ public class CardApiTests {
 
     @Test
     public void testSave() throws Exception {
-        when(cardService.save(card)).thenReturn(card);
+        when(cardService.save(card, "")).thenReturn(card);
         mvc.perform(post("/api/cards")
                 .content(new ObjectMapper().writeValueAsString(card))
                 .characterEncoding("utf-8")
@@ -67,7 +67,7 @@ public class CardApiTests {
 
     @Test
     public void testUpdate() throws Exception {
-        when(cardService.update(card)).thenReturn(card);
+        when(cardService.update(card, "")).thenReturn(card);
         mvc.perform(put("/api/cards")
                 .content(new ObjectMapper().writeValueAsString(card))
                 .characterEncoding("utf-8")
@@ -90,7 +90,7 @@ public class CardApiTests {
 
     @Test
     public void testGetFindById() throws Exception {
-        when(cardService.findById(card.getId())).thenReturn(card);
+        when(cardService.findById(card.getId(), "")).thenReturn(card);
         mvc.perform(get("/api/cards/{id}", card.getId())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))

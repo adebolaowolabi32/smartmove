@@ -1,14 +1,24 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.Wallet;
+import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.service.*;
+import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,6 +27,7 @@ import java.util.Date;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Controller
 public class HomeController {
 
@@ -59,16 +70,27 @@ public class HomeController {
     @Autowired
     private SecurityUtil securityUtil;
 
+    @Autowired
+    IswCoreService coreService;
+
+    @Autowired
+    private PageUtil pageUtil;
+
 
     @GetMapping(value = {"/", "/index", "/home"})
     public String home(Model model) {
+        model.addAttribute("passportSignUpUrl", securityUtil.getPassportSignUpUrl());
         return "index";
     }
 
     @GetMapping("/dashboard")
     public String dashboard(Principal principal, Model model) {
+
         User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
+        Wallet wallet = null;
+        Card card = null;
+
         Long no_admins = 0L;
         Long no_regulators = 0L;
         Long no_operators = 0L;
@@ -91,36 +113,42 @@ public class HomeController {
         Long no_ticketers = 0L;
         Long no_drivers = 0L;
 
+        String username = principal.getName();
         if(securityUtil.isOwnedEntity(role)){
-            no_regulators = userService.countByRole(principal, user, Enum.Role.REGULATOR);
-            no_operators = userService.countByRole(principal, user, Enum.Role.OPERATOR);
-            no_agents = userService.countByRole(principal, user, Enum.Role.AGENT);
-            no_service_providers = userService.countByRole(principal, user, Enum.Role.SERVICE_PROVIDER);
-            no_inspectors = userService.countByRole(principal, user, Enum.Role.INSPECTOR);
-            no_ticketers = userService.countByRole(principal, user, Enum.Role.TICKETER);
-            no_drivers = userService.countByRole(principal, user, Enum.Role.DRIVER);
+            no_regulators = userService.countByRole(username, user, Enum.Role.REGULATOR);
+            no_operators = userService.countByRole(username, user, Enum.Role.OPERATOR);
+            no_agents = userService.countByRole(username, user, Enum.Role.AGENT);
+            no_service_providers = userService.countByRole(username, user, Enum.Role.SERVICE_PROVIDER);
+            no_inspectors = userService.countByRole(username, user, Enum.Role.INSPECTOR);
+            no_ticketers = userService.countByRole(username, user, Enum.Role.TICKETER);
+            no_drivers = userService.countByRole(username, user, Enum.Role.DRIVER);
             no_vehicles = vehicleService.countByOwner(user);
             no_terminals = terminalService.countByOwner(user);
             no_routes = routeService.countByOwner(user);
             no_validators = deviceService.countByTypeAndOwner(Enum.DeviceType.VALIDATOR, user);
             no_readers = deviceService.countByTypeAndOwner(Enum.DeviceType.READER, user);
-            no_transactions = transactionService.countAll();
+            no_transactions = transactionService.countByOwner(username);
             //if(role == Enum.Role.AGENT ) {
-                card_balance = cardService.findByOwner(user.getId()).getBalance();
-            wallet_balance = walletService.findByOwner(user.getUsername()).getBalance();
-            no_cards = cardService.countAll();
-            no_transfers = transferService.countAll();
+            try {
+                wallet = walletService.findByOwner(user.getUsername());
+                card = cardService.findByOwner(user.getUsername());
+            } catch (Exception ex) {
+                log.info("Caught An Error which happened in Home Controller ===>" + ex.getMessage());
+            }
+            card_balance = card != null ? card.getBalance() : 0L;
+            wallet_balance = wallet != null ? wallet.getBalance() : 0D;
+            no_cards = cardService.countByOwner(username);
+            no_transfers = transferService.countByOwner(username);
             //}
-        }
-        else {
-            no_admins = userService.countByRole(principal, null, Enum.Role.ISW_ADMIN);
-            no_regulators = userService.countByRole(principal, null, Enum.Role.REGULATOR);
-            no_operators = userService.countByRole(principal, null, Enum.Role.OPERATOR);
-            no_agents = userService.countByRole(principal, null, Enum.Role.AGENT);
-            no_service_providers = userService.countByRole(principal, null, Enum.Role.SERVICE_PROVIDER);
-            no_inspectors = userService.countByRole(principal, null, Enum.Role.INSPECTOR);
-            no_ticketers = userService.countByRole(principal, null, Enum.Role.TICKETER);
-            no_drivers = userService.countByRole(principal, null, Enum.Role.DRIVER);
+        } else {
+            no_admins = userService.countByRole(username, null, Enum.Role.ISW_ADMIN);
+            no_regulators = userService.countByRole(username, null, Enum.Role.REGULATOR);
+            no_operators = userService.countByRole(username, null, Enum.Role.OPERATOR);
+            no_agents = userService.countByRole(username, null, Enum.Role.AGENT);
+            no_service_providers = userService.countByRole(username, null, Enum.Role.SERVICE_PROVIDER);
+            no_inspectors = userService.countByRole(username, null, Enum.Role.INSPECTOR);
+            no_ticketers = userService.countByRole(username, null, Enum.Role.TICKETER);
+            no_drivers = userService.countByRole(username, null, Enum.Role.DRIVER);
             no_vehicles = vehicleService.countAll();
             no_terminals = terminalService.countAll();
             no_routes = routeService.countAll();
@@ -158,6 +186,41 @@ public class HomeController {
         Date dateobj = new Date();
         model.addAttribute("time_date", format.format(dateobj));
         return "dashboard";
+
     }
 
+    @GetMapping("/signup")
+    public String showSignUp(Principal principal, Model model) {
+        model.addAttribute("user", new UserRegistration());
+        model.addAttribute("roles", pageUtil.getRoles());
+        return "signup";
+    }
+
+
+    @PostMapping("/signup")
+    public String signUp(Principal principal, @Valid UserRegistration user,
+                         BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            //TODO change findAll to findAllEligible
+            model.addAttribute("user", new UserRegistration());
+            model.addAttribute("roles", pageUtil.getRoles());
+            return "signup";
+        }
+        String message = userService.selfSignUp(user, principal.getName());
+        model.addAttribute("message", message);
+        model.addAttribute("user", new UserRegistration());
+        return "signup";
+    }
+
+    @GetMapping("/smlogout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:" + securityUtil.getPassportLogoutUrl();
+    }
+
+    @GetMapping("/setCurrency")
+    public String setCurrency(Model model, @RequestParam(defaultValue = "NGN") String currency, @RequestParam(defaultValue = "/") String path, HttpSession session) {
+        session.setAttribute("currency", currency);
+        return "redirect:" + path;
+    }
 }

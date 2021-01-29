@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ManifestRepository extends CrudRepository<Manifest, Long> {
+
     List<Manifest> findAll();
 
     Page<Manifest> findAll(Pageable pageable);
@@ -21,6 +22,5 @@ public interface ManifestRepository extends CrudRepository<Manifest, Long> {
     Manifest findByTripIdAndName(long tripId, String name);
 
     Manifest findByScheduleIdAndName(long scheduleId, String name);
-
 
 }

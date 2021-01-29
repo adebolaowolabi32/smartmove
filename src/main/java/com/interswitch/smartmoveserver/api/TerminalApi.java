@@ -1,9 +1,12 @@
 package com.interswitch.smartmoveserver.api;
 
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Terminal;
 import com.interswitch.smartmoveserver.service.TerminalService;
+import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,45 +22,34 @@ public class TerminalApi {
     TerminalService terminalService;
 
     @GetMapping(produces = "application/json")
-    private List<Terminal> findAll() {
-        return terminalService.findAll();
+    private PageView<Terminal> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "10") int size) {
+        return terminalService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     private Terminal save(@Validated @RequestBody Terminal terminal) {
-        return terminalService.save(terminal);
+        return terminalService.save(terminal, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     private Terminal findById(@Validated @PathVariable long id) {
-        return terminalService.findById(id);
+        return terminalService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
-    @GetMapping(value = "/findByOwner/{owner}", produces = "application/json")
-    private List<Terminal> findByOwner(@Validated @PathVariable long owner) {
-        return terminalService.findByOwner(owner);
+    @GetMapping(value = "/owner/{id}", produces = "application/json")
+    private List<Terminal> findByOwnerId(@Validated @PathVariable long ownerId) {
+        return terminalService.findTerminalsByOwnerId(ownerId);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")
     private Terminal update(@Validated @RequestBody Terminal terminal) {
-        return terminalService.update(terminal);
+        return terminalService.update(terminal, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @DeleteMapping("/{id}")
     private void delete(@Validated @PathVariable long id) {
-        terminalService.delete(id);
-    }
-
-    @PostMapping(value = "/activate/{id}", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void activate(@Validated @PathVariable long id) {
-        terminalService.activate(id);
-    }
-
-    @PostMapping(value = "/deactivate/{id}", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void deactivate(@Validated @PathVariable long id) {
-        terminalService.deactivate(id);
+        terminalService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 }

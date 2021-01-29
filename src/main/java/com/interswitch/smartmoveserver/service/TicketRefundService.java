@@ -1,14 +1,12 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.interswitch.smartmoveserver.model.Manifest;
-import com.interswitch.smartmoveserver.model.Ticket;
-import com.interswitch.smartmoveserver.model.TicketRefund;
-import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.view.RefundTicket;
 import com.interswitch.smartmoveserver.repository.TicketRefundRepository;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.interswitchng.audit.annotation.Audited;
+import com.interswitchng.audit.model.AuditableAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,23 +14,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /*
  * Created by adebola.owolabi on 7/27/2020
  */
 @Service
 public class TicketRefundService {
-    private final Log logger = LogFactory.getLog(getClass());
     @Autowired
     PageUtil pageUtil;
 
     @Autowired
-    private TicketService ticketService;
+    private TicketRefundRepository refundRepository;
 
     @Autowired
-    private TicketRefundRepository refundRepository;
+    private TicketService ticketService;
 
     @Autowired
     private ManifestService manifestService;
@@ -62,6 +59,7 @@ public class TicketRefundService {
         return this.save(refund);
     }
 
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public TicketRefund save(TicketRefund refund) {
         return refundRepository.save(refund);
     }
@@ -70,9 +68,15 @@ public class TicketRefundService {
         return refundRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket Refund not found"));
     }
 
-    public Page<TicketRefund> findAllByOperator(Principal principal, int page, int size) {
+    public List<TicketRefund> findAllByOwner(String principal) {
+        User user = userService.findByUsername(principal);
+        return refundRepository.findAllByOperator(user);
+    }
+
+    public PageView<TicketRefund> findAllByOwner(int page, int size, String principal) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        User user = userService.findByUsername(principal.getName());
-        return refundRepository.findAllByOperator(pageable, user);
+        User user = userService.findByUsername(principal);
+        Page<TicketRefund> pages = refundRepository.findAllByOperator(pageable, user);
+        return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 }

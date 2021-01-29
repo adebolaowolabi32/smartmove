@@ -1,16 +1,14 @@
 package com.interswitch.smartmoveserver.api;
 
 import com.interswitch.smartmoveserver.model.Device;
-import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.request.DeviceConnection;
-import com.interswitch.smartmoveserver.model.response.DeviceConnectionResponse;
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.service.DeviceService;
+import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author adebola.owolabi
@@ -22,69 +20,30 @@ public class DeviceApi {
     @Autowired
     private DeviceService deviceService;
 
-    @PostMapping(value = "/connect", consumes = "application/json", produces = "application/json")
-    public DeviceConnectionResponse connectDevice(@RequestBody @Validated DeviceConnection deviceConnection) {
-        return deviceService.connectDevice(deviceConnection);
-    }
-
     @GetMapping(produces = "application/json")
-    private List<Device> findAll() {
-        return deviceService.findAll();
+    private PageView<Device> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "10") int size) {
+        return deviceService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     private Device save(@Validated @RequestBody Device device) {
-        return deviceService.save(device);
+        return deviceService.save(device, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     private Device findById(@Validated @PathVariable long id) {
-        return deviceService.findById(id);
-    }
-
-    @GetMapping(value = "/findByOwner/{owner}", produces = "application/json")
-    private List<Device> findAllByOwner(@Validated @PathVariable long owner) {
-        return deviceService.findAllByOwner(owner);
-    }
-
-    @GetMapping(value = "/findByType/{type}", produces = "application/json")
-    private List<Device> find(@Validated @PathVariable Enum.DeviceType type) {
-        return deviceService.find(type);
-    }
-
-    @PostMapping(value = "/{deviceId}/assignToVehicle/{vehicleId}", produces = "application/json", consumes = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void assignToVehicle(@Validated @PathVariable long deviceId, @Validated @PathVariable long vehicleId) {
-        deviceService.assignToVehicle(deviceId, vehicleId);
-    }
-
-    @PostMapping(value = "/{deviceId}/assignToAgent/{agentId}", produces = "application/json", consumes = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void assignToAgent(@Validated @PathVariable long deviceId, @Validated @PathVariable long agentId) {
-        deviceService.assignToAgent(deviceId, agentId);
+        return deviceService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")
     private Device update(@Validated @RequestBody Device device) {
-        return deviceService.update(device);
+        return deviceService.update(device, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @DeleteMapping("/{id}")
     private void delete(@Validated @PathVariable long id) {
-        deviceService.delete(id);
+        deviceService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
-
-    @PostMapping(value = "/activate/{id}", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void activate(@Validated @PathVariable long id) {
-        deviceService.activate(id);
-    }
-
-    @PostMapping(value = "/deactivate/{id}", produces = "application/json")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    private void deactivate(@Validated @PathVariable long id) {
-        deviceService.deactivate(id);
-    }
-
 }

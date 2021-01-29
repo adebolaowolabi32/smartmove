@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">User Settings</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-cogs mr-1"></i>
+        <span>User Settings</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Add New User Settings</b></h2>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+        <form action="#" class="card p-3" data-parsley-validate="true"
+              method="post" th:action="@{/userSettings/create}"
+              th:object="${userSettings}">
+
+            <div class="form-group row">
+                <label class="control-label col-sm-4" for="makerCheckerEnabled"><b>Enable Maker Checker For All
+                    Users</b></label>
+                <div class="col-sm-8">
+                    <label class="switch">
+                        <input id="makerCheckerEnabled" name="makerCheckerEnabled" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-2">
+                    <button class="btn btn-outline-primary btn-sized" type="submit">Submit</button>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </form>
+    </div>
+</div>
+</html>

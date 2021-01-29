@@ -840,7 +840,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
     color: #fff; }
   .m-dropdown.m-dropdown--header-bg-fill .m-dropdown__header .m-dropdown__header-subtitle {
     color: #fff; }
-	
+
 .m-separator {
   height: 0;
   margin: 20px 0; }
@@ -15603,12 +15603,15 @@ body {
     .dark-text {
         font-weight: 400;
         font-size: 1rem;
-        color: black;
+        color: #014260;
     }
     .dark-text-big {
         font-weight: 500;
         font-size: 1.6rem;
         color: black;
+    }
+    .icon-blue {
+        color: #014260;
     }
     .title-text {
         font-size: 1.1rem;
@@ -15636,8 +15639,10 @@ body {
    .spaced {
         padding: 50px;
    }
-   .dotted-hr {
-        border-top: dotted 3px;
+   .dotted-line {
+        border-top: dotted 2px;
+        color: #333; /* old IE */
+        background-color: #333; /* Modern Browsers */
    }
 
    .boarding-pass-body{
@@ -15670,13 +15675,13 @@ body {
        height:100px;
    }
 
-   #brt {
+   #vehiclePicture {
         width:250px;
         height:150px;
    }
 
-   #brt-bus {
-           width:350px;
+   #vehiclePic, #profilePic {
+           width:300px;
            height:200px;
    }
 
@@ -15767,7 +15772,19 @@ body {
       border-radius: 0.25rem;
       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
-    .selected {
-        background-color: grey;
-        color: #FFF;
+
+    .ticket-till-tiles{
+      height:100px;
+      border:1px solid grey;
+      border-radius: 10px 10px 10px 10px;
+    }
+
+    .text-content {
+        text-align: center;
+    }
+    .red {
+        color: red;
+    }
+    .inline {
+        display: inline;
     }

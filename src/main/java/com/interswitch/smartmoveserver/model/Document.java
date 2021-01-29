@@ -4,17 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
+/**
+ * @author earnest.suru
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity
 @Table(name = "documents")
-public class Document {
+@EntityListeners(AuditingEntityListener.class)
+public class Document extends AbstractAuditEntity<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

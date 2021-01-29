@@ -1,11 +1,12 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Ticket;
+import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.TicketService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /*
  * Created by adebola.owolabi on 7/27/2020
@@ -34,9 +36,15 @@ public class TicketController {
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
-        Page<Ticket> ticketPage = ticketService.findAllByOperator(principal, page, size);
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
-        model.addAttribute("ticketPage", ticketPage);
+
+        //TODO:: Implement server side pagination
+        //PageView<Ticket> ticketPage = ticketService.findAllByOperator(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
+        User user = userService.findByUsername(principal.getName());
+        List<Ticket> tickets = ticketService.findAllByOwner(owner, principal.getName());
+        PageView<Ticket> ticketPage = ticketService.findAllByOperator(owner, page, size, principal.getName());
+        model.addAttribute("tickets", tickets);
+        model.addAttribute("status", user.getTillStatus().name());
         return "tickets/get";
     }
 
@@ -63,7 +71,7 @@ public class TicketController {
             return "tickets/create";
         }
 
-        Ticket savedTicket = ticketService.save(principal, ticket);
+        Ticket savedTicket = ticketService.save(principal.getName(), ticket);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/tickets/details/" + savedTicket.getId();
     }

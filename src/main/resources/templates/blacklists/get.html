@@ -15,7 +15,8 @@
                         <div class="row">
                             <a href="#" th:href="@{/blacklists/add}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New Item</a>
                             <a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
-                            <a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fas fa-file-import"></i>
+                                Import CSV</a>
                         </div>
                     </div>
                 </div>
@@ -34,28 +35,24 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="blacklist : ${blacklistPage.content}">
+                <tr th:each="blacklist : ${blacklists}">
                     <td th:text="${blacklist.id}"></td>
                     <td th:text="${blacklist.identifier}"></td>
                     <td th:text="${blacklist.type}"></td>
                     <td>
                         <a class="justify-content-center" th:href="@{/blacklists/details/{id}(id=${blacklist.id})}">
-                            <button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
                         </a>
                     </td>
                     <td>
                         <a class="justify-content-center" th:href="@{/blacklists/remove/{id}(id=${blacklist.id})}">
-                            <button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
                         </a>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <div th:if="${blacklistPage.totalPages > 0}" class="pagination"
-                 th:each="pageNumber : ${pageNumbers}">
-                <a th:href="@{/get(size=${blacklistPage.size}, page=${pageNumber})}"
-                   th:class="${pageNumber==blacklistPage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
-            </div>
         </div>
     </div>
 </div>

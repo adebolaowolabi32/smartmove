@@ -15,7 +15,8 @@
 						<div class="row">
 							<a href="#" th:href="@{/terminals/create}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New</a>
 							<a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
-							<a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fas fa-file-import"></i>
+                                Import CSV</a>
 						</div>
 					</div>
 				</div>
@@ -23,54 +24,53 @@
 			<br>
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{terminal.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-			<table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+            <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
 				<thead class='thead-light'>
-				<tr>
-					<th>Id</th>
-					<th>Name</th>
-					<th>Transport Mode</th>
-					<th>Country</th>
-					<th>State</th>
-					<th>Lga</th>
-					<th>Owner</th>
-					<th>Active</th>
-					<th>View Details</th>
-					<th>Remove</th>
-				</tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Mode</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>Lga</th>
+                    <th>Owner</th>
+                    <th>Active</th>
+                    <th>View Details</th>
+                    <th>Remove</th>
+                </tr>
 				</thead>
 				<tbody>
-				<tr th:each="terminal : ${terminalPage.content}">
-					<td th:text="${terminal.id}"></td>
-					<td th:text="${terminal.name}"></td>
-					<td th:text="${terminal.mode}"></td>
-					<td th:text="${terminal.country}"></td>
-					<td th:text="${terminal.state}"></td>
-					<td th:text="${terminal.lga}"></td>
-					<td th:text="${terminal.owner != null ? terminal.owner.username : ''}"></td>
-					<td>
-						<label class="switch">
-							<input type="checkbox" id="enabled" name="enabled" th:checked="${terminal.enabled}" disabled>
-							<span class="slider round"></span>
-						</label>
-					</td>
-					<td>
-						<a class="justify-content-center" th:href="@{/terminals/details/{id}(id=${terminal.id})}">
-							<button type='button' class='btn btn-primary btn-sm'><i class='far fa-eye'></i></button>
-						</a>
-					</td>
-					<td>
-						<a class="justify-content-center" th:href="@{/terminals/delete/{id}(id=${terminal.id})}">
-							<button type='button' class='btn btn-danger btn-sm'><i class='far fa-trash-alt'></i></button>
-						</a>
-					</td>
-				</tr>
+                <tr th:each="terminal : ${terminals}">
+                    <td th:text="${terminal.id}"></td>
+                    <td th:text="${terminal.name}"></td>
+                    <td th:text="${terminal.code}"></td>
+                    <td th:text="${terminal.mode}"></td>
+                    <td th:text="${terminal.country}"></td>
+                    <td th:text="${terminal.state}"></td>
+                    <td th:text="${terminal.lga}"></td>
+                    <td th:text="${terminal.owner != null ? terminal.owner.username : ''}"></td>
+                    <td>
+                        <label class="switch">
+                            <input disabled id="enabled" name="enabled" th:checked="${terminal.enabled}"
+                                   type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/terminals/details/{id}(id=${terminal.id})}">
+                            <button class='btn btn-primary btn-sm' type='button'><i class='far fa-eye'></i></button>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="justify-content-center" th:href="@{/terminals/delete/{id}(id=${terminal.id})}">
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
 				</tbody>
 			</table>
-			<div th:if="${terminalPage.totalPages > 0}" class="pagination"
-				 th:each="pageNumber : ${pageNumbers}">
-				<a th:href="@{/get(size=${terminalPage.size}, page=${pageNumber})}"
-				   th:class="${pageNumber==terminalPage.number + 1} ? active"><button class='btn btn-outline-default' th:text=${pageNumber}></button></a>
-			</div>
 		</div>
 	</div>
 </div>

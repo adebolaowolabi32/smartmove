@@ -536,7 +536,7 @@ function loadTransactionDetails() {
 };
 
 
-function validateBvn(){
+/*function validateBvn(){
 
     var val = document.getElementById("bvn").value;
     console.log(val);
@@ -619,16 +619,23 @@ function validateNextOfPhone(){
     document.getElementById('nextOfKinMobileDiv').innerHTML = "<em class='blink' style='color:red;'>Mobile phone number could not be validated.</em>";
     return;
 }
-};
+};*/
 
 function checkSelection(){
 var selectedCategory = document.getElementById("idCategory").selectedIndex;
 
-if(selectedCategory===6){
+if(selectedCategory===7){
   document.getElementById("otherIdCategoryDiv").style.display = "block";
 }
 else{
  document.getElementById("otherIdCategoryDiv").style.display = "none";
 }
+
+if(selectedCategory==6){
+ document.getElementById("idNumberSuperDiv").style.display = "none";
+}else{
+ document.getElementById("idNumberSuperDiv").style.display = "block";
+}
+
 }
 

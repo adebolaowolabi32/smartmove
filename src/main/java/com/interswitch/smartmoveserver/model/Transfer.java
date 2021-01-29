@@ -1,9 +1,12 @@
 package com.interswitch.smartmoveserver.model;
 
+import com.interswitchng.audit.model.Auditable;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /*
@@ -12,7 +15,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "transfers")
-public class Transfer {
+@EntityListeners(AuditingEntityListener.class)
+public class Transfer extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -26,4 +30,17 @@ public class Transfer {
 
     @DateTimeFormat(pattern = "MMM dd yyyy HH:mm aa")
     private LocalDateTime transferDateTime;
+
+    @ManyToOne
+    private User owner;
+
+    @Override
+    public Long getAuditableId() {
+        return this.getId();
+    }
+
+    @Override
+    public String getAuditableName() {
+        return this.getClass().getSimpleName();
+    }
 }

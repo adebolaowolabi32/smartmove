@@ -1,16 +1,15 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.interswitch.smartmoveserver.model.Device;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Vehicle;
-import com.interswitch.smartmoveserver.model.VehicleCategory;
+import com.interswitch.smartmoveserver.service.DeviceService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.service.VehicleCategoryService;
 import com.interswitch.smartmoveserver.service.VehicleService;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +23,7 @@ import java.util.List;
 /**
  * @author adebola.owolabi
  */
+@Slf4j
 @Controller
 @RequestMapping("/vehicles")
 public class VehicleController {
@@ -37,37 +37,41 @@ public class VehicleController {
     UserService userService;
 
     @Autowired
-    PageUtil pageUtil;
+    DeviceService deviceService;
 
-    private final Log logger = LogFactory.getLog(getClass());
+    @Autowired
+    PageUtil pageUtil;
 
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
-        Page<Vehicle> vehiclePage = vehicleService.findAllPaginated(principal, owner, page, size);
-        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-        model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehiclePage));
-        model.addAttribute("vehiclePage", vehiclePage);
-        model.addAttribute("categories", vehicleCategories);
+        //TODO:: Implement server side pagination
+        //PageView<Vehicle> vehiclePage = vehicleService.findAllPaginated(owner, page, size, principal.getName());
+        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehiclePage));
+        List<Vehicle> vehicles = vehicleService.findAll(owner, principal.getName());
+        model.addAttribute("vehicles", vehicles);
         return "vehicles/get";
     }
 
     @GetMapping("/details/{id}")
     public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
-        Vehicle vehicle = vehicleService.findById(principal, id);
+        Vehicle vehicle = vehicleService.findById(id, principal.getName());
         model.addAttribute("vehicle", vehicle);
         return "vehicles/details";
     }
 
     @GetMapping("/create")
     public String showCreate(Principal principal, Model model) {
+
         Vehicle vehicle = new Vehicle();
+        List<Device> devices = deviceService.findAll(0L, principal.getName());
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
-        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-        model.addAttribute("categories", vehicleCategories);
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("vehicle", vehicle);
+        model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
+        model.addAttribute("devices", devices);
         return "vehicles/create";
     }
 
@@ -77,25 +81,25 @@ public class VehicleController {
         if (result.hasErrors()) {
             model.addAttribute("vehicle", vehicle);
             //TODO change findAll to findAllEligible
-            List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-            model.addAttribute("categories", vehicleCategories);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("vehicle", vehicle);
+            model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
             return "vehicles/create";
         }
 
-        Vehicle savedVehicle = vehicleService.save(vehicle);
+        Vehicle savedVehicle = vehicleService.save(vehicle, principal.getName());
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/vehicles/details/" + savedVehicle.getId();
     }
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        Vehicle vehicle = vehicleService.findById(principal, id);
+        Vehicle vehicle = vehicleService.findById(id, principal.getName());
         model.addAttribute("vehicle", vehicle);
         //TODO change findAll to findAllEligible
-        List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-        model.addAttribute("categories", vehicleCategories);
-        model.addAttribute("owners", userService.findAll());
+        model.addAttribute("vehicle", vehicle);
+        model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
+        model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
         return "vehicles/update";
     }
 
@@ -107,20 +111,19 @@ public class VehicleController {
         if (result.hasErrors()) {
             //TODO change findAll to findAllEligible
             model.addAttribute("vehicle", vehicle);
-            List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll();
-            model.addAttribute("categories", vehicleCategories);
-            model.addAttribute("owners", userService.findAll());
+            model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
+            model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
             return "vehicles/update";
         }
-        vehicleService.update(vehicle);
+        vehicleService.update(vehicle, principal.getName());
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/vehicles/details/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        Vehicle vehicle = vehicleService.findById(id);
-        vehicleService.delete(id);
+        Vehicle vehicle = vehicleService.findById(id, principal.getName());
+        vehicleService.delete(id, principal.getName());
         User owner = vehicle.getOwner();
         long ownerId = owner != null ? owner.getId() : 0;
         redirectAttributes.addFlashAttribute("deleted", true);

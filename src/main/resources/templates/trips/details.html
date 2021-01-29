@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default.html}">
+      layout:decorate="~{layouts/default.html}"
+>
 <title layout:fragment="title">Trips</title>
-<div layout:fragment="content" class="card mb-4">
+<div class="card mb-4" layout:fragment="content" style="border:none">
     <div class="card-header"><i class="fas fas fa-road"></i>
         <span>Trip & Passenger Manifest details</span>
         <a style="float:right;">
@@ -26,9 +27,11 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-4" for="mode"><b>Transport Mode</b></label>
+                                <label class="col-sm-4" for="mode"><b>Mode</b></label>
                                 <div class="col-sm-8">
-                                    <span id="mode" th:text="${trip.mode}"></span></div>
+                                    <span id="mode"
+                                          th:text="${trip.schedule!=null ? trip.schedule.route.mode : '' }"></span>
+                                </div>
                             </div>
 
                             <div class="form-group row">
@@ -52,7 +55,7 @@
                                     Terminal</b></label>
                                 <div class="col-sm-8">
                                     <span id="startTerminal"
-                                          th:text="${trip.schedule!=null ? trip.schedule.startTerminal.name : '' }"></span>
+                                          th:text="${trip.schedule!=null ? trip.schedule.route.startTerminal.name : '' }"></span>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +64,7 @@
                                 <label class="control-label col-sm-4" for="stopTerminal"><b>Arrival Terminal</b></label>
                                 <div class="col-sm-8">
                                     <span id="stopTerminal"
-                                          th:text="${trip.schedule!=null ? trip.schedule.stopTerminal.name : '' }"></span>
+                                          th:text="${trip.schedule!=null ? trip.schedule.route.stopTerminal.name : '' }"></span>
                                 </div>
                             </div>
 
@@ -97,10 +100,12 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
                 <br><br>
-                <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+                <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
+
                     <thead class='thead-light'>
                     <tr>
                         <th>SN</th>
@@ -150,6 +155,12 @@
                     <button class='btn btn-outline-info' style="margin:5px" type='button'><i class='fas fa-edit'></i>
                         Edit
                         Trip
+                    </button>
+                </a>
+
+                <a th:href="@{/manifests/upload-trip-manifest/{id}(id=${trip.id})}">
+                    <button class='btn btn-outline-info' style="margin:5px" type='button'><i class='fa fa-upload'></i>
+                        Upload Passenger Manifest
                     </button>
                 </a>
 

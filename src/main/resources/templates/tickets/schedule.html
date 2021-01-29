@@ -9,7 +9,7 @@
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-4">
-                    <h2><b> Select Booking</b></h2>
+                    <h2><b> Select New Booking</b></h2>
                 </div>
 
             </div>
@@ -26,13 +26,13 @@
                 <div class="list-group-item list-group-item-action" th:each="schedule : ${schedules}">
                     <div class="row">
                         <div class="col-sm-3">
-                            <img alt="BRT Bus" id="brt" src="/img/brt.png">
+                            <img alt="Vehicle Picture" id="vehiclePicture" th:src="${schedule.vehicle.pictureUrl}">
                         </div>
                         <div class="col-sm-4">
                             <div class="booking-item-flight-details">
                                 <h5 class="booking-item-title" th:text="${schedule.vehicle.name}"> Executive Coach</h5>
                                 <p>
-                                    <span th:text="${schedule.vehicle.capacity}"> 59</span> Seat(s)
+                                    <span th:text="${schedule.vehicle.capacity}"> 7575</span> Seat(s)
                                 </p>
                             </div>
                             <div class="row">
@@ -61,7 +61,8 @@
                                 <div class="col">
                                     <div class="booking-item-arrival">
                                         <p class="text-color"><b>Departure</b></p>
-                                        <p class="booking-item-address" th:text="${schedule.startTerminal.name}"><i
+                                        <p class="booking-item-address" th:text="${schedule.route.startTerminal.name}">
+                                            <i
                                                 class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
                                         <p class="booking-item-address" th:text="${schedule.departureDate}"><i
                                                 class="fa fa-calender"></i> 17-Aug-2020</p>
@@ -72,7 +73,7 @@
                                 <div class="col">
                                     <div class="booking-item-arrival">
                                         <p class="text-color"><b>Arrival</b></p>
-                                        <p class="booking-item-address" th:text="${schedule.stopTerminal.name}"><i
+                                        <p class="booking-item-address" th:text="${schedule.route.stopTerminal.name}"><i
                                                 class="fa fa-map-marker"></i> LAGOS (Jibowu) </p>
                                         <p class="booking-item-address" th:text="${schedule.arrivalDate}"><i
                                                 class="fa fa-calender"></i> 17-Aug-2020</p>
@@ -83,7 +84,8 @@
                             </div>
                         </div>
                         <div class="col-sm-2">
-                            <span class="amt-big">&#8358; <span th:text="${schedule.fare}">14,000.00/seat</span></span>
+                            <span class="amt-big"><span th:text="${schedule.route.fare}">14,000.00/seat</span> <span
+                                    th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span></span>
                             <br>
                             <a class="btn btn-lg btn-outline-primary btn-sized" id="expander"
                                th:href="@{${flowExecutionUrl} + '&_eventId=makeBooking&scheduleId=' + ${schedule.id} + '&noOfPassengers=' + ${scheduleBooking.noOfPassengers}}">Select</a>

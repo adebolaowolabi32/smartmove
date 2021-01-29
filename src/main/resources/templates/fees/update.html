@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<title layout:fragment="title">Fees</title>
+<div class="card mb-4" layout:fragment="content">
+    <div class="card-header"><i class="fas fa-memory mr-1"></i>
+        <span>Fees</span></div>
+    <div class="card-body">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2><b> Update Fee</b></h2>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
+        <form action="#" class="card p-3" data-parsley-validate="true"
+              method="post" th:action="@{/fees/update/{id}(id=${fee.id})}"
+              th:object="${fee}">
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="feeName"><b>Fee Name</b></label>
+                <div class="col-sm-10">
+                    <input class="form-control"
+                           data-parsley-length="[3, 40]"
+                           data-parsley-length-message="Please provide a name between 3 and 40 characters long"
+                           data-parsley-required-message="Please provide fee name"
+                           disabled
+                           id="feeName"
+                           name="feeName"
+                           required th:field="*{feeName}">
+                    <p class="small text-danger" th:errors="*{feeName}" th:if="${#fields.hasErrors('feeName')}"></p>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="description"><b>Fee Description</b></label>
+                <div class="col-sm-10">
+                    <input class="form-control"
+                           id="description" name="description" th:field="*{description}">
+                    <p class="small text-danger" th:errors="*{description}"
+                       th:if="${#fields.hasErrors('description')}"></p>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="value"><b>Fee Value</b></label>
+                <div class="col-sm-10">
+                    <input class="form-control"
+                           data-parsley-required-message="Please provide fee value" id="value" name="value"
+                           required
+                           th:field="*{value}">
+                    <p class="small text-danger" th:errors="*{value}" th:if="${#fields.hasErrors('value')}"></p>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="ratingMetric"><b>Rate Metric</b></label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="ratingMetric" th:field="*{ratingMetricType}">
+                        <option value="">Select...</option>
+                        <option value="FLAT">FLAT</option>
+                        <option value="PERCENT">PERCENT</option>
+                    </select></div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="enabled"><b>Active</b></label>
+                <div class="col-sm-10">
+                    <label class="switch">
+                        <input id="enabled" name="enabled" th:checked="${fee.enabled}" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-2">
+                    <button class="btn btn-outline-primary btn-sized" type="submit">Submit</button>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </form>
+    </div>
+</div>
+</html>
