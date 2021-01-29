@@ -65,8 +65,8 @@ public class UserController {
                          @Valid @RequestParam(defaultValue = "10") int size, Model model) {
         PageView<User> userPage = userService.findAllPaginatedByRole(principal.getName(), owner, role, page, size);
         model.addAttribute("title", pageUtil.buildTitle(role));
-        if (role != null && role.getClass().isInstance(Enum.Role.class)) {
-            model.addAttribute("role", role);
+        if (role != null) {
+            model.addAttribute("role", role.name());
         }
         model.addAttribute("userPage", userPage);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(userPage));
