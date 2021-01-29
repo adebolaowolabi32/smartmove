@@ -59,10 +59,10 @@ public class UserController {
     ErrorResponseUtil errorResponseUtil;
 
     @GetMapping("/get")
-    public String getAll(Principal principal, @RequestParam("role") Enum.Role role,
-                         @RequestParam(required = false, defaultValue = "0") Long owner,
-                         @RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = "10") int size, Model model) {
+    public String getAll(Principal principal, @Valid @RequestParam("role") Enum.Role role,
+                         @Valid @RequestParam(required = false, defaultValue = "0") Long owner,
+                         @Valid @RequestParam(defaultValue = "1") int page,
+                         @Valid @RequestParam(defaultValue = "10") int size, Model model) {
         PageView<User> userPage = userService.findAllPaginatedByRole(principal.getName(), owner, role, page, size);
         model.addAttribute("title", pageUtil.buildTitle(role));
         Enum.Role userRole = role;
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @GetMapping("/details/{id}")
-    public String getDetails(Principal principal, @PathVariable("id") long id, Model model) {
+    public String getDetails(Principal principal, @Valid @PathVariable("id") long id, Model model) {
         User user = userService.findById(id, principal.getName());
         model.addAttribute("regulators_no", userService.countByRoleAndOwner(user, Enum.Role.REGULATOR));
         model.addAttribute("operators_no", userService.countByRoleAndOwner(user, Enum.Role.OPERATOR));
@@ -96,7 +96,7 @@ public class UserController {
 
 
     @GetMapping("/create")
-    public String showCreate(Principal principal, @RequestParam("role") Enum.Role role, Model model) {
+    public String showCreate(Principal principal, @Valid @RequestParam("role") Enum.Role role, Model model) {
         //TODO:: need to handle method level user permissions specific to each role
         User user = new User();
         user.setRole(role);
@@ -111,7 +111,7 @@ public class UserController {
 
 
     @GetMapping("/created")
-    public String showCreated(Principal principal, @RequestParam("role") Enum.Role role, Model model) {
+    public String showCreated(Principal principal, @Valid @RequestParam("role") Enum.Role role, Model model) {
         //TODO:: need to handle method level user permissions specific to each role
         User user = new User();
         user.setRole(role);
@@ -125,13 +125,13 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(Principal principal, @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String create(Principal principal, @Valid @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         logger.info("Wanna create user for role==>" + role.name());
         user.setRole(role);
 
         if (result.hasErrors()) {
-            logger.info("Error trying to create user==>" + errorResponseUtil.getErrorMessages(result));
+            logger.info("Error trying to create user==>" + ErrorResponseUtil.getErrorMessages(result));
             model.addAttribute("title", pageUtil.buildTitle(role));
             model.addAttribute("user", user);
             //TODO change findAll to findAllEligible
@@ -149,7 +149,7 @@ public class UserController {
     }
 
     @GetMapping("/update/{id}")
-    public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
+    public String showUpdate(Principal principal, @Valid @PathVariable("id") long id, Model model) {
         User user = userService.findById(id, principal.getName());
         Enum.Role role = user.getRole();
         model.addAttribute("title", pageUtil.buildTitle(role));
@@ -161,7 +161,7 @@ public class UserController {
     }
 
     @PostMapping("/update/{id}")
-    public String update(Principal principal, @PathVariable("id") long id, @Valid User user,
+    public String update(Principal principal, @Valid @PathVariable("id") long id, @Valid User user,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         User existing = userService.findById(id, principal.getName());
         Enum.Role role = existing.getRole();
@@ -180,7 +180,7 @@ public class UserController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
+    public String delete(Principal principal, @Valid @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
         User user = userService.findById(id, principal.getName());
         userService.delete(id, principal.getName());
         Enum.Role role = user.getRole();
