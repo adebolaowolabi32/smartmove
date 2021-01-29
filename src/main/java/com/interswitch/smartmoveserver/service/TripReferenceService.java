@@ -43,8 +43,7 @@ public class TripReferenceService {
     public TripReference update(TripReference tripReference, String principal) {
         User owner = userService.findByUsername(principal);
         TripReference tripReference1 = tripRefRepository.findByOwner(owner);
-        if (tripReference1 != null)
-        {
+        if (tripReference1 != null) {
             tripReference.setId(tripReference1.getId());
             tripReference.setOwner(tripReference1.getOwner());
             tripReference.setPrefix(tripReference.getPrefix().toUpperCase());

@@ -89,7 +89,7 @@ public class CardController {
             model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("card")));
             return "cards/update";
         }
-        cardService.update(card,principal.getName());
+        cardService.update(card, principal.getName());
         redirectAttributes.addFlashAttribute("updated", true);
         return "redirect:/cards/details/" + id;
     }
@@ -113,7 +113,7 @@ public class CardController {
     @PostMapping("/upload")
     public String doCardsUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
         try {
-            boolean succeeded = cardService.upload(file,principal.getName());
+            boolean succeeded = cardService.upload(file, principal.getName());
             redirectAttributes.addFlashAttribute("uploaded", succeeded);
             return "redirect:/cards/get";
         } catch (Exception ex) {

@@ -4,10 +4,11 @@ public class GenericModel<T> {
 
     private T t;
 
-    public GenericModel(T t){
+    public GenericModel(T t) {
         this.t = t;
     }
-    public T getEntity(){
+
+    public T getEntity() {
         return t;
     }
 }

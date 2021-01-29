@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
     Page<Ticket> findAllByOperator(Pageable pageable, User operator);
+
     Page<Ticket> findAll(Pageable pageable);
 
     List<Ticket> findAllByOperator(User operator);

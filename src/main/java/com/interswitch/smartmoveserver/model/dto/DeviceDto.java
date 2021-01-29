@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+
 @Data
 public class DeviceDto {
 

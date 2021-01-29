@@ -140,8 +140,7 @@ public class HomeController {
             no_cards = cardService.countByOwner(username);
             no_transfers = transferService.countByOwner(username);
             //}
-        }
-        else {
+        } else {
             no_admins = userService.countByRole(username, null, Enum.Role.ISW_ADMIN);
             no_regulators = userService.countByRole(username, null, Enum.Role.REGULATOR);
             no_operators = userService.countByRole(username, null, Enum.Role.OPERATOR);

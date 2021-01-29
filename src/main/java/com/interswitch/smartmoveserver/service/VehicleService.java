@@ -51,7 +51,8 @@ public class VehicleService {
     public Vehicle save(Vehicle vehicle, String principal) {
         String name = vehicle.getName();
         boolean exists = vehicleRepository.existsByName(name);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle with name: " + name + " already exists");
+        if (exists)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Vehicle with name: " + name + " already exists");
         if (vehicle.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             vehicle.setOwner(owner);
@@ -115,8 +116,7 @@ public class VehicleService {
             if (securityUtil.isOwnedEntity(user.getRole())) {
                 Page<Vehicle> pages = vehicleRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
+            } else {
                 Page<Vehicle> pages = vehicleRepository.findAll(pageable);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
@@ -146,13 +146,14 @@ public class VehicleService {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
+
     private Vehicle buildVehicle(Vehicle vehicle) {
         VehicleCategory vehicleCategory = vehicle.getCategory();
-        if(vehicleCategory != null)
+        if (vehicleCategory != null)
             vehicle.setCategory(vehicleCategoryService.findById(vehicleCategory.getId()));
 
         Device device = vehicle.getDevice();
-        if(device != null)
+        if (device != null)
             vehicle.setDevice(deviceService.findById(device.getId()));
         return vehicle;
     }

@@ -23,6 +23,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findAllByRoleAndOwner(Enum.Role role, User owner);
     Page<User> findAllByRoleAndOwner(Pageable pageable, Enum.Role role, User owner);
     List<User> findAll();
+
     boolean existsByUsername(String username);
 
     Long countByRole(Enum.Role role);

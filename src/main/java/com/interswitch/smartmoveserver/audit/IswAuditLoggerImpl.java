@@ -23,16 +23,13 @@ import java.util.concurrent.Executors;
 @Component
 public class IswAuditLoggerImpl {
 
+    private final ExecutorService executorService;
     @Autowired
     private AuditTrailRepository auditTrailRepository;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private HttpRequestUtil httpRequestUtil;
-
-    private final ExecutorService executorService;
 
     public IswAuditLoggerImpl() {
         this.executorService = Executors.newFixedThreadPool(10);
@@ -42,7 +39,7 @@ public class IswAuditLoggerImpl {
 
         executorService.submit(() -> {
             try {
-                log.info("Inside log implementation,auditable value ===>"+auditable);
+                log.info("Inside log implementation,auditable value ===>" + auditable);
                 AuditTrail audit = new AuditTrail();
                 audit.setResource(auditable.getAuditableName().toLowerCase());
                 audit.setResourceId((Long) auditable.getAuditableId());
@@ -50,17 +47,17 @@ public class IswAuditLoggerImpl {
                 audit.setAction(auditableAction);
                 audit.setActor(actor);
 
-                if(!actor.isEmpty()){
+                if (!actor.isEmpty()) {
                     User actorUser = userService.findByUsername(actor);
-                    User actorOwner = actorUser.getOwner()!=null && (actorUser.getRole()!= Enum.Role.ISW_ADMIN || actorUser.getRole()!= Enum.Role.OPERATOR )? actorUser.getOwner() : actorUser ;
+                    User actorOwner = actorUser.getOwner() != null && (actorUser.getRole() != Enum.Role.ISW_ADMIN || actorUser.getRole() != Enum.Role.OPERATOR) ? actorUser.getOwner() : actorUser;
                     audit.setOwner(actorOwner);
                 }
                 audit.setActionDate(Instant.now());
                 audit.setActionTimeStamp(DateUtil.formatDate(LocalDateTime.now()));
-                audit.setDescription(actor + " "+ auditableAction.name().concat("d").toLowerCase() + " " + auditable.getAuditableName().toLowerCase()+" ");
+                audit.setDescription(actor + " " + auditableAction.name().concat("d").toLowerCase() + " " + auditable.getAuditableName().toLowerCase() + " ");
                 log.info("audit trail:>" + audit);
 
-                if(audit.getResourceId()>0) {
+                if (audit.getResourceId() > 0) {
                     auditTrailRepository.save(audit);
                 }
 

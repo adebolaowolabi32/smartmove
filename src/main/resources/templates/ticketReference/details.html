@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default.html}"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+>
 <title layout:fragment="title">Ticket Reference</title>
-<div layout:fragment="content" class="card mb-4">
+<div class="card mb-4" layout:fragment="content">
     <div class="card-header"><i class="fas fa-bus mr-1"></i><span>Ticket Reference</span></div>
     <div class="card-body">
         <div class="table-wrapper">
@@ -14,8 +14,10 @@
                     </div>
                     <div class="col-sm-1">
                         <div class="row">
-                            <a th:unless="${ticketReference}" th:href="@{/ticketReference/create}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Create</a>
-                            <a th:if="${ticketReference}" th:href="@{/ticketReference/update}" class="btn btn-info"><i class="fas fa-edit" aria-hidden="true"></i> Edit</a>
+                            <a class="btn btn-info" th:href="@{/ticketReference/create}" th:unless="${ticketReference}"><i
+                                    aria-hidden="true" class="fas fa-plus"></i> Create</a>
+                            <a class="btn btn-info" th:href="@{/ticketReference/update}" th:if="${ticketReference}"><i
+                                    aria-hidden="true" class="fas fa-edit"></i> Edit</a>
                         </div>
                     </div>
                 </div>
@@ -29,40 +31,43 @@
 
                 <div class="card p-3">
 
-                <div class="col">
-                    <div class="form-group row">
-                        <label class="control-label col-sm-4" for="prefix"><b>Prefix</b></label>
-                        <div class="col-sm-8">
-                            <span id="prefix" th:text="${ticketReference.prefix}"></span></div>
+                    <div class="col">
+                        <div class="form-group row">
+                            <label class="control-label col-sm-4" for="prefix"><b>Prefix</b></label>
+                            <div class="col-sm-8">
+                                <span id="prefix" th:text="${ticketReference.prefix}"></span></div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="enabled"><b>Active</b></label>
+                            <div class="col-sm-8">
+                                <label class="switch">
+                                    <input disabled id="enabled" name="enabled" th:checked="${ticketReference.enabled}"
+                                           type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                                </span></div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="startTerminalEnabled"><b>Departure Terminal</b></label>
+                            <div class="col-sm-8">
+                                <label class="switch">
+                                    <input disabled id="startTerminalEnabled" name="startTerminalEnabled"
+                                           th:checked="${ticketReference.startTerminalEnabled}" type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                                </span></div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="stopTerminalEnabled"><b>Destination Terminal</b></label>
+                            <div class="col-sm-8">
+                                <label class="switch">
+                                    <input disabled id="stopTerminalEnabled" name="enabled"
+                                           th:checked="${ticketReference.stopTerminalEnabled}" type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                                </span></div>
+                        </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-4" for="enabled"><b>Active</b></label>
-                        <div class="col-sm-8">
-                            <label class="switch">
-                                <input disabled id="enabled" name="enabled" th:checked="${ticketReference.enabled}" type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
-                            </span></div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-4" for="startTerminalEnabled"><b>Departure Terminal</b></label>
-                        <div class="col-sm-8">
-                            <label class="switch">
-                                <input disabled id="startTerminalEnabled" name="startTerminalEnabled" th:checked="${ticketReference.startTerminalEnabled}" type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
-                            </span></div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-4" for="stopTerminalEnabled"><b>Destination Terminal</b></label>
-                        <div class="col-sm-8">
-                            <label class="switch">
-                                <input disabled id="stopTerminalEnabled" name="enabled" th:checked="${ticketReference.stopTerminalEnabled}" type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
-                            </span></div>
-                    </div>
-                </div>
 
 
                 </div>

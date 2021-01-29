@@ -15,8 +15,8 @@ public class AuditableActionStatusImpl implements AuditableActionStatus {
 
     @Override
     public boolean actionSuccessful(Object returnedObject, AuditableAction auditableAction) {
-        switch (auditableAction){
-            case CREATE :
+        switch (auditableAction) {
+            case CREATE:
             case UPDATE:
                 returnObjectSuccessful(returnedObject);
             default:

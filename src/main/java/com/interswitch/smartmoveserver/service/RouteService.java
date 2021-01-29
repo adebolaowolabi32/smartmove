@@ -74,8 +74,7 @@ public class RouteService {
             if (securityUtil.isOwnedEntity(user.getRole())) {
                 Page<Route> pages = routeRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
+            } else {
                 Page<Route> pages = routeRepository.findAll(pageable);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
@@ -105,9 +104,10 @@ public class RouteService {
         String name = startTerminalName + " - " + stopTerminalName;
         route.setName(name);
         boolean exists = routeRepository.existsByName(name);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Route with name: " + name + " already exists");
+        if (exists)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Route with name: " + name + " already exists");
 
-        if(startTerminalName.equalsIgnoreCase(stopTerminalName)){
+        if (startTerminalName.equalsIgnoreCase(stopTerminalName)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't create route with same start and end terminal");
         }
 
@@ -118,7 +118,7 @@ public class RouteService {
         return routeRepository.save(buildRoute(route));
     }
 
-    public  Route mapToRoute(RouteDto routeDto){
+    public Route mapToRoute(RouteDto routeDto) {
         Route route = new Route();
         Terminal start = terminalService.findById(routeDto.getStartTerminalId());
         Terminal stop = terminalService.findById(routeDto.getStopTerminalId());
@@ -160,7 +160,7 @@ public class RouteService {
 
     public void delete(long id, String principal) {
 
-        log.info("wanna delete route with id===>"+id);
+        log.info("wanna delete route with id===>" + id);
         Optional<Route> existing = routeRepository.findById(id);
         if (existing.isPresent()) {
             routeRepository.deleteById(id);
@@ -190,21 +190,21 @@ public class RouteService {
     }
 
     //BUS, CAR, RAIL, FERRY, RICKSHAW
-    private Enum.TransportMode convertToTransportModeEnum(String name){
+    private Enum.TransportMode convertToTransportModeEnum(String name) {
 
-        if(name.startsWith("BUS") || name.equalsIgnoreCase("bus")){
+        if (name.startsWith("BUS") || name.equalsIgnoreCase("bus")) {
             return Enum.TransportMode.BUS;
         }
 
-        if(name.startsWith("CAR") || name.equalsIgnoreCase("car")){
+        if (name.startsWith("CAR") || name.equalsIgnoreCase("car")) {
             return Enum.TransportMode.CAR;
         }
 
-        if(name.startsWith("RAIL") || name.equalsIgnoreCase("rail")){
+        if (name.startsWith("RAIL") || name.equalsIgnoreCase("rail")) {
             return Enum.TransportMode.RAIL;
         }
 
-        if(name.startsWith("FERRY") || name.equalsIgnoreCase("ferry")){
+        if (name.startsWith("FERRY") || name.equalsIgnoreCase("ferry")) {
             return Enum.TransportMode.FERRY;
         }
 

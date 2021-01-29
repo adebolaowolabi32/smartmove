@@ -5,7 +5,6 @@ import com.interswitch.smartmoveserver.model.Transfer;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
 import com.interswitch.smartmoveserver.repository.WalletTransferRepository;
-import com.interswitch.smartmoveserver.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

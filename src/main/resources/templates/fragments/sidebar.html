@@ -11,13 +11,17 @@
                 <div class="sb-sidenav-menu-heading">Management</div>
                 <div data-parent="#sidenavAccordion">
                     <nav class=".sb-sidenav-menu nav">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
+                        <a aria-controls="collapseUser" aria-expanded="false" class="nav-link collapsed"
+                           data-target="#collapseUser" data-toggle="collapse" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             <span th:text="#{userManagement}">User Management</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div></a>
-                        <div class="collapse" id="collapseUser" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div aria-labelledby="headingOne" class="collapse" data-parent="#sidenavAccordion"
+                             id="collapseUser">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')" th:href="@{/users/get?role=ISW_ADMIN}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')"
+                                   th:href="@{/users/get?role=ISW_ADMIN}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{administrators}">Administrators</span></a>
                                 <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_EXECUTIVES')"
@@ -28,7 +32,8 @@
                                    th:href="@{/users/get?role=REGULATOR}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{regulators}">Regulators</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_OPERATORS')" th:href="@{/users/get?role=OPERATOR}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_OPERATORS')"
+                                   th:href="@{/users/get?role=OPERATOR}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{operators}">Operators</span></a>
                                 <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_SERVICE_PROVIDERS')"
@@ -39,17 +44,20 @@
                                    th:href="@{/users/get?role=INSPECTOR}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{inspectors}">Inspectors</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_DRIVERS')" th:href="@{/users/get?role=DRIVER}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_DRIVERS')"
+                                   th:href="@{/users/get?role=DRIVER}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{drivers}">Drivers</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_AGENTS')" th:href="@{/users/get?role=AGENT}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_AGENTS')"
+                                   th:href="@{/users/get?role=AGENT}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{agents}">Agents</span></a>
                                 <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETERS')"
                                    th:href="@{/users/get?role=TICKETER}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{ticketers}">Ticketers</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_VEHICLE_OWNERS')" th:href="@{/users/get?role=VEHICLE_OWNER}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_VEHICLE_OWNERS')"
+                                   th:href="@{/users/get?role=VEHICLE_OWNER}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                     <span th:text="#{vehicleOwners}">Vehicle Owners</span></a>
                                 <a class="nav-link" href="#" th:href="@{/userSettings/details}">
@@ -79,33 +87,42 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-memory"></i></div>
                             <span th:text="#{terminals}">Transport Terminals</span></a>
 
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTrip" aria-expanded="false" aria-controls="collapseUser">
+                        <a aria-controls="collapseUser" aria-expanded="false" class="nav-link collapsed"
+                           data-target="#collapseTrip" data-toggle="collapse" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             <span>Trips and Schedules</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div></a>
-                        <div class="collapse" id="collapseTrip" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div aria-labelledby="headingTwo" class="collapse" data-parent="#sidenavAccordion"
+                             id="collapseTrip">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_ROUTES')" th:href="@{/routes/get}" href="#">
-                                <div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
-                                <span th:text="#{routes}">Routes</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_SCHEDULES')" th:href="@{/schedules/get}"
-                                   href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_ROUTES')"
+                                   th:href="@{/routes/get}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-route"></i></div>
+                                    <span th:text="#{routes}">Routes</span></a>
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_SCHEDULES')"
+                                   th:href="@{/schedules/get}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
                                     <span th:text="#{schedules}">Schedules</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRIPS')" th:href="@{/trips/get}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TRIPS')"
+                                   th:href="@{/trips/get}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-road"></i></div>
                                     <span th:text="#{trips}">Trips</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TRIPS')" th:href="@{/tripReference/details}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TRIPS')"
+                                   th:href="@{/tripReference/details}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-ellipsis-h"></i></div>
                                     <span>Trip Reference</span></a>
 
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicket" aria-expanded="false" aria-controls="collapseUser">
+                        <a aria-controls="collapseUser" aria-expanded="false" class="nav-link collapsed"
+                           data-target="#collapseTicket" data-toggle="collapse" href="#">
                             <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                             <span th:text="#{ticketManagement}">Ticket Management</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div></a>
-                        <div class="collapse" id="collapseTicket" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div aria-labelledby="headingTwo" class="collapse" data-parent="#sidenavAccordion"
+                             id="collapseTicket">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKETS')"
                                    th:href="@{/tickets/get}">
@@ -126,20 +143,25 @@
 
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTicketTill" aria-expanded="false" aria-controls="collapseTicketTill">
+                        <a aria-controls="collapseTicketTill" aria-expanded="false" class="nav-link collapsed"
+                           data-target="#collapseTicketTill" data-toggle="collapse" href="#">
                             <div class="sb-nav-link-icon"><i class="fa fa-tasks"></i></div>
                             <span th:text="#{ticketTill}">Ticket Till</span>
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseTicketTill" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                        <div aria-labelledby="headingOne" class="collapse" data-parent="#sidenavAccordion"
+                             id="collapseTicketTill">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TICKET_TILL')" th:href="@{/ticket-till/status}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKET_TILL')"
+                                   th:href="@{/ticket-till/status}">
                                     <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
                                     <span th:text="#{tillStatus}">Status</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('VIEW_TICKET_TILL')" th:href="@{/ticket-till/approved}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_TICKET_TILL')"
+                                   th:href="@{/ticket-till/approved}">
                                     <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
                                     <span th:text="#{approvedTills}">Approved</span></a>
-                                <a class="nav-link" sec:authorize="hasAuthority('UPDATE_TICKET_TILL')" th:href="@{/ticket-till/approval}" href="#">
+                                <a class="nav-link" href="#" sec:authorize="hasAuthority('UPDATE_TICKET_TILL')"
+                                   th:href="@{/ticket-till/approval}">
                                     <div class="sb-nav-link-icon"><i class="fa fa-circle"></i></div>
                                     <span th:text="#{tillApprovals}">Approvals</span></a>
 
@@ -152,7 +174,8 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             <span th:text="#{settlements}">Settlements</span></a>
 
-                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_FEE_CONFIGURATIONS')" th:href="@{/fees/get}" href="#">
+                        <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_FEE_CONFIGURATIONS')"
+                           th:href="@{/fees/get}">
                             <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
                             <span th:text="#{feeConfig}">Fee Configurations</span></a>
 
@@ -160,7 +183,8 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
                             <span th:text="#{settings}">Settings</span></a>
 
-                        <a class="nav-link" sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')" th:href="@{/audit-trails/get}" href="#">
+                        <a class="nav-link" href="#" sec:authorize="hasAuthority('VIEW_AUDIT_TRAIL')"
+                           th:href="@{/audit-trails/get}">
                             <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                             <span th:text="#{auditTrails}">Audit Trails</span></a>
 

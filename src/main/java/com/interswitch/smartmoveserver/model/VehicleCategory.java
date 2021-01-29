@@ -21,7 +21,7 @@ import java.util.Set;
 @Entity
 @Table(name = "vehicle_categories")
 @EntityListeners(AuditingEntityListener.class)
-public class VehicleCategory extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable{
+public class VehicleCategory extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -70,8 +70,8 @@ public class VehicleCategory extends AbstractAuditEntity<String> implements Audi
     @NotNull(message = "Capacity is required.")
     private int capacity;
 
-    @Column(name="seats",nullable = true)
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @Column(name = "seats", nullable = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "seat")
     private Set<Seat> seats;
 

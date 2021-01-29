@@ -33,7 +33,7 @@ public class SmartMoveApplication {
     }
 
     @Bean
-    public AuditorAware<String> auditorAware(){
+    public AuditorAware<String> auditorAware() {
         return new AuditorAwareImpl();
     }
 

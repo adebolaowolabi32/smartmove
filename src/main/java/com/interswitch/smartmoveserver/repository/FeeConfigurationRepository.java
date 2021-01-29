@@ -19,7 +19,7 @@ public interface FeeConfigurationRepository extends CrudRepository<FeeConfigurat
 
     Page<FeeConfiguration> findAll(Pageable pageable);
 
-    List<FeeConfiguration> findByEnabledAndOperatorUsername(boolean enabled,String username);
+    List<FeeConfiguration> findByEnabledAndOperatorUsername(boolean enabled, String username);
 
     FeeConfiguration findById(long feeConfigId);
 

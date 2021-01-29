@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.model.VehicleCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +19,7 @@ public interface VehicleCategoryRepository extends CrudRepository<VehicleCategor
     Long countByOwner(User owner);
     Page<VehicleCategory> findAll(Pageable pageable);
     List<VehicleCategory> findAll();
+
     boolean existsByName(String name);
 
 

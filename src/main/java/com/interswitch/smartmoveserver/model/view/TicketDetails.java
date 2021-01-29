@@ -1,8 +1,10 @@
 
 package com.interswitch.smartmoveserver.model.view;
+
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;

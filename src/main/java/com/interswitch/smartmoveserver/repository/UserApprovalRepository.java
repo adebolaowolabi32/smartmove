@@ -13,5 +13,6 @@ public interface UserApprovalRepository extends CrudRepository<UserApproval, Lon
     List<UserApproval> findAllByOwner(User owner);
 
     UserApproval findByUsr(User usr);
+
     List<UserApproval> findAll();
 }

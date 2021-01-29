@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "user_approvals")
-public class UserApproval extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable  {
+public class UserApproval extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

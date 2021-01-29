@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default.html}"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 <title layout:fragment="title">Trips</title>
-<div layout:fragment="content" class="card mb-4" style="border:none">
+<div class="card mb-4" layout:fragment="content" style="border:none">
     <div class="card-header"><i class="fas fas fa-road"></i>
         <span>Trip & Passenger Manifest details</span>
         <a style="float:right;">
@@ -29,7 +29,8 @@
                             <div class="form-group row">
                                 <label class="col-sm-4" for="mode"><b>Mode</b></label>
                                 <div class="col-sm-8">
-                                    <span id="mode" th:text="${trip.schedule!=null ? trip.schedule.route.mode : '' }"></span>
+                                    <span id="mode"
+                                          th:text="${trip.schedule!=null ? trip.schedule.route.mode : '' }"></span>
                                 </div>
                             </div>
 
@@ -105,7 +106,7 @@
                 <br><br>
                 <table cellspacing="0" class="table table-bordered table-responsive" id="dataTable" width="100%">
 
-                <thead class='thead-light'>
+                    <thead class='thead-light'>
                     <tr>
                         <th>SN</th>
                         <th>Name</th>
@@ -159,7 +160,7 @@
 
                 <a th:href="@{/manifests/upload-trip-manifest/{id}(id=${trip.id})}">
                     <button class='btn btn-outline-info' style="margin:5px" type='button'><i class='fa fa-upload'></i>
-                       Upload Passenger Manifest
+                        Upload Passenger Manifest
                     </button>
                 </a>
 

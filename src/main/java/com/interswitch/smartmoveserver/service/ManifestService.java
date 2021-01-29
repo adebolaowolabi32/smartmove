@@ -136,11 +136,11 @@ public class ManifestService {
 
     private Manifest buildManifest(Manifest manifest) {
         Trip trip = manifest.getTrip();
-        if(trip != null)
+        if (trip != null)
             manifest.setTrip(tripService.findById(trip.getId()));
 
         Schedule schedule = manifest.getSchedule();
-        if(schedule != null)
+        if (schedule != null)
             manifest.setSchedule(scheduleService.findById(schedule.getId()));
 
         return manifest;
@@ -151,14 +151,13 @@ public class ManifestService {
         FileParser<ManifestDto> fileParser = new FileParser<>();
         List<Manifest> savedManifests = new ArrayList<>();
         List<ManifestDto> manifestDtoList = fileParser.parseFileToEntity(file, ManifestDto.class);
-        manifestDtoList.forEach(manifestDto->{
+        manifestDtoList.forEach(manifestDto -> {
 
             Manifest manifest = mapToManifest(manifestDto);
-            if(trip!=null){
+            if (trip != null) {
                 manifest.setTrip(trip);
-            }
-            else{
-               manifest.setSchedule(schedule);
+            } else {
+                manifest.setSchedule(schedule);
             }
             savedManifests.add(manifestRepository.save(manifest));
         });
@@ -166,7 +165,7 @@ public class ManifestService {
         return savedManifests;
     }
 
-    private Manifest mapToManifest(ManifestDto dto){
+    private Manifest mapToManifest(ManifestDto dto) {
         return Manifest.builder()
                 .address(dto.getAddress())
                 .boarded(dto.getBoarded().startsWith("T") || dto.getBoarded().startsWith("t"))
@@ -189,17 +188,17 @@ public class ManifestService {
     }
 
 
-    private Enum.IdCategory convertToCategoryEnum(String name){
+    private Enum.IdCategory convertToCategoryEnum(String name) {
         // NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT, VOTERS_CARD, SCHOOL_ID, OTHER
-        if(name.startsWith("NAT")){
+        if (name.startsWith("NAT")) {
             return Enum.IdCategory.NATIONAL_ID;
         }
 
-        if(name.startsWith("DRIVERS_LICENSE")){
+        if (name.startsWith("DRIVERS_LICENSE")) {
             return Enum.IdCategory.DRIVERS_LICENSE;
         }
 
-        if(name.startsWith("INTERNATIONAL_PASSPORT")){
+        if (name.startsWith("INTERNATIONAL_PASSPORT")) {
             return Enum.IdCategory.INTERNATIONAL_PASSPORT;
         }
 

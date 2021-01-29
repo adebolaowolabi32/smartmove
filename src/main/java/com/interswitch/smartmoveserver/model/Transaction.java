@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "transactions")
 @EntityListeners(AuditingEntityListener.class)
-public class Transaction extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable{
+public class Transaction extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

@@ -3,8 +3,6 @@ package com.interswitch.smartmoveserver.api;
 import com.interswitch.smartmoveserver.model.Wallet;
 import com.interswitch.smartmoveserver.service.WalletService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
-import com.sun.mail.iap.Response;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,11 +37,11 @@ public class WalletApi {
 
     @PutMapping(produces = "application/json", consumes = "application/json")
     private Wallet update(@Validated @RequestBody Wallet wallet) {
-        return walletService.update(wallet,JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+        return walletService.update(wallet, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @DeleteMapping("/{id}")
     private void delete(@Validated @PathVariable long id) {
-        walletService.delete(id,JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+        walletService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 }

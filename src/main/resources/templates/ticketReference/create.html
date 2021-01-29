@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default.html}">
+<html layout:decorate="~{layouts/default.html}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <title layout:fragment="title">Ticket Reference</title>
-<div layout:fragment="content" class="card mb-4">
+<div class="card mb-4" layout:fragment="content">
     <div class="card-header"><i class="fas fa-road mr-1"></i>
         <span>Ticket Reference</span></div>
     <div class="card-body">
@@ -15,15 +15,15 @@
         </div>
         <br>
         <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
-        <form class="card p-3" action="#" method="post"
-              th:action="@{/ticketReference/create}" th:object="${ticketReference}"
-              data-parsley-validate="true">
+        <form action="#" class="card p-3" data-parsley-validate="true"
+              method="post" th:action="@{/ticketReference/create}"
+              th:object="${ticketReference}">
 
             <div class="form-group row">
                 <label class="control-label col-sm-4" for="prefix"><b>Prefix</b></label>
                 <div class="col-sm-8">
-                    <input class="form-control" id="prefix" name="prefix" th:field="*{prefix}" required>
-                    <p class="small text-danger" th:if="${#fields.hasErrors('prefix')}" th:errors="*{prefix}"></p>
+                    <input class="form-control" id="prefix" name="prefix" required th:field="*{prefix}">
+                    <p class="small text-danger" th:errors="*{prefix}" th:if="${#fields.hasErrors('prefix')}"></p>
                 </div>
             </div>
 
@@ -31,7 +31,7 @@
                 <label class="control-label col-sm-2" for="enabled"><b>Active</b></label>
                 <div class="col-sm-10">
                     <label class="switch">
-                        <input type="checkbox" name="enabled" id="enabled">
+                        <input id="enabled" name="enabled" type="checkbox">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -41,7 +41,7 @@
                 <label class="control-label col-sm-2" for="startTerminalEnabled"><b>Departure Terminal</b></label>
                 <div class="col-sm-10">
                     <label class="switch">
-                        <input type="checkbox" name="startTerminalEnabled" id="startTerminalEnabled">
+                        <input id="startTerminalEnabled" name="startTerminalEnabled" type="checkbox">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -51,7 +51,7 @@
                 <label class="control-label col-sm-2" for="stopTerminalEnabled"><b>Destination Terminal</b></label>
                 <div class="col-sm-10">
                     <label class="switch">
-                        <input type="checkbox" name="stopTerminalEnabled" id="stopTerminalEnabled">
+                        <input id="stopTerminalEnabled" name="stopTerminalEnabled" type="checkbox">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -60,7 +60,7 @@
             <div class="row">
                 <div class="col-sm-8"></div>
                 <div class="col-sm-2">
-                    <button type="submit" class="btn btn-outline-primary btn-sized">Submit</button>
+                    <button class="btn btn-outline-primary btn-sized" type="submit">Submit</button>
                 </div>
                 <div class="col-sm-2"></div>
             </div>

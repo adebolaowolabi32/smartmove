@@ -55,8 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/webjars/**", "/css/**", "/js/**","/swf/**", "/img/**","/images/**", "/fonts/**","/assets/**", "/vendor/**",
-                        "/keep-alive", "/retry", "/", "/index", "/login","/health").permitAll()
+                .antMatchers("/webjars/**", "/css/**", "/js/**", "/swf/**", "/img/**", "/images/**", "/fonts/**", "/assets/**", "/vendor/**",
+                        "/keep-alive", "/retry", "/", "/index", "/login", "/health").permitAll()
                 //.requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
                 .anyRequest().authenticated()
                 .and()
@@ -95,7 +95,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public  AuthenticationManager authenticationManager(){
+    public AuthenticationManager authenticationManager() {
         return new AuthenticationManager() {
             @Override
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -103,7 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 return authentication;
             }
         };
-    };
+    }
 
 
     public GrantedAuthoritiesMapper userAuthoritiesMapper() {

@@ -28,7 +28,7 @@ public class SecurityUtil {
     private String smartmoveUrl;
 
 
-    public boolean isOwner(String username, Long owner){
+    public boolean isOwner(String username, Long owner) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();

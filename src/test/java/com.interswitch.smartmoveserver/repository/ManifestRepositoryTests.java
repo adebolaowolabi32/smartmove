@@ -69,7 +69,7 @@ public class ManifestRepositoryTests {
         testUser.setEmail(new RandomUtil().nextString().concat("@example.com"));
         testUser.setMobileNo(RandomUtil.getRandomNumber(11));
         testUser.setUsername(testUser.getEmail());
-        testUser.setPassword(""+new RandomUtil().nextString());
+        testUser.setPassword("" + new RandomUtil().nextString());
 
         User owner = userRepository.save(testUser);
 
@@ -135,17 +135,17 @@ public class ManifestRepositoryTests {
     @AfterAll
     public void tearDown() {
 
-     manifestRepository.deleteAll();
-     scheduleRepository.deleteAll();
-     seatRepository.deleteAll();
-     vehicleRepository.deleteAll();
-     vehicleMakeRepository.deleteAll();
-     userRepository.deleteAll();
+        manifestRepository.deleteAll();
+        scheduleRepository.deleteAll();
+        seatRepository.deleteAll();
+        vehicleRepository.deleteAll();
+        vehicleMakeRepository.deleteAll();
+        userRepository.deleteAll();
 
     }
 
     @Test
-    public void testFindByTripId(){
+    public void testFindByTripId() {
         manifestRepository.findById(savedManifest.getId())
                 .ifPresent(mnf -> {
                     assertThat(mnf.getAddress()).isEqualTo(manifest.getAddress());
@@ -158,15 +158,15 @@ public class ManifestRepositoryTests {
     }
 
     @Test
-    public void testFindAll(){
+    public void testFindAll() {
         List<Manifest> manifests = manifestRepository.findAll();
-        assertTrue(manifests.size()>0);
+        assertTrue(manifests.size() > 0);
     }
 
     @Test
-    public void testFindByScheduleId(){
+    public void testFindByScheduleId() {
         Pageable pageable = PageRequest.of(1, 5);
-        Page<Manifest> manifestPage = manifestRepository.findByScheduleId(pageable,savedSchedule.getId());
-        assertTrue(manifestPage.getTotalElements() >=1);
+        Page<Manifest> manifestPage = manifestRepository.findByScheduleId(pageable, savedSchedule.getId());
+        assertTrue(manifestPage.getTotalElements() >= 1);
     }
 }

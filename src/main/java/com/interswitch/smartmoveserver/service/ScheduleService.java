@@ -123,7 +123,7 @@ public class ScheduleService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Schedule update(Schedule schedule, String principal) {
         Optional<Schedule> existing = scheduleRepository.findById(schedule.getId());
-        if (existing.isPresent()){
+        if (existing.isPresent()) {
             if (schedule.getOwner() == null) {
                 User owner = userService.findByUsername(principal);
                 schedule.setOwner(owner);
@@ -150,7 +150,7 @@ public class ScheduleService {
 
     private Schedule buildSchedule(Schedule schedule) {
         VehicleCategory vehicleCategory = schedule.getVehicle();
-        if(vehicleCategory != null)
+        if (vehicleCategory != null)
             schedule.setVehicle(vehicleCategoryService.findById(vehicleCategory.getId()));
 
         Route route = schedule.getRoute();

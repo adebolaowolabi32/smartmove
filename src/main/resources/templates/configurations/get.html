@@ -15,7 +15,8 @@
 						<div class="row">
 							<a href="#" th:href="@{/configurations/create}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New</a>
 							<a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
-							<a href="#" class="btn btn-info"><i class="fas fa-file-import" aria-hidden="true"></i> Import CSV</a>
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fas fa-file-import"></i>
+                                Import CSV</a>
 						</div>
 					</div>
 				</div>
@@ -38,10 +39,10 @@
 					<td th:text="${configuration.name}"></td>
 					<td th:text="${configuration.value}"></td>
 					<td>
-						<a class="justify-content-center"
-						   th:href="@{/configurations/delete/{id}(id=${configuration.id})}">
-							<button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
-							</button>
+                        <a class="justify-content-center"
+                           th:href="@{/configurations/delete/{id}(id=${configuration.id})}">
+                            <button class='btn btn-danger btn-sm' type='button'><i class='far fa-trash-alt'></i>
+                            </button>
 						</a>
 					</td>
 				</tr>

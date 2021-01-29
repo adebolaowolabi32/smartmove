@@ -62,7 +62,7 @@ public class ManifestServiceTests {
         testUser.setEmail(new RandomUtil().nextString().concat("@example.com"));
         testUser.setMobileNo(RandomUtil.getRandomNumber(11));
         testUser.setUsername(testUser.getEmail());
-        testUser.setPassword(""+new RandomUtil().nextString());
+        testUser.setPassword("" + new RandomUtil().nextString());
 
         User owner = userRepository.save(testUser);
 
@@ -136,7 +136,7 @@ public class ManifestServiceTests {
     public void testFindAll() {
         savedManifest = manifestService.save(manifest);
         List<Manifest> manifests = manifestService.findAll();
-        assertTrue(manifests.size()>=1);
+        assertTrue(manifests.size() >= 1);
     }
 
     /*@Test

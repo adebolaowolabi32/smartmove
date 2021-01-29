@@ -24,13 +24,11 @@ import java.util.List;
 public class FeeConfigurationController {
 
     @Autowired
+    ErrorResponseUtil errorResponseUtil;
+    @Autowired
     private FeeConfigurationService feeConfigurationService;
-
     @Autowired
     private PageUtil pageUtil;
-
-    @Autowired
-    ErrorResponseUtil errorResponseUtil;
 
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
@@ -49,7 +47,7 @@ public class FeeConfigurationController {
                              @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "10") int size) {
 
-        FeeConfiguration feeConfiguration = feeConfigurationService.findById(id,principal.getName());
+        FeeConfiguration feeConfiguration = feeConfigurationService.findById(id, principal.getName());
         model.addAttribute("fee", feeConfiguration);
         return "fees/details";
     }
@@ -66,9 +64,9 @@ public class FeeConfigurationController {
 
         log.info("Entered controller...");
         if (result.hasErrors()) {
-            log.info("has Entered controller error..."+errorResponseUtil.getErrorMessages(result));
+            log.info("has Entered controller error..." + errorResponseUtil.getErrorMessages(result));
             model.addAttribute("fee", feeConfiguration);
-            String message = errorResponseUtil.getErrorMessages(result).contains("Failed to convert property value of type 'java.lang.String")?"Fee value only accept numbers and not texts." :"Unacceptable data format for one of the fields is used,please check and retry.";
+            String message = errorResponseUtil.getErrorMessages(result).contains("Failed to convert property value of type 'java.lang.String") ? "Fee value only accept numbers and not texts." : "Unacceptable data format for one of the fields is used,please check and retry.";
             redirectAttributes.addFlashAttribute("error", message);
             return "redirect:/fees/create";
         }
@@ -80,7 +78,7 @@ public class FeeConfigurationController {
 
     @GetMapping("/update/{id}")
     public String showUpdate(Principal principal, @PathVariable("id") long id, Model model) {
-        FeeConfiguration fee = feeConfigurationService.findById(id,principal.getName());
+        FeeConfiguration fee = feeConfigurationService.findById(id, principal.getName());
         model.addAttribute("fee", fee);
         return "fees/update";
     }
@@ -106,7 +104,7 @@ public class FeeConfigurationController {
 
     @GetMapping("/delete/{id}")
     public String delete(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
-        FeeConfiguration fee = feeConfigurationService.findById(id,principal.getName());
+        FeeConfiguration fee = feeConfigurationService.findById(id, principal.getName());
         feeConfigurationService.delete(id, principal.getName());
         redirectAttributes.addFlashAttribute("deleted", true);
         return "redirect:/fees/get";

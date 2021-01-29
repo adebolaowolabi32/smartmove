@@ -5,15 +5,23 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class FileParser<T> {
 
     private static final CsvMapper mapper = new CsvMapper();
 
-    public List<T> parseFileToEntity(MultipartFile file,Class<T> model) throws IOException {
-        return read(model, file.getInputStream());
+    public List<T> parseFileToEntity(MultipartFile file, Class<T> model) throws IOException {
+        List<T> result = null;
+        try (InputStream inputStream = file.getInputStream()) {
+            result = read(model, inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return result;
     }
 
     private <T> List<T> read(Class<T> model, InputStream stream) throws IOException {

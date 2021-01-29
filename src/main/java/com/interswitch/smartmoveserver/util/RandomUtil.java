@@ -3,7 +3,6 @@ package com.interswitch.smartmoveserver.util;
 import java.security.SecureRandom;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  *
@@ -71,7 +70,7 @@ public class RandomUtil {
      */
     private static long generateRandomDigits(int n) {
         int m = (int) Math.pow(10, n - 1);
-        return m + new Random().nextInt(9 * m);
+        return m + new SecureRandom().nextInt(9 * m);
     }
 
     public String nextString() {

@@ -17,26 +17,26 @@ import java.util.stream.Stream;
  */
 @Component
 public class PageUtil {
-    private static List<Enum.Role> ownersForAgents = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.AGENT,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForOperators = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForRegulators = Arrays.asList(Enum.Role.REGULATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForVehicleOwners = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForDrivers = Arrays.asList(Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForTicketers = Arrays.asList(Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForServiceProviders = Arrays.asList(Enum.Role.REGULATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForInspectors = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForCards = Arrays.asList(Enum.Role.AGENT, Enum.Role.DRIVER,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForDevices = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.AGENT,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForRoutes = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForSchedules = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForTerminals = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR,Enum.Role.ISW_ADMIN);
-    private static List<Enum.Role> ownersForVehicles = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.VEHICLE_OWNER,Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForAgents = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.AGENT, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForOperators = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForRegulators = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForVehicleOwners = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForDrivers = Arrays.asList(Enum.Role.OPERATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForTicketers = Arrays.asList(Enum.Role.OPERATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForServiceProviders = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForInspectors = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForCards = Arrays.asList(Enum.Role.AGENT, Enum.Role.DRIVER, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForDevices = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.AGENT, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForRoutes = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForSchedules = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForTerminals = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.ISW_ADMIN);
+    private static List<Enum.Role> ownersForVehicles = Arrays.asList(Enum.Role.REGULATOR, Enum.Role.OPERATOR, Enum.Role.VEHICLE_OWNER, Enum.Role.ISW_ADMIN);
 
-    public <T> List<Long> getPageNumber(PageView<T> page){
+    public <T> List<Long> getPageNumber(PageView<T> page) {
         List<Long> pageNumbers = new ArrayList<>();
         long pageCount = page.getCount();
-        if(pageCount > 0) {
-            pageNumbers = LongStream.rangeClosed(1,pageCount).boxed().collect(Collectors.toList());
+        if (pageCount > 0) {
+            pageNumbers = LongStream.rangeClosed(1, pageCount).boxed().collect(Collectors.toList());
         }
         return pageNumbers;
     }
@@ -49,8 +49,7 @@ public class PageUtil {
 
     public String buildTitle(Enum.Role role){
         String title = "";
-        switch(role)
-        {
+        switch(role) {
             case ISW_ADMIN:
                 title = "Administrator";
                 break;
@@ -93,8 +92,7 @@ public class PageUtil {
 
     public String buildSaveMessage(Enum.Role role){
         String message = "";
-        switch(role)
-        {
+        switch(role) {
             case ISW_ADMIN:
                 message = "administrator.saved.message";
                 break;
@@ -134,8 +132,7 @@ public class PageUtil {
 
     public String buildUpdateMessage(Enum.Role role){
         String message = "";
-        switch(role)
-        {
+        switch(role) {
             case ISW_ADMIN:
                 message = "administrator.updated.message";
                 break;
@@ -175,8 +172,7 @@ public class PageUtil {
 
     public String buildDeleteMessage(Enum.Role role){
         String message = "";
-        switch(role)
-        {
+        switch(role) {
             case ISW_ADMIN:
                 message = "administrator.deleted.message";
                 break;

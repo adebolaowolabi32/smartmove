@@ -8,7 +8,7 @@ import lombok.Data;
 public class RouteDto {
 
     @JsonProperty("TransportMode")
-    private String  transportMode;
+    private String transportMode;
 
     @JsonProperty("StartTerminalId")
     private long startTerminalId;

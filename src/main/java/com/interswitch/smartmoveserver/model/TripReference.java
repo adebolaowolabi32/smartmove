@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "trip_references")
 @EntityListeners(AuditingEntityListener.class)
-public class TripReference extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
+public class TripReference extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -23,7 +23,7 @@ public class TripReference extends AbstractAuditEntity<String> implements Audita
     @Length(min = 3, max = 10, message = "Prefix must be between 3 and 10 characters long.")
     private String prefix;
 
-    @OneToOne(optional=false)
+    @OneToOne(optional = false)
     private User owner;
 
     private boolean enabled;

@@ -13,7 +13,7 @@ public class TripDto implements Serializable {
     @JsonProperty("VehicleNumber")
     private String vehicleNumber;
     @JsonProperty("ScheduleId")
-    private long  scheduleId;
+    private long scheduleId;
     @JsonProperty("DriverEmail")
     private String driverEmail;
 }

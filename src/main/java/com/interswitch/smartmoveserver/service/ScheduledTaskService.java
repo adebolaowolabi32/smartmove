@@ -7,20 +7,16 @@ import com.interswitch.smartmoveserver.util.DateUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 public class ScheduledTaskService {
 
-    protected final Log logger = LogFactory.getLog(getClass());
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
+    protected final Log logger = LogFactory.getLog(getClass());
     @Autowired
     TicketTillRepository ticketTillRepository;
 
@@ -41,12 +37,12 @@ public class ScheduledTaskService {
 //    }
 
 
-    public void doEndOfDayTicketTillUpdate(){
+    public void doEndOfDayTicketTillUpdate() {
 
         String todayDate = DateUtil.getTodayDate();
         List<TicketTillView> ticketTillViewSummaryList =
-                ticketTillService.findAggregatedTicketTillByIssuanceDateAndStatus(todayDate,false);
-        ticketTillViewSummaryList.forEach(ttv->{
+                ticketTillService.findAggregatedTicketTillByIssuanceDateAndStatus(todayDate, false);
+        ticketTillViewSummaryList.forEach(ttv -> {
             ticketTillService.closeTicketTill(ttv);
         });
 

@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.api;
 
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.Route;
-import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.RouteService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class RouteApi {
 
     @GetMapping(produces = "application/json")
     private PageView<Route> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
-                                      @RequestParam(defaultValue = "10") int size) {
+                                    @RequestParam(defaultValue = "10") int size) {
         return routeService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 

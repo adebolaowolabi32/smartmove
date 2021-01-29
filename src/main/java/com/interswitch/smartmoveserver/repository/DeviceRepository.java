@@ -22,6 +22,8 @@ public interface DeviceRepository extends CrudRepository<Device, Long> {
     Long countByOwner(User owner);
     Long countByType(Enum.DeviceType type);
     Long countByTypeAndOwner(Enum.DeviceType type, User owner);
+
     boolean existsByName(String name);
+
     boolean existsByDeviceId(String deviceId);
 }

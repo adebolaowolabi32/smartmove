@@ -1,7 +1,6 @@
 package com.interswitch.smartmoveserver.model;
 
 import lombok.Data;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;

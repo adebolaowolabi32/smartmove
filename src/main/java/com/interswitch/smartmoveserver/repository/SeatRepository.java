@@ -9,9 +9,12 @@ import java.util.Set;
 
 public interface SeatRepository extends CrudRepository<Seat, Long> {
 
-      List<Seat> findAll();
-      Seat findById(String seatId);
-      Set<Seat> findByVehicleId(long id);
-      Seat findByVehicleIdAndSeatNo(long vehicleId,int seatNo);
+    List<Seat> findAll();
+
+    Seat findById(String seatId);
+
+    Set<Seat> findByVehicleId(long id);
+
+    Seat findByVehicleIdAndSeatNo(long vehicleId, int seatNo);
 
 }

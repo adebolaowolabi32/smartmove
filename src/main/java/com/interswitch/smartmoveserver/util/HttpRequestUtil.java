@@ -2,17 +2,11 @@ package com.interswitch.smartmoveserver.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @Component
 public class HttpRequestUtil {
-
-    @Autowired
-    private HttpServletRequest request;
 
     private static final String[] IP_HEADER_CANDIDATES = {
             "X-Forwarded-For",
@@ -27,10 +21,12 @@ public class HttpRequestUtil {
             "HTTP_VIA",
             "REMOTE_ADDR"
     };
+    @Autowired
+    private HttpServletRequest request;
 
     public String getClientIpAddress() {
 
-        if (request== null) {
+        if (request == null) {
             return "0.0.0.0";
         }
 
@@ -42,7 +38,7 @@ public class HttpRequestUtil {
             }
         }
 
-       return request.getRemoteAddr();
+        return request.getRemoteAddr();
 //        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.getRequestAttributes())).getRequest();
 //        String ip = Optional.ofNullable(request.getHeader("X-FORWARDED-FOR")).orElse(request.getRemoteAddr());
 //        if (ip.equals("0:0:0:0:0:0:0:1")) ip = "127.0.0.1";

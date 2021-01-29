@@ -16,11 +16,9 @@ public class JwtUtil {
         if (authToken != null) {
             if (authToken instanceof OAuth2AuthenticationToken) {
                 attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
-            }
-            else if (authToken instanceof JwtAuthenticationToken) {
+            } else if (authToken instanceof JwtAuthenticationToken) {
                 attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
-            }
-            else return "";
+            } else return "";
             Object user = attributes.get("user_name");
             if (user != null) {
                 userName = user.toString().trim();

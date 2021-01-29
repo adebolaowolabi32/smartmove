@@ -47,8 +47,8 @@ public class DocumentService {
     @PostConstruct
     public void init() throws IOException {
 
-         this.uploadDir = Paths.get(dir, "uploads");
-         this.deletedDir = Paths.get(dir, "deleted");
+        this.uploadDir = Paths.get(dir, "uploads");
+        this.deletedDir = Paths.get(dir, "deleted");
 
         if (!Files.exists(Paths.get(dir))) {
             Files.createDirectories(Paths.get(dir));

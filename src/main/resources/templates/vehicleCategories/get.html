@@ -15,7 +15,8 @@
 						<div class="row">
 							<a href="#" th:href="@{/vehicleCategories/create}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Add New</a>
 							<a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
-							<a href="#" class="btn btn-info"><i class="fas fa-file-import" aria-hidden="true"></i> Import CSV</a>
+                            <a class="btn btn-info" href="#"><i aria-hidden="true" class="fas fa-file-import"></i>
+                                Import CSV</a>
 						</div>
 					</div>
 				</div>
@@ -24,7 +25,7 @@
 			<div th:replace="fragments/alert-success :: alert-success (message=${deleted} ? #{vehicleCategory.deleted.message} : false)"></div>
 			<div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
 
-            <table class="table table-bordered table-responsive-sm" id="dataTable" width="100%" cellspacing="0">
+            <table cellspacing="0" class="table table-bordered table-responsive-sm" id="dataTable" width="100%">
 				<thead class='thead-light'>
                 <tr>
                     <th>Id</th>

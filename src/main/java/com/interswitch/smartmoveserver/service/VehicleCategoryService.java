@@ -56,6 +56,12 @@ public class VehicleCategoryService {
         return vehicleCategoryRepository.findAll();
     }
 
+    private static int getIntegerPart(float value) {
+        float fractionalPart = value % 1;
+        float integralPart = value - fractionalPart;
+        return Math.round(integralPart);
+    }
+
     public List<VehicleCategory> findAll(Long owner, String principal) {
         User user = userService.findByUsername(principal);
         if (owner == 0) {
@@ -94,6 +100,10 @@ public class VehicleCategoryService {
         }
     }
 
+    public VehicleCategory findById(long id) {
+        return vehicleCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist"));
+    }
+
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public VehicleCategory save(VehicleCategory vehicleCategory, String principal) {
         String name = vehicleCategory.getName();
@@ -118,10 +128,6 @@ public class VehicleCategoryService {
         }
         VehicleCategory vehicle = vehicleCategoryRepository.save(buildVehicleCategory(vehicleCategory));
         return createSeats(vehicle);
-    }
-
-    public VehicleCategory findById(long id) {
-        return vehicleCategoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle Category does not exist"));
     }
 
     public VehicleCategory findById(long id, String principal) {
@@ -179,12 +185,6 @@ public class VehicleCategoryService {
         if (vehicleModel != null)
             vehicleCategory.setModel(vehicleModelService.findById(vehicleModel.getId()));
         return vehicleCategory;
-    }
-
-    private static int getIntegerPart(float value) {
-        float fractionalPart = value % 1;
-        float integralPart = value - fractionalPart;
-        return Math.round(integralPart);
     }
 
     private VehicleCategory createSeats(VehicleCategory vehicle) {

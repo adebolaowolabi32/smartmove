@@ -1,8 +1,10 @@
 package com.interswitch.smartmoveserver.model;
 
 import com.interswitchng.audit.model.AuditableAction;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;

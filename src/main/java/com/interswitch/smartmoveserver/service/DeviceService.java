@@ -55,8 +55,7 @@ public class DeviceService {
             if (securityUtil.isOwnedEntity(user.getRole())) {
                 Page<Device> pages = deviceRepository.findAllByTypeAndOwner(pageable, type, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
+            } else {
                 Page<Device> pages = deviceRepository.findAllByType(pageable, type);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
@@ -79,8 +78,7 @@ public class DeviceService {
             if (securityUtil.isOwnedEntity(user.getRole())) {
                 Page<Device> pages = deviceRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
+            } else {
                 Page<Device> pages = deviceRepository.findAll(pageable);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
@@ -126,7 +124,8 @@ public class DeviceService {
     public Device save(Device device, String principal) {
         String name = device.getName();
         boolean exists = deviceRepository.existsByName(name);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Device with name: " + name + " already exists");
+        if (exists)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Device with name: " + name + " already exists");
         if(device.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             device.setOwner(owner);
@@ -149,8 +148,8 @@ public class DeviceService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Device update(Device device, String principal) {
         Optional<Device> existing = deviceRepository.findById(device.getId());
-        if(existing.isPresent()){
-            if(device.getOwner() == null) {
+        if (existing.isPresent()) {
+            if (device.getOwner() == null) {
                 User owner = userService.findByUsername(principal);
                 device.setOwner(owner);
             }
@@ -233,17 +232,17 @@ public class DeviceService {
     public boolean upload(MultipartFile file, String principal) throws IOException {
         User owner = userService.findByUsername(principal);
         List<Device> savedDevices = new ArrayList<>();
-        if(file.getSize()>1){
+        if (file.getSize() > 1) {
             FileParser<DeviceDto> fileParser = new FileParser<>();
             List<DeviceDto> deviceDtoList = fileParser.parseFileToEntity(file, DeviceDto.class);
             deviceDtoList.forEach(deviceDto -> {
                 savedDevices.add(save(mapToDevice(deviceDto, owner), principal));
             });
         }
-        return savedDevices.size()>1;
+        return savedDevices.size() > 1;
     }
 
-    private Device mapToDevice(DeviceDto deviceDto, User owner){
+    private Device mapToDevice(DeviceDto deviceDto, User owner) {
 
         return Device.builder()
                 .balance(0)
@@ -260,28 +259,28 @@ public class DeviceService {
                 .build();
     }
 
-    private boolean isEnabled(String enabledStatus){
+    private boolean isEnabled(String enabledStatus) {
         return enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true");
     }
 
-    private Enum.DeviceStatus convertToDeviceStatus(String status){
+    private Enum.DeviceStatus convertToDeviceStatus(String status) {
         //CONNECTED, DISCONNECTED, BATTERY_LOW, EMERGENCY
         Enum.DeviceStatus deviceStatus = null;
-        try{
+        try {
             deviceStatus = Enum.DeviceStatus.valueOf(status.toUpperCase());
-        }catch(IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
 
         }
 
         return deviceStatus;
     }
 
-    private Enum.FareType convertToFareType(String fareType){
+    private Enum.FareType convertToFareType(String fareType) {
         //FIXED, VARIABLE
         return Enum.FareType.valueOf(fareType.toUpperCase());
     }
 
-    private Enum.DeviceType convertToDeviceType(String fareType){
+    private Enum.DeviceType convertToDeviceType(String fareType) {
         // READER, VALIDATOR, READER_VALIDATOR
         return Enum.DeviceType.valueOf(fareType.toUpperCase());
     }

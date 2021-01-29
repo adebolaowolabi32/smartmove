@@ -61,7 +61,7 @@ public class TripServiceTests {
         testUser.setEmail(new RandomUtil().nextString().concat("@example.com"));
         testUser.setMobileNo(RandomUtil.getRandomNumber(11));
         testUser.setUsername(testUser.getEmail());
-        testUser.setPassword(""+new RandomUtil().nextString());
+        testUser.setPassword("" + new RandomUtil().nextString());
 
         User owner = userRepository.save(testUser);
         vehicle = new Vehicle();
@@ -116,31 +116,31 @@ public class TripServiceTests {
     }
 
     @Test
-    public void testFindAll(){
+    public void testFindAll() {
         savedTrip = tripService.save(trip);
         List<Trip> trips = tripService.findAll();
-        assertTrue(trips.size()>=1);
+        assertTrue(trips.size() >= 1);
     }
 
     @Test
-    public void testSave(){
+    public void testSave() {
         savedTrip = tripService.save(trip);
         assertTrue(savedTrip.getId() > 0);
     }
 
     @Test
-    public void testFindById(){
+    public void testFindById() {
         savedTrip = tripService.save(trip);
         Trip trip = tripService.findById(savedTrip.getId());
-        assertTrue(trip.getId()==savedTrip.getId());
+        assertTrue(trip.getId() == savedTrip.getId());
     }
 
     @Test
-    public void testUpdate(){
+    public void testUpdate() {
         savedTrip = tripService.save(trip);
         savedTrip.setFare(100);
-        Trip updatedTrip  = tripService.update(savedTrip);
-        assertTrue(updatedTrip.getFare()==savedTrip.getFare());
+        Trip updatedTrip = tripService.update(savedTrip);
+        assertTrue(updatedTrip.getFare() == savedTrip.getFare());
     }
 
     /*@Test
