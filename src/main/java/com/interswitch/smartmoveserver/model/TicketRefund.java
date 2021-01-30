@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "ticket_refunds")
 @EntityListeners(AuditingEntityListener.class)
-public class TicketRefund extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
+public class TicketRefund extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

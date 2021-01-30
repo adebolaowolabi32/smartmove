@@ -69,7 +69,7 @@ public class ApplicationStartup implements CommandLineRunner {
 
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
-       // sendMailTest();
+        // sendMailTest();
     }
 
     public void loadVehicleMakesAndModels() {
@@ -198,7 +198,7 @@ public class ApplicationStartup implements CommandLineRunner {
 
         Map<String, Object> params = new HashMap<>();
         params.put("user", "Earnest Test");
-        params.put("username","earnesto");
+        params.put("username", "earnesto");
         params.put("role", "Agent");
         params.put("portletUri", "");
         params.put("owner", "ISW TESTING INC");
@@ -206,6 +206,6 @@ public class ApplicationStartup implements CommandLineRunner {
 
         messagingService.sendEmail("serihbrah@gmail.com",
                 "New User SignUp", "messages" + File.separator + "approve_user", params);
-}
+    }
 
 }

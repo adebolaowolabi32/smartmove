@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layouts/default.html}">
 <title layout:fragment="title">Blacklists</title>
 <div layout:fragment="content" class="card mb-4">
@@ -23,23 +22,23 @@
             <br>
             <div th:replace="fragments/alert-success :: alert-success (message=${saved} ? #{blacklist.saved.message} : false)"></div>
             <div class="card p-3">
-                
+
                 <div class="col">
-                <div class="form-group row">
-                    <label class="col-sm-2" for="id"><b>ID</b></label>
-                    <div class="col-sm-10">
-                        <span id="id" th:text="${blacklist.id}"></span></div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-2" for="identifier"><b>Identifier</b></label>
-                    <div class="col-sm-10">
-                        <span id="identifier" th:text="${blacklist.identifier}"></span></div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-2" for="type"><b>Type</b></label>
-                    <div class="col-sm-10">
-                        <span id="type" th:text="${blacklist.type}"></span></div>
-                </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="id"><b>ID</b></label>
+                        <div class="col-sm-10">
+                            <span id="id" th:text="${blacklist.id}"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="identifier"><b>Identifier</b></label>
+                        <div class="col-sm-10">
+                            <span id="identifier" th:text="${blacklist.identifier}"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2" for="type"><b>Type</b></label>
+                        <div class="col-sm-10">
+                            <span id="type" th:text="${blacklist.type}"></span></div>
+                    </div>
                 </div>
 
             </div>

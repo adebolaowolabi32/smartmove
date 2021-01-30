@@ -31,11 +31,9 @@ import java.util.*;
 public class AuditService implements AuditableService {
 
     private final AuditActorService auditActorService;
-
+    private final HashMap<Class, AuditableActionStatus> actionStatusMap;
     @Autowired
     private IswAuditLoggerImpl auditLogger;
-
-    private final HashMap<Class, AuditableActionStatus> actionStatusMap;
 
     public AuditService(AuditActorService auditActorService) {
         this.auditActorService = auditActorService;
@@ -74,7 +72,7 @@ public class AuditService implements AuditableService {
                     auditables.clear();
                     auditables.addAll(returned);
                 }
-                log.info("Auditables before pushing===>"+auditables);
+                log.info("Auditables before pushing===>" + auditables);
                 pushAuditables(auditables, action);
             }
         } catch (Throwable throwable) {
@@ -120,9 +118,9 @@ public class AuditService implements AuditableService {
 
     private void pushAuditables(List<Auditable> auditables, AuditableAction auditableAction) {
         for (Auditable auditable : auditables) {
-            log.info("Wanna log audit trail===>"+auditable);
+            log.info("Wanna log audit trail===>" + auditable);
             auditLogger.log(auditable, auditActorService.getActor(), getDomainCodes(auditable), auditableAction);
-            log.info("finished calling log audit trail===>"+auditable);
+            log.info("finished calling log audit trail===>" + auditable);
         }
     }
 
@@ -136,7 +134,7 @@ public class AuditService implements AuditableService {
             for (String f : clazz.fields()) {
                 try {
                     domainCodes.add(String.valueOf(wrapper.getPropertyValue(f)));
-                } catch (BeansException e){
+                } catch (BeansException e) {
                     log.error(String.format("Audit domain property [%s] of auditable [%s] is not readable",
                             f, auditable.getClass().getSimpleName()), e);
                 }
@@ -149,14 +147,14 @@ public class AuditService implements AuditableService {
             if (field != null) {
                 try {
                     domainCodes.add(String.valueOf(wrapper.getPropertyValue(f.getName())));
-                } catch (BeansException e){
+                } catch (BeansException e) {
                     log.error(String.format("Audit domain property [%s] of auditable [%s] is not readable",
                             f.getName(), auditable.getClass().getSimpleName()), e);
                 }
             }
         }
 
-        if (StringUtils.hasText(auditActorService.getActorDomainCode())){
+        if (StringUtils.hasText(auditActorService.getActorDomainCode())) {
             domainCodes.add(auditActorService.getActorDomainCode());
         }
 

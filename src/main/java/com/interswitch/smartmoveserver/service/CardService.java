@@ -75,8 +75,7 @@ public class CardService {
             if (securityUtil.isOwnedEntity(user.getRole())) {
                 Page<Card> pages = cardRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
+            } else {
                 Page<Card> pages = cardRepository.findAll(pageable);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
@@ -95,8 +94,9 @@ public class CardService {
     public Card save(Card card, String principal) {
         String pan = card.getPan();
         boolean exists = cardRepository.existsByPan(pan);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "A card with this PAN: " + pan + " already exists.");
-        if(card.getOwner() == null) {
+        if (exists)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "A card with this PAN: " + pan + " already exists.");
+        if (card.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             card.setOwner(owner);
         }
@@ -133,11 +133,12 @@ public class CardService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Card update(Card card, String principal) {
         Optional<Card> existing = cardRepository.findById(card.getId());
-        if(existing.isPresent()){
+        if (existing.isPresent()) {
             String pan = card.getPan();
             boolean exists = cardRepository.existsByPan(pan);
-            if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "A card with this PAN: " + pan + " already exists.");
-            if(card.getOwner() == null) {
+            if (exists)
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "A card with this PAN: " + pan + " already exists.");
+            if (card.getOwner() == null) {
                 User owner = userService.findByUsername(principal);
                 card.setOwner(owner);
             }
@@ -169,17 +170,17 @@ public class CardService {
     public boolean upload(MultipartFile file, String principal) throws IOException {
         User owner = userService.findByUsername(principal);
         List<Card> savedCards = new ArrayList<>();
-        if(file.getSize()>1){
+        if (file.getSize() > 1) {
             FileParser<CardDto> fileParser = new FileParser<>();
             List<CardDto> cardDtoList = fileParser.parseFileToEntity(file, CardDto.class);
-            cardDtoList.forEach(cardDto->{
+            cardDtoList.forEach(cardDto -> {
                 savedCards.add(cardRepository.save(mapToCard(cardDto, owner)));
             });
         }
-        return savedCards.size()>1;
+        return savedCards.size() > 1;
     }
 
-    private Card mapToCard(CardDto cardDto, User owner){
+    private Card mapToCard(CardDto cardDto, User owner) {
 
         return Card.builder()
                 .balance(0)
@@ -192,12 +193,12 @@ public class CardService {
                 .build();
     }
 
-    private Enum.CardType convertToCardTypeEnum(String mode){
+    private Enum.CardType convertToCardTypeEnum(String mode) {
         //ISW_ADMIN, REGULATOR, OPERATOR, VEHICLE_OWNER, EMV, DRIVER, AGENT, COMMUTER
         return Enum.CardType.valueOf(mode.toUpperCase());
     }
 
-    private boolean isEnabled(String enabledStatus){
+    private boolean isEnabled(String enabledStatus) {
         return enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true");
     }
 }

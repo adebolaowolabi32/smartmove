@@ -27,33 +27,23 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest
 public class TripRepositoryTests {
 
+    private final Log logger = LogFactory.getLog(getClass());
     private Trip savedTrip;
-
     private Trip trip;
-
     private Vehicle vehicle;
-
     @Autowired
     private TripRepository tripRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private VehicleRepository vehicleRepository;
-
     @Autowired
     private VehicleMakeRepository vehicleMakeRepository;
-
     @Autowired
     private VehicleCategoryRepository vehicleCategoryRepository;
-
     private Schedule schedule;
-
     @Autowired
     private ScheduleRepository scheduleRepository;
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Before
     public void setUp() {
@@ -66,7 +56,7 @@ public class TripRepositoryTests {
         testUser.setEmail(new RandomUtil().nextString().concat("@example.com"));
         testUser.setMobileNo(RandomUtil.getRandomNumber(11));
         testUser.setUsername(testUser.getEmail());
-        testUser.setPassword(""+new RandomUtil().nextString());
+        testUser.setPassword("" + new RandomUtil().nextString());
 
         User owner = userRepository.save(testUser);
 
@@ -122,6 +112,7 @@ public class TripRepositoryTests {
         userRepository.deleteAll();
 
     }
+
     @Test
     public void testFindById() {
         tripRepository.findById(savedTrip.getId())
@@ -134,10 +125,11 @@ public class TripRepositoryTests {
                     assertThat(trp.getSchedule()).isEqualTo(trip.getSchedule());
                 });
     }
+
     @Test
     public void testFindByReferenceNo() {
         Trip tripFrmDb = tripRepository.findByReferenceNo(savedTrip.getReferenceNo());
-        assertThat(tripFrmDb!=null);
+        assertThat(tripFrmDb != null);
         assertThat(tripFrmDb.getDriver()).isEqualTo(trip.getDriver());
         assertThat(tripFrmDb.getFare()).isEqualTo(trip.getFare());
         assertThat(tripFrmDb.getOwner()).isEqualTo(trip.getOwner());
@@ -145,22 +137,23 @@ public class TripRepositoryTests {
         assertThat(tripFrmDb.getVehicle()).isEqualTo(trip.getVehicle());
         assertThat(tripFrmDb.getSchedule()).isEqualTo(trip.getSchedule());
     }
+
     @Test
     public void testFindByDriverUsername() {
         List<Trip> trips = tripRepository.findByDriverUsername(savedTrip.getDriver().getUsername());
-        assertTrue(trips.size()>0);
+        assertTrue(trips.size() > 0);
     }
 
     @Test
     public void testFindAll() {
         List<Trip> trips = tripRepository.findAll();
-        assertTrue(trips.size()>0);
+        assertTrue(trips.size() > 0);
     }
 
     @Test
     public void testDelete() {
         tripRepository.deleteById(savedTrip.getId());
-        assertTrue(tripRepository.findById(savedTrip.getId()).isPresent()==false) ;
+        assertTrue(tripRepository.findById(savedTrip.getId()).isPresent() == false);
     }
 
 }

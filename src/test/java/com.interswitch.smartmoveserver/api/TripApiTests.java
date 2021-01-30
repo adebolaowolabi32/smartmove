@@ -58,47 +58,46 @@ public class TripApiTests {
 
     }
 
-   @Test
+    @Test
     private void testFindAll() throws Exception {
-       when(tripService.findAll()).thenReturn(Arrays.asList(trip, new Trip()));
-       mvc.perform(get("/api/trips")
-               .characterEncoding("utf-8")
-               .contentType(MediaType.APPLICATION_JSON))
-               .andExpect(status().isOk())
-               .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-               .andExpect(jsonPath("$", hasSize(2)));
+        when(tripService.findAll()).thenReturn(Arrays.asList(trip, new Trip()));
+        mvc.perform(get("/api/trips")
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$", hasSize(2)));
 
     }
 
-   @Test
-    private void  testSave() throws Exception {
-       when(tripService.save(trip)).thenReturn(trip);
-       mvc.perform(post("/api/trips")
-               .content(new ObjectMapper().writeValueAsString(trip))
-               .characterEncoding("utf-8")
-               .contentType(MediaType.APPLICATION_JSON))
-               .andExpect(status().isCreated())
-               .andExpect(jsonPath("$", notNullValue()));
+    @Test
+    private void testSave() throws Exception {
+        when(tripService.save(trip)).thenReturn(trip);
+        mvc.perform(post("/api/trips")
+                .content(new ObjectMapper().writeValueAsString(trip))
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$", notNullValue()));
     }
 
-   @Test
+    @Test
     private void testFindById() throws Exception {
-       when(tripService.findById(trip.getId())).thenReturn(trip);
-       mvc.perform(get("/api/trips/{id}", trip.getId())
-               .characterEncoding("utf-8")
-               .contentType(MediaType.APPLICATION_JSON))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$", notNullValue()));
+        when(tripService.findById(trip.getId())).thenReturn(trip);
+        mvc.perform(get("/api/trips/{id}", trip.getId())
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()));
     }
 
 
-
-   @Test
+    @Test
     private void testDelete() throws Exception {
-       mvc.perform(delete("/api/trips/{id}", trip.getId())
-               .characterEncoding("utf-8")
-               .contentType(MediaType.APPLICATION_JSON))
-               .andExpect(status().isOk());
+        mvc.perform(delete("/api/trips/{id}", trip.getId())
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
 

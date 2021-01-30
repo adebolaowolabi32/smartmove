@@ -100,36 +100,35 @@ public class UserService {
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public User registerUserFromAPI(User user, String principal) {
-        log.info("Principal creator===>"+principal);
+        log.info("Principal creator===>" + principal);
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //TODO :: see below
         user.setEnabled(true);
         //iswCoreService.createUser(user);
         PassportUser passportUser = passportService.findUser(user.getEmail());
-        if(passportUser == null) {
+        if (passportUser == null) {
             user.setLoginFreqType(1);
             passportUser = passportService.createUser(user);
             saveToDb(passportUser, user, principal);
-        }
-        else{
+        } else {
             saveToDb(passportUser, user, principal);
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists. Kindly ask user to login with their Quickteller credentials");
         }
         return user;
     }
 
-    private User saveToDb(PassportUser passportUser, User user, String owner){
+    private User saveToDb(PassportUser passportUser, User user, String owner) {
         Enum.Role role = user.getRole();
         user.setOwner(null);
-        if(!role.equals(Enum.Role.ISW_ADMIN)) {
+        if (!role.equals(Enum.Role.ISW_ADMIN)) {
             Optional<User> ownerUser = userRepository.findByUsername(owner);
-            if(ownerUser.isPresent()) user.setOwner(ownerUser.get());
+            if (ownerUser.isPresent()) user.setOwner(ownerUser.get());
         }
         user.setUsername(passportUser.getUsername());
         user.setPassword(passportUser.getPassword());
         userRepository.save(user);
-        if(role.equals(Enum.Role.AGENT)){
+        if (role.equals(Enum.Role.AGENT)) {
             walletService.autoCreateForUser(user);
             cardService.autoCreateForUser(user);
         }
@@ -205,7 +204,7 @@ public class UserService {
                 if (ownerOptional.isPresent())
                     owner = ownerOptional.get();
                 else
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("The referrer : %s, does not exist on Smartmove ",ownerName));
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("The referrer : %s, does not exist on Smartmove ", ownerName));
             }
             user.setRole(userRegistration.getRole());
             user.setAddress(userRegistration.getAddress());
@@ -234,7 +233,7 @@ public class UserService {
         if (!role.equals(Enum.Role.ISW_ADMIN)) {
             user.setOwner(owner);
         }
-        if (user.getPicture()!=null && user.getPicture().getSize()>0) {
+        if (user.getPicture() != null && user.getPicture().getSize() > 0) {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
             user.setPictureUrl(doc.getUrl());
         }
@@ -286,6 +285,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You do not have sufficient rights to this resource.");
         }
     }
+
     public PageView<User> findAllPaginatedByRole(String principal, long owner, Enum.Role role, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
         Optional<User> user = userRepository.findByUsername(principal);
@@ -351,7 +351,7 @@ public class UserService {
         Optional<User> existingUser = userRepository.findById(user.getId());
         if (existingUser.isPresent()) {
             User existing = existingUser.get();
-            if (user.getPicture().getSize()>0) {
+            if (user.getPicture().getSize() > 0) {
                 Document doc = documentService.saveDocument(new Document(user.getPicture()));
                 existing.setPictureUrl(doc.getUrl());
             }
@@ -405,17 +405,17 @@ public class UserService {
     public boolean upload(MultipartFile file, String principal) throws IOException {
         User owner = findByUsername(principal);
         List<User> savedUsers = new ArrayList<>();
-        if(file.getSize()>1){
+        if (file.getSize() > 1) {
             FileParser<UserDto> fileParser = new FileParser<>();
             List<UserDto> userDtoList = fileParser.parseFileToEntity(file, UserDto.class);
-            userDtoList.forEach(userDto->{
+            userDtoList.forEach(userDto -> {
                 savedUsers.add(create(mapToUser(userDto, owner), principal));
             });
         }
-        return savedUsers.size()>1;
+        return savedUsers.size() > 1;
     }
 
-    private User mapToUser(UserDto userDto, User owner){
+    private User mapToUser(UserDto userDto, User owner) {
 
         return User.builder()
                 .email(userDto.getEmail())
@@ -430,12 +430,12 @@ public class UserService {
                 .build();
     }
 
-    private Enum.Role convertToRoleEnum(String role){
+    private Enum.Role convertToRoleEnum(String role) {
         //  ISW_ADMIN, REGULATOR, OPERATOR, EXECUTIVE, SERVICE_PROVIDER, INSPECTOR, TICKETER, VEHICLE_OWNER, AGENT, DRIVER, COMMUTER
         return Enum.Role.valueOf(role.toUpperCase());
     }
 
-    private boolean isEnabled(String enabledStatus){
+    private boolean isEnabled(String enabledStatus) {
         return enabledStatus.equalsIgnoreCase("true") || enabledStatus.startsWith("true");
     }
 
@@ -464,7 +464,7 @@ public class UserService {
             if (owner.equals(principal) || loggedInUser.getRole() == Enum.Role.ISW_ADMIN) {
                 approval.setApproved(true);
                 approval.setDeclined(false);
-                if(userApprovalRepository.save(approval).isApproved()){
+                if (userApprovalRepository.save(approval).isApproved()) {
                     if (approval.getSignUpType() == Enum.SignUpType.CREATED_BY_ADMIN) {
                         User user = approval.getUsr();
                         user.setPassword(new RandomUtil(8).nextString());

@@ -19,7 +19,7 @@ public class ManifestApi {
 
     @GetMapping(produces = "application/json")
     private PageView<Manifest> findAll(@RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size) {
+                                       @RequestParam(defaultValue = "10") int size) {
         return manifestService.findAllPaginated(page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
@@ -38,7 +38,7 @@ public class ManifestApi {
     private Manifest update(@Validated @RequestBody Manifest manifest) {
         return manifestService.update(manifest, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
-    
+
     @DeleteMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     private void delete(@Validated @PathVariable long id) {

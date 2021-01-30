@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layouts/default.html}"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      layout:decorate="~{layouts/default.html}"
+>
 <title layout:fragment="title">Vehicle Categories</title>
 <div layout:fragment="content" class="card mb-4">
 	<div class="card-header"><i class="fas fa-bus mr-1"></i><span>Vehicle Categories</span></div>
@@ -25,7 +25,7 @@
 				<div class="row">
 					<div class="col">
 						<div class="form-group row">
-							<label class="col-sm-4" for="mode"><b>Mode</b></label>
+                            <label class="col-sm-4" for="mode"><b>Mode</b></label>
 							<div class="col-sm-8">
 								<span id="mode" th:text="${vehicleCategory.mode}"></span></div>
 						</div>
@@ -37,12 +37,16 @@
 						<div class="form-group row">
 							<label class="col-sm-4" for="make"><b>Make</b></label>
 							<div class="col-sm-8">
-								<span id="make" th:text="${vehicleCategory.make!=null ?vehicleCategory.make.name : ''}"></span></div>
+                                <span id="make"
+                                      th:text="${vehicleCategory.make!=null ?vehicleCategory.make.name : ''}"></span>
+                            </div>
 						</div>
 						<div class="form-group row">
 							<label class="col-sm-4" for="model"><b>Model</b></label>
 							<div class="col-sm-8">
-								<span id="model" th:text="${vehicleCategory.model !=null ? vehicleCategory.model.name : ''}"></span></div>
+                                <span id="model"
+                                      th:text="${vehicleCategory.model !=null ? vehicleCategory.model.name : ''}"></span>
+                            </div>
 						</div>
 						<div class="form-group row">
 							<label class="col-sm-4" for="color"><b>Color</b></label>
@@ -58,12 +62,14 @@
 						<div class="form-group row">
 							<label class="control-label col-sm-4" for="owner"><b>Owner</b></label>
 							<div class="col-sm-8">
-								<span id="owner" th:text="${vehicleCategory.owner!=null ? vehicleCategory.owner.username : ''}"></span></div>
+                                <span id="owner"
+                                      th:text="${vehicleCategory.owner!=null ? vehicleCategory.owner.username : ''}"></span>
+                            </div>
 						</div>
 					</div>
 
 					<div class="col">
-						<img alt="Vehicle Picture" id="vehiclePic" th:src="${vehicleCategory.pictureUrl}">
+                        <img alt="Vehicle Picture" id="vehiclePic" th:src="${vehicleCategory.pictureUrl}">
 					</div>
 				</div>
 			</div>

@@ -24,30 +24,27 @@ import java.security.Principal;
 @RequestMapping("/ticket-till")
 public class TicketTillController {
 
+    private final Log logger = LogFactory.getLog(getClass());
     @Autowired
     TicketTillService ticketTillService;
-
     @Autowired
     UserService userService;
-
     @Autowired
     PageUtil pageUtil;
-
-    private final Log logger = LogFactory.getLog(getClass());
 
     @GetMapping("/status")
     public String showTicketTillStatus(Principal principal, Model model) {
 
         User user = userService.findByUsername(principal.getName());
         TicketTillView ticketTill = ticketTillService.findCurrentUserTicketTillStatus(user);
-        model.addAttribute("status",user.getTillStatus().name());
-        model.addAttribute("ticketTill",ticketTill);
+        model.addAttribute("status", user.getTillStatus().name());
+        model.addAttribute("ticketTill", ticketTill);
         model.addAttribute("todayDate", DateUtil.getTodayDate());
         return "ticket-till/status";
     }
 
     @PostMapping("/close")
-    public String closeTicketTill(Principal principal,Model model) {
+    public String closeTicketTill(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
         TicketTillView ticketTill = ticketTillService.findCurrentUserTicketTillStatus(user);
         ticketTillService.closeTicketTill(ticketTill);
@@ -55,29 +52,29 @@ public class TicketTillController {
     }
 
     @GetMapping("/approval/{id}")
-    public String approveTicketTill(Principal principal,@PathVariable("id") long id,Model model,RedirectAttributes redirectAttributes) {
+    public String approveTicketTill(Principal principal, @PathVariable("id") long id, Model model, RedirectAttributes redirectAttributes) {
         User user = userService.findByUsername(principal.getName());
-        ticketTillService.approveTicketTill(user,id);
+        ticketTillService.approveTicketTill(user, id);
         redirectAttributes.addFlashAttribute("approved", true);
         return "redirect:/ticket-till/approval";
     }
 
     @GetMapping("/approval")
-    public String showApproveTicketTill(Principal principal,@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "10") int size,Model model) {
+    public String showApproveTicketTill(Principal principal, @RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int size, Model model) {
         User user = userService.findByUsername(principal.getName());
-        PageView<TicketTillSummary> ticketTillSummaryPage = ticketTillService.findUnApprovedTicketTillSummary(user.getId(),user.getOwner() != null ? user.getOwner().getId() : 0,false,page,size);
-        model.addAttribute("ticketTillSummaryPage",ticketTillSummaryPage);
+        PageView<TicketTillSummary> ticketTillSummaryPage = ticketTillService.findUnApprovedTicketTillSummary(user.getId(), user.getOwner() != null ? user.getOwner().getId() : 0, false, page, size);
+        model.addAttribute("ticketTillSummaryPage", ticketTillSummaryPage);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketTillSummaryPage));
         return "ticket-till/approval";
     }
 
     @GetMapping("/approved")
-    public String showApprovedTicketTill(Principal principal,@RequestParam(defaultValue = "1") int page,
-                                        @RequestParam(defaultValue = "10") int size,Model model) {
+    public String showApprovedTicketTill(Principal principal, @RequestParam(defaultValue = "1") int page,
+                                         @RequestParam(defaultValue = "10") int size, Model model) {
         User user = userService.findByUsername(principal.getName());
-        PageView<TicketTillSummary> ticketTillSummaryPage = ticketTillService.findUnApprovedTicketTillSummary(user.getId(),user.getOwner() != null ? user.getOwner().getId() : 0,true,page,size);
-        model.addAttribute("ticketTillSummaryPage",ticketTillSummaryPage);
+        PageView<TicketTillSummary> ticketTillSummaryPage = ticketTillService.findUnApprovedTicketTillSummary(user.getId(), user.getOwner() != null ? user.getOwner().getId() : 0, true, page, size);
+        model.addAttribute("ticketTillSummaryPage", ticketTillSummaryPage);
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketTillSummaryPage));
         return "ticket-till/approved";
     }

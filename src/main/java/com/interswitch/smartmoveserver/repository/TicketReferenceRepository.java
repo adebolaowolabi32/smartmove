@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TicketReferenceRepository extends CrudRepository<TicketReference, Long> {
     TicketReference findByOwner(User owner);
+
     void deleteByOwner(User owner);
 
 }

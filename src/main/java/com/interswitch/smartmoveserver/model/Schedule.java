@@ -21,7 +21,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "schedules")
 @EntityListeners(AuditingEntityListener.class)
-public class Schedule extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
+public class Schedule extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

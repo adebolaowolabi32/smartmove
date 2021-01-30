@@ -25,17 +25,13 @@ import java.util.List;
 public class FeeConfigurationService {
 
     @Autowired
-    private FeeConfigurationRepository feeConfigurationRepository;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
     PageUtil pageUtil;
-
     @Autowired
     SecurityUtil securityUtil;
-
+    @Autowired
+    private FeeConfigurationRepository feeConfigurationRepository;
+    @Autowired
+    private UserService userService;
 
     public List<FeeConfiguration> findAll() {
         return feeConfigurationRepository.findAll();
@@ -84,6 +80,7 @@ public class FeeConfigurationService {
     /**
      * This implementation is done with the assumption that only an operator(as well as ISW admin for test purposes)
      * can create fee configuration
+     *
      * @param feeConfiguration
      * @param principal
      * @return
@@ -95,15 +92,16 @@ public class FeeConfigurationService {
         String transportOperatorUsername = (systemUser.getRole() == Enum.Role.OPERATOR || systemUser.getRole() == Enum.Role.ISW_ADMIN) ?
                 systemUser.getUsername() : systemUser.getOwner() != null ? systemUser.getOwner().getUsername() : "";
 
-        boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName(),transportOperatorUsername);
+        boolean exists = feeConfigurationRepository.existsByFeeNameAndOperatorUsername(feeConfiguration.getFeeName(), transportOperatorUsername);
 
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured for %s.",feeConfiguration.getFeeName(),transportOperatorUsername));
+        if (exists)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Fee type with the name %s already configured for %s.", feeConfiguration.getFeeName(), transportOperatorUsername));
 
         //TODO: this implementation to be adjusted with a drop-down of all operators(only to visible to isw admin)
         // from which one will select and create fee configs for transport operators/owners
 
         if (feeConfiguration.getOwner() == null) {
-             feeConfiguration.setOwner(systemUser);
+            feeConfiguration.setOwner(systemUser);
             feeConfiguration.setOperator(systemUser);
         }
         return feeConfigurationRepository.save(feeConfiguration);
@@ -122,7 +120,7 @@ public class FeeConfigurationService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public FeeConfiguration update(FeeConfiguration feeConfiguration, String principal) {
 
-        if (feeConfiguration!=null) {
+        if (feeConfiguration != null) {
 
             if (feeConfiguration.getOwner() == null) {
                 User owner = userService.findByUsername(principal);
@@ -136,7 +134,7 @@ public class FeeConfigurationService {
 
     public void delete(long id, String principal) {
         FeeConfiguration feeConfiguration = feeConfigurationRepository.findById(id);
-        if (feeConfiguration!=null)
+        if (feeConfiguration != null)
             feeConfigurationRepository.deleteById(id);
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Fee configuration does not exist.");

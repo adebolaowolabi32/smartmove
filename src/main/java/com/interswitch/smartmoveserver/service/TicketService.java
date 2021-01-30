@@ -38,8 +38,7 @@ public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
 
-    @Autowired
-    private UserService userService;
+    private static String PREFIX_SEPARATOR = "|";
 
     @Autowired
     private ManifestService manifestService;
@@ -58,15 +57,12 @@ public class TicketService {
 
     @Autowired
     private StateService stateService;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private TicketTillService ticketTillService;
-
     @Autowired
     private SeatRepository seatRepository;
-
-    private static String PREFIX_SEPARATOR = "|";
-
     @Autowired
     private TicketReferenceService ticketReferenceService;
 
@@ -113,11 +109,10 @@ public class TicketService {
         //make sure to search by operator
         User owner;
         try {
-             owner = userService.findById(searchRequest.getOwnerId());
-             return extractScheduleDetails(findBooking(owner.getUsername(),scheduleBooking));
-        }catch(ResponseStatusException ex){
-            if(ex.getStatus()==HttpStatus.NOT_FOUND){
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("the specified owner id - %d does'nt exist on Smartmove",searchRequest.getOwnerId()));
+            owner = userService.findById(searchRequest.getOwnerId());
+            return extractScheduleDetails(findBooking(owner.getUsername(),scheduleBooking));} catch (ResponseStatusException ex) {
+            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
+                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("the agent's owner id - %d does'nt exist on Smartmove", searchRequest.getOwnerId()));
             }
             return new ScheduleSearchResult();
         }
@@ -155,7 +150,7 @@ public class TicketService {
     public TicketDetails setPassengerDetails(TicketDetails ticketDetails) {
 
         String seatsData = ticketDetails.getSeatsData();
-        String seatNumbers[] = seatsData.split(",");
+        String[] seatNumbers = seatsData.split(",");
         int noOfPassengers = seatNumbers.length;
         ticketDetails.setNoOfPassengers(noOfPassengers);
         ticketDetails.setPassengers(this.initializePassengerList(seatNumbers));
@@ -199,7 +194,7 @@ public class TicketService {
         return ticketDetails;
     }
 
-   @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
+    @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public TicketDetails confirmTickets(String username, TicketDetails ticketDetails) {
         Iterable<Ticket> savedTicketsIterable = ticketRepository.saveAll(ticketDetails.getTickets());
         //this is an asynchronous event here running on another thread.
@@ -303,7 +298,7 @@ public class TicketService {
         return manifest;
     }
 
-    private List<Passenger> initializePassengerList(String seatNumbers[]) {
+    private List<Passenger> initializePassengerList(String[] seatNumbers) {
         List<Passenger> passengers = new ArrayList<>();
         for (int i = 0; i < seatNumbers.length; i++) {
             Passenger passenger = new Passenger();
@@ -327,7 +322,7 @@ public class TicketService {
         String prefix = "";
         String startTerminal = "";
         String stopTerminal = "";
-        if (ticketReference!=null && ticketReference.isEnabled()) {
+        if (ticketReference != null && ticketReference.isEnabled()) {
             prefix = ticketReference.getPrefix() + PREFIX_SEPARATOR;
             if (ticketReference.isStartTerminalEnabled())
                 startTerminal = schedule.getRoute().getStartTerminal().getCode() + PREFIX_SEPARATOR;
@@ -433,12 +428,13 @@ public class TicketService {
 
         Map<String, Object> params = new HashMap<>();
         params.put("ticketDetails", ticketDetails);
+
         messagingService.sendEmail(ticketDetails.getContactEmail(),
                 "Your Trip Reservation", "tickets" + File.separator + "preview", params);
     }
 
-    private void setPassengerSeatAsUnavailable(TicketDetails ticketDetails,Passenger passenger){
-        Seat seat =  seatRepository.findByVehicleIdAndSeatNo(ticketDetails.getSchedule().getVehicle().getId(),Integer.valueOf(passenger.getSeatNo()));
+    private void setPassengerSeatAsUnavailable(TicketDetails ticketDetails, Passenger passenger) {
+        Seat seat = seatRepository.findByVehicleIdAndSeatNo(ticketDetails.getSchedule().getVehicle().getId(), Integer.valueOf(passenger.getSeatNo()));
         seat.setAvailable(false);
         seat.setPicked(true);
         seatRepository.save(seat);

@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -16,9 +17,9 @@ import java.io.Serializable;
 @Builder
 @Data
 @Entity
-@Table(name="fee_configurations")
+@Table(name = "fee_configurations")
 @EntityListeners(AuditingEntityListener.class)
-public class FeeConfiguration extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
+public class FeeConfiguration extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +28,8 @@ public class FeeConfiguration extends AbstractAuditEntity<String> implements Aud
     @Enumerated(EnumType.STRING)
     private Enum.FeeName feeName;
 
-    @NotNull(message="fee value is required")
-    @Positive(message="fee value can only be a positive number")
+    @NotNull(message = "fee value is required")
+    @Positive(message = "fee value can only be a positive number")
     private double value;
 
     @Enumerated(EnumType.STRING)

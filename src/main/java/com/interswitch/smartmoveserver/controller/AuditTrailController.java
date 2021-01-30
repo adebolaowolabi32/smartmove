@@ -27,7 +27,7 @@ public class AuditTrailController {
     @GetMapping("/get")
     public String getAll(Principal principal, @RequestParam(required = false, defaultValue = "0") Long owner,
                          Model model, @RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = "10") int size){
+                         @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
         //PageView<AuditTrail> auditTrailPageView = auditTrailService.findAllPaginated(owner,  page,  size, principal.getName()) ;
         //model.addAttribute("pageNumbers", pageUtil.getPageNumber(auditTrailPageView));

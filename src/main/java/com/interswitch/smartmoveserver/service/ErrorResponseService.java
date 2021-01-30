@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class ErrorResponseService {
 
     public ErrorResponse fromException(Throwable e, WebRequest request, int httpStatus, String errorMessage) {
-        HttpMethod httpMethod = ((ServletWebRequest)request).getHttpMethod();
+        HttpMethod httpMethod = ((ServletWebRequest) request).getHttpMethod();
         String message = errorMessage;
         String eMessage = e.getMessage();
         ErrorResponse response = new ErrorResponse();

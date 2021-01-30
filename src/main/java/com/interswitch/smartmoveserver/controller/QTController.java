@@ -22,7 +22,7 @@ public class QTController {
         return "qt-transport/bus-list";
     }
 
-    @PostMapping (value = {"/bus-list"})
+    @PostMapping(value = {"/bus-list"})
     public String bsp(Model model) {
         return "qt-transport/bus-list";
     }

@@ -13,32 +13,32 @@ import java.util.stream.Collectors;
 @Component
 public class ErrorResponseUtil {
 
-	public Map<String, String> getErrorFieldMap(BindingResult result) {
-		Map<String, String> errors = new HashMap<>();
-		result.getAllErrors().forEach((error) -> {
-			String fieldName = ((FieldError) error).getField();
-			String errorMessage = error.getDefaultMessage();
+    public static String getErrorMessages(BindingResult result) {
+        return result.getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.joining(","));
+    }
 
-			errors.put(fieldName, errorMessage);
-		});
-		return errors;
-	}
+    public Map<String, String> getErrorFieldMap(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
+        result.getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
 
-	public Map<String, List<String>> getErrorMessagesMap(BindingResult result) {
-		Map<String, List<String>> errorMap = new HashMap<>();
-		List<String> errorMessages = new ArrayList<>();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 
-		result.getAllErrors().forEach((error) -> {
-			String fieldName = ((FieldError) error).getField();
-			String errorMessage = error.getDefaultMessage();
-			errorMessages.add(fieldName.concat(":" + errorMessage));
-		});
+    public Map<String, List<String>> getErrorMessagesMap(BindingResult result) {
+        Map<String, List<String>> errorMap = new HashMap<>();
+        List<String> errorMessages = new ArrayList<>();
 
-		errorMap.put("errors", errorMessages);
-		return errorMap;
-	}
+        result.getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errorMessages.add(fieldName.concat(":" + errorMessage));
+        });
 
-	public static String getErrorMessages(BindingResult result) {
-		return result.getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.joining(","));
-	}
+        errorMap.put("errors", errorMessages);
+        return errorMap;
+    }
 }

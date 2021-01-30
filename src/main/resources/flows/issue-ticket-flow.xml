@@ -66,14 +66,15 @@
                       expression="ticketService.makeBooking(currentUser.name,requestParameters.scheduleId, requestParameters.noOfPassengers)"/>
         </transition>
 
-<!--        <transition on="no" to="makeBooking">-->
-<!--            <evaluate-->
-<!--                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on NO ... transitioning to makeBooking')"/>-->
+        <!--        <transition on="no" to="makeBooking">-->
+        <!--            <evaluate-->
+        <!--                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on NO ... transitioning to makeBooking')"/>-->
 
-<!--        </transition>-->
+        <!--        </transition>-->
 
         <transition on="no" to="makeBooking">
-            <evaluate expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on NO ... transitioning to seat selection')"/>
+            <evaluate
+                    expression="T(org.slf4j.LoggerFactory).getLogger(getClass()).info('on NO ... transitioning to seat selection')"/>
 
         </transition>
 

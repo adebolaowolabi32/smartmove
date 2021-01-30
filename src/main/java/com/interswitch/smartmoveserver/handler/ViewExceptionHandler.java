@@ -96,10 +96,10 @@ public class ViewExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleAllExceptions(Exception exception, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         ResponseStatus responseStatus = exception.getClass().getAnnotation(ResponseStatus.class);
-        final HttpStatus status = responseStatus!=null ? responseStatus.value():HttpStatus.INTERNAL_SERVER_ERROR;
+        final HttpStatus status = responseStatus != null ? responseStatus.value() : HttpStatus.INTERNAL_SERVER_ERROR;
         final String localizedMessage = exception.getLocalizedMessage();
         final String path = request.getServletPath();
-        String message = (StringUtils.isNotEmpty(localizedMessage) ? localizedMessage:status.getReasonPhrase());
+        String message = (StringUtils.isNotEmpty(localizedMessage) ? localizedMessage : status.getReasonPhrase());
         log.error(String.format(ERROR_MESSAGE_TEMPLATE, message, path), exception);
         redirectAttributes.addFlashAttribute("error", message);
         return "redirect:" + path + "?" + request.getQueryString();

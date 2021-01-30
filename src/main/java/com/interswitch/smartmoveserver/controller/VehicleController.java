@@ -1,6 +1,8 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.Device;
+import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.Vehicle;
 import com.interswitch.smartmoveserver.service.DeviceService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.service.VehicleCategoryService;
@@ -69,7 +71,7 @@ public class VehicleController {
         model.addAttribute("vehicle", vehicle);
         model.addAttribute("categories", vehicleCategoryService.findByOwner(principal.getName()));
         model.addAttribute("owners", userService.findOwners(pageUtil.getOwners("vehicle")));
-        model.addAttribute("devices",devices);
+        model.addAttribute("devices", devices);
         return "vehicles/create";
     }
 

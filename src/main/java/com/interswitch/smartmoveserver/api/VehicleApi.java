@@ -21,29 +21,29 @@ public class VehicleApi {
 
     @GetMapping(produces = "application/json")
     private PageView<Vehicle> findAll(@RequestParam(required = false, defaultValue = "0") Long owner, @RequestParam(defaultValue = "1") int page,
-                                              @RequestParam(defaultValue = "10") int size) {
+                                      @RequestParam(defaultValue = "10") int size) {
         return vehicleService.findAllPaginated(owner, page, size, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     private Vehicle save(@Validated @RequestBody Vehicle vehicle) {
-        return vehicleService.save(vehicle,JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+        return vehicleService.save(vehicle, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     private Vehicle findById(@Validated @PathVariable long id) {
-        return vehicleService.findById(id,JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+        return vehicleService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json")
     private Vehicle update(@Validated @RequestBody Vehicle vehicle) {
-        return vehicleService.update(vehicle,JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+        return vehicleService.update(vehicle, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     private void delete(@Validated @PathVariable long id) {
-        vehicleService.delete(id,JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+        vehicleService.delete(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
     }
 }

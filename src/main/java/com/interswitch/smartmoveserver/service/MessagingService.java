@@ -51,7 +51,7 @@ public class MessagingService {
         try {
             Context context = new Context(Locale.ENGLISH, params);
             String message = templateEngine.process(template, context);
-            log.info("EmailMessage==>"+message);
+            log.info("EmailMessage==>" + message);
             EmailPayload emailPayload = new EmailPayload();
             emailPayload.setContentType(MediaType.TEXT_PLAIN_VALUE);
             emailPayload.setMessage(message);

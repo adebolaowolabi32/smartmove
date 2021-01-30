@@ -44,8 +44,7 @@ public class TicketReferenceService {
     public TicketReference update(TicketReference ticketReference, String principal) {
         User owner = userService.findByUsername(principal);
         TicketReference ticketReference1 = ticketReferenceRepository.findByOwner(owner);
-        if (ticketReference1 != null)
-        {
+        if (ticketReference1 != null) {
             ticketReference.setId(ticketReference1.getId());
             ticketReference.setOwner(ticketReference1.getOwner());
             ticketReference.setPrefix(ticketReference.getPrefix().toUpperCase());

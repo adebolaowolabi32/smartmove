@@ -228,8 +228,8 @@
                         <div class="form-group col">
                             <label class="control-label" for="seatNo">Seat *</label>
                             <div>
-                                <input class="form-control" id="seatNo" required
-                                       th:field="*{passengers[__${i-1}__].seatNo}" readonly>
+                                <input class="form-control" id="seatNo" readonly
+                                       required th:field="*{passengers[__${i-1}__].seatNo}">
                             </div>
                         </div>
 

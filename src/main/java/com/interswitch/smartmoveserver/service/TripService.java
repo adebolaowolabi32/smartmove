@@ -34,25 +34,20 @@ public class TripService {
     @Autowired
     TripRepository tripRepository;
 
+    private static String PREFIX_SEPARATOR = "|";
     @Autowired
     VehicleService vehicleService;
-
     @Autowired
     ScheduleService scheduleService;
-
     @Autowired
     UserService userService;
-
     @Autowired
     TripReferenceService tripReferenceService;
 
     @Autowired
-    SecurityUtil securityUtil;
-
-    @Autowired
     PageUtil pageUtil;
-
-    private static String PREFIX_SEPARATOR = "|";
+    @Autowired
+    SecurityUtil securityUtil;
 
     public List<Trip> findAll() {
         return tripRepository.findAll();
@@ -108,7 +103,7 @@ public class TripService {
         if (tripReference != null && tripReference.isEnabled())
             prefix = tripReference.getPrefix() + PREFIX_SEPARATOR;
         trip.setReferenceNo(prefix + RandomUtil.getRandomNumber(6));
-        if(trip.getOwner() == null) {
+        if (trip.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             trip.setOwner(owner);
         }
@@ -131,8 +126,7 @@ public class TripService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Trip update(Trip trip) {
         Optional<Trip> existing = tripRepository.findById(trip.getId());
-        if (existing.isPresent())
-        {
+        if (existing.isPresent()) {
             return tripRepository.save(trip);
         }
 
@@ -143,9 +137,8 @@ public class TripService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Trip update(Trip trip, String principal) {
         Optional<Trip> existing = tripRepository.findById(trip.getId());
-        if (existing.isPresent())
-        {
-            if(trip.getOwner() == null) {
+        if (existing.isPresent()) {
+            if (trip.getOwner() == null) {
                 User owner = userService.findByUsername(principal);
                 trip.setOwner(owner);
             }
@@ -177,33 +170,34 @@ public class TripService {
 
     private Trip buildVehicle(Trip trip) {
         Vehicle vehicle = trip.getVehicle();
-        if(vehicle != null)
+        if (vehicle != null)
             trip.setVehicle(vehicleService.findById(vehicle.getId()));
 
         Schedule schedule = trip.getSchedule();
-        if(schedule != null)
+        if (schedule != null)
             trip.setSchedule(scheduleService.findById(schedule.getId()));
 
         User driver = trip.getDriver();
-        if(driver != null)
+        if (driver != null)
             trip.setDriver(userService.findById(driver.getId()));
         return trip;
     }
+
     public boolean upload(MultipartFile file, String principal) throws IOException {
         User owner = userService.findByUsername(principal);
         List<Trip> savedTrips = new ArrayList<>();
-        if(file.getSize()>1){
+        if (file.getSize() > 1) {
             FileParser<TripDto> fileParser = new FileParser<>();
             List<TripDto> tripDtoList = fileParser.parseFileToEntity(file, TripDto.class);
-            tripDtoList.forEach(tripDto->{
-                savedTrips.add( tripRepository.save(mapToTrip(tripDto, owner)));
+            tripDtoList.forEach(tripDto -> {
+                savedTrips.add(tripRepository.save(mapToTrip(tripDto, owner)));
 
             });
         }
-        return savedTrips.size()>1;
+        return savedTrips.size() > 1;
     }
 
-    private Trip mapToTrip(TripDto tripDto, User owner){
+    private Trip mapToTrip(TripDto tripDto, User owner) {
         User driver = userService.findByEmail(tripDto.getDriverEmail());
         Schedule schedule = scheduleService.findById(tripDto.getScheduleId());
         Vehicle vehicle = vehicleService.findByRegNo(tripDto.getVehicleNumber());

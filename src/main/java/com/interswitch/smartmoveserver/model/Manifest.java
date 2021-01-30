@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "manifests")
 @EntityListeners(AuditingEntityListener.class)
-public class Manifest extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
+public class Manifest extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -77,11 +77,11 @@ public class Manifest extends AbstractAuditEntity<String> implements Auditable<L
     private String nextOfKinMobile;
 
     @ManyToOne
-    @JoinColumn(name = "trip",nullable=true)
+    @JoinColumn(name = "trip", nullable = true)
     private Trip trip;
 
     @ManyToOne
-    @JoinColumn(name = "schedule",nullable = true)
+    @JoinColumn(name = "schedule", nullable = true)
     private Schedule schedule;
 
     private boolean boarded;

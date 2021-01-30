@@ -65,8 +65,7 @@ public class TerminalService {
             if (securityUtil.isOwnedEntity(user.getRole())) {
                 Page<Terminal> pages = terminalRepository.findAllByOwner(pageable, user);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
-            }
-            else {
+            } else {
                 Page<Terminal> pages = terminalRepository.findAll(pageable);
                 return new PageView<>(pages.getTotalElements(), pages.getContent());
             }
@@ -85,7 +84,8 @@ public class TerminalService {
     public Terminal save(Terminal terminal, String principal) {
         String name = terminal.getName();
         boolean exists = terminalRepository.existsByName(name);
-        if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "Terminal with name: " + name + " already exists");
+        if (exists)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Terminal with name: " + name + " already exists");
         if(terminal.getOwner() == null) {
             User owner = userService.findByUsername(principal);
             terminal.setOwner(owner);
@@ -96,7 +96,7 @@ public class TerminalService {
     public Terminal findById(long id) {
         return terminalRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist"));
     }
-    
+
     public Terminal findById(long id, String principal) {
         return terminalRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist"));
     }
@@ -104,8 +104,8 @@ public class TerminalService {
     @Audited(auditableAction = AuditableAction.UPDATE, auditableActionClass = AuditableActionStatusImpl.class)
     public Terminal update(Terminal terminal, String principal) {
         Optional<Terminal> existing = terminalRepository.findById(terminal.getId());
-        if(existing.isPresent()){
-            if(terminal.getOwner() == null) {
+        if (existing.isPresent()) {
+            if (terminal.getOwner() == null) {
                 User owner = userService.findByUsername(principal);
                 terminal.setOwner(owner);
             }
@@ -126,16 +126,15 @@ public class TerminalService {
     @Audited(auditableAction = AuditableAction.DELETE, auditableActionClass = AuditableActionStatusImpl.class)
     public Terminal auditedDelete(long id, String principal) {
         Optional<Terminal> existing = terminalRepository.findById(id);
-        if(existing.isPresent()) {
+        if (existing.isPresent()) {
             terminalRepository.deleteById(id);
             return new GenericModel<Terminal>(existing.get()).getEntity();
-        }
-        else{
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Terminal does not exist");
         }
     }
 
-    public List<Terminal> findTerminalsByOwnerId(long ownerId){
+    public List<Terminal> findTerminalsByOwnerId(long ownerId) {
         return terminalRepository.findByOwnerId(ownerId);
     }
     public Long countByOwner(User user){

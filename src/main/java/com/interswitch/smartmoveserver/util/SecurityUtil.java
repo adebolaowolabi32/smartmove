@@ -28,7 +28,7 @@ public class SecurityUtil {
     private String smartmoveUrl;
 
 
-    public boolean isOwner(String username, Long owner){
+    public boolean isOwner(String username, Long owner) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
@@ -39,7 +39,26 @@ public class SecurityUtil {
     }
 
     public boolean isOwnedEntity(Enum.Role role) {
-        return role != Enum.Role.ISW_ADMIN;
+        boolean isOwned = false;
+        switch (role) {
+            case ISW_ADMIN:
+                isOwned = false;
+                break;
+            case EXECUTIVE:
+            case REGULATOR:
+            case OPERATOR:
+            case VEHICLE_OWNER:
+            case AGENT:
+            case DRIVER:
+            case SERVICE_PROVIDER:
+            case INSPECTOR:
+            case TICKETER:
+            case COMMUTER:
+            default:
+                isOwned = true;
+                break;
+        }
+        return isOwned;
     }
 
     public boolean isOperator(User user) {

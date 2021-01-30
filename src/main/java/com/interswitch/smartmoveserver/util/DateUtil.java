@@ -68,6 +68,7 @@ public class DateUtil {
 
         return date;
     }
+
     public static LocalDateTime textToLocalDateTime(String text) {
         try {
 
@@ -75,14 +76,14 @@ public class DateUtil {
             LocalDateTime dateTime = LocalDateTime.parse(text, formatter);
             return dateTime;
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             return null;
         }
 
     }
 
     public static LocalDate textToLocalDate(String text) {
-        LocalDate localDate= LocalDate.parse(text, DateTimeFormatter.ISO_DATE);
+        LocalDate localDate = LocalDate.parse(text, DateTimeFormatter.ISO_DATE);
         return localDate;
     }
 

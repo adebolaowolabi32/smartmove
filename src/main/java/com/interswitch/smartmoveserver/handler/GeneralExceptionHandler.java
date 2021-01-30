@@ -47,7 +47,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
-            HttpHeaders headers, HttpStatus status, WebRequest request) {
+                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> validationErrors = exception.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -58,7 +58,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception,
-            HttpHeaders headers, HttpStatus status, WebRequest request) {
+                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
         return getExceptionResponseEntity(exception, status, request,
                 Collections.singletonList(exception.getLocalizedMessage()));
     }
@@ -100,10 +100,10 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllExceptions(Exception exception, WebRequest request) {
         ResponseStatus responseStatus = exception.getClass().getAnnotation(ResponseStatus.class);
-        final HttpStatus status = responseStatus!=null ? responseStatus.value():HttpStatus.INTERNAL_SERVER_ERROR;
+        final HttpStatus status = responseStatus != null ? responseStatus.value() : HttpStatus.INTERNAL_SERVER_ERROR;
         final String localizedMessage = exception.getLocalizedMessage();
         final String path = request.getDescription(false);
-        String message = (StringUtils.isNotEmpty(localizedMessage) ? localizedMessage:status.getReasonPhrase());
+        String message = (StringUtils.isNotEmpty(localizedMessage) ? localizedMessage : status.getReasonPhrase());
         logger.error(String.format(ERROR_MESSAGE_TEMPLATE, message, path), exception);
         return getExceptionResponseEntity(exception, status, request, Collections.singletonList(message));
     }
@@ -119,7 +119,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         body.put(MESSAGE, getMessageForStatus(status));
         final String errorsMessage = CollectionUtils.isNotEmpty(errors) ?
                 errors.stream().filter(StringUtils::isNotEmpty).collect(Collectors.joining(LIST_JOIN_DELIMITER))
-                :status.getReasonPhrase();
+                : status.getReasonPhrase();
         log.error(ERRORS_FOR_PATH, errorsMessage, path);
         return new ResponseEntity<>(body, status);
     }

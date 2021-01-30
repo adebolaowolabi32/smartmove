@@ -7,7 +7,9 @@
     <div class="row">
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_ADMINISTRATORS')">
             <div class="card bg-info text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{administrators}">Administrators</span><span class="number" th:text="${no_admins}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{administrators}">Administrators</span><span class="number"
+                                                                                                          th:text="${no_admins}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/users/get?role=ISW_ADMIN}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -27,7 +29,9 @@
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_OPERATORS')">
             <div class="card bg-success text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{operators}">Operators</span><span class="number" th:text="${no_operators}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{operators}">Operators</span><span class="number"
+                                                                                                th:text="${no_operators}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/users/get?role=OPERATOR}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -36,7 +40,9 @@
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_AGENTS')">
             <div class="card bg-info text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{agents}">Agents</span><span class="number" th:text="${no_agents}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{agents}">Agents</span><span class="number"
+                                                                                          th:text="${no_agents}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/users/get?role=AGENT}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -46,7 +52,9 @@
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_DRIVERS')">
             <div class="card bg-warning text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{drivers}">Drivers</span><span class="number" th:text="${no_drivers}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{drivers}">Drivers</span><span class="number"
+                                                                                            th:text="${no_drivers}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#" th:href="@{/users/get?role=DRIVER}">View
                         Details</a>
@@ -57,8 +65,9 @@
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_SERVICE_PROVIDERS')">
             <div class="card bg-info text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{serviceProviders}">Service Providers</span><span class="number"
-                                                                     th:text="${no_service_providers}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{serviceProviders}">Service Providers</span><span
+                        class="number"
+                        th:text="${no_service_providers}">21</span></div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#" th:href="@{/users/get?role=SERVICE_PROVIDER}">View
                         Details</a>
@@ -69,7 +78,9 @@
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_INSPECTORS')">
             <div class="card bg-warning text-white mb-4">
-                <div class="card-body heavy"> <span th:text="#{inspectors}">Inspectors</span><span class="number" th:text="${no_inspectors}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{inspectors}">Inspectors</span><span class="number"
+                                                                                                  th:text="${no_inspectors}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#" th:href="@{/users/get?role=INSPECTOR}">View
                         Details</a>
@@ -80,7 +91,9 @@
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TICKETERS')">
             <div class="card bg-success text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{ticketers}">Ticketers</span><span class="number" th:text="${no_ticketers}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{ticketers}">Ticketers</span><span class="number"
+                                                                                                th:text="${no_ticketers}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#" th:href="@{/users/get?role=TICKETER}">View
                         Details</a>
@@ -91,7 +104,9 @@
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_VEHICLES')">
             <div class="card bg-dark text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{vehicles}">Vehicles</span><span class="number" th:text="${no_vehicles}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{vehicles}">Vehicles</span><span class="number"
+                                                                                              th:text="${no_vehicles}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/vehicles/get}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -100,7 +115,9 @@
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TERMINALS')">
             <div class="card bg-secondary text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{terminals}">Transport Terminals</span><span class="number" th:text="${no_terminals}">25</span></div>
+                <div class="card-body heavy"><span th:text="#{terminals}">Transport Terminals</span><span class="number"
+                                                                                                          th:text="${no_terminals}">25</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/terminals/get}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -109,7 +126,9 @@
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_ROUTES')">
             <div class="card bg-dark text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{routes}">Routes</span><span class="number" th:text="${no_routes}">50</span></div>
+                <div class="card-body heavy"><span th:text="#{routes}">Routes</span><span class="number"
+                                                                                          th:text="${no_routes}">50</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link"  th:href="@{/routes/get}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -119,7 +138,9 @@
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TRIPS')">
             <div class="card bg-secondary text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{trips}">Trips</span><span class="number" th:text="${no_trips}">50</span></div>
+                <div class="card-body heavy"><span th:text="#{trips}">Trips</span><span class="number"
+                                                                                        th:text="${no_trips}">50</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/trips/get}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -129,7 +150,9 @@
 
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_VALIDATORS')">
             <div class="card bg-danger text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{validators}">Validators</span><span class="number" th:text="${no_validators}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{validators}">Validators</span><span class="number"
+                                                                                                  th:text="${no_validators}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link"  th:href="@{/devices/get?type=VALIDATOR}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -138,7 +161,9 @@
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_READERS')">
             <div class="card bg-success text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{readers}">Readers</span><span class="number" th:text="${no_readers}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{readers}">Readers</span><span class="number"
+                                                                                            th:text="${no_readers}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link"  th:href="@{/devices/get?type=READER}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -147,7 +172,9 @@
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_TRANSACTIONS')">
             <div class="card bg-info text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{transactions}">Transactions</span><span class="number" th:text="${no_transactions}">21</span></div>
+                <div class="card-body heavy"><span th:text="#{transactions}">Transactions</span><span class="number"
+                                                                                                      th:text="${no_transactions}">21</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link"  th:href="@{/transactions/get}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -156,7 +183,9 @@
         </div>
         <div class="col-xl-3 col-md-6" sec:authorize="hasAuthority('VIEW_SETTLEMENTS')">
             <div class="card bg-danger text-white mb-4">
-                <div class="card-body heavy"><span th:text="#{settlements}">Settlements</span><span class="number" th:text="${no_settlements}">25</span></div>
+                <div class="card-body heavy"><span th:text="#{settlements}">Settlements</span><span class="number"
+                                                                                                    th:text="${no_settlements}">25</span>
+                </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" th:href="@{/reports/get}" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -171,7 +200,8 @@
                     <span class="card-status"><i class="fas fa-check"></i><span th:text="#{active}">ACTIVE</span></span>
                     <br>
                     <div class="dark-text-big">
-                        <span><span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span> <span th:text="${wallet_balance}">15,052</span></span>
+                        <span><span th:text="${session.currency} ? ${session.currency} : NGN">&#8358;</span> <span
+                                th:text="${wallet_balance}">15,052</span></span>
                         <a class="icon-blue" href="#"><i class="fas fa-sync"></i></a>
                     </div>
                     <div class="balance-time">
@@ -179,8 +209,10 @@
                     </div>
                 </div>
                 <div class=" card-footer d-flex align-items-center justify-content-between">
-                    <a class="dark-text" href="#" th:href="@{/topups/get}"><i class="fas fa-coins"></i><span th:text="#{fund-my-wallet}"> Fund my Wallet</span></a>
-                    <a class="dark-text" href="#" th:href="@{/transfers/get}"><i class="fas fa-history"></i> <span th:text="#{wallet-history}"> Wallet History</span></a>
+                    <a class="dark-text" href="#" th:href="@{/topups/get}"><i class="fas fa-coins"></i><span
+                            th:text="#{fund-my-wallet}"> Fund my Wallet</span></a>
+                    <a class="dark-text" href="#" th:href="@{/transfers/get}"><i class="fas fa-history"></i> <span
+                            th:text="#{wallet-history}"> Wallet History</span></a>
                 </div>
             </div>
         </div>
@@ -212,23 +244,29 @@
     </div>
 
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-chart-area mr-1"></i><span th:text="#{activities}">Activities</span></div>
+        <div class="card-header"><i class="fas fa-chart-area mr-1"></i><span th:text="#{activities}">Activities</span>
+        </div>
         <div class="card-body heavy"><canvas id="myAreaChart" width="100%" height="30"></canvas></div>
-        <div class="card-footer small text-muted"><span th:text="#{last-updated}">Updated yesterday at 11:59 PM</span></div>
+        <div class="card-footer small text-muted"><span th:text="#{last-updated}">Updated yesterday at 11:59 PM</span>
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-6">
             <div class="card mb-4">
-                <div class="card-header"><i class="fas fa-chart-bar mr-1"></i><span th:text="#{transactions}">Transactions</span></div>
+                <div class="card-header"><i class="fas fa-chart-bar mr-1"></i><span th:text="#{transactions}">Transactions</span>
+                </div>
                 <div class="card-body heavy"><canvas id="myBarChart" width="100%" height="50"></canvas></div>
-                <div class="card-footer small text-muted"><span th:text="#{last-updated}">Updated yesterday at 11:59 PM</span></div>
+                <div class="card-footer small text-muted"><span
+                        th:text="#{last-updated}">Updated yesterday at 11:59 PM</span></div>
             </div>
         </div>
         <div class="col-lg-6">
             <div class="card mb-4">
-                <div class="card-header"><i class="fas fa-chart-pie mr-1"></i><span th:text="#{analytics}">Analytics</span></div>
+                <div class="card-header"><i class="fas fa-chart-pie mr-1"></i><span
+                        th:text="#{analytics}">Analytics</span></div>
                 <div class="card-body heavy"><canvas id="myPieChart" width="100%" height="50"></canvas></div>
-                <div class="card-footer small text-muted"><span th:text="#{last-updated}">Updated yesterday at 11:59 PM</span></div>
+                <div class="card-footer small text-muted"><span
+                        th:text="#{last-updated}">Updated yesterday at 11:59 PM</span></div>
             </div>
         </div>
     </div>

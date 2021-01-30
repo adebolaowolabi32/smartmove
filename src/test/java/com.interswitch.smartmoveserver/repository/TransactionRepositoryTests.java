@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.repository;
 
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.Transaction;
-import com.interswitch.smartmoveserver.model.User;
 import org.junit.After;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.interswitch.smartmoveserver.util.TestUtils.buildTestUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest

@@ -24,5 +24,4 @@ public class Facility extends AbstractAuditEntity<String> implements Serializabl
     private String image;
 
 
-
 }

@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>Welcome</title>
 </head>
 <body style="font-family:'Helvetica Neue',sans-serif; margin:0;padding:0; height:100%; color: #00425F; font-weight: 400">
 <div class="wrapper" style="width:600px; margin: 0 auto;">
     <div class="body" style="padding:40px;font-size: 14px; line-height: 20px">
-		<img alt="Interswitch Logo"
-			 style="float:right" th:src="${portletUri} + '/assets/img/interswitchngnew.png'" width="150"/>
+        <img alt="Interswitch Logo"
+             style="float:right" th:src="${portletUri} + '/assets/img/interswitchngnew.png'" width="150"/>
 
-		<div class="body-content" style="margin-top:50px; float:left">
+        <div class="body-content" style="margin-top:50px; float:left">
             <p>
-				Hello <span th:text="${user}"></span>,
-			</p>
+                Hello <span th:text="${user}"></span>,
+            </p>
             <p>
-				An account has been created for you on the <strong>Smart Move Platform</strong>.
-			</p>
-			<p>
-				User Details:
-			<ul>
-				<li>Role: <span th:text="${role}"></span></li>
-				<li>Referrer: <span th:text="${owner}"></span></li>
-				<li>Username: <span th:text="${username}"></span></li>
-				<li>Default Password: <span th:text="${password}"></span></li>
-			</ul>
-			</p>
-			<br>
-			<p>
-				<a th:href="${portletUri}">Click here </a> to sign-in and change your password.
-			</p>
-			<br>
+                An account has been created for you on the <strong>Smart Move Platform</strong>.
+            </p>
             <p>
-				Thank you. Have a great day!
+                User Details:
+            <ul>
+                <li>Role: <span th:text="${role}"></span></li>
+                <li>Referrer: <span th:text="${owner}"></span></li>
+                <li>Username: <span th:text="${username}"></span></li>
+                <li>Default Password: <span th:text="${password}"></span></li>
+            </ul>
+            </p>
+            <br>
+            <p>
+                <a th:href="${portletUri}">Click here </a> to sign-in and change your password.
+            </p>
+            <br>
+            <p>
+                Thank you. Have a great day!
             </p>
         </div>
     </div>

@@ -7,8 +7,9 @@
     <div class="card-body">
 
         <div class="row" th:style="${status == 'CLOSE' ? 'display : block' : 'display : none'}">
-            <div style="width:500px;margin-left:50px;" class="alert alert-warning" role="alert">
-                <p> Your ticket till is <b>closed</b>,you can't sell ticket until after <b>approved.</b><p>
+            <div class="alert alert-warning" role="alert" style="width:500px;margin-left:50px;">
+                <p> Your ticket till is <b>closed</b>,you can't sell ticket until after <b>approved.</b>
+                <p>
             </div>
         </div>
         <div class="table-wrapper">
@@ -20,7 +21,9 @@
                     <div class="col-sm-4">
                         <div class="row">
 
-                            <a th:style="${status == 'OPEN' ? 'visibility : visible' : 'visibility : hidden'}" href="#" th:href="@{/issueTicket}" class="btn btn-info"><i class="fas fa-plus" aria-hidden="true"></i> Create New</a>
+                            <a class="btn btn-info" href="#" th:href="@{/issueTicket}"
+                               th:style="${status == 'OPEN' ? 'visibility : visible' : 'visibility : hidden'}"><i
+                                    aria-hidden="true" class="fas fa-plus"></i> Create New</a>
                             <a href="#" class="btn btn-info"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh List</a>
                             <a href="#" class="btn btn-info"><i class="fa fa-file-export" aria-hidden="true"></i> Export to Excel</a>
                         </div>

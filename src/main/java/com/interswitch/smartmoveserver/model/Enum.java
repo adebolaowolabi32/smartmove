@@ -52,15 +52,15 @@ public class Enum {
         NATIONAL_ID, DRIVERS_LICENSE, INTERNATIONAL_PASSPORT, VOTERS_CARD, SCHOOL_ID, OTHER, NO_ID
     }
 
-    public enum TicketTillStatus{
-        OPEN,CLOSE
+    public enum TicketTillStatus {
+        OPEN, CLOSE
     }
 
-    public enum RatingMetricType{
-        PERCENT,FLAT
+    public enum RatingMetricType {
+        PERCENT, FLAT
     }
 
-    public enum FeeName{
+    public enum FeeName {
         VAT("VAT"), ID_CARD_FEE("ID CARD Fee");
 
         private String name;

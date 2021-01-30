@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +24,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class User extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable {
+public class User extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,11 +48,11 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
     @Length(min = 5, max = 50, message = "Address must be between 5 and 50 characters long.")
     private String address;
 
-    @Column(unique=true)
+    @Column(unique = true)
     @Length(min = 5, max = 30, message = "Mobile number must be between 5 and 30 characters long.")
     private String mobileNo;
 
-    @Column(unique=true)
+    @Column(unique = true)
     @NotBlank(message = "Email address is required.")
     @Length(min = 5, max = 50, message = "Email address must be between 5 and 50 characters long.")
     private String email;
@@ -68,7 +67,7 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     private boolean enabled;
 
-//    @URL(message = "Picture URL is not valid")
+    //    @URL(message = "Picture URL is not valid")
 //    @Length(max = 200, message = "Picture URL must be less than 200 characters long")
     private String pictureUrl;
 

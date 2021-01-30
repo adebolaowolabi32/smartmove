@@ -134,7 +134,7 @@ public class DeviceController {
     @PostMapping("/upload")
     public String doDevicesUpload(Principal principal, MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
         try {
-            boolean succeeded = deviceService.upload(file,principal.getName());
+            boolean succeeded = deviceService.upload(file, principal.getName());
             redirectAttributes.addFlashAttribute("uploaded", succeeded);
             return "redirect:/devices/get";
         } catch (Exception ex) {

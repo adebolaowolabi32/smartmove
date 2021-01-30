@@ -40,7 +40,7 @@ public final class TestUtils {
         return user;
     }
 
-    public static User buildTestUser(Enum.Role role){
+    public static User buildTestUser(Enum.Role role) {
         User user = new User();
         user.setFirstName("Alice");
         user.setLastName("Com");

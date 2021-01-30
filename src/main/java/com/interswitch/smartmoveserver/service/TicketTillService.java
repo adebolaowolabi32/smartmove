@@ -24,34 +24,30 @@ import java.util.*;
 public class TicketTillService {
 
     private final Log logger = LogFactory.getLog(getClass());
-
+    @Autowired
+    PageUtil pageUtil;
     @Autowired
     private TicketTillRepository ticketTillRepository;
-
     @Autowired
     private TicketTillSummaryRepository ticketTillSummaryRepository;
-
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    PageUtil pageUtil;
-
     @Async
-    public void pushDataToTicketTill(Iterable<Ticket> iterableTicket){
+    public void pushDataToTicketTill(Iterable<Ticket> iterableTicket) {
         iterableTicket.forEach(
                 ticketsIt -> {
                     User user = ticketsIt.getOperator();
 
-                    TicketTill ticketTill =  TicketTill.builder()
-                            .tillOperatorName(user.getFirstName().concat(" "+user.getLastName()))
+                    TicketTill ticketTill = TicketTill.builder()
+                            .tillOperatorName(user.getFirstName().concat(" " + user.getLastName()))
                             .tillOperatorUsername(user.getUsername())
                             .tillOperatorId(user.getId())
                             .ticketIssuanceDate(LocalDate.now())
                             .ticketIssuanceTime(LocalTime.now())
                             .ticketId(ticketsIt.getId())
                             .totalAmount(ticketsIt.getFare())
-                            .tillOperatorOwnerId(user.getOwner()!=null ? user.getOwner().getId() : 0)
+                            .tillOperatorOwnerId(user.getOwner() != null ? user.getOwner().getId() : 0)
                             .approved(false).closed(false).build();
 
                     ticketTillRepository.save(ticketTill);
@@ -59,21 +55,21 @@ public class TicketTillService {
 
     }
 
-   public TicketTillView  findCurrentUserTicketTillStatus(User user){
+    public TicketTillView findCurrentUserTicketTillStatus(User user) {
 
-        if(user!=null && user.getId()>0){
+        if (user != null && user.getId() > 0) {
             TicketTillView ticketTillView = ticketTillRepository
-                    .findCurrentTicketTillStatusByDateAndTillOperatorId(DateUtil.getTodayDate(),user.getId());
+                    .findCurrentTicketTillStatusByDateAndTillOperatorId(DateUtil.getTodayDate(), user.getId());
             return ticketTillView;
         }
         return null;
     }
 
-    public void closeTicketTill(TicketTillView ticketTill){
-        if(ticketTill!=null){
-            logger.info("wanna close ticket till===>"+ticketTill);
+    public void closeTicketTill(TicketTillView ticketTill) {
+        if (ticketTill != null) {
+            logger.info("wanna close ticket till===>" + ticketTill);
             //update ticket till closed=true
-            ticketTillRepository.updateTicketTillStatusByTillOperatorIdAndIssuanceDate(ticketTill.getTicketIssuanceDate(),ticketTill.getTillOperatorId());
+            ticketTillRepository.updateTicketTillStatusByTillOperatorIdAndIssuanceDate(ticketTill.getTicketIssuanceDate(), ticketTill.getTillOperatorId());
             //submit till to ticketTillSummary
             ticketTillSummaryRepository.save(TicketTillSummary.builder()
                     .tillStartTime(ticketTill.getTillStartTime())
@@ -98,9 +94,9 @@ public class TicketTillService {
 
     }
 
-    public void  approveTicketTill(User user,long ticketTillSummaryId){
+    public void approveTicketTill(User user, long ticketTillSummaryId) {
         Optional<TicketTillSummary> ticketTillSummaryOptional = ticketTillSummaryRepository.findById(ticketTillSummaryId);
-        if(ticketTillSummaryOptional.isPresent()){
+        if (ticketTillSummaryOptional.isPresent()) {
             TicketTillSummary ticketTillSummary = ticketTillSummaryOptional.get();
             ticketTillSummary.setApprover(user);
             ticketTillSummary.setApproved(true);
@@ -115,18 +111,18 @@ public class TicketTillService {
 
     }
 
-    public PageView<TicketTillSummary> findUnApprovedTicketTillSummary(long tillOperatorId,long tillOperatorOwner,boolean approved,int page,int size){
+    public PageView<TicketTillSummary> findUnApprovedTicketTillSummary(long tillOperatorId, long tillOperatorOwner, boolean approved, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        logger.info("Size of TicketTillSummary Params===>operator ID:"+tillOperatorId+"==>operator ownerId:"+tillOperatorOwner+"===>approved:"+approved);
-        Set<Long> ids  = new HashSet<>();
-        ids.addAll(Arrays.asList(tillOperatorId,tillOperatorOwner));
-        Page<TicketTillSummary> pages = ticketTillSummaryRepository.findByTillOperatorOwnerInAndApproved(pageable,ids,approved);
-        logger.info("Size of TicketTillSummary===>"+pages.getContent().size());
+        logger.info("Size of TicketTillSummary Params===>operator ID:" + tillOperatorId + "==>operator ownerId:" + tillOperatorOwner + "===>approved:" + approved);
+        Set<Long> ids = new HashSet<>();
+        ids.addAll(Arrays.asList(tillOperatorId, tillOperatorOwner));
+        Page<TicketTillSummary> pages = ticketTillSummaryRepository.findByTillOperatorOwnerInAndApproved(pageable, ids, approved);
+        logger.info("Size of TicketTillSummary===>" + pages.getContent().size());
         return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 
-    public List<TicketTillView> findAggregatedTicketTillByIssuanceDateAndStatus(String date,boolean closed){
-        return ticketTillRepository.findAggregatedTicketTillByIssuanceDateAndStatus(date,closed);
+    public List<TicketTillView> findAggregatedTicketTillByIssuanceDateAndStatus(String date, boolean closed) {
+        return ticketTillRepository.findAggregatedTicketTillByIssuanceDateAndStatus(date, closed);
     }
 
 }

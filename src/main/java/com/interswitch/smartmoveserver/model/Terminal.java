@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "terminals")
 @EntityListeners(AuditingEntityListener.class)
-public class Terminal extends AbstractAuditEntity<String> implements Auditable<Long>,Serializable{
+public class Terminal extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

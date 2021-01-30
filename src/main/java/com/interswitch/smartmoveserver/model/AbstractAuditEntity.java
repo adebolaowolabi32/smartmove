@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 /**
  * This abstract class is inherited by all entities that needs to
  * capture audit trail
+ *
  * @param <T>
  */
 @Data
