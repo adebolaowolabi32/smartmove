@@ -26,6 +26,7 @@ public class Schedule extends AbstractAuditEntity<String> implements Auditable<L
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "route")
     @NotNull(message = "Route is required.")
