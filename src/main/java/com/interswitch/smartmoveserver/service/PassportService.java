@@ -1,20 +1,25 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
+import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
+import com.interswitch.smartmoveserver.model.response.PassportErrorResponse;
+import com.interswitch.smartmoveserver.model.response.UserPassportResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.UnknownHttpStatusCodeException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -65,8 +70,41 @@ public class PassportService {
         return retrievePassportUser(response.getBody());
     }
 
+    public UserPassportResponse getUserAccessDetails(UserLoginRequest userLoginRequest) throws JsonProcessingException {
+        String auth = clientId + ":" + clientSecret;
+        byte[] encodedAuth = Base64.encodeBase64(
+                auth.getBytes(Charset.forName("US-ASCII")));
+        String authHeader = "Basic " + new String(encodedAuth);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, authHeader);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED.toString());
+        MultiValueMap formData = new LinkedMultiValueMap();
+        formData.add("grant_type", "password");
+        formData.add("scope", "profile");
+        formData.add("username", userLoginRequest.getUsername());
+        formData.add("password", userLoginRequest.getPassword());
+        UserPassportResponse passportResponse = null;
+        ResponseEntity<UserPassportResponse> responseEntity = null;
+        try {
+            responseEntity = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, UserPassportResponse.class);
+            passportResponse = responseEntity.getBody();
+            return responseEntity.getBody();
+        } catch (Exception ex) {
+            if (ex instanceof HttpClientErrorException) {
+                String response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                ObjectMapper mapper = new ObjectMapper();
+                PassportErrorResponse passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, passportErrorResponse.getDescription());
+            } else if (ex instanceof HttpServerErrorException || ex instanceof UnknownHttpStatusCodeException) {
+                String response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                ObjectMapper mapper = new ObjectMapper();
+                PassportErrorResponse passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, passportErrorResponse.getDescription());
+            }
+            return null;
+        }
+    }
     public String getAccessToken(){
-        log.info("++calling passport for access token===>");
         String auth = clientId + ":" + clientSecret;
         byte[] encodedAuth = Base64.encodeBase64(
                 auth.getBytes(Charset.forName("US-ASCII")) );
@@ -79,7 +117,6 @@ public class PassportService {
         formData.add("scope", "profile");
         ResponseEntity response = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, Object.class);
         Map<String, Object> resultToJson = (Map<String, Object>) response.getBody();
-        log.info("done calling passport for access token===>");
         return "Bearer " + resultToJson.get("access_token").toString();
     }
 

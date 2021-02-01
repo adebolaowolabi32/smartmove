@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author adebola.owolabi
@@ -188,9 +189,7 @@ public class VehicleCategoryService {
     }
 
     private VehicleCategory createSeats(VehicleCategory vehicle) {
-
         Set<Seat> seats = new HashSet<>();
-
         for (int i = 1; i <= vehicle.getCapacity(); i++) {
             Seat seat = new Seat();
             seat.setSeatNo(i);
@@ -200,5 +199,11 @@ public class VehicleCategoryService {
             seats.add(createdSeat);
         }
         return vehicle;
+    }
+
+    public long getSumOfAvailableSeatsByVehicleId(long vehicleId){
+        Set<Seat> seats = seatRepository.findByVehicleId(vehicleId);
+       long sumOfAvailableSeats = seats.stream().filter(seat->seat.isAvailable()).collect(Collectors.toList()).size();
+     return sumOfAvailableSeats;
     }
 }

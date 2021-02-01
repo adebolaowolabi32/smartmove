@@ -1,11 +1,14 @@
 package com.interswitch.smartmoveserver.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
+import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
+import com.interswitch.smartmoveserver.model.response.UserPassportResponse;
 import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
@@ -565,5 +568,21 @@ public class UserService {
         params.put("username", user.getUsername());
         messagingService.sendEmail(user.getEmail(),
                 "User SignUp Declined", "messages" + File.separator + "declined_user", params);
+    }
+
+    public UserPassportResponse doUserAuthFromApi(UserLoginRequest loginRequest) throws JsonProcessingException {
+        log.info("Calling login 1 ===>");
+        UserPassportResponse passportResponse=null;
+        try{
+            passportResponse = passportService.getUserAccessDetails(loginRequest);
+            User smartMoveUser = findByUsername(passportResponse.getEmail());
+            passportResponse.setRole(smartMoveUser!=null ? smartMoveUser.getRole().name() : "");
+        }catch (ResponseStatusException ex) {
+            if (ex.getStatus() == HttpStatus.NOT_FOUND) {
+                return passportResponse;
+            }
+        }
+        log.info("PassportResponse===>"+passportResponse);
+        return passportResponse;
     }
 }

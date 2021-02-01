@@ -28,6 +28,7 @@ import java.util.Base64;
 @Configuration
 @Order(1)
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
+
     @Value("${spring.security.oauth2.resourceserver.jwt.public-key}")
     private String publicKey;
 
@@ -35,13 +36,14 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers(HttpMethod.OPTIONS)
-                .antMatchers("/error", "/health");
+                .antMatchers("/error", "/health","/auth/login");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.requestMatcher(new RequestHeaderRequestMatcher("Authorization"))
-                .authorizeRequests().antMatchers("/api/**")
+                .authorizeRequests()
+                .antMatchers("/api/**")
                 .authenticated()
                 .and().csrf().disable()
                 .oauth2ResourceServer()

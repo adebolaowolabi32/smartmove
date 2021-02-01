@@ -57,12 +57,16 @@ public class TicketService {
 
     @Autowired
     private StateService stateService;
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private TicketTillService ticketTillService;
+
     @Autowired
     private SeatRepository seatRepository;
+
     @Autowired
     private TicketReferenceService ticketReferenceService;
 
@@ -77,6 +81,9 @@ public class TicketService {
 
     @Autowired
     private MessagingService messagingService;
+
+    @Autowired
+    private VehicleCategoryService vehicleCategoryService;
 
     public List<Terminal> getTerminals() {
         return terminalService.findAll();
@@ -110,16 +117,40 @@ public class TicketService {
         User owner;
         try {
             owner = userService.findById(searchRequest.getOwnerId());
-            return extractScheduleDetails(findBooking(owner.getUsername(),scheduleBooking));} catch (ResponseStatusException ex) {
+            return extractScheduleDetails(findBooking(owner.getUsername(),scheduleBooking));
+        } catch (ResponseStatusException ex) {
             if (ex.getStatus() == HttpStatus.NOT_FOUND) {
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("the agent's owner id - %d does'nt exist on Smartmove", searchRequest.getOwnerId()));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("the user's owner id - %d does'nt exist on Smartmove", searchRequest.getOwnerId()));
             }
             return new ScheduleSearchResult();
         }
     }
 
     private ScheduleSearchResult extractScheduleDetails(ScheduleBooking scheduleBooking){
-        return new ScheduleSearchResult();
+
+        ScheduleSearchResult searchResult = new ScheduleSearchResult();
+        searchResult.setDeparture(scheduleBooking.getDeparture());
+        searchResult.setReturnDate(scheduleBooking.getReturnDate());
+        searchResult.setStartTerminal(scheduleBooking.getStartTerminal());
+        searchResult.setStopTerminal(scheduleBooking.getStopTerminal());
+        searchResult.setRoundTrip(scheduleBooking.isRoundTrip());
+        List<ScheduleSearchResult.ScheduleView> scheduleViews = new ArrayList<>();
+        List<ScheduleSearchResult.ScheduleView> returnScheduleViews = new ArrayList<>();
+
+        scheduleBooking.getSchedules().forEach(s->{
+            ScheduleSearchResult.ScheduleView scheduleView = buildScheduleView(s);
+            scheduleViews.add(scheduleView);
+
+        });
+
+        scheduleBooking.getReturnSchedules().forEach(s->{
+            ScheduleSearchResult.ScheduleView scheduleView = buildScheduleView(s);
+            returnScheduleViews.add(scheduleView);
+
+        });
+        searchResult.setReturnSchedules(returnScheduleViews);
+        searchResult.setSchedules(scheduleViews);
+        return searchResult;
     }
 
     public TicketDetails makeBooking(String username, String scheduleId, int noOfPassengers) {
@@ -192,6 +223,10 @@ public class TicketService {
         ticketDetails.setTickets(tickets);
         ticketDetails.setTotalFare(totalFare);
         return ticketDetails;
+    }
+
+    public void confirmTicketsFromApi(){
+
     }
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
@@ -438,6 +473,23 @@ public class TicketService {
         seat.setAvailable(false);
         seat.setPicked(true);
         seatRepository.save(seat);
+    }
+
+    private ScheduleSearchResult.ScheduleView buildScheduleView(Schedule s) {
+        ScheduleSearchResult.ScheduleView scheduleView = new ScheduleSearchResult.ScheduleView();
+        scheduleView.setArrivalTime(s.getArrivalTime());
+        scheduleView.setDepartureTime(s.getDepartureTime());
+        scheduleView.setDuration(DateUtil.getDuration(s.getDepartureTime(), s.getArrivalTime()));
+        scheduleView.setFare(s.getRoute().getFare());
+        scheduleView.setScheduleId(s.getId());
+        scheduleView.setVehicleCapacity(s.getVehicle().getCapacity());
+        scheduleView.setVehicleId(s.getVehicle().getId());
+        scheduleView.setVehicleMode(s.getVehicle().getMode().name());
+        scheduleView.setVehicleName(s.getVehicle().getName());
+        scheduleView.setVehiclePictureUrl(s.getVehicle().getPictureUrl() == null ? "" : s.getVehicle().getPictureUrl());
+        //scheduleView.setAcAvailable();
+        scheduleView.setAvailableSeats(vehicleCategoryService.getSumOfAvailableSeatsByVehicleId(scheduleView.getVehicleId()));
+        return scheduleView;
     }
 
     public PageView<Ticket> findAllByOperator(Long owner, int page, int size, String principal) {

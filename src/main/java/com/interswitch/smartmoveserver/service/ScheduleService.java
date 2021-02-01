@@ -8,6 +8,7 @@ import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import java.util.Optional;
 /*
  * Created by adebola.owolabi on 8/7/2020
  */
+@Slf4j
 @Service
 @Transactional
 public class ScheduleService {

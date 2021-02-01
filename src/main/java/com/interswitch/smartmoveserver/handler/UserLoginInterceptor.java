@@ -19,9 +19,11 @@ import java.util.List;
 @Component
 public class UserLoginInterceptor extends HandlerInterceptorAdapter {
 
-    private static List<String> excludedEndpoints = Arrays.asList("/", "/api/.*", "/signup/?", "/smlogout/?", "/index/?", "/assets/.*", "/css/.*", "/fonts/.*", "/images/.*", "/img/.*", "/js/.*", "/sass/.*", "/scss/.*", "/vendor/.*");
+    private static List<String> excludedEndpoints = Arrays.asList("/", "/auth/login","/api/.*", "/signup/?", "/smlogout/?", "/index/?", "/assets/.*", "/css/.*", "/fonts/.*", "/images/.*", "/img/.*", "/js/.*", "/sass/.*", "/scss/.*", "/vendor/.*");
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private SecurityUtil securityUtil;
 

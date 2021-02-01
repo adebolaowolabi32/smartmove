@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.Date;
 
 @Slf4j
@@ -106,6 +106,16 @@ public class DateUtil {
     public static String getTodayDate() {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(new Date());
+    }
+
+    public static long getDuration(LocalTime start,LocalTime end){
+        long duration =0;
+        try{
+            duration = ChronoUnit.HOURS.between(start, end);
+        }catch(DateTimeException | ArithmeticException ex){
+            log.error("An error happened while trying to compute duration between two local time===>"+ex.getLocalizedMessage());
+        }
+        return  duration;
     }
 /*
     public static String toYearMonth(Date dateString) {
