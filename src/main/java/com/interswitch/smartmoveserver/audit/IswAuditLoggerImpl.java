@@ -39,7 +39,6 @@ public class IswAuditLoggerImpl {
 
         executorService.submit(() -> {
             try {
-                log.info("Inside log implementation,auditable value ===>" + auditable);
                 AuditTrail audit = new AuditTrail();
                 audit.setResource(auditable.getAuditableName().toLowerCase());
                 audit.setResourceId((Long) auditable.getAuditableId());
@@ -55,7 +54,6 @@ public class IswAuditLoggerImpl {
                 audit.setActionDate(Instant.now());
                 audit.setActionTimeStamp(DateUtil.formatDate(LocalDateTime.now()));
                 audit.setDescription(actor + " " + auditableAction.name().concat("d").toLowerCase() + " " + auditable.getAuditableName().toLowerCase() + " ");
-                log.info("audit trail:>" + audit);
 
                 if (audit.getResourceId() > 0) {
                     auditTrailRepository.save(audit);

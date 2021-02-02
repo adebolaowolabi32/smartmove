@@ -571,7 +571,6 @@ public class UserService {
     }
 
     public UserPassportResponse doUserAuthFromApi(UserLoginRequest loginRequest) throws JsonProcessingException {
-        log.info("Calling login 1 ===>");
         UserPassportResponse passportResponse=null;
         try{
             passportResponse = passportService.getUserAccessDetails(loginRequest);
@@ -582,7 +581,6 @@ public class UserService {
                 return passportResponse;
             }
         }
-        log.info("PassportResponse===>"+passportResponse);
         return passportResponse;
     }
 }

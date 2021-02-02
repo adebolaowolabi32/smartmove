@@ -2,7 +2,6 @@ package com.interswitch.smartmoveserver.api;
 
 import com.interswitch.smartmoveserver.model.request.ScheduleSearchRequest;
 import com.interswitch.smartmoveserver.model.response.ScheduleSearchResult;
-import com.interswitch.smartmoveserver.model.view.ScheduleBooking;
 import com.interswitch.smartmoveserver.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

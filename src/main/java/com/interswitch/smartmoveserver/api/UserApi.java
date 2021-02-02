@@ -1,11 +1,8 @@
 package com.interswitch.smartmoveserver.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
-import com.interswitch.smartmoveserver.model.response.UserPassportResponse;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;

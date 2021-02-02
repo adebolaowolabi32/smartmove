@@ -126,11 +126,9 @@ public class UserController {
     @PostMapping("/create")
     public String create(Principal principal, @Valid @RequestParam("role") Enum.Role role, @Valid User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
-        logger.info("Wanna create user for role==>" + role.name());
         user.setRole(role);
 
         if (result.hasErrors()) {
-            logger.info("Error trying to create user==>" + ErrorResponseUtil.getErrorMessages(result));
             model.addAttribute("title", pageUtil.buildTitle(role));
             model.addAttribute("user", user);
             //TODO change findAll to findAllEligible
@@ -140,7 +138,6 @@ public class UserController {
         }
 
         User savedUser = userService.create(user, principal.getName());
-
         redirectAttributes.addFlashAttribute("saved", true);
         redirectAttributes.addFlashAttribute("saved_message", pageUtil.buildSaveMessage(role));
         return "redirect:/users/details/" + savedUser.getId();
