@@ -178,7 +178,6 @@ public class UserService {
         passportUser = passportService.createUser(user);
         //iswCoreService.createUser(user);
         user.setUsername(passportUser.getUsername());
-        user.setPassword(passportUser.getPassword());
         save(user, owner);
         sendUserSetUpEmail(user, owner);
         return user;
