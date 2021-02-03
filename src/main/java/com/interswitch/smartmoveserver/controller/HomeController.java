@@ -196,6 +196,13 @@ public class HomeController {
         return "signup";
     }
 
+    @GetMapping("/auth/signin")
+    public String showSignin(Principal principal, Model model) {
+        model.addAttribute("user", new UserRegistration());
+        model.addAttribute("roles", pageUtil.getRoles());
+        return "signin";
+    }
+
 
     @PostMapping("/signup")
     public String signUp(Principal principal, @Valid UserRegistration user,
