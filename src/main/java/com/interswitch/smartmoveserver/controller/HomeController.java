@@ -196,7 +196,6 @@ public class HomeController {
         return "signup";
     }
 
-
     @PostMapping("/signup")
     public String signUp(Principal principal, @Valid UserRegistration user,
                          BindingResult result, Model model) {
