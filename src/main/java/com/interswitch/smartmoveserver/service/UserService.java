@@ -9,6 +9,7 @@ import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.model.response.UserPassportResponse;
+import com.interswitch.smartmoveserver.model.response.UserRoleResponse;
 import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
 import com.interswitch.smartmoveserver.util.FileParser;
@@ -326,6 +327,17 @@ public class UserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
+    }
+
+    public UserRoleResponse findUserRoleByUsername(String username) {
+        User user = findByUsername(username);
+        UserRoleResponse userRoleResponse = UserRoleResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .ownerId(user.getOwner() != null ? user.getId() : 0)
+                .role(user.getRole() != null ? user.getRole().name() : "")
+                .build();
+        return userRoleResponse;
     }
 
     public User findByEmail(String email) {

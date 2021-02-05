@@ -3,6 +3,7 @@ package com.interswitch.smartmoveserver.api;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.PageView;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.response.UserRoleResponse;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,12 @@ public class UserApi {
     @GetMapping(value = "/{id}", produces = "application/json")
     private User findById(@Validated @PathVariable long id) {
         return userService.findById(id, JwtUtil.getUsername(SecurityContextHolder.getContext().getAuthentication()));
+    }
+
+    @GetMapping(value = "/role", produces = "application/json")
+    private UserRoleResponse findByUsername(@Validated @RequestParam("username") String  username) {
+        UserRoleResponse userRole = userService.findUserRoleByUsername(username);
+        return userRole;
     }
 
     @DeleteMapping("/{id}")
