@@ -39,8 +39,6 @@ public class DeviceController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<Device> devicePage = deviceService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(devicePage));
         List<Device> devices = deviceService.findAll(owner, principal.getName());
         model.addAttribute("devices", devices);
         return "devices/get";

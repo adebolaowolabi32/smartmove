@@ -42,8 +42,6 @@ public class ManifestController {
 
     @GetMapping("/upload-schedule-manifest/{id}")
     public String showManifestUploadPage(Principal principal, @PathVariable("id") long id, Model model) {
-
-        logger.info("GET===>Entered manifest controller==>ID " + id);
         Schedule schedule = scheduleService.findById(id);
         model.addAttribute("schedule", schedule);
         return "manifests/upload-schedule-manifest";

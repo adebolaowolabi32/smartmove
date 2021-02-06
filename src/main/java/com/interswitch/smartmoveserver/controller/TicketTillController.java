@@ -9,8 +9,6 @@ import com.interswitch.smartmoveserver.service.TicketTillService;
 import com.interswitch.smartmoveserver.service.UserService;
 import com.interswitch.smartmoveserver.util.DateUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +22,6 @@ import java.security.Principal;
 @RequestMapping("/ticket-till")
 public class TicketTillController {
 
-    private final Log logger = LogFactory.getLog(getClass());
     @Autowired
     TicketTillService ticketTillService;
     @Autowired

@@ -331,12 +331,11 @@ public class UserService {
 
     public UserRoleResponse findUserRoleByUsername(String username) {
         User user = findByUsername(username);
-        UserRoleResponse userRoleResponse = UserRoleResponse.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .ownerId(user.getOwner() != null ? user.getId() : 0)
-                .role(user.getRole() != null ? user.getRole().name() : "")
-                .build();
+        UserRoleResponse userRoleResponse = new UserRoleResponse();
+        userRoleResponse.setId(user.getId());
+        userRoleResponse.setEmail(user.getEmail());
+        userRoleResponse.setOwnerId(user.getOwner() != null ? user.getId() : 0);
+        userRoleResponse.setRole(user.getRole() != null ? user.getRole().name() : "");
         return userRoleResponse;
     }
 

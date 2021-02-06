@@ -36,8 +36,6 @@ public class TransferController {
                           Model model, @RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<Transfer> transferPage = transferService.findAllPaginated(page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(transferPage));
         List<Transfer> transfers = transferService.findAll(principal.getName());
         model.addAttribute("transfers", transfers);
         return "transfers/get";

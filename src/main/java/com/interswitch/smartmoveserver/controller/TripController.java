@@ -47,8 +47,6 @@ public class TripController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<Trip> tripPage = tripService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(tripPage));
         List<Trip> trips = tripService.findAll(owner, principal.getName());
         model.addAttribute("trips", trips);
         return "trips/get";
@@ -60,7 +58,6 @@ public class TripController {
                              @RequestParam(defaultValue = "10") int size) {
 
         Trip trip = tripService.findById(id, principal.getName());
-
         PageView<Manifest> manifestPage = manifestService.findPaginatedManifestByTripId(page, size, trip.getId());
         model.addAttribute("pageNumbers", pageUtil.getPageNumber(manifestPage));
         model.addAttribute("manifestPage", manifestPage);

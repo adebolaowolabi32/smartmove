@@ -35,8 +35,6 @@ public class FeeConfigurationController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<FeeConfiguration> feeConfigurationPageViewPage = feeConfigurationService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(feeConfigurationPageViewPage));
         List<FeeConfiguration> feeConfigurations = feeConfigurationService.findAll(owner, principal.getName());
         model.addAttribute("feeConfigs", feeConfigurations);
         return "fees/get";
@@ -62,9 +60,8 @@ public class FeeConfigurationController {
     @PostMapping("/create")
     public String create(Principal principal, @Valid FeeConfiguration feeConfiguration, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
-        log.info("Entered controller...");
         if (result.hasErrors()) {
-            log.info("has Entered controller error..." + errorResponseUtil.getErrorMessages(result));
+            log.error("Error happened while trying to create fee configurations..." + errorResponseUtil.getErrorMessages(result));
             model.addAttribute("fee", feeConfiguration);
             String message = errorResponseUtil.getErrorMessages(result).contains("Failed to convert property value of type 'java.lang.String") ? "Fee value only accept numbers and not texts." : "Unacceptable data format for one of the fields is used,please check and retry.";
             redirectAttributes.addFlashAttribute("error", message);
@@ -93,7 +90,7 @@ public class FeeConfigurationController {
         fee.setFeeName(existingFee.getFeeName());
 
         if (result.hasErrors()) {
-            log.info("there's an error with fee config update" + result.getFieldErrors());
+            log.error("there's an error with fee config update" + result.getFieldErrors());
             model.addAttribute("fee", existingFee);
             return "fees/update";
         }

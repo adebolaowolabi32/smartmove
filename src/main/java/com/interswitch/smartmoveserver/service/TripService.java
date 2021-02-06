@@ -33,7 +33,6 @@ public class TripService {
 
     @Autowired
     TripRepository tripRepository;
-
     private static String PREFIX_SEPARATOR = "|";
     @Autowired
     VehicleService vehicleService;
@@ -43,7 +42,6 @@ public class TripService {
     UserService userService;
     @Autowired
     TripReferenceService tripReferenceService;
-
     @Autowired
     PageUtil pageUtil;
     @Autowired

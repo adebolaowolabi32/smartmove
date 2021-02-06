@@ -45,8 +45,6 @@ public class RouteController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<Route> routePage = routeService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(routePage));
         List<Route> routes = routeService.findAll(owner, principal.getName());
         model.addAttribute("routes", routes);
         return "routes/get";

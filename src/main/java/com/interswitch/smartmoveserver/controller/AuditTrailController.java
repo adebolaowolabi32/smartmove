@@ -29,8 +29,6 @@ public class AuditTrailController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<AuditTrail> auditTrailPageView = auditTrailService.findAllPaginated(owner,  page,  size, principal.getName()) ;
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(auditTrailPageView));
         List<AuditTrail> auditTrails = auditTrailService.findAll(owner, principal.getName());
         model.addAttribute("auditTrails", auditTrails);
         return "audit-trails/get";

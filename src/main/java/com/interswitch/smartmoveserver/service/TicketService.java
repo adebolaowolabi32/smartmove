@@ -168,11 +168,8 @@ public class TicketService {
         String transportOperatorUsername = (user.getRole() == Enum.Role.OPERATOR || user.getRole() == Enum.Role.ISW_ADMIN) ?
                 user.getUsername() : user.getOwner() != null ? user.getOwner().getUsername() : "";
 
-        log.info("Transport Operator username===>" + transportOperatorUsername);
-
         List<FeeConfiguration> feeConfigurationList = feeConfigurationService.findEnabledFeeConfigByOperatorUsername(transportOperatorUsername);
 
-        log.info("feeConfigurationList===>" + feeConfigurationList);
         //add FeeConfiguration list to the ticketDetails
         ticketDetails.setFees(feeConfigurationList);
         return ticketDetails;
@@ -219,7 +216,7 @@ public class TicketService {
             }
 
         }
-        log.info("AppliedFeeDetails==>" + ticketDetails.getAppliedFees());
+
         ticketDetails.setTickets(tickets);
         ticketDetails.setTotalFare(totalFare);
         return ticketDetails;
@@ -442,7 +439,6 @@ public class TicketService {
                 //do not apply ID-CARD-FEE
                 continue;
             } else {
-                log.info("feeConfiguration getFeeName ===>" + feeConfiguration.getFeeName().name() + "CustomName::" + feeConfiguration.getFeeName().getCustomName());
                 if (feeConfiguration.getRatingMetricType() == Enum.RatingMetricType.FLAT) {
                     feeDetailList.add(new FeeDetails(feeConfiguration.getFeeName().getCustomName(), feeConfiguration.getValue()));
                     totalFare += feeConfiguration.getValue();

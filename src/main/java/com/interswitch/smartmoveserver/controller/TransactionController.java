@@ -31,8 +31,6 @@ public class TransactionController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<Transaction> transactionPage = transactionService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(transactionPage));
         List<Transaction> transactions = transactionService.findAll(owner, principal.getName());
         model.addAttribute("transactions", transactions);
         return "transactions/get";
