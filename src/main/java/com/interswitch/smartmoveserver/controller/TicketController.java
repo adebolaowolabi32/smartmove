@@ -38,8 +38,6 @@ public class TicketController {
                          @RequestParam(defaultValue = "10") int size) {
 
         //TODO:: Implement server side pagination
-        //PageView<Ticket> ticketPage = ticketService.findAllByOperator(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(ticketPage));
         User user = userService.findByUsername(principal.getName());
         List<Ticket> tickets = ticketService.findAllByOwner(owner, principal.getName());
         PageView<Ticket> ticketPage = ticketService.findAllByOperator(owner, page, size, principal.getName());
@@ -70,7 +68,6 @@ public class TicketController {
             model.addAttribute("owners", userService.findAll());
             return "tickets/create";
         }
-
         Ticket savedTicket = ticketService.save(principal.getName(), ticket);
         redirectAttributes.addFlashAttribute("saved", true);
         return "redirect:/tickets/details/" + savedTicket.getId();

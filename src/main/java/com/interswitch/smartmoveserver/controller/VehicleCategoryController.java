@@ -45,8 +45,6 @@ public class VehicleCategoryController {
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size, Model model) {
         //TODO:: Implement server side pagination
-        //PageView<VehicleCategory> vehicleCategoryPage = vehicleCategoryService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(vehicleCategoryPage));
         List<VehicleCategory> vehicleCategories = vehicleCategoryService.findAll(owner, principal.getName());
         model.addAttribute("vehicleCategories", vehicleCategories);
         return "vehicleCategories/get";

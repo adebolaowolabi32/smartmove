@@ -38,8 +38,6 @@ public class CardController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<Card> cardPage = cardService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(cardPage));
         List<Card> cards = cardService.findAll(owner, principal.getName());
         model.addAttribute("cards", cards);
         return "cards/get";

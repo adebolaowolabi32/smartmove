@@ -67,7 +67,6 @@ public class TicketTillService {
 
     public void closeTicketTill(TicketTillView ticketTill) {
         if (ticketTill != null) {
-            logger.info("wanna close ticket till===>" + ticketTill);
             //update ticket till closed=true
             ticketTillRepository.updateTicketTillStatusByTillOperatorIdAndIssuanceDate(ticketTill.getTicketIssuanceDate(), ticketTill.getTillOperatorId());
             //submit till to ticketTillSummary
@@ -89,7 +88,6 @@ public class TicketTillService {
             User user = userOptionalWrapper.get();
             user.setTillStatus(Enum.TicketTillStatus.CLOSE);
             userRepository.save(user);
-            logger.info("done with close ticket till");
         }
 
     }
@@ -113,11 +111,9 @@ public class TicketTillService {
 
     public PageView<TicketTillSummary> findUnApprovedTicketTillSummary(long tillOperatorId, long tillOperatorOwner, boolean approved, int page, int size) {
         PageRequest pageable = pageUtil.buildPageRequest(page, size);
-        logger.info("Size of TicketTillSummary Params===>operator ID:" + tillOperatorId + "==>operator ownerId:" + tillOperatorOwner + "===>approved:" + approved);
         Set<Long> ids = new HashSet<>();
         ids.addAll(Arrays.asList(tillOperatorId, tillOperatorOwner));
         Page<TicketTillSummary> pages = ticketTillSummaryRepository.findByTillOperatorOwnerInAndApproved(pageable, ids, approved);
-        logger.info("Size of TicketTillSummary===>" + pages.getContent().size());
         return new PageView<>(pages.getTotalElements(), pages.getContent());
     }
 

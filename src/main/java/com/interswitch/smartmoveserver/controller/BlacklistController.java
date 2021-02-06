@@ -34,8 +34,6 @@ public class BlacklistController {
         public String getAll(Principal principal, Model model, @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "10") int size) {
             //TODO:: Implement server side pagination
-            //PageView<Blacklist> blacklistPage = blacklistService.findAllPaginated(page, size);
-            //model.addAttribute("pageNumbers", pageUtil.getPageNumber(blacklistPage));
             List<Blacklist> blacklists = blacklistService.findAll();
             model.addAttribute("blacklists", blacklists);
             return "blacklists/get";

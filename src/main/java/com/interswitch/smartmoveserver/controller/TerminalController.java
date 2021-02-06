@@ -41,8 +41,6 @@ public class TerminalController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<Terminal> terminalPage = terminalService.findAllPaginated(owner, page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(terminalPage));
         List<Terminal> terminals = terminalService.findAll(owner, principal.getName());
         model.addAttribute("terminals", terminals);
         return "terminals/get";

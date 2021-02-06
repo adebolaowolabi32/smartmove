@@ -30,8 +30,6 @@ public class RefundController {
                          Model model, @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "10") int size) {
         //TODO:: Implement server side pagination
-        //PageView<TicketRefund> refundPage = refundService.findAllByOperator(page, size, principal.getName());
-        //model.addAttribute("pageNumbers", pageUtil.getPageNumber(refundPage));
         List<TicketRefund> refunds = refundService.findAllByOwner(principal.getName());
         model.addAttribute("refunds", refunds);
         return "refunds/get";

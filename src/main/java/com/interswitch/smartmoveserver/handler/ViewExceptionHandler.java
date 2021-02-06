@@ -76,7 +76,7 @@ public class ViewExceptionHandler {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public String handleResponsestatusExceptions(ResponseStatusException exception, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String handleResponseStatusExceptions(ResponseStatusException exception, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         final HttpStatus status = exception.getStatus();
         final String localizedMessage = exception.getLocalizedMessage();
         final String path = request.getServletPath();
