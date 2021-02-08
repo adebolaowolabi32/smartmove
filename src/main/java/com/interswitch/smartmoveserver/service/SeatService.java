@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author adebola.owolabi
@@ -56,4 +57,8 @@ public class SeatService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat does not exist");
         }
     }
+
+    public Set<Seat> findSeatsByVehicleId(long vehicleId){
+       return seatRepository.findByVehicleId(vehicleId); }
+
 }
