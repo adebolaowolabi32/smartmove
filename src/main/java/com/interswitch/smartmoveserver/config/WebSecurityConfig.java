@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**", "/swf/**", "/img/**", "/images/**", "/fonts/**", "/assets/**", "/vendor/**",
-                        "/keep-alive", "/retry", "/", "/index", "/login", "/health","/error").permitAll()
+                        "/keep-alive", "/retry", "/", "/index", "/login", "/health","/error","/signupnew","/forgotpassword").permitAll()
                 //.requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
                 .anyRequest().authenticated()
                 .and()

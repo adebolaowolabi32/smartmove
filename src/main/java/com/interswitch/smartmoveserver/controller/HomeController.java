@@ -1,9 +1,7 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.interswitch.smartmoveserver.model.Card;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.Wallet;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -221,5 +219,30 @@ public class HomeController {
     public String setCurrency(Model model, @RequestParam(defaultValue = "NGN") String currency, @RequestParam(defaultValue = "/") String path, HttpSession session) {
         session.setAttribute("currency", currency);
         return "redirect:" + path;
+    }
+
+    @GetMapping("/signupnew")
+    public String showNewSignupPage(Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("roles", pageUtil.getRoles());
+        return "signupnew";
+    }
+
+    @GetMapping("/v1/verify")
+    public String showEmailVerificationPage(@RequestParam("token") String token,Model model) {
+        VerificationToken tokenValidation = userService.getEmailVerificationToken(token);
+        return "";
+    }
+
+    @GetMapping("/forgotpassword")
+    public String showForgetPasswordPage(Model model) {
+        // model.addAttribute("user", new UserRegistration());
+        return "forgotpassword";
+    }
+
+    @GetMapping("/login")
+    public String showLoginPage(Model model) {
+        // model.addAttribute("user", new UserRegistration());
+        return "login";
     }
 }

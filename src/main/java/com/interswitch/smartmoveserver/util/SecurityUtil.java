@@ -72,4 +72,24 @@ public class SecurityUtil {
     public String getPassportLogoutUrl() {
         return passportLogoutUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl;
     }
+
+    public boolean isPasswordPolicyCompliant(String password){
+        boolean hasSpecialCharacters = password.contains("@") || password.contains("#") || password.contains("$")
+                || password.contains("%") || password.contains("!") ;
+
+        boolean hasAtLeastOneUpperCase = true;
+
+        boolean hastAtLeastOneLowerCase = true;
+
+        boolean hasAtLeastOneDigit = true;
+
+        boolean hasAtLeastSevenCharacters = password.trim().length()>=7;
+
+        if(hasSpecialCharacters && hasAtLeastOneUpperCase && hastAtLeastOneLowerCase &&
+                hasAtLeastSevenCharacters && hastAtLeastOneLowerCase){
+            return true;
+        }
+
+        return false;
+    }
 }

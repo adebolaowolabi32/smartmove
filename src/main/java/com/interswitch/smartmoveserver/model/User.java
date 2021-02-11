@@ -67,8 +67,8 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     private boolean enabled;
 
-    //    @URL(message = "Picture URL is not valid")
-//    @Length(max = 200, message = "Picture URL must be less than 200 characters long")
+    //@URL(message = "Picture URL is not valid")
+    //@Length(max = 200, message = "Picture URL must be less than 200 characters long")
     private String pictureUrl;
 
     @JsonIgnore
@@ -79,6 +79,8 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     @Enumerated(EnumType.STRING)
     private Enum.TicketTillStatus tillStatus = Enum.TicketTillStatus.OPEN;
+
+    private Boolean emailVerified;
 
     @Override
     public Long getAuditableId() {

@@ -78,4 +78,19 @@ public class Enum {
     public enum SignUpType {
         CREATED_BY_ADMIN, SELF_SIGNUP
     }
+
+    public enum EmailVerificationTokenStatus {
+        INVALID("Invalid"), EXPIRED("Expired"),VALID("Valid");
+
+        private String name;
+
+        EmailVerificationTokenStatus(String name) {
+            this.name = name;
+        }
+
+        public String getCustomName() {
+            return name;
+        }
+
+    }
 }
