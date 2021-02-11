@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default.html}">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
@@ -17,7 +17,6 @@
     <!--          type='text/css'>-->
     <!--    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>-->
 
-    <link crossorigin="anonymous" href="#" rel="stylesheet" th:href="@{/css/styles.css}"/>
     <link crossorigin="anonymous" href="#" rel="stylesheet" th:href="@{/css/custom.css}"/>
 </head>
 <body>
@@ -30,28 +29,28 @@
     <div class="container">
         <div class="row align-items-center justify-content-center my-5">
             <div class="col">
-                <div class="m-auto w-75  inter-form py-3 px-4 rounded shadow-lg">
+                <div class="m-auto  inter-form py-3 px-4 rounded shadow-lg">
                     <div class="form-header">
-                        <h1 class="h3">Sign In</h1>
-                        <p class="small text-secondary">
+                        <h1 class="h3 smart-bold-700">Sign In</h1>
+                        <p class="smart-text-normal text-secondary">
                             Enter the details below to sign in.
                         </p>
                     </div>
                     <form action="">
                         <div class="mb-3">
-                            <label for="email" class="form-label small">Email</label>
+                            <label for="email" class="form-label smart-text-normal">Email</label>
                             <input
                                     type="email"
-                                    class="form-control form-control-sm shadow-none"
+                                    class="form-control shadow-none"
                                     id="email"
                                     placeholder="Enter mail address"
                             />
                         </div>
                         <div class="mb-3 position-relative password">
-                            <label for="password" class="form-label small"
+                            <label for="password" class="form-label smart-text-normal"
                             >Password</label
                             >
-                            <input type="password" class="form-control form-control-sm shadow-none" id="password"
+                            <input type="password" class="form-control shadow-none" id="password"
                                     placeholder="Enter password"
                             />
                             <i
@@ -61,10 +60,10 @@
                             ></i>
                         </div>
                         <div class="w-100">
-                            <button class="w-100 btn btn-sm smart-bg-blue text-light"><b>Sign In</b></button>
+                            <button class="w-100 btn smart-bg-blue text-light"><b>Sign In</b></button>
                         </div>
                         <div class="my-3">
-                            <p class="small text-secondary">
+                            <p class=" text-secondary">
                                 Don't have an account?
                                 <a class="smart-color-blue" href="/signup.html"
                                 ><b>Sign up</b></a
@@ -73,12 +72,12 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
-                                <a href="/forgotPassword.html" class="small text-dark"
+                                <a href="/forgotPassword.html" class=" text-dark"
                                 ><b>Forgot Password?</b></a
                                 >
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <p class="small">Contact Support</p>
+                                <p class="">Contact Support</p>
                             </div>
                         </div>
                     </form>
