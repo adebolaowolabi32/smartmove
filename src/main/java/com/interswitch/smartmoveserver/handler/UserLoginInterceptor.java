@@ -42,7 +42,7 @@ public class UserLoginInterceptor extends HandlerInterceptorAdapter {
             User user = userService.findByUsername(principal.getName());
             if (user != null) {
                 if (user.getRole() == null) {
-                    response.sendRedirect("/signup");
+                    response.sendRedirect("/signupnew");
                     return false;
                 } else if (!user.isEnabled()) {
                     response.sendRedirect("/smlogout");

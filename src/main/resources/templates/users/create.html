@@ -35,7 +35,8 @@
             <div class="form-group row">
                 <label class="control-label col-sm-2" for="email"><b>Last Name</b></label>
                 <div class="col-sm-10">
-                    <input class="form-control" data-parsley-length="[3, 40]"
+                    <input class="form-control"
+                           data-parsley-length="[3, 40]"
                            data-parsley-length-message="Please provide a name between 3 and 40 characters long"
                            data-parsley-required-message="Please provide your last name" id="lastName"
                            name="lastName"
@@ -49,7 +50,8 @@
             <div class="form-group row">
                 <label class="control-label col-sm-2" for="email"><b>Email Address</b></label>
                 <div class="col-sm-10">
-                    <input class="form-control" data-parsley-maxlength="70"
+                    <input class="form-control"
+                           data-parsley-maxlength="70"
                            data-parsley-maxlength-message="Please provide an email no more than 70 characters long"
                            data-parsley-required-message="Please provide your email address" id="email"
                            name="email"
@@ -63,7 +65,8 @@
             <div class="form-group row">
                 <label class="control-label col-sm-2" for="mobileNo"><b>Mobile Number</b></label>
                 <div class="col-sm-10">
-                    <input class="form-control" data-parsley-error-message="Please provide a valid mobile number"
+                    <input class="form-control"
+                           data-parsley-error-message="Please provide a valid mobile number"
                            data-parsley-pattern="^((\+|00)?[1-9]|0)\d{1,14}$" id="mobileNo" name="mobileNo"
                            th:field="*{mobileNo}"
                            type="phone">

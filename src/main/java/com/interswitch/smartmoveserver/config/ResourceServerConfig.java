@@ -36,7 +36,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers(HttpMethod.OPTIONS)
-                .antMatchers("/error", "/health","/auth/login");
+                .antMatchers("/error", "/health","/auth/login","/signupnew");
     }
 
     @Override

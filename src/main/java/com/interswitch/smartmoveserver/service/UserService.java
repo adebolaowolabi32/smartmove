@@ -244,30 +244,14 @@ public class UserService {
 
         log.info("user token generated===>"+token);
 
-        String recipientAddress = user.getEmail();
-
-        String subject = "SmartMove Registration Confirmation";
-
-        String confirmationUrl = portletUri+ "/verify?token=" + token;
-
-        log.info("confirmationUrl===>"+confirmationUrl.trim());
-
-        String messageText = "Hi,"
-                + "Thank you for signing up with XEngine Merchant Services.<br>Please click the link below to activate your account:<br>"
-                + confirmationUrl.trim();
+        String verificationUrl = portletUri+ "/verify?token=" + token;
 
         Map<String, Object> params = new HashMap<>();
-        //params.put("owner", owner.getFirstName() + " " + owner.getLastName());
-        params.put("firstName", user.getFirstName());
-        params.put("lastName", user.getLastName());
-        params.put("address", user.getAddress());
-        params.put("email", user.getEmail());
-        params.put("mobileNo", user.getMobileNo());
-        params.put("role", user.getRole());
-        params.put("portletUri", portletUri);
+        params.put("name", user.getFirstName());
+        params.put("verificationUrl", verificationUrl);
 
-//        messagingService.sendEmail(owner.getEmail(),
-//                "New User SignUp", "messages" + File.separator + "approve_user", params);
+        messagingService.sendEmail(user.getEmail(),
+                "User Confirmation", "messages" + File.separator + "email_verification", params);
     }
     public String selfSignUp(UserRegistration userRegistration, String principal) {
         User user = findByUsername(principal);

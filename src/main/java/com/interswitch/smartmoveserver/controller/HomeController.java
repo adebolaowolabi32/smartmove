@@ -2,6 +2,7 @@ package com.interswitch.smartmoveserver.controller;
 
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
+import com.interswitch.smartmoveserver.model.request.UserRegRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -77,7 +78,7 @@ public class HomeController {
 
     @GetMapping(value = {"/", "/index", "/home"})
     public String home(Model model) {
-        model.addAttribute("passportSignUpUrl", securityUtil.getPassportSignUpUrl());
+        model.addAttribute("smartMoveSignupUrl", securityUtil.getSmartmoveUrl());
         return "index";
     }
 
@@ -223,8 +224,23 @@ public class HomeController {
 
     @GetMapping("/signupnew")
     public String showNewSignupPage(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserRegRequest());
         model.addAttribute("roles", pageUtil.getRoles());
+        return "signupnew";
+    }
+
+    @PostMapping("/signupnew")
+    public String doNewSignupPage( @Valid UserRegRequest user,
+                                   BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("user", new UserRegRequest());
+            model.addAttribute("roles", pageUtil.getRoles());
+            return "signupnew";
+        }
+
+        String message = userService.doSelfSignUp(user);
+        model.addAttribute("message", message);
+        model.addAttribute("user", new UserRegRequest());
         return "signupnew";
     }
 

@@ -69,6 +69,10 @@ public class SecurityUtil {
         return passportSignUpUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl + "/signup";
     }
 
+    public String getSmartmoveUrl(){
+        return smartmoveUrl+"/signupnew";
+    }
+
     public String getPassportLogoutUrl() {
         return passportLogoutUrl + "?client_id=" + clientId + "&redirect_uri=" + smartmoveUrl;
     }
