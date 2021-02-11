@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpSession;
@@ -79,16 +80,8 @@ public class HomeController {
     @Autowired
     private PageUtil pageUtil;
 
-
-    @GetMapping(value = {"/", "/index", "/home"})
-    public String home(Model model) {
-        model.addAttribute("passportSignUpUrl", securityUtil.getPassportSignUpUrl());
-        return "index";
-    }
-
-    @GetMapping("/dashboard")
+    @GetMapping(value = {"/", "/dashboard"})
     public String dashboard(Principal principal, Model model) {
-
         User user = userService.findByUsername(principal.getName());
         Enum.Role role = user.getRole();
         Wallet wallet = null;
@@ -198,14 +191,14 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String login(UserLoginRequest user, BindingResult result, Model model) throws JsonProcessingException {
+    public String login(UserLoginRequest user, BindingResult result, Model model, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         String url;
         String token = userService.login(user);
-        if (token.equals(""))
-            url = UriComponentsBuilder.fromUriString("/login")
-                    .queryParam("error")
-                    .build().toUriString();
-        else url = UriComponentsBuilder.fromUriString("/dashboard")
+        if (token.equals("")) {
+            redirectAttributes.addFlashAttribute("error", "Incorrect username or password");
+            url = "/login";
+        } else
+            url = UriComponentsBuilder.fromUriString("/dashboard")
                 .queryParam("auth_token", token)
                 .build().toUriString();
         return "redirect:" + url;
@@ -234,11 +227,10 @@ public class HomeController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
         session.invalidate();
-        return "redirect:" + UriComponentsBuilder.fromUriString("/login")
-                .queryParam("logout")
-                .build().toUriString();
+        redirectAttributes.addFlashAttribute("message", "Logout successful");
+        return "redirect:/login";
     }
 
     @GetMapping("/setCurrency")

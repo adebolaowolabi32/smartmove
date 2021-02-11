@@ -4,7 +4,75 @@
 	Add all your Custom Styled CSS here for New Styles or
 	Overwriting Default Theme Styles for Better Hanlding Updates
 -----------------------------------------------------------------*/
+:root {
+    --smart-blue: #4aaad3;
+    --smart-light-blue: #E5E5E5;
+  }
 
+@font-face{
+font-family: "Averta Regular";
+src: url("../../../fonts/Averta-Regular.woff") format("woff"),
+        url("../../../fonts/Averta-Regular.woff2") format("woff2");
+}
 
+ body {
+ font-family: "Averta-Regular";
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-size: 16px;
+    background: #f2f6f9;
+ }
 
+  a {
+    text-decoration: none;
+  }
+  body {
+    background: var(--smart-light-blue);
+  }
+  .inter-form {
+    background-color: white;
+  }
+  .password > i {
+    right: 7px;
+    bottom: 7px;
+    filter: contrast(20%);
+  }
+
+  #img-container {
+    display: none;
+  }
+
+  .logo {
+    object-fit: contain;
+  }
+
+  .smart-bg-blue {
+    background-color: var(--smart-blue);
+  }
+  .smart-color-blue {
+    color: var(--smart-blue);
+  }
+  .smart-color-blue:hover {
+    color: #4aaad3b8;
+  }
+
+  /*  Medium devices (tablets, 768px and up) */
+  @media (min-width: 768px) {
+    #img-container {
+    display: block;
+  }
+    .inter-img {
+      height: 277px;
+      width: 463px;
+    }
+  }
+
+  /*  Large devices (desktops, 992px and up) */
+  @media (min-width: 992px) {
+  }
+
+  /*  Extra large devices (large desktops, 1200px and up) */
+  @media (min-width: 1200px) {
+  }
 
