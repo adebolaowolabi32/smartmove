@@ -22,6 +22,6 @@ public class LoginApi {
     @PostMapping(value="/login",produces = "application/json", consumes = "application/json")
     @ResponseStatus(value = HttpStatus.CREATED)
     private UserPassportResponse login(@Validated @RequestBody UserLoginRequest loginRequest) throws JsonProcessingException {
-        return userService.doUserAuthFromApi(loginRequest);
+        return userService.doUserAuth(loginRequest);
     }
 }

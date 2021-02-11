@@ -1,9 +1,11 @@
 package com.interswitch.smartmoveserver.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
+import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -16,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -189,6 +192,25 @@ public class HomeController {
 
     }
 
+    @GetMapping("/login")
+    public String showLogin() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(UserLoginRequest user, BindingResult result, Model model) throws JsonProcessingException {
+        String url;
+        String token = userService.login(user);
+        if (token.equals(""))
+            url = UriComponentsBuilder.fromUriString("/login")
+                    .queryParam("error")
+                    .build().toUriString();
+        else url = UriComponentsBuilder.fromUriString("/dashboard")
+                .queryParam("auth_token", token)
+                .build().toUriString();
+        return "redirect:" + url;
+    }
+
     @GetMapping("/signup")
     public String showSignUp(Principal principal, Model model) {
         model.addAttribute("user", new UserRegistration());
@@ -211,10 +233,12 @@ public class HomeController {
         return "signup";
     }
 
-    @GetMapping("/smlogout")
+    @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:" + securityUtil.getPassportLogoutUrl();
+        return "redirect:" + UriComponentsBuilder.fromUriString("/login")
+                .queryParam("logout")
+                .build().toUriString();
     }
 
     @GetMapping("/setCurrency")
