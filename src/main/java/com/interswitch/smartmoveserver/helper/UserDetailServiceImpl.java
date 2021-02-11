@@ -37,7 +37,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getGrantedAuthorities(user));
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), "DummyPassword", getGrantedAuthorities(user));
         } else {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
