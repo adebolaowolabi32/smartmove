@@ -1,31 +1,33 @@
 package com.interswitch.smartmoveserver.config;
 
+import com.interswitch.smartmoveserver.filter.JwtAuthenticationEntryPoint;
+import com.interswitch.smartmoveserver.filter.JwtAuthenticationFilter;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.service.IswCoreService;
 import com.interswitch.smartmoveserver.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.oauth2.client.endpoint.NimbusAuthorizationCodeTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.HashSet;
 import java.util.List;
@@ -43,7 +45,7 @@ import java.util.Set;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(2)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements ApplicationContextAware {
 
     @Autowired
     IswCoreService coreService;
@@ -51,42 +53,59 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserService userService;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Autowired
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(encoder());
+    }
+
+    @Bean
+    public JwtAuthenticationFilter authenticationTokenFilterBean() {
+        return new JwtAuthenticationFilter();
+    }
+
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**", "/swf/**", "/img/**", "/images/**", "/fonts/**", "/assets/**", "/vendor/**",
-                        "/keep-alive", "/retry", "/", "/index", "/login", "/health","/error").permitAll()
+                        "/keep-alive", "/retry", "/index", "/login", "/health", "/error").permitAll()
                 //.requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic().disable()
-                .formLogin().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
                 .logout()
-                .logoutUrl("/smlogout")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
                 .and().csrf().and()
                 .oauth2Login()
+                .loginPage("/login")
                 .defaultSuccessUrl("/dashboard")
                 .authorizationEndpoint()
-                .baseUri("/oauth/authorize")
                 .authorizationRequestRepository(authorizationRequestRepository())
-                .and()
-                .tokenEndpoint()
-                .accessTokenResponseClient(accessTokenResponseClient())
-                .and()
-                .redirectionEndpoint()
-                .baseUri("/callback")
                 .and()
                 .userInfoEndpoint()
                 .userAuthoritiesMapper(this.userAuthoritiesMapper());
-    }
-
-    @Bean
-    public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
-        return new NimbusAuthorizationCodeTokenResponseClient();
+        http
+                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -95,16 +114,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() {
-        return new AuthenticationManager() {
-            @Override
-            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                authentication.setAuthenticated(true);
-                return authentication;
-            }
-        };
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
     }
-
 
     public GrantedAuthoritiesMapper userAuthoritiesMapper() {
         return (authorities) -> {
