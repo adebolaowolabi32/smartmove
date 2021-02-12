@@ -11,7 +11,6 @@
     <link href="#" rel="stylesheet" th:href="@{/vendor/fontawesome-free/css/all.min.css}" type="text/css">
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           type="text/css"/>
-    <link href="#" rel="stylesheet" th:href="@{/css/styles.css}">
     <link href="#" rel="stylesheet" th:href="@{/css/custom.css}">
 </head>
 <body>
@@ -26,11 +25,11 @@
 <div class="login-container">
     <div class="container">
         <div class="row align-items-center justify-content-center my-5">
-            <div class="col">
-                <div class="m-auto w-75  inter-form py-3 px-4 rounded shadow-lg">
+            <div class="col my-5">
+                <div class="m-auto  inter-form py-5 px-5 rounded shadow-lg">
                     <div class="form-header">
-                        <h1 class="h3">Sign In</h1>
-                        <p class="small text-secondary">
+                        <h1 class="h3 smart-bold-700">Sign In</h1>
+                        <p class="smart-text-normal text-secondary">
                             Enter the details below to sign in.
                         </p>
                     </div>
@@ -38,41 +37,41 @@
                     <div th:replace="fragments/alert-success :: alert-success (message=${message})"></div>
                     <form method="post" th:action="${'/login'}" th:object="${userLoginRequest}">
                         <div class="mb-3">
-                            <label class="form-label small" for="username">Username</label>
-                            <input class="form-control form-control-sm shadow-none"
+                            <label class="form-label smart-text-normal" for="username">Username</label>
+                            <input class="form-control shadow-none"
                                    id="username"
                                    name="username" placeholder="Enter username"
                                    type="text"/>
                         </div>
                         <div class="mb-3 position-relative password">
-                            <label class="form-label small" for="password">Password</label>
-                            <input class="form-control form-control-sm shadow-none" id="password" name="password"
+                            <label class="form-label smart-text-normal" for="password">Password</label>
+                            <input class="form-control shadow-none" id="password" name="password"
                                    placeholder="Enter password" type="password"/>
                             <i
                                     class="far fa-eye position-absolute"
                                     id="togglePassword"
                                     style="cursor: pointer"></i>
                         </div>
-                        <div class="w-100">
-                            <button class="w-100 btn btn-sm smart-bg-blue text-light"><b>Sign In</b></button>
+                        <div class="w-100" style="margin: 2.3rem 0;">
+                            <button class="w-100 btn smart-bg-blue text-light"><b>Sign In</b></button>
                         </div>
-                        <div class="my-3">
-                            <p class="small text-secondary">
+                        <div class="">
+                            <p class=" text-secondary">
                                 Don't have an account?
                                 <a class="smart-color-blue" th:href="${signupUrl}">
                                     <b>Sign up</b>
                                 </a>
                             </p>
                         </div>
-                        <div class="row">
+                        <div class="row mb-5">
                             <div class="col-sm-12 col-md-6">
-                                <a class="small text-dark" href="/forgotPassword.html">
+                                <a class="text-decoration-none text-dark" th:href="@{/forgotpassword}">
                                     <b>Forgot Password?</b>
                                 </a>
                             </div>
-                            <div class="col-sm-12 col-md-6">
-                                <a class="small" href="#"
-                                ><b>Contact Support</b></a>
+                            <div class="col-sm-12 col-md-6" style="text-align: right;">
+                                <a class="text-dark smart-text-normal text-decoration-none" style="text-align: right;" href="#"
+                                >Contact Support</a>
                             </div>
                         </div>
                     </form>
