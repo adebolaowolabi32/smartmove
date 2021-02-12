@@ -5,6 +5,7 @@ import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
+import com.interswitch.smartmoveserver.model.request.ChangePassword;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
@@ -28,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmail;
@@ -89,6 +91,15 @@ public class UserService {
         }*/
         UserPassportResponse response = doUserAuth(user);
         return response != null ? response.getAccessToken() : "";
+    }
+
+    public void changePassword(Principal principal, ChangePassword changePassword) throws JsonProcessingException {
+        UserLoginRequest user = new UserLoginRequest();
+        user.setUsername(principal.getName());
+        user.setPassword(changePassword.getOldPassword());
+        UserPassportResponse response = doUserAuth(user);
+        String accessToken = response != null ? response.getAccessToken() : "";
+        passportService.changePassword(accessToken, changePassword);
     }
 
     public List<User> findAll() {

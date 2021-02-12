@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.smartmoveserver.infrastructure.APIRequestClient;
 import com.interswitch.smartmoveserver.model.User;
+import com.interswitch.smartmoveserver.model.request.ChangePassword;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
 import com.interswitch.smartmoveserver.model.response.PassportErrorResponse;
@@ -41,6 +42,8 @@ public class PassportService {
     private String clientId;
     @Value("${spring.security.oauth2.client.registration.passport.client-secret}")
     private String clientSecret;
+    @Value("${spring.application.passport.change-password-url}")
+    private String changePasswordUrl;
 
     @Autowired
     APIRequestClient apiRequestClient;
@@ -102,6 +105,13 @@ public class PassportService {
             }
             return null;
         }
+    }
+
+    public PassportUser changePassword(String token, ChangePassword changePassword) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
+        return retrievePassportUser(apiRequestClient.Process(changePassword, headers, null, changePasswordUrl, HttpMethod.POST, Object.class).getBody());
     }
 
     public String getAccessToken(){

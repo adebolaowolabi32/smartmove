@@ -5,6 +5,7 @@ import com.interswitch.smartmoveserver.model.Card;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
+import com.interswitch.smartmoveserver.model.request.ChangePassword;
 import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.service.*;
@@ -224,6 +225,17 @@ public class HomeController {
         model.addAttribute("message", message);
         model.addAttribute("user", new UserRegistration());
         return "signup";
+    }
+
+    @GetMapping("/changePassword")
+    public String showChangePassword() {
+        return "changePassword";
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(Principal principal, ChangePassword changePassword, BindingResult result, Model model) throws JsonProcessingException {
+        userService.changePassword(principal, changePassword);
+        return "changePassword";
     }
 
     @GetMapping("/logout")

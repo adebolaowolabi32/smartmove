@@ -92,6 +92,26 @@ public class UserController {
         return "users/details";
     }
 
+    @GetMapping("/profile/me")
+    public String showProfile(Principal principal, Model model) {
+        User user = userService.findByUsername(principal.getName());
+        model.addAttribute("regulators_no", userService.countByRoleAndOwner(user, Enum.Role.REGULATOR));
+        model.addAttribute("operators_no", userService.countByRoleAndOwner(user, Enum.Role.OPERATOR));
+        model.addAttribute("ticketers_no", userService.countByRoleAndOwner(user, Enum.Role.TICKETER));
+        model.addAttribute("agents_no", userService.countByRoleAndOwner(user, Enum.Role.AGENT));
+        model.addAttribute("vehicles_no", vehicleService.countByOwner(user));
+        model.addAttribute("terminals_no", terminalService.countByOwner(user));
+        model.addAttribute("routes_no", routeService.countByOwner(user));
+        model.addAttribute("devices_no", deviceService.countByOwner(user));
+        model.addAttribute("transactions_no", transactionService.countByOwner(user.getUsername()));
+        model.addAttribute("settlements_no", 0);
+        model.addAttribute("cards_no", cardService.countByOwner(user.getUsername()));
+        model.addAttribute("title", pageUtil.buildTitle(user.getRole()));
+        model.addAttribute("user", user);
+        model.addAttribute("isOwned", securityUtil.isOwnedEntity(user.getRole()));
+        //TODO::Get children of each entity by type
+        return "users/details";
+    }
 
     @GetMapping("/create")
     public String showCreate(Principal principal, @Valid @RequestParam("role") Enum.Role role, Model model) {
