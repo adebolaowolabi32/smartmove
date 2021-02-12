@@ -234,7 +234,11 @@ public class HomeController {
 
     @PostMapping("/changePassword")
     public String changePassword(Principal principal, ChangePassword changePassword, BindingResult result, Model model) throws JsonProcessingException {
-        userService.changePassword(principal, changePassword);
+        boolean successful = userService.changePassword(principal, changePassword);
+        if (successful)
+            model.addAttribute("message", "Password change successful");
+        else
+            model.addAttribute("error", "Password is incorrect");
         return "changePassword";
     }
 

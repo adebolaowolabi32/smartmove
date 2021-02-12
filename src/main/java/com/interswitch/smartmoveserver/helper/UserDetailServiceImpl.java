@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /*
@@ -34,13 +33,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private BCryptPasswordEncoder bcryptEncoder;
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            return new org.springframework.security.core.userdetails.User(user.getUsername(), "DummyPassword", getGrantedAuthorities(user));
-        } else {
-            throw new UsernameNotFoundException("Invalid username or password.");
-        }
+        User user = userService.findOrCreateByUsername(username);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), "DummyPassword", getGrantedAuthorities(user));
     }
 
     private Set<GrantedAuthority> getGrantedAuthorities(User user) {

@@ -93,13 +93,15 @@ public class UserService {
         return response != null ? response.getAccessToken() : "";
     }
 
-    public void changePassword(Principal principal, ChangePassword changePassword) throws JsonProcessingException {
+    public boolean changePassword(Principal principal, ChangePassword changePassword) throws JsonProcessingException {
         UserLoginRequest user = new UserLoginRequest();
         user.setUsername(principal.getName());
         user.setPassword(changePassword.getOldPassword());
         UserPassportResponse response = doUserAuth(user);
         String accessToken = response != null ? response.getAccessToken() : "";
+        if (accessToken.equals("")) return false;
         passportService.changePassword(accessToken, changePassword);
+        return true;
     }
 
     public List<User> findAll() {
@@ -378,7 +380,8 @@ public class UserService {
             if (isInterswitchEmail(passportUser.getEmail()))
                 return saveAsAdmin(passportUser);
 
-            return userRepository.save(passportService.buildUser(passportUser));
+            //return userRepository.save(passportService.buildUser(passportUser));
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The username you provided does not exist on SmartMove");
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to this resource");
     }

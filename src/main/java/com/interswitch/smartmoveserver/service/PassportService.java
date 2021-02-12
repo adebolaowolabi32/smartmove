@@ -107,11 +107,11 @@ public class PassportService {
         }
     }
 
-    public PassportUser changePassword(String token, ChangePassword changePassword) {
+    public void changePassword(String token, ChangePassword changePassword) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-        return retrievePassportUser(apiRequestClient.Process(changePassword, headers, null, changePasswordUrl, HttpMethod.POST, Object.class).getBody());
+        apiRequestClient.Process(changePassword, headers, null, changePasswordUrl, HttpMethod.POST, Object.class).getBody();
     }
 
     public String getAccessToken(){
