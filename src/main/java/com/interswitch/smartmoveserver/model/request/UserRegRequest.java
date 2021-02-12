@@ -1,11 +1,9 @@
 package com.interswitch.smartmoveserver.model.request;
 
-import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Data

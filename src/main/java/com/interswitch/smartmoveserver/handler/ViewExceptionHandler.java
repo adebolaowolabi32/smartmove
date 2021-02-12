@@ -82,8 +82,13 @@ public class ViewExceptionHandler {
         final String path = request.getServletPath();
         String message = "";
         if (localizedMessage.contains("{")) {
-            message = (StringUtils.isNotEmpty(localizedMessage) ?
-                    StringUtils.substringBetween(localizedMessage, "{", "}") : status.getReasonPhrase());
+            if (localizedMessage.contains("code") && localizedMessage.contains("description")) {
+                message = (StringUtils.isNotEmpty(localizedMessage) ?
+                        StringUtils.substringBetween(localizedMessage, "\"description\":\"", "\",\"errors\"") : status.getReasonPhrase());
+            } else {
+                message = (StringUtils.isNotEmpty(localizedMessage) ?
+                        StringUtils.substringBetween(localizedMessage, "{", "}") : status.getReasonPhrase());
+            }
         } else {
             message = (StringUtils.isNotEmpty(localizedMessage) ?
                     StringUtils.substringBetween(localizedMessage, "\"", "\"") : status.getReasonPhrase());
