@@ -14,5 +14,7 @@ public interface UserApprovalRepository extends CrudRepository<UserApproval, Lon
 
     UserApproval findByUsr(User usr);
 
+    UserApproval findByUsrId(long userId);
+
     List<UserApproval> findAll();
 }

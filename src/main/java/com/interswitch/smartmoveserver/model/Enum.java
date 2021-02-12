@@ -78,4 +78,19 @@ public class Enum {
     public enum SignUpType {
         CREATED_BY_ADMIN, SELF_SIGNUP
     }
+
+    public enum EmailVerificationTokenStatus {
+        INVALID("link is invalid."), EXPIRED("Link has expired!please check your email for a new link sent to you."),VALID("Congratulations!Your details have been sent to your referrer,you'll be notified as soon as you're approved by referrer.");
+
+        private String description;
+
+        EmailVerificationTokenStatus(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+    }
 }

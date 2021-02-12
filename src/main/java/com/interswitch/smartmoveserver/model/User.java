@@ -50,7 +50,7 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     @Column(unique = true)
     @Length(min = 5, max = 30, message = "Mobile number must be between 5 and 30 characters long.")
-    private String mobileNo;
+    private String  mobileNo;
 
     @Column(unique = true)
     @NotBlank(message = "Email address is required.")
@@ -67,8 +67,8 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     private boolean enabled;
 
-    //    @URL(message = "Picture URL is not valid")
-//    @Length(max = 200, message = "Picture URL must be less than 200 characters long")
+    //@URL(message = "Picture URL is not valid")
+    //@Length(max = 200, message = "Picture URL must be less than 200 characters long")
     private String pictureUrl;
 
     @JsonIgnore
@@ -79,6 +79,8 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     @Enumerated(EnumType.STRING)
     private Enum.TicketTillStatus tillStatus = Enum.TicketTillStatus.OPEN;
+
+    private Boolean emailVerified;
 
     @Override
     public Long getAuditableId() {

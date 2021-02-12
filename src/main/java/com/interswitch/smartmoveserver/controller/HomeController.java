@@ -2,12 +2,15 @@ package com.interswitch.smartmoveserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.interswitch.smartmoveserver.model.Card;
+import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.User;
 import com.interswitch.smartmoveserver.model.Wallet;
 import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
+import com.interswitch.smartmoveserver.model.request.UserRegRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.service.*;
+import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -79,6 +82,9 @@ public class HomeController {
 
     @Autowired
     private PageUtil pageUtil;
+
+    @Autowired
+    ErrorResponseUtil errorResponseUtil;
 
     @GetMapping(value = {"/", "/dashboard"})
     public String dashboard(Principal principal, Model model) {
@@ -186,7 +192,8 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String showLogin() {
+    public String showLogin(Model model) {
+        model.addAttribute("signupUrl",securityUtil.getSmartmoveSignupUrl());
         return "login";
     }
 
@@ -237,5 +244,58 @@ public class HomeController {
     public String setCurrency(Model model, @RequestParam(defaultValue = "NGN") String currency, @RequestParam(defaultValue = "/") String path, HttpSession session) {
         session.setAttribute("currency", currency);
         return "redirect:" + path;
+    }
+
+    @GetMapping("/signupnew")
+    public String showNewSignupPage(Model model) {
+        model.addAttribute("user", new UserRegRequest());
+        model.addAttribute("roles", pageUtil.getRoles());
+        model.addAttribute("loginUrl",securityUtil.getSmartmoveLoginUrl());
+        return "signupnew";
+    }
+
+    @PostMapping("/signupnew")
+    public String doNewSignupPage( @Valid UserRegRequest user,
+                                   BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("user", user);
+            model.addAttribute("roles", pageUtil.getRoles());
+            return "signupnew";
+        }
+
+        String message = userService.doSelfSignUp(user);
+        model.addAttribute("message", message);
+        model.addAttribute("user", new UserRegRequest());
+        model.addAttribute("roles", pageUtil.getRoles());
+        return "signupnew";
+    }
+
+    @GetMapping("/verify")
+    public String showEmailVerificationPage(@RequestParam("token") String token,Model model) {
+        VerificationToken tokenValidation = userService.getEmailVerificationToken(token);
+        //initiate redirect to verification success page
+        //redirect to verification failure page
+        Enum.EmailVerificationTokenStatus tokenStatus = tokenValidation.getTokenStatus();
+        String message="";
+        switch(tokenStatus){
+            case VALID:
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.VALID.getDescription()),tokenValidation.getUser().getFirstName());
+                model.addAttribute("message",message);
+                return "verificationcheck" ;
+            case EXPIRED:
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.EXPIRED.getDescription()),tokenValidation.getUser().getFirstName());
+                model.addAttribute("message",message);
+                return"verificationerror";
+            default:
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.INVALID.getDescription()),tokenValidation.getUser().getFirstName());
+                model.addAttribute("message",message);
+                return"verificationerror";
+        }
+    }
+
+    @GetMapping("/forgotpassword")
+    public String showForgetPasswordPage(Model model) {
+        // model.addAttribute("user", new UserRegistration());
+        return "forgotpassword";
     }
 }

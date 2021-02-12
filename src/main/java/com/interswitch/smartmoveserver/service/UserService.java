@@ -7,6 +7,7 @@ import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
 import com.interswitch.smartmoveserver.model.request.PassportUser;
 import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
+import com.interswitch.smartmoveserver.model.request.UserRegRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.model.response.UserPassportResponse;
 import com.interswitch.smartmoveserver.model.response.UserRoleResponse;
@@ -91,6 +92,9 @@ public class UserService {
         return response != null ? response.getAccessToken() : "";
     }
 
+    @Autowired
+    private VerificationTokenService verificationTokenService;
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -118,7 +122,6 @@ public class UserService {
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public User registerUserFromAPI(User user, String principal) {
-        log.info("Principal creator===>" + principal);
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //TODO :: see below
@@ -205,6 +208,80 @@ public class UserService {
         return save(user, null);
     }
 
+    /**
+     * -create the user on passport
+     * -create the user on smartmove
+     * -send mail for user email verification.
+     *
+     * @param userRegRequest
+     * @return
+     */
+    public String doSelfSignUp(UserRegRequest userRegRequest) {
+        User userReq = userRegRequest.mapUserRequestToUser();
+        Optional<User> optionalUser = userRepository.findByEmail(userReq.getEmail());
+        User userInSmartMove = null;
+
+        if (optionalUser.isPresent()) {
+            userInSmartMove = optionalUser.get();
+        }
+
+        if (userInSmartMove != null) {
+
+            UserApproval userApproval = userApprovalRepository.findByUsrId(userInSmartMove.getId());
+            if (userApproval != null && userApproval.isApproved()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists.");
+            } else if (userApproval != null && !userApproval.isApproved()) {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You have already completed this process. You will receive an email with your smartmove credentials as soon as you are approved.");
+            } else {
+                //send email verification email again
+                sendVerificationMail(userInSmartMove);
+                return "Your user account exists on smartmove but has not been verified via email.Please check your email for verification link!";
+            }
+        }
+
+        String ownerName = userRegRequest.getOwner();
+        Optional<User> ownerOptional = userRepository.findByUsername(ownerName);
+        User owner = null;
+
+        if (ownerOptional.isPresent()) {
+            owner = ownerOptional.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("The referrer : %s, does not exist on Smartmove ", ownerName));
+        }
+
+        PassportUser passportUser = passportService.findUser(userReq.getEmail());
+        if (passportUser != null) {
+            User usr = passportService.buildUser(passportUser);
+            userReq.setUsername(usr.getUsername());
+        } else {
+            passportUser = passportService.createUser(userReq);
+            userReq.setUsername(passportUser.getUsername());
+        }
+        save(userReq, owner);
+        sendVerificationMail(userReq);
+        String message = String.format("Hi %s,a user verification email has been sent to you.Please kindly check to proceed with your on-boarding process", userReq.getFirstName());
+        return message;
+
+
+    }
+
+    private void sendVerificationMail(User user) {
+
+        VerificationToken verificationToken = verificationTokenService.createToken(user);
+
+        String token = verificationToken.getToken();
+
+        String verificationUrl = portletUri + "/verify?token=" + token;
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", user.getFirstName());
+        params.put("verificationUrl", verificationUrl);
+        params.put("portletUri", portletUri);
+
+        messagingService.sendEmail(user.getEmail(),
+                "Email Verification", "messages" + File.separator + "email_verification", params);
+    }
+
     public String selfSignUp(UserRegistration userRegistration, String principal) {
         User user = findByUsername(principal);
         if (user != null && user.getRole() != null)
@@ -212,6 +289,7 @@ public class UserService {
         UserApproval userApproval = userApprovalRepository.findByUsr(user);
         if (userApproval != null)
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You have already completed this process. You will receive an email with your smartmove credentials as soon as you are approved.");
+
         PassportUser passportUser = passportService.findUser(principal);
         if (passportUser != null) {
             User owner = null;
@@ -228,6 +306,7 @@ public class UserService {
             user.setOwner(owner);
             user.setEnabled(false);
             save(user, owner);
+
             UserApproval approval = new UserApproval();
             approval.setOwner(owner);
             approval.setUsr(user);
@@ -607,5 +686,47 @@ public class UserService {
             }
         }
         return passportResponse;
+    }
+
+    public VerificationToken getEmailVerificationToken(String token) {
+
+        VerificationToken verificationToken = verificationTokenService.findByToken(token);
+
+        if (verificationToken == null) {
+            verificationToken = new VerificationToken();
+            verificationToken.setTokenStatus(Enum.EmailVerificationTokenStatus.INVALID);
+            return verificationToken;
+        }
+
+        User verificationTokenUser = verificationToken.getUser();
+        Calendar cal = Calendar.getInstance();
+
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            verificationToken.setTokenStatus(Enum.EmailVerificationTokenStatus.EXPIRED);
+            //initiate call to send another verification link
+            sendVerificationMail(verificationTokenUser);
+            return verificationToken;
+        }
+
+        Optional<User> optionalUser = userRepository.findByEmail(verificationTokenUser.getEmail());
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setEmailVerified(true);
+            userRepository.save(user);
+            verificationToken.setUser(user);
+        }
+
+        verificationToken.setTokenStatus(Enum.EmailVerificationTokenStatus.VALID);
+        //initiate call to approvalRepo
+        UserApproval approval = new UserApproval();
+        approval.setOwner(verificationTokenUser.getOwner());
+        approval.setUsr(verificationTokenUser);
+        approval.setSignUpType(Enum.SignUpType.SELF_SIGNUP);
+        userApprovalRepository.save(approval);
+        if (verificationTokenUser.getOwner() != null) {
+            sendMakerCheckerEmail(verificationTokenUser, verificationTokenUser.getOwner());
+           }
+        return verificationToken;
     }
 }
