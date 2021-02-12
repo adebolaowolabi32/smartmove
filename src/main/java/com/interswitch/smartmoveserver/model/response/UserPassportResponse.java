@@ -17,6 +17,7 @@ public class UserPassportResponse {
     private String refreshToken;
     @JsonIgnore
     private String scope;
+    private String user_name;
     private String firstName;
     private String lastName;
     @JsonIgnore
@@ -24,9 +25,6 @@ public class UserPassportResponse {
     @JsonIgnore
     private boolean firstLogin;
     private String mobileNo;
-    @JsonIgnore
-    @JsonProperty("kyc_domain")
-    private String kycDomain;
     @JsonIgnore
     private boolean mobileNoVerified;
     @JsonIgnore

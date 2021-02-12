@@ -87,7 +87,6 @@ public class PassportService {
         ResponseEntity<UserPassportResponse> responseEntity = null;
         try {
             responseEntity = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, UserPassportResponse.class);
-            passportResponse = responseEntity.getBody();
             return responseEntity.getBody();
         } catch (Exception ex) {
             if (ex instanceof HttpClientErrorException) {
@@ -104,6 +103,7 @@ public class PassportService {
             return null;
         }
     }
+
     public String getAccessToken(){
         String auth = clientId + ":" + clientSecret;
         byte[] encodedAuth = Base64.encodeBase64(

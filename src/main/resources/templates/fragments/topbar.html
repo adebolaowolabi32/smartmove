@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <div th:fragment="topbar">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-light">
-            <a th:href="@{/index}"><img alt="Interswitch Logo" class="img-brand" th:src="@{/assets/img/interswitchngnew.png}"></a>
+            <a th:href="@{/dashboard}"><img alt="Interswitch Logo" class="img-brand"
+                                            th:src="@{/assets/img/interswitchngnew.png}"></a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars-alt"></i></button>
             <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
                 <div class="input-group">
@@ -169,7 +170,7 @@
                                             <li class="m-nav__separator m-nav__separator--fit">
                                             </li>
                                             <li class="m-nav__item">
-                                                <a class="m-nav__link" href="#" th:href="@{/smlogout}">
+                                                <a class="m-nav__link" href="#" th:href="@{/logout}">
                                                     <i class="m-nav__link-icon flaticon-lifebuoy"></i>
                                                     <span class="m-nav__link-text">Logout</span>
                                                 </a>
