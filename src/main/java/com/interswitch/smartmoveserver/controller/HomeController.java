@@ -199,13 +199,18 @@ public class HomeController {
     public String login(UserLoginRequest user, BindingResult result, Model model, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         String url;
         String token = userService.login(user);
-        if (token.equals("")) {
+        if (token.equalsIgnoreCase("FirstLogin")) {
+            //use the email/username to call the passport endpoint
+            redirectAttributes.addFlashAttribute("message", "It appears this is your first login. Please change your password");
+            url = "/resetpassword";
+        } else if (token.equals("")) {
             redirectAttributes.addFlashAttribute("error", "Incorrect username or password");
             url = "/login";
-        } else
+        } else {
             url = UriComponentsBuilder.fromUriString("/dashboard")
-                .queryParam("auth_token", token)
-                .build().toUriString();
+                    .queryParam("auth_token", token)
+                    .build().toUriString();
+        }
         return "redirect:" + url;
     }
 
@@ -310,5 +315,11 @@ public class HomeController {
     public String showForgetPasswordPage(Model model) {
         // model.addAttribute("user", new UserRegistration());
         return "forgotpassword";
+    }
+
+    @GetMapping("/resetpassword")
+    public String showResetPasswordPage(Model model) {
+        // model.addAttribute("user", new UserRegistration());
+        return "resetpassword";
     }
 }

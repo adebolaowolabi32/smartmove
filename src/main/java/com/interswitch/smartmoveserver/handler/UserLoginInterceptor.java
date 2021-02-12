@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class UserLoginInterceptor extends HandlerInterceptorAdapter {
 
-    private static List<String> excludedEndpoints = Arrays.asList("/error.*", "/login", "/auth/login", "/api/.*", "/signupnew", "/verify", "/forgotpassword", "/signup/?", "/logout/?", "/index/?", "/assets/.*", "/css/.*", "/fonts/.*", "/images/.*", "/img/.*", "/js/.*", "/sass/.*", "/scss/.*", "/vendor/.*");
+    private static List<String> excludedEndpoints = Arrays.asList("/error.*", "/login", "/auth/login", "/api/.*", "/signupnew", "/verify", "/forgotpassword", "/resetpassword", "/signup/?", "/logout/?", "/index/?", "/assets/.*", "/css/.*", "/fonts/.*", "/images/.*", "/img/.*", "/js/.*", "/sass/.*", "/scss/.*", "/vendor/.*");
 
     @Autowired
     private UserService userService;
@@ -45,7 +45,7 @@ public class UserLoginInterceptor extends HandlerInterceptorAdapter {
                     response.sendRedirect("/signupnew");
                     return false;
                 } else if (!user.isEnabled()) {
-                    response.sendRedirect("/smlogout");
+                    response.sendRedirect("/logout");
                     return false;
                 } else return true;
             }

@@ -10,7 +10,10 @@ import com.interswitch.smartmoveserver.model.response.UserPassportResponse;
 import com.interswitch.smartmoveserver.model.response.UserRoleResponse;
 import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
-import com.interswitch.smartmoveserver.util.*;
+import com.interswitch.smartmoveserver.util.FileParser;
+import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.RandomUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -43,9 +45,6 @@ public class UserService {
 
     @Autowired
     PassportService passportService;
-
-    @Autowired
-    IswCoreService iswCoreService;
 
     @Autowired
     WalletService walletService;
@@ -74,21 +73,11 @@ public class UserService {
     @Value("${smartmove.url}")
     private String portletUri;
 
-    @Autowired
-    private JwtUtil jwtTokenUtil;
-
-    @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
-
     public String login(UserLoginRequest user) throws JsonProcessingException {
-        /*User dbUser = findByUsername(user.getUsername());
-        if (dbUser != null) {
-            dbUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-            userRepository.save(dbUser);
-        }*/
         UserPassportResponse response = doUserAuth(user);
         return response != null ? response.getAccessToken() : "";
     }
+
 
     @Autowired
     private VerificationTokenService verificationTokenService;
@@ -252,6 +241,7 @@ public class UserService {
             User usr = passportService.buildUser(passportUser);
             userReq.setUsername(usr.getUsername());
         } else {
+            userReq.setLoginFreqType(2);
             passportUser = passportService.createUser(userReq);
             userReq.setUsername(passportUser.getUsername());
         }
@@ -673,12 +663,18 @@ public class UserService {
 
     public UserPassportResponse doUserAuth(UserLoginRequest loginRequest) throws JsonProcessingException {
         UserPassportResponse passportResponse = null;
-        try{
+        try {
             passportResponse = passportService.getUserAccessDetails(loginRequest);
             if (passportResponse == null) return null;
             User smartMoveUser = findByUsername(passportResponse.getUser_name());
             passportResponse.setRole(smartMoveUser != null ? smartMoveUser.getRole().name() : "");
-        }catch (ResponseStatusException ex) {
+        } catch (ResponseStatusException ex) {
+            if (ex.getStatus() == HttpStatus.FORBIDDEN) {
+                String description = ex.getReason();
+                if (description.contains("It appears this is your first login. Please change your password"))
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "First login,need to reset password!");
+            }
+
             if (ex.getStatus() == HttpStatus.NOT_FOUND) {
                 return passportResponse;
             }
