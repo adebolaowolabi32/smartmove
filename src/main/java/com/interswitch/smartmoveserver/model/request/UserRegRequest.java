@@ -24,8 +24,6 @@ public class UserRegRequest extends UserRegistration {
     @Length(min = 5, max = 50, message = "Email address must be between 5 and 50 characters long.")
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    private Enum.Role role;
 
     public User mapUserRequestToUser() {
         User user = User.builder()

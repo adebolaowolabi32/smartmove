@@ -5,6 +5,7 @@ import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.request.UserRegRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
 import com.interswitch.smartmoveserver.service.*;
+import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
 import com.interswitch.smartmoveserver.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -74,6 +75,9 @@ public class HomeController {
 
     @Autowired
     private PageUtil pageUtil;
+
+    @Autowired
+    ErrorResponseUtil errorResponseUtil;
 
 
     @GetMapping(value = {"/", "/index", "/home"})
@@ -232,8 +236,11 @@ public class HomeController {
     @PostMapping("/signupnew")
     public String doNewSignupPage( @Valid UserRegRequest user,
                                    BindingResult result, Model model) {
+        log.info("In signupnew");
+
         if (result.hasErrors()) {
-            model.addAttribute("user", new UserRegRequest());
+            log.error("binding result errors===>"+errorResponseUtil.getErrorMessages(result));
+            model.addAttribute("user", user);
             model.addAttribute("roles", pageUtil.getRoles());
             return "signupnew";
         }
@@ -241,13 +248,31 @@ public class HomeController {
         String message = userService.doSelfSignUp(user);
         model.addAttribute("message", message);
         model.addAttribute("user", new UserRegRequest());
+        model.addAttribute("roles", pageUtil.getRoles());
         return "signupnew";
     }
 
-    @GetMapping("/v1/verify")
+    @GetMapping("/verify")
     public String showEmailVerificationPage(@RequestParam("token") String token,Model model) {
         VerificationToken tokenValidation = userService.getEmailVerificationToken(token);
-        return "";
+        //initiate redirect to verification success page
+        //redirect to verification failure page
+        Enum.EmailVerificationTokenStatus tokenStatus = tokenValidation.getTokenStatus();
+        String message="";
+        switch(tokenStatus){
+            case VALID:
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.VALID.getDescription()),tokenValidation.getUser().getFirstName());
+                model.addAttribute("message",message);
+                return "verificationcheck" ;
+            case EXPIRED:
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.EXPIRED.getDescription()),tokenValidation.getUser().getFirstName());
+                model.addAttribute("message",message);
+                return"verificationerror";
+            default:
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.INVALID.getDescription()),tokenValidation.getUser().getFirstName());
+                model.addAttribute("message",message);
+                return"verificationerror";
+        }
     }
 
     @GetMapping("/forgotpassword")
