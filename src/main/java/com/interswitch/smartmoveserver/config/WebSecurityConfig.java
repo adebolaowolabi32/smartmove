@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -83,7 +84,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
 
         http.authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**", "/swf/**", "/img/**", "/images/**", "/fonts/**", "/assets/**", "/vendor/**",
-                        "/keep-alive", "/retry", "/index", "/login", "/health", "/error").permitAll()
+                        "/keep-alive", "/retry", "/index", "/login", "/health", "/error", "/signupnew", "/verify", "/forgotpassword").permitAll()
+                .antMatchers(HttpMethod.POST, "/signupnew").permitAll()
                 //.requestMatchers(new NegatedRequestMatcher(new AntPathRequestMatcher("/api/**")))
                 .anyRequest().authenticated()
                 .and()
