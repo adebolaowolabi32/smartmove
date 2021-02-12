@@ -21,6 +21,7 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class VerificationToken extends AbstractAuditEntity<String> implements Auditable<Long>, Serializable {
 
+    //expires in 24 hours i.e 60min x 24
     private static final int EXPIRATION = 60 * 24;
 
     @Id
@@ -35,6 +36,8 @@ public class VerificationToken extends AbstractAuditEntity<String> implements Au
     private User user;
 
     private Date expiryDate;
+
+    private transient Enum.EmailVerificationTokenStatus tokenStatus;
 
     public VerificationToken(User user, String token) {
         this.user = user;

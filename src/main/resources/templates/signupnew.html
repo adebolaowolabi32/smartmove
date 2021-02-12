@@ -82,11 +82,11 @@
                                     data-parsley-error-message="Please provide a valid mobile number"
                                     data-parsley-pattern="^((\+|00)?[1-9]|0)\d{1,14}$"
                                     id="phone"
-                                    name="phone"
+                                    name="mobileNo"
                                     th:field="*{mobileNo}"
                                     placeholder="Enter phone number"
                             />
-                            <p class=" text-danger" th:errors="*{owner}" th:if="${#fields.hasErrors('mobileNo')}"></p>
+                            <p class="small text-danger" th:errors="*{mobileNo}" th:if="${#fields.hasErrors('mobileNo')}"></p>
                         </div>
                         <div class="mb-3">
                             <label for="role" class="form-label "
@@ -125,7 +125,7 @@
                                     th:field="*{address}"
                                     placeholder="Enter address"
                             />
-                            <p class=" text-danger" th:errors="*{owner}" th:if="${#fields.hasErrors('address')}"></p>
+                            <p class="small text-danger" th:errors="*{address}" th:if="${#fields.hasErrors('address')}"></p>
                         </div>
                         <div class="mb-3 position-relative password">
                             <label for="password" class="form-label "
@@ -145,7 +145,7 @@
                                     style="cursor: pointer"
                             ></i>
 
-                            <p class=" text-danger" th:errors="*{owner}" th:if="${#fields.hasErrors('password')}"></p>
+                            <p class="small text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
 
                         </div>
                         <div class="w-100">

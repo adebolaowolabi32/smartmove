@@ -30,6 +30,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
 import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmail;
 
 /**
@@ -91,6 +92,9 @@ public class UserService {
         return response != null ? response.getAccessToken() : "";
     }
 
+    @Autowired
+    private VerificationTokenService verificationTokenService;
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -118,7 +122,6 @@ public class UserService {
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public User registerUserFromAPI(User user, String principal) {
-        log.info("Principal creator===>" + principal);
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //TODO :: see below
@@ -206,64 +209,79 @@ public class UserService {
     }
 
     /**
-     *  -create the user on passport
-     *  -create the user on smartmove
-     *  -send mail for user email verification.
+     * -create the user on passport
+     * -create the user on smartmove
+     * -send mail for user email verification.
+     *
      * @param userRegRequest
      * @return
      */
-    public String doSelfSignUp(UserRegRequest userRegRequest){
+    public String doSelfSignUp(UserRegRequest userRegRequest) {
+        User userReq = userRegRequest.mapUserRequestToUser();
+        Optional<User> optionalUser = userRepository.findByEmail(userReq.getEmail());
+        User userInSmartMove = null;
 
-        User user = userRegRequest.mapUserRequestToUser();
-        Optional<User> userInSmartMoveDb = userRepository.findByEmail(userRegRequest.getEmail());
+        if (optionalUser.isPresent()) {
+            userInSmartMove = optionalUser.get();
+        }
 
-        if (userInSmartMoveDb.isPresent() && userInSmartMoveDb.get().getRole() != null)
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "You already exist as a SmartMove user.");
+        if (userInSmartMove != null) {
 
-        UserApproval userApproval = userApprovalRepository.findByUsr(userInSmartMoveDb.get());
-        if (userApproval != null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You have already completed this process. You will receive an email with your smartmove credentials as soon as you are approved.");
+            UserApproval userApproval = userApprovalRepository.findByUsrId(userInSmartMove.getId());
+            if (userApproval != null && userApproval.isApproved()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists.");
+            } else if (userApproval != null && !userApproval.isApproved()) {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You have already completed this process. You will receive an email with your smartmove credentials as soon as you are approved.");
+            } else {
+                //send email verification email again
+                sendVerificationMail(userInSmartMove);
+                return "Your user account exists on smartmove but has not been verified via email.Please check your email for verification link!";
+            }
+        }
 
         String ownerName = userRegRequest.getOwner();
-        Optional<User> owner =  userRepository.findByUsername(ownerName);
+        Optional<User> ownerOptional = userRepository.findByUsername(ownerName);
+        User owner = null;
 
-        if(!owner.isPresent()){
+        if (ownerOptional.isPresent()) {
+            owner = ownerOptional.get();
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("The referrer : %s, does not exist on Smartmove ", ownerName));
         }
 
-        PassportUser passportUser = passportService.findUser(userRegRequest.getEmail());
+        PassportUser passportUser = passportService.findUser(userReq.getEmail());
         if (passportUser != null) {
             User usr = passportService.buildUser(passportUser);
-            user.setUsername(usr.getUsername());
-            save(user, owner.get());
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists. Kindly ask user to login with their Quickteller credentials");
+            userReq.setUsername(usr.getUsername());
+        } else {
+            passportUser = passportService.createUser(userReq);
+            userReq.setUsername(passportUser.getUsername());
         }
-
-        passportUser = passportService.createUser(user);
-        user.setUsername(passportUser.getUsername());
-        save(user, owner.get());
-        sendVerificationMail(user);
-        String message = String.format("Hi %s,a user verification email has been sent to you.Please kindly check to proceed with your on-boarding process",user.getFirstName());
+        save(userReq, owner);
+        sendVerificationMail(userReq);
+        String message = String.format("Hi %s,a user verification email has been sent to you.Please kindly check to proceed with your on-boarding process", userReq.getFirstName());
         return message;
+
+
     }
 
-    private void sendVerificationMail(User user){
+    private void sendVerificationMail(User user) {
 
         VerificationToken verificationToken = verificationTokenService.createToken(user);
 
         String token = verificationToken.getToken();
 
-        log.info("user token generated===>"+token);
-
-        String verificationUrl = portletUri+ "/verify?token=" + token;
+        String verificationUrl = portletUri + "/verify?token=" + token;
 
         Map<String, Object> params = new HashMap<>();
         params.put("name", user.getFirstName());
         params.put("verificationUrl", verificationUrl);
+        params.put("portletUri", portletUri);
 
         messagingService.sendEmail(user.getEmail(),
-                "User Confirmation", "messages" + File.separator + "email_verification", params);
+                "Email Verification", "messages" + File.separator + "email_verification", params);
     }
+
     public String selfSignUp(UserRegistration userRegistration, String principal) {
         User user = findByUsername(principal);
         if (user != null && user.getRole() != null)
@@ -288,6 +306,7 @@ public class UserService {
             user.setOwner(owner);
             user.setEnabled(false);
             save(user, owner);
+
             UserApproval approval = new UserApproval();
             approval.setOwner(owner);
             approval.setUsr(user);
@@ -674,23 +693,40 @@ public class UserService {
         VerificationToken verificationToken = verificationTokenService.findByToken(token);
 
         if (verificationToken == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid email verification code");
+            verificationToken = new VerificationToken();
+            verificationToken.setTokenStatus(Enum.EmailVerificationTokenStatus.INVALID);
+            return verificationToken;
         }
 
         User verificationTokenUser = verificationToken.getUser();
         Calendar cal = Calendar.getInstance();
 
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Expired email verification link");
+            verificationToken.setTokenStatus(Enum.EmailVerificationTokenStatus.EXPIRED);
+            //initiate call to send another verification link
+            sendVerificationMail(verificationTokenUser);
+            return verificationToken;
         }
 
         Optional<User> optionalUser = userRepository.findByEmail(verificationTokenUser.getEmail());
 
-        if(optionalUser.isPresent()){
-           User user =  optionalUser.get();
-           user.setEmailVerified(true);
-           userRepository.save(user);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setEmailVerified(true);
+            userRepository.save(user);
+            verificationToken.setUser(user);
         }
+
+        verificationToken.setTokenStatus(Enum.EmailVerificationTokenStatus.VALID);
+        //initiate call to approvalRepo
+        UserApproval approval = new UserApproval();
+        approval.setOwner(verificationTokenUser.getOwner());
+        approval.setUsr(verificationTokenUser);
+        approval.setSignUpType(Enum.SignUpType.SELF_SIGNUP);
+        userApprovalRepository.save(approval);
+        if (verificationTokenUser.getOwner() != null) {
+            sendMakerCheckerEmail(verificationTokenUser, verificationTokenUser.getOwner());
+           }
         return verificationToken;
     }
 }

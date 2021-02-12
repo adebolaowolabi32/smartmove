@@ -50,7 +50,7 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
 
     @Column(unique = true)
     @Length(min = 5, max = 30, message = "Mobile number must be between 5 and 30 characters long.")
-    private String mobileNo;
+    private String  mobileNo;
 
     @Column(unique = true)
     @NotBlank(message = "Email address is required.")

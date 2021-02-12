@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <title>Email Verification</title>
+
+    <link href="#" rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <link href="#" rel="stylesheet" th:href="@{/vendor/fontawesome-free/css/all.min.css}" type="text/css">
+    <link crossorigin="anonymous" href="#" rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link crossorigin="anonymous" href="#" rel="stylesheet" th:href="@{/css/custom.css}"/>
+</head>
+<body>
+<div>
+    <nav class="navbar navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand ms-lg-5" href="#"><img class="logo" th:src="@{'/assets/img/smartmove-logo.png'}"
+                    alt="smartMove Logo" width="100" height="30" /></a>
+        </div>
+    </nav>
+    <div style="display: flex; height: 100vh; justify-content: center; align-items: center; ">
+        <div>
+            <h1>Email successfully verified!</h1>
+            <h3>
+            <div th:text="${message}"></div>
+            </h3>
+            <div class="img-container" style="margin: 10px 0; text-align:center">
+                <img class="inter-img" th:src="@{'/assets/img/check.png'}" alt="Success Mark" height="200"
+                    width="200" />
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

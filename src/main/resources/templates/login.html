@@ -16,7 +16,10 @@
 <body>
 <nav class="navbar navbar-light bg-light shadow-sm">
     <div class="container">
-        <a class="navbar-brand ms-lg-5" href="#"><img class="logo" th:src="@{'/assets/img/smartmove-logo.png'}" alt="smartMove Logo" width="100" height="30"/></a>
+        <a class="navbar-brand ms-lg-5" href="#">
+            <img alt="SmartMove Logo" class="logo" height="30" th:src="@{'/assets/img/smartmove-logo.png'}"
+                 width="100"/>
+        </a>
     </div>
 </nav>
 <div class="login-container">
@@ -55,26 +58,27 @@
                         <div class="my-3">
                             <p class=" text-secondary">
                                 Don't have an account?
-                                <a class="smart-color-blue" th:href="@{/signupnew}">
+                                <a class="smart-color-blue" th:href="${signupUrl}">
                                     <b>Sign up</b>
                                 </a>
                             </p>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
-                                <a href="/forgotPassword.html" class=" text-dark"
-                                ><b>Forgot Password?</b></a
-                                >
+                                <a class="small text-dark" href="/forgotPassword.html">
+                                    <b>Forgot Password?</b>
+                                </a>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <p class="">Contact Support</p>
+                                <a class="small" href="#"
+                                ><b>Contact Support</b></a>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="col" id="img-container">
-                <img class="rounded inter-img" th:src="@{'/assets/img/smartmove-bus.png'}" alt="SmartMove Bus"/>
+                <img alt="SmartMove Bus" class="rounded inter-img" th:src="@{/assets/img/smartmove-bus.png}"/>
             </div>
         </div>
     </div>

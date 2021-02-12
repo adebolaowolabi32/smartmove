@@ -40,8 +40,11 @@
                     <div class="col-sm-9">
                         <select class="form-control form-control-full" id="role" th:field="*{role}">
                             <option value="">Select...</option>
-                            <option th:each="role : ${roles}" th:text="${role}"
-                                    th:value="${role}"></option>
+                            <option th:each="role : ${roles}"
+                                    th:text="${role}"
+                                    th:value="${role}">
+
+                            </option>
                         </select>
                         <p class="small text-danger" th:errors="*{role}" th:if="${#fields.hasErrors('role')}"></p>
                     </div>
