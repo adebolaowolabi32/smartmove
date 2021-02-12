@@ -89,15 +89,23 @@ public class PassportService {
             responseEntity = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, UserPassportResponse.class);
             return responseEntity.getBody();
         } catch (Exception ex) {
+            String response="";
+            ObjectMapper mapper = new ObjectMapper();
+            PassportErrorResponse passportErrorResponse;
+
+            if(ex instanceof HttpClientErrorException.Forbidden){
+                response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, passportErrorResponse.getDescription());
+            }
             if (ex instanceof HttpClientErrorException) {
-                String response = ((HttpClientErrorException) ex).getResponseBodyAsString();
-                ObjectMapper mapper = new ObjectMapper();
-                PassportErrorResponse passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, passportErrorResponse.getDescription());
             } else if (ex instanceof HttpServerErrorException || ex instanceof UnknownHttpStatusCodeException) {
-                String response = ((HttpClientErrorException) ex).getResponseBodyAsString();
-                ObjectMapper mapper = new ObjectMapper();
-                PassportErrorResponse passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                mapper = new ObjectMapper();
+                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
                 throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, passportErrorResponse.getDescription());
             }
             return null;
