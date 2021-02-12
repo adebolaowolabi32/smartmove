@@ -25,8 +25,8 @@
 <div class="login-container">
     <div class="container">
         <div class="row align-items-center justify-content-center my-5">
-            <div class="col">
-                <div class="m-auto  inter-form py-3 px-4 rounded shadow-lg">
+            <div class="col my-5">
+                <div class="m-auto  inter-form py-5 px-5 rounded shadow-lg">
                     <div class="form-header">
                         <h1 class="h3 smart-bold-700">Sign In</h1>
                         <p class="smart-text-normal text-secondary">
@@ -52,10 +52,10 @@
                                     id="togglePassword"
                                     style="cursor: pointer"></i>
                         </div>
-                        <div class="w-100">
+                        <div class="w-100" style="margin: 2.3rem 0;">
                             <button class="w-100 btn smart-bg-blue text-light"><b>Sign In</b></button>
                         </div>
-                        <div class="my-3">
+                        <div class="">
                             <p class=" text-secondary">
                                 Don't have an account?
                                 <a class="smart-color-blue" th:href="${signupUrl}">
@@ -63,15 +63,15 @@
                                 </a>
                             </p>
                         </div>
-                        <div class="row">
+                        <div class="row mb-5">
                             <div class="col-sm-12 col-md-6">
-                                <a class="small text-dark" href="/forgotPassword.html">
+                                <a class="text-decoration-none text-dark" th:href="@{/forgotpassword}">
                                     <b>Forgot Password?</b>
                                 </a>
                             </div>
-                            <div class="col-sm-12 col-md-6">
-                                <a class="small" href="#"
-                                ><b>Contact Support</b></a>
+                            <div class="col-sm-12 col-md-6" style="text-align: right;">
+                                <a class="text-dark smart-text-normal text-decoration-none" style="text-align: right;" href="#"
+                                >Contact Support</a>
                             </div>
                         </div>
                     </form>
