@@ -86,14 +86,6 @@ public class HomeController {
     @Autowired
     ErrorResponseUtil errorResponseUtil;
 
-
-    @GetMapping(value = {"/", "/index", "/home"})
-    public String home(Model model) {
-        model.addAttribute("smartMoveSignupUrl", securityUtil.getSmartmoveUrl());
-        return "index";
-    }
-
-
     @GetMapping(value = {"/", "/dashboard"})
     public String dashboard(Principal principal, Model model) {
         User user = userService.findByUsername(principal.getName());
@@ -200,7 +192,8 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String showLogin() {
+    public String showLogin(Model model) {
+        model.addAttribute("signupUrl",securityUtil.getSmartmoveSignupUrl());
         return "login";
     }
 
@@ -257,16 +250,14 @@ public class HomeController {
     public String showNewSignupPage(Model model) {
         model.addAttribute("user", new UserRegRequest());
         model.addAttribute("roles", pageUtil.getRoles());
+        model.addAttribute("loginUrl",securityUtil.getSmartmoveLoginUrl());
         return "signupnew";
     }
 
     @PostMapping("/signupnew")
     public String doNewSignupPage( @Valid UserRegRequest user,
                                    BindingResult result, Model model) {
-        log.info("In signupnew");
-
         if (result.hasErrors()) {
-            log.error("binding result errors===>"+errorResponseUtil.getErrorMessages(result));
             model.addAttribute("user", user);
             model.addAttribute("roles", pageUtil.getRoles());
             return "signupnew";
@@ -306,11 +297,5 @@ public class HomeController {
     public String showForgetPasswordPage(Model model) {
         // model.addAttribute("user", new UserRegistration());
         return "forgotpassword";
-    }
-
-    @GetMapping("/login")
-    public String showLoginPage(Model model) {
-        // model.addAttribute("user", new UserRegistration());
-        return "login";
     }
 }

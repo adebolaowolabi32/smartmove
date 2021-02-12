@@ -122,7 +122,6 @@ public class UserService {
 
     @Audited(auditableAction = AuditableAction.CREATE, auditableActionClass = AuditableActionStatusImpl.class)
     public User registerUserFromAPI(User user, String principal) {
-        log.info("Principal creator===>" + principal);
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //TODO :: see below
@@ -218,8 +217,6 @@ public class UserService {
      * @return
      */
     public String doSelfSignUp(UserRegRequest userRegRequest) {
-
-        log.info("userRegRequest====>"+userRegRequest);
         User userReq = userRegRequest.mapUserRequestToUser();
         Optional<User> optionalUser = userRepository.findByEmail(userReq.getEmail());
         User userInSmartMove = null;
@@ -254,19 +251,13 @@ public class UserService {
 
         PassportUser passportUser = passportService.findUser(userReq.getEmail());
         if (passportUser != null) {
-            log.info("Passport isn't null===>user exists on passport");
             User usr = passportService.buildUser(passportUser);
             userReq.setUsername(usr.getUsername());
         } else {
-            log.info("User doesn't exist on passport");
             passportUser = passportService.createUser(userReq);
             userReq.setUsername(passportUser.getUsername());
         }
-
-        log.info("owner===>"+owner);
-        log.info("userReq===>"+userReq);
         save(userReq, owner);
-        log.info("useReq expected to have id==>"+userReq.getId());
         sendVerificationMail(userReq);
         String message = String.format("Hi %s,a user verification email has been sent to you.Please kindly check to proceed with your on-boarding process", userReq.getFirstName());
         return message;
@@ -279,8 +270,6 @@ public class UserService {
         VerificationToken verificationToken = verificationTokenService.createToken(user);
 
         String token = verificationToken.getToken();
-
-        log.info("user token generated===>" + token);
 
         String verificationUrl = portletUri + "/verify?token=" + token;
 
