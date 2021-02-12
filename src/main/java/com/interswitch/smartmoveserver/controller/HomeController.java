@@ -231,19 +231,19 @@ public class HomeController {
         return "signup";
     }
 
-    @GetMapping("/changePassword")
+    @GetMapping("/changepassword")
     public String showChangePassword() {
-        return "changePassword";
+        return "changepassword";
     }
 
-    @PostMapping("/changePassword")
+    @PostMapping("/changepassword")
     public String changePassword(Principal principal, ChangePassword changePassword, BindingResult result, Model model) throws JsonProcessingException {
         boolean successful = userService.changePassword(principal, changePassword);
         if (successful)
             model.addAttribute("message", "Password change successful");
         else
             model.addAttribute("error", "Password is incorrect");
-        return "changePassword";
+        return "changepassword";
     }
 
     @GetMapping("/logout")
