@@ -7,10 +7,12 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Data
 public class UserRegRequest extends UserRegistration {
 
+    //@Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{7,20}$",message="You")
     private String password;
 
     @NotBlank(message = "Full name is required.")
