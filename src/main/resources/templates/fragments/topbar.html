@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
     <div th:fragment="topbar">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-light">
             <a th:href="@{/dashboard}"><img alt="Interswitch Logo" class="img-brand"
@@ -118,8 +118,10 @@
 
                                         </div>
                                         <div class="m-card-user__details">
-                                            <span class="m-card-user__name m--font-weight-500"> Company Name</span>
-                                            <a class="m-card-user__email m--font-weight-300 m-link" href="#">company@email.com</a>
+                                            <span class="m-card-user__name m--font-weight-300"
+                                                  sec:authentication="name"> Company Name</span>
+                                            <span class="m-card-user__email m--font-weight-300 m-link"
+                                                  sec:authentication="name">company@email.com</span>
                                         </div>
                                     </div>
                                 </div>
@@ -131,20 +133,17 @@
                                                 <span class="m-nav__section-text">User Section</span>
                                             </li>
                                             <li class="m-nav__item">
-                                                <a class="m-nav__link" href="#">
+                                                <a class="m-nav__link" th:href="@{/users/profile/me}">
                                                     <i class="m-nav__link-icon flaticon-profile-1"></i>
                                                     <span class="m-nav__link-title">
-                                                            <span class="m-nav__link-wrap">
-                                                                <span class="m-nav__link-text">My Profile</span>
-                                                                <span class="m-nav__link-badge"><span class="m-badge m-badge--success">2</span></span>
-                                                            </span>
-                                                        </span>
+                                                            <span class="m-nav__link-wrap">My Profile</span>
+                                                    </span>
                                                 </a>
                                             </li>
                                             <li class="m-nav__item">
-                                                <a class="m-nav__link" data-target="#CompanyList" data-toggle="modal">
+                                                <a class="m-nav__link" th:href="@{/changepassword}">
                                                     <i class="m-nav__link-icon flaticon-share"></i>
-                                                    <span class="m-nav__link-text">Switch Account</span>
+                                                    <span class="m-nav__link-text">Change Password</span>
                                                 </a>
                                             </li>
                                             <li class="m-nav__item">

@@ -1,11 +1,9 @@
 package com.interswitch.smartmoveserver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.interswitch.smartmoveserver.model.Card;
-import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.Enum;
-import com.interswitch.smartmoveserver.model.User;
-import com.interswitch.smartmoveserver.model.Wallet;
+import com.interswitch.smartmoveserver.model.*;
+import com.interswitch.smartmoveserver.model.request.ChangePassword;
 import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegRequest;
 import com.interswitch.smartmoveserver.model.request.UserRegistration;
@@ -195,7 +193,7 @@ public class HomeController {
 
     @GetMapping("/login")
     public String showLogin(Model model) {
-        model.addAttribute("signupUrl",securityUtil.getSmartmoveSignupUrl());
+        model.addAttribute("signupUrl", securityUtil.getSmartmoveSignupUrl());
         return "login";
     }
 
@@ -203,11 +201,11 @@ public class HomeController {
     public String login(UserLoginRequest user, BindingResult result, Model model, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         String url;
         String token = userService.login(user);
-        if(token.equalsIgnoreCase("FirstLogin")){
+        if (token.equalsIgnoreCase("FirstLogin")) {
             //use the email/username to call the passport endpoint
             redirectAttributes.addFlashAttribute("message", "It appears this is your first login. Please change your password");
             url = "/resetpassword";
-        }else if (token.equals("")) {
+        } else if (token.equals("")) {
             redirectAttributes.addFlashAttribute("error", "Incorrect username or password");
             url = "/login";
         } else {
@@ -240,6 +238,21 @@ public class HomeController {
         return "signup";
     }
 
+    @GetMapping("/changepassword")
+    public String showChangePassword() {
+        return "changepassword";
+    }
+
+    @PostMapping("/changepassword")
+    public String changePassword(Principal principal, ChangePassword changePassword, BindingResult result, Model model) throws JsonProcessingException {
+        boolean successful = userService.changePassword(principal, changePassword);
+        if (successful)
+            model.addAttribute("message", "Password change successful");
+        else
+            model.addAttribute("error", "Password is incorrect");
+        return "changepassword";
+    }
+
     @GetMapping("/logout")
     public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
         session.invalidate();
@@ -257,13 +270,13 @@ public class HomeController {
     public String showNewSignupPage(Model model) {
         model.addAttribute("user", new UserRegRequest());
         model.addAttribute("roles", pageUtil.getRoles());
-        model.addAttribute("loginUrl",securityUtil.getSmartmoveLoginUrl());
+        model.addAttribute("loginUrl", securityUtil.getSmartmoveLoginUrl());
         return "signupnew";
     }
 
     @PostMapping("/signupnew")
-    public String doNewSignupPage( @Valid UserRegRequest user,
-                                   BindingResult result, Model model) {
+    public String doNewSignupPage(@Valid UserRegRequest user,
+                                  BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("user", user);
             model.addAttribute("roles", pageUtil.getRoles());
@@ -278,25 +291,25 @@ public class HomeController {
     }
 
     @GetMapping("/verify")
-    public String showEmailVerificationPage(@RequestParam("token") String token,Model model) {
+    public String showEmailVerificationPage(@RequestParam("token") String token, Model model) {
         VerificationToken tokenValidation = userService.getEmailVerificationToken(token);
         //initiate redirect to verification success page
         //redirect to verification failure page
         Enum.EmailVerificationTokenStatus tokenStatus = tokenValidation.getTokenStatus();
-        String message="";
-        switch(tokenStatus){
+        String message = "";
+        switch (tokenStatus) {
             case VALID:
-                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.VALID.getDescription()),tokenValidation.getUser().getFirstName());
-                model.addAttribute("message",message);
-                return "verificationcheck" ;
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.VALID.getDescription()), tokenValidation.getUser().getFirstName());
+                model.addAttribute("message", message);
+                return "verificationcheck";
             case EXPIRED:
-                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.EXPIRED.getDescription()),tokenValidation.getUser().getFirstName());
-                model.addAttribute("message",message);
-                return"verificationerror";
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.EXPIRED.getDescription()), tokenValidation.getUser().getFirstName());
+                model.addAttribute("message", message);
+                return "verificationerror";
             default:
-                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.INVALID.getDescription()),tokenValidation.getUser().getFirstName());
-                model.addAttribute("message",message);
-                return"verificationerror";
+                message = String.format("Hello %s,".concat(Enum.EmailVerificationTokenStatus.INVALID.getDescription()), tokenValidation.getUser().getFirstName());
+                model.addAttribute("message", message);
+                return "verificationerror";
         }
     }
 

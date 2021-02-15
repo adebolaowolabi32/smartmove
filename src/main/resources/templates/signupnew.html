@@ -21,7 +21,8 @@
 <body>
 <nav class="navbar navbar-light bg-light shadow-sm fixed-top">
     <div class="container">
-        <a class="navbar-brand ms-lg-5" href="#"><img class="logo" th:src="@{'/assets/img/smartmove-logo.png'}" alt="smartMove Logo" width="100" height="30"/></a>
+        <a class="navbar-brand ms-lg-5" href="#"><img alt="smartMove Logo" class="logo" height="30"
+                                                      th:src="@{'/assets/img/smartmove-logo.png'}" width="100"/></a>
     </div>
 </nav>
 <div class="signup-container">
@@ -38,106 +39,110 @@
 
                     <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
                     <div th:replace="fragments/alert-success :: alert-success (message=${message})"></div>
-                    <form action="#" data-parsley-validate="true" method="post" th:action="${'/signupnew'}" th:object="${user}">
+                    <form action="#" data-parsley-validate="true" method="post" th:action="${'/signupnew'}"
+                          th:object="${user}">
                         <div class="mb-3">
-                            <label for="fullName" class="form-label "
+                            <label class="form-label " for="fullName"
                             >Full name</label
                             >
                             <input
-                                    type="text"
                                     class="form-control shadow-none"
-                                    id="fullName"
-                                    name="fullName"
-                                    th:field="*{fullName}"
                                     data-parsley-length="[3, 40]"
                                     data-parsley-length-message="Please provide a name between 3 and 40 characters long"
                                     data-parsley-required-message="Please provide your full name"
+                                    id="fullName"
+                                    name="fullName"
                                     placeholder="Firstname and Lastname"
                                     required
+                                    th:field="*{fullName}"
+                                    type="text"
 
                             />
-                            <p class=" text-danger" th:errors="*{fullName}" th:if="${#fields.hasErrors('fullName')}"></p>
+                            <p class=" text-danger" th:errors="*{fullName}"
+                               th:if="${#fields.hasErrors('fullName')}"></p>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label ">Email</label>
+                            <label class="form-label " for="email">Email</label>
                             <input
-                                    type="email"
                                     class="form-control shadow-none"
-                                    id="email"
                                     data-parsley-maxlength="70"
                                     data-parsley-maxlength-message="Please provide an email no more than 70 characters long"
                                     data-parsley-required-message="Please provide your email address"
+                                    id="email"
                                     placeholder="Enter mail address"
-                                    th:field="*{email}"
                                     required
+                                    th:field="*{email}"
+                                    type="email"
                             />
                         </div>
                         <div class="mb-3">
-                            <label for="phone" class="form-label "
+                            <label class="form-label " for="phone"
                             >Phone Number</label
                             >
                             <input
-                                    type="phone"
                                     class="form-control shadow-none"
                                     data-parsley-error-message="Please provide a valid mobile number"
                                     data-parsley-pattern="^((\+|00)?[1-9]|0)\d{1,14}$"
                                     id="phone"
                                     name="mobileNo"
-                                    th:field="*{mobileNo}"
                                     placeholder="Enter phone number"
+                                    th:field="*{mobileNo}"
+                                    type="phone"
                             />
-                            <p class="small text-danger" th:errors="*{mobileNo}" th:if="${#fields.hasErrors('mobileNo')}"></p>
+                            <p class="small text-danger" th:errors="*{mobileNo}"
+                               th:if="${#fields.hasErrors('mobileNo')}"></p>
                         </div>
                         <div class="mb-3">
-                            <label for="role" class="form-label "
+                            <label class="form-label " for="role"
                             >Role</label
                             >
 
-                            <select name="role" id="role" class="form-control shadow-none" th:field="*{role}">
+                            <select class="form-control shadow-none" id="role" name="role" th:field="*{role}">
                                 <option value="">Select...</option>
                                 <option th:each="role : ${roles}" th:text="${role}"
                                         th:value="${role}"></option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="referral" class="form-label "
+                            <label class="form-label " for="referral"
                             >Referral</label
                             >
                             <input
-                                    type="text"
                                     class="form-control shadow-none"
                                     id="referral"
-                                    th:field="*{owner}"
                                     placeholder="Enter referral"
                                     required
+                                    th:field="*{owner}"
+                                    type="text"
                             />
                             <p class=" text-danger" th:errors="*{owner}" th:if="${#fields.hasErrors('owner')}"></p>
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label "
+                            <label class="form-label " for="address"
                             >Address</label
                             >
                             <input
-                                    type="text"
                                     class="form-control shadow-none"
                                     id="address"
                                     name="address"
-                                    th:field="*{address}"
                                     placeholder="Enter address"
+                                    th:field="*{address}"
+                                    type="text"
                             />
-                            <p class="small text-danger" th:errors="*{address}" th:if="${#fields.hasErrors('address')}"></p>
+                            <p class="small text-danger" th:errors="*{address}"
+                               th:if="${#fields.hasErrors('address')}"></p>
                         </div>
                         <div class="mb-3 position-relative password">
-                            <label for="password" class="form-label "
+                            <label class="form-label " for="password"
                             >Password</label
                             >
                             <input
-                                    type="password"
                                     class="form-control shadow-none"
                                     id="password"
                                     name="password"
-                                    th:field="*{password}"
                                     placeholder="Enter password"
+                                    th:field="*{password}"
+                                    type="password"
                             />
                             <i
                                     class="far fa-eye position-absolute"
@@ -145,7 +150,8 @@
                                     style="cursor: pointer"
                             ></i>
 
-                            <p class="small text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
+                            <p class="small text-danger" th:errors="*{password}"
+                               th:if="${#fields.hasErrors('password')}"></p>
 
                         </div>
                         <div class="w-100" style="margin: 2.3rem 0;">
@@ -164,13 +170,13 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-6 d-sm-none d-md-block" id="img-container">
-                <img class="rounded inter-img" th:src="@{'/assets/img/smartmove-bus.png'}" alt="SmartMove Bus"/>
+                <img alt="SmartMove Bus" class="rounded inter-img" th:src="@{'/assets/img/smartmove-bus.png'}"/>
             </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" th:src="@{js/passwordVisibility.js}">
+<script th:src="@{js/passwordVisibility.js}" type="text/javascript">
 
 </script>
 </body>

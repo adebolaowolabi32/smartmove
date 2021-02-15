@@ -5,15 +5,15 @@ import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
-import com.interswitch.smartmoveserver.model.request.PassportUser;
-import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
-import com.interswitch.smartmoveserver.model.request.UserRegRequest;
-import com.interswitch.smartmoveserver.model.request.UserRegistration;
+import com.interswitch.smartmoveserver.model.request.*;
 import com.interswitch.smartmoveserver.model.response.UserPassportResponse;
 import com.interswitch.smartmoveserver.model.response.UserRoleResponse;
 import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
 import com.interswitch.smartmoveserver.repository.UserRepository;
-import com.interswitch.smartmoveserver.util.*;
+import com.interswitch.smartmoveserver.util.FileParser;
+import com.interswitch.smartmoveserver.util.PageUtil;
+import com.interswitch.smartmoveserver.util.RandomUtil;
+import com.interswitch.smartmoveserver.util.SecurityUtil;
 import com.interswitchng.audit.annotation.Audited;
 import com.interswitchng.audit.model.AuditableAction;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 import static com.interswitch.smartmoveserver.helper.JwtHelper.isInterswitchEmail;
@@ -434,8 +435,8 @@ public class UserService {
         if (passportUser != null) {
             if (isInterswitchEmail(passportUser.getEmail()))
                 return saveAsAdmin(passportUser);
-
-            return userRepository.save(passportService.buildUser(passportUser));
+            //return userRepository.save(passportService.buildUser(passportUser));
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The username you provided does not exist on SmartMove");
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to this resource");
     }
@@ -723,5 +724,16 @@ public class UserService {
             sendMakerCheckerEmail(verificationTokenUser, verificationTokenUser.getOwner());
         }
         return verificationToken;
+    }
+
+    public boolean changePassword(Principal principal, ChangePassword changePassword) throws JsonProcessingException {
+        UserLoginRequest user = new UserLoginRequest();
+        user.setUsername(principal.getName());
+        user.setPassword(changePassword.getOldPassword());
+        UserPassportResponse response = doUserAuth(user);
+        String accessToken = response != null ? response.getAccessToken() : "";
+        if (accessToken.equals("")) return false;
+        passportService.changePassword(accessToken, changePassword);
+        return true;
     }
 }
