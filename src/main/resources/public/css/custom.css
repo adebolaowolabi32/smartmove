@@ -191,6 +191,9 @@
   .text-decoration-none {
       text-decoration: none;
   }
+  .smart-bg-light {
+      background-color: #ffffff;
+  }
 
   /*  Medium devices (tablets, 768px and up) */
   @media (min-width: 768px) {
