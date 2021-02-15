@@ -125,7 +125,6 @@ public class PassportService {
         formData.add("scope", "profile");
         ResponseEntity response = apiRequestClient.Process(formData, headers, null, tokenUrl, HttpMethod.POST, Object.class);
         Map<String, Object> resultToJson = (Map<String, Object>) response.getBody();
-        log.info("Tk===>"+resultToJson.get("access_token").toString());
         return "Bearer " + resultToJson.get("access_token").toString();
     }
 
