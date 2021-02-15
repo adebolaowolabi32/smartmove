@@ -320,6 +320,8 @@ public class UserService {
             Document doc = documentService.saveDocument(new Document(user.getPicture()));
             user.setPictureUrl(doc.getUrl());
         }
+
+        user.setPassword("");
         userRepository.save(user);
         if (role.equals(Enum.Role.AGENT)) {
             walletService.autoCreateForUser(user);
