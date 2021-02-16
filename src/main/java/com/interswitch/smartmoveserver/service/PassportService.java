@@ -186,7 +186,6 @@ public class PassportService {
         passportUser.setMobileNo(user.getMobileNo());
         passportUser.setPassword(user.getPassword());
         passportUser.setEnabled(user.isEnabled());
-        passportUser.setFirstLogin(user.getLoginFreqType() < 1);
         return passportUser;
     }
 
