@@ -84,8 +84,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements A
 
         http.authorizeRequests()
                 .antMatchers("/webjars/**", "/css/**", "/js/**", "/swf/**", "/img/**", "/images/**", "/fonts/**", "/assets/**", "/vendor/**",
-                        "/keep-alive", "/retry", "/index", "/login", "/health","/error","/signupnew","/verify","/forgotpassword","/resetpassword/**").permitAll()
-                 .antMatchers(HttpMethod.POST, "/signupnew","/resetpassword","/forgotpassword").permitAll()
+                        "/keep-alive", "/retry", "/index", "/login", "/health","/error","/signup","/verify","/forgotpassword","/resetpassword/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/signup","/resetpassword","/forgotpassword").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)

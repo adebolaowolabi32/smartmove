@@ -111,7 +111,6 @@ public class UserService {
         boolean exists = userRepository.existsById(user.getId());
         if (exists) throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         //TODO :: see below
-        user.setEnabled(true);
         //iswCoreService.createUser(user);
         PassportUser passportUser = passportService.findUser(user.getEmail());
         if (passportUser == null) {
@@ -128,17 +127,21 @@ public class UserService {
     private User saveToDb(PassportUser passportUser, User user, String owner) {
         Enum.Role role = user.getRole();
         user.setOwner(null);
+
         if (!role.equals(Enum.Role.ISW_ADMIN)) {
             Optional<User> ownerUser = userRepository.findByUsername(owner);
             if (ownerUser.isPresent()) user.setOwner(ownerUser.get());
         }
+
         user.setUsername(passportUser.getUsername());
         user.setPassword(passportUser.getPassword());
         userRepository.save(user);
+
         if (role.equals(Enum.Role.AGENT)) {
             walletService.autoCreateForUser(user);
             cardService.autoCreateForUser(user);
         }
+
         return user;
     }
 
@@ -267,45 +270,6 @@ public class UserService {
 
         messagingService.sendEmail(user.getEmail(),
                 "Email Verification", "messages" + File.separator + "email_verification", params);
-    }
-
-    public String selfSignUp(UserRegistration userRegistration, String principal) {
-        User user = findByUsername(principal);
-        if (user != null && user.getRole() != null)
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "You already exist as a SmartMove user.");
-        UserApproval userApproval = userApprovalRepository.findByUsr(user);
-        if (userApproval != null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You have already completed this process. You will receive an email with your smartmove credentials as soon as you are approved.");
-
-        PassportUser passportUser = passportService.findUser(principal);
-        if (passportUser != null) {
-            User owner = null;
-            String ownerName = userRegistration.getOwner();
-            if (!ownerName.isEmpty()) {
-                Optional<User> ownerOptional = userRepository.findByUsername(userRegistration.getOwner());
-                if (ownerOptional.isPresent())
-                    owner = ownerOptional.get();
-                else
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("The referrer : %s, does not exist on Smartmove ", ownerName));
-            }
-            user.setRole(userRegistration.getRole());
-            user.setAddress(userRegistration.getAddress());
-            user.setOwner(owner);
-            user.setEnabled(false);
-            save(user, owner);
-
-            UserApproval approval = new UserApproval();
-            approval.setOwner(owner);
-            approval.setUsr(user);
-            approval.setSignUpType(Enum.SignUpType.SELF_SIGNUP);
-            userApprovalRepository.save(approval);
-            if (owner != null) {
-                sendMakerCheckerEmail(user, owner);
-                return "Your sign up was successful and we've sent an email to your referer. You'll receive an email once they approve.";
-            }
-            return "Your sign up request has been received. You will receive an email as soon as you are approved.";
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "We were unable to sign up this user. Contact the system administrator.");
     }
 
 

@@ -213,28 +213,6 @@ public class HomeController {
         return "redirect:" + url;
     }
 
-    @GetMapping("/signup")
-    public String showSignUp(Principal principal, Model model) {
-        model.addAttribute("user", new UserRegistration());
-        model.addAttribute("roles", pageUtil.getRoles());
-        return "signup";
-    }
-
-    @PostMapping("/signup")
-    public String signUp(Principal principal, @Valid UserRegistration user,
-                         BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            //TODO change findAll to findAllEligible
-            model.addAttribute("user", new UserRegistration());
-            model.addAttribute("roles", pageUtil.getRoles());
-            return "signup";
-        }
-        String message = userService.selfSignUp(user, principal.getName());
-        model.addAttribute("message", message);
-        model.addAttribute("user", new UserRegistration());
-        return "signup";
-    }
-
     @GetMapping("/changepassword")
     public String showChangePassword() {
         return "changepassword";
@@ -263,7 +241,7 @@ public class HomeController {
         return "redirect:" + path;
     }
 
-    @GetMapping("/signupnew")
+    @GetMapping("/signup")
     public String showNewSignupPage(Model model) {
         model.addAttribute("user", new UserRegRequest());
         model.addAttribute("roles", pageUtil.getRoles());
@@ -271,7 +249,7 @@ public class HomeController {
         return "signupnew";
     }
 
-    @PostMapping("/signupnew")
+    @PostMapping("/signup")
     public String doNewSignupPage(@Valid UserRegRequest user,
                                   BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -327,7 +305,7 @@ public class HomeController {
         boolean successful = passportService.initiatePasswordReset(username);
 
         if (successful)
-            model.addAttribute("message", "A message has been sent to your email,Please check to follow instructions to reset password.");
+            model.addAttribute("message", "A message has been sent to your email, please follow the instructions to reset your password.");
         else
             model.addAttribute("error", "Please ensure you're using the correct username.");
         return "forgotpassword";
@@ -335,13 +313,17 @@ public class HomeController {
 
     @GetMapping("/resetpassword/{uuid}")
     public String showUserPasswordResetPage( @PathVariable("uuid") String  uuid,Model model) {
-        // model.addAttribute("user", new UserRegistration());
+        model.addAttribute("uuid", uuid);
         return "resetpassword";
     }
 
-    @PostMapping("/resetpassword/{uuid}")
-    public String resetUserPassword( @PathVariable("uuid") String  uuid,Model model) {
-        // model.addAttribute("user", new UserRegistration());
+    @PostMapping("/resetpassword")
+    public String resetUserPassword(Model model,UserAccountRecovery userAccountRecovery,BindingResult bindingResult) throws JsonProcessingException {
+        boolean successful = passportService.doPasswordReset(userAccountRecovery);
+        if (successful)
+            model.addAttribute("message", "Your password has been successfully reset.");
+        else
+            model.addAttribute("error", "Link is invalid/expired.");
         return "resetpassword";
     }
 }

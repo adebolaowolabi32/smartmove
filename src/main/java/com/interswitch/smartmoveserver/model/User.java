@@ -30,11 +30,9 @@ public class User extends AbstractAuditEntity<String> implements Auditable<Long>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIgnore
     @Column(unique=true)
     private String username;
 
-    @JsonIgnore
     private String password;
 
     @NotBlank(message = "First name is required.")

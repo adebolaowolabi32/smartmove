@@ -39,7 +39,7 @@
 
                     <div th:replace="fragments/alert-error :: alert-error (error=${error})"></div>
                     <div th:replace="fragments/alert-success :: alert-success (message=${message})"></div>
-                    <form action="#" data-parsley-validate="true" method="post" th:action="${'/signupnew'}"
+                    <form action="#" data-parsley-validate="true" method="post" th:action="${'/signup'}"
                           th:object="${user}">
                         <div class="mb-3">
                             <label class="form-label " for="fullName"
@@ -162,7 +162,7 @@
                         <div class="my-3">
                             <p class=" text-secondary">
                                 Already have an account?
-                                <a class="smart-color-blue" href="/login.html"><b>Login</b></a>
+                                <a class="smart-color-blue" th:href="@{/login}"><b>Login</b></a>
                             </p>
                             <p class=""><b>Contact Support</b></p>
                         </div>

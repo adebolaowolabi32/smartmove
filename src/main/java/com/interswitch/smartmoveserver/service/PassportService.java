@@ -133,20 +133,20 @@ public class PassportService {
         resetPassword.setDestinationUri(smartMoveBaseUrl.concat("/resetpassword"));
         resetPassword.setUsername(username);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken());
+        headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-        return apiRequestClient.Process(resetPassword, headers, null, changePasswordUrl, HttpMethod.POST, Object.class).getStatusCode() == HttpStatus.OK;
+        return apiRequestClient.Process(resetPassword, headers, null, resetPasswordNotificationUrl, HttpMethod.POST, Object.class).getStatusCode() == HttpStatus.OK;
     }
 
     public boolean doPasswordReset(UserAccountRecovery passwordResetBody) throws JsonProcessingException {
         //returns 204 OK
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken());
+        headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
         boolean passwordResetSuccessful = false;
 
         try {
-            passwordResetSuccessful = apiRequestClient.Process(passwordResetBody, headers, null, changePasswordUrl, HttpMethod.POST, Object.class).getStatusCode() == HttpStatus.NO_CONTENT;
+            passwordResetSuccessful = apiRequestClient.Process(passwordResetBody, headers, null, resetPasswordUrl, HttpMethod.POST, Object.class).getStatusCode() == HttpStatus.NO_CONTENT;
             return passwordResetSuccessful;
         } catch (Exception ex) {
             String response = "";
