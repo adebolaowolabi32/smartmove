@@ -21,9 +21,9 @@
                 User Details:
             <ul>
                 <li>Role: <span th:text="${role}"></span></li>
-                <li>Referrer: <span th:text="${owner}"></span></li>
+                <li th:if="${owner}">Referrer: <span th:text="${owner}"></span></li>
                 <li>Username: <span th:text="${username}"></span></li>
-                <li>Default Password: <span th:text="${password}"></span></li>
+                <li th:if="${password}">Password: <span th:text="${password}"></span></li>
             </ul>
             </p>
             <br>

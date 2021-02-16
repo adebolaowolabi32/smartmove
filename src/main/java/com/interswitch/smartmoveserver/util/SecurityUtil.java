@@ -70,7 +70,7 @@ public class SecurityUtil {
     }
 
     public String getSmartmoveSignupUrl() {
-        return smartmoveUrl + "/signupnew";
+        return smartmoveUrl + "/signup";
     }
 
     public String getSmartmoveLoginUrl() {

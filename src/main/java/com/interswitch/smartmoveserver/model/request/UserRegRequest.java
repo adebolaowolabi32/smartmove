@@ -3,12 +3,13 @@ package com.interswitch.smartmoveserver.model.request;
 import com.interswitch.smartmoveserver.model.User;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Data
 public class UserRegRequest extends UserRegistration {
 
+    //@Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{7,20}$",message="You")
     private String password;
 
     @NotBlank(message = "Full name is required.")

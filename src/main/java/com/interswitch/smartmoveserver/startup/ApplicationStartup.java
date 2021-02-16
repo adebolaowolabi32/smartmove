@@ -66,7 +66,6 @@ public class ApplicationStartup implements CommandLineRunner {
         adminUser.setEnabled(true);
         userService.setUp(adminUser);
         log.info("System Administrator created successfully!");
-
         loadStatesAndLocalGovt();
         loadVehicleMakesAndModels();
         // sendMailTest();
