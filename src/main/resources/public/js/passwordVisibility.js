@@ -8,8 +8,12 @@ const oldPassword = document.querySelector("#oldPassword");
 const newPassword = document.querySelector("#newPassword");
 const confirmPassword = document.querySelector("#confirmPassword");
 const submitUpdatePassword = document.querySelector("#submitUpdatePassword");
+const newChangedPassword = document.querySelector("#newChangePassword");
+const confirmUpdatedPassword = document.querySelector("#confirmUpdatePassword");
+const confirmChangedPassword = document.querySelector("#confirmChangePassword");
 
-if (toggleNewPassword) {
+
+if (toggleNewPassword && newPassword) {
     toggleNewPassword.addEventListener("click", (e) => {
         const type = newPassword.getAttribute("type") === "password" ? "text" : "password";
         newPassword.setAttribute("type", type);
@@ -22,6 +26,35 @@ if (toggleNewPassword) {
         }
     });
 }
+
+if (toggleNewPassword) {
+    toggleNewPassword.addEventListener("click", (e) => {
+        const type = newChangedPassword.getAttribute("type") === "password" ? "text" : "password";
+        newChangedPassword.setAttribute("type", type);
+        if(type === "text") {
+            toggleNewPassword.classList.remove("fa-eye");
+            toggleNewPassword.classList.add("fa-eye-slash");
+        } else {
+            toggleNewPassword.classList.add("fa-eye");
+            toggleNewPassword.classList.remove("fa-eye-slash");
+        }
+    });
+}
+
+if (toggleNewPassword) {
+    toggleNewPassword.addEventListener("click", (e) => {
+        const type = newUpdatePassword.getAttribute("type") === "password" ? "text" : "password";
+        newUpdatePassword.setAttribute("type", type);
+        if(type === "text") {
+            toggleNewPassword.classList.remove("fa-eye");
+            toggleNewPassword.classList.add("fa-eye-slash");
+        } else {
+            toggleNewPassword.classList.add("fa-eye");
+            toggleNewPassword.classList.remove("fa-eye-slash");
+        }
+    });
+}
+
 if (toggleOldPassword) {
     toggleOldPassword.addEventListener("click", (e) => {
         const type = oldPassword.getAttribute("type") === "password" ? "text" : "password";
@@ -50,7 +83,7 @@ if (togglePassword) {
     });
 }
 
-if (toggleConfirmPassword) {
+if (toggleConfirmPassword && confirmPassword) {
     toggleConfirmPassword.addEventListener("click", (e) => {
         const type = confirmPassword.getAttribute("type") === "password" ? "text" : "password";
         confirmPassword.setAttribute("type", type);
@@ -64,17 +97,30 @@ if (toggleConfirmPassword) {
     });
 }
 
-// if (submitUpdatePassword) {
-//     submitUpdatePassword.addEventListener("click", (e) => {
-//         e.preventDefault();
-//         if (newPassword !== confirmPassword) {
-//             passwordErr.textContent = "Passwords doesn't match";
-//             setTimeout(() => {
-//                 passwordErr.textContent = "";
-//             }, 5000);
-//         }
-//     })
-    
-// }
+if (toggleConfirmPassword && confirmUpdatedPassword) {
+    toggleConfirmPassword.addEventListener("click", (e) => {
+        const type = confirmUpdatedPassword.getAttribute("type") === "password" ? "text" : "password";
+        confirmUpdatedPassword.setAttribute("type", type);
+        if(type === "text") {
+            toggleConfirmPassword.classList.remove("fa-eye");
+            toggleConfirmPassword.classList.add("fa-eye-slash");
+        } else {
+            toggleConfirmPassword.classList.add("fa-eye");
+            toggleConfirmPassword.classList.remove("fa-eye-slash");
+        }
+    });
+}
 
-
+if (toggleConfirmPassword) {
+    toggleConfirmPassword.addEventListener("click", (e) => {
+        const type = confirmChangedPassword.getAttribute("type") === "password" ? "text" : "password";
+        confirmChangedPassword.setAttribute("type", type);
+        if(type === "text") {
+            toggleConfirmPassword.classList.remove("fa-eye");
+            toggleConfirmPassword.classList.add("fa-eye-slash");
+        } else {
+            toggleConfirmPassword.classList.add("fa-eye");
+            toggleConfirmPassword.classList.remove("fa-eye-slash");
+        }
+    });
+}
