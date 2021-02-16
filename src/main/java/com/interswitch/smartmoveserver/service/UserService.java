@@ -5,7 +5,10 @@ import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.dto.UserDto;
-import com.interswitch.smartmoveserver.model.request.*;
+import com.interswitch.smartmoveserver.model.request.ChangePassword;
+import com.interswitch.smartmoveserver.model.request.PassportUser;
+import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
+import com.interswitch.smartmoveserver.model.request.UserRegRequest;
 import com.interswitch.smartmoveserver.model.response.UserPassportResponse;
 import com.interswitch.smartmoveserver.model.response.UserRoleResponse;
 import com.interswitch.smartmoveserver.repository.UserApprovalRepository;
@@ -399,7 +402,7 @@ public class UserService {
             if (isInterswitchEmail(passportUser.getEmail()))
                 return saveAsAdmin(passportUser);
             //return userRepository.save(passportService.buildUser(passportUser));
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The username you provided does not exist on SmartMove");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "The username you provided does not exist on SmartMove");
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to this resource");
     }
