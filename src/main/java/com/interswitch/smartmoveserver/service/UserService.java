@@ -78,7 +78,6 @@ public class UserService {
         return response != null ? response.getAccessToken() : "";
     }
 
-
     @Autowired
     private VerificationTokenService verificationTokenService;
 

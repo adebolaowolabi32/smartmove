@@ -3,10 +3,7 @@ package com.interswitch.smartmoveserver.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
-import com.interswitch.smartmoveserver.model.request.ChangePassword;
-import com.interswitch.smartmoveserver.model.request.UserLoginRequest;
-import com.interswitch.smartmoveserver.model.request.UserRegRequest;
-import com.interswitch.smartmoveserver.model.request.UserRegistration;
+import com.interswitch.smartmoveserver.model.request.*;
 import com.interswitch.smartmoveserver.service.*;
 import com.interswitch.smartmoveserver.util.ErrorResponseUtil;
 import com.interswitch.smartmoveserver.util.PageUtil;
@@ -314,14 +311,36 @@ public class HomeController {
     }
 
 
-    @GetMapping("/forgotpassword/{uuid}")
-    public String showForgetPasswordPage( @PathVariable("uuid") String  uuid,Model model) {
-        // model.addAttribute("user", new UserRegistration());
+    @GetMapping("/forgotpassword")
+    public String showForgetPasswordPage(Model model) {
+        model.addAttribute("passwordReset", new PasswordResetRequest());
         return "forgotpassword";
     }
 
-    @GetMapping("/resetpassword")
-    public String showResetPasswordPage(Model model) {
+
+    @PostMapping("/forgotpassword")
+    public String initiatePasswordRecovery(@Valid PasswordResetRequest userAccountReset,
+                                           BindingResult result, Model model) {
+
+        log.info("calling forgot password...");
+        String username= userAccountReset.getUsername();
+        boolean successful = passportService.initiatePasswordReset(username);
+
+        if (successful)
+            model.addAttribute("message", "A message has been sent to your email,Please check to follow instructions to reset password.");
+        else
+            model.addAttribute("error", "Please ensure you're using the correct username.");
+        return "forgotpassword";
+    }
+
+    @GetMapping("/resetpassword/{uuid}")
+    public String showUserPasswordResetPage( @PathVariable("uuid") String  uuid,Model model) {
+        // model.addAttribute("user", new UserRegistration());
+        return "resetpassword";
+    }
+
+    @PostMapping("/resetpassword/{uuid}")
+    public String resetUserPassword( @PathVariable("uuid") String  uuid,Model model) {
         // model.addAttribute("user", new UserRegistration());
         return "resetpassword";
     }

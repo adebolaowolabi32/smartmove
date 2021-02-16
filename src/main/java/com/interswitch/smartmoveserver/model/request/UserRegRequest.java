@@ -3,7 +3,6 @@ package com.interswitch.smartmoveserver.model.request;
 import com.interswitch.smartmoveserver.model.User;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
