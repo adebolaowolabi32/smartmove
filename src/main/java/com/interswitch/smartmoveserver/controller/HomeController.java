@@ -300,7 +300,6 @@ public class HomeController {
     public String initiatePasswordRecovery(@Valid PasswordResetRequest userAccountReset,
                                            BindingResult result, Model model) {
 
-        log.info("calling forgot password...");
         String username= userAccountReset.getUsername();
         boolean successful = passportService.initiatePasswordReset(username);
 
