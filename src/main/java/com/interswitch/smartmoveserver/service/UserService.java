@@ -601,10 +601,20 @@ public class UserService {
         params.put("role", user.getRole());
         params.put("portletUri", portletUri);
         params.put("username", user.getUsername());
-        params.put("password", user.getPassword());
+
+
+        UserApproval userApproval = userApprovalRepository.findByUsrId(user.getId());
+
+        if (userApproval != null) {
+
+            if (userApproval.getSignUpType() == Enum.SignUpType.CREATED_BY_ADMIN) {
+                params.put("password", user.getPassword());
+            }
+        }
+
         if (owner == null) {
             messagingService.sendEmail(user.getEmail(),
-                    "User SignUp Approved", "messages" + File.separator + "welcome", params);
+                    "User SignUp Approved", "messages" + File.separator + "welcome_new", params);
         } else {
             String ownerName = owner.getFirstName() + " " + owner.getLastName();
             params.put("owner", ownerName);
