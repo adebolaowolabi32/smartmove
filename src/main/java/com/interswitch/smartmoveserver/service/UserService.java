@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.interswitch.smartmoveserver.audit.AuditableActionStatusImpl;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
@@ -76,7 +75,7 @@ public class UserService {
     @Value("${smartmove.url}")
     private String portletUri;
 
-    public String login(UserLoginRequest user) throws JsonProcessingException {
+    public String login(UserLoginRequest user) {
         UserPassportResponse response = doUserAuth(user);
         return response != null ? response.getAccessToken() : "";
     }
@@ -230,17 +229,16 @@ public class UserService {
                 return "Your user account exists on smartmove but has not been verified via email.Please check your email for verification link!";
             }
         }
-
-        String ownerName = userRegRequest.getOwner();
-        Optional<User> ownerOptional = userRepository.findByUsername(ownerName);
         User owner = null;
-
-        if (ownerOptional.isPresent()) {
-            owner = ownerOptional.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("The referrer : %s, does not exist on Smartmove ", ownerName));
+        String ownerName = userRegRequest.getOwner();
+        if (!ownerName.isEmpty()) {
+            Optional<User> ownerOptional = userRepository.findByUsername(ownerName);
+            if (ownerOptional.isPresent()) {
+                owner = ownerOptional.get();
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("The referrer : %s, does not exist on Smartmove ", ownerName));
+            }
         }
-
         PassportUser passportUser = passportService.findUser(userReq.getEmail());
         if (passportUser != null) {
             User usr = passportService.buildUser(passportUser);
@@ -254,8 +252,6 @@ public class UserService {
         sendVerificationMail(userReq);
         String message = String.format("Hi %s,a user verification email has been sent to you.Please kindly check to proceed with your on-boarding process", userReq.getFirstName());
         return message;
-
-
     }
 
     private void sendVerificationMail(User user) {
@@ -402,9 +398,11 @@ public class UserService {
             if (isInterswitchEmail(passportUser.getEmail()))
                 return saveAsAdmin(passportUser);
             //return userRepository.save(passportService.buildUser(passportUser));
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "The username you provided does not exist on SmartMove");
+            return null;
+            //throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "The username you provided does not exist on SmartMove");
         }
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to this resource");
+        return null;
+        //throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to this resource");
     }
 
 
@@ -639,7 +637,7 @@ public class UserService {
                 "User SignUp Declined", "messages" + File.separator + "declined_user", params);
     }
 
-    public UserPassportResponse doUserAuth(UserLoginRequest loginRequest) throws JsonProcessingException {
+    public UserPassportResponse doUserAuth(UserLoginRequest loginRequest) {
         UserPassportResponse passportResponse = null;
         try {
             passportResponse = passportService.getUserAccessDetails(loginRequest);
@@ -702,7 +700,7 @@ public class UserService {
         return verificationToken;
     }
 
-    public boolean changePassword(Principal principal, ChangePassword changePassword) throws JsonProcessingException {
+    public boolean changePassword(Principal principal, ChangePassword changePassword) {
         UserLoginRequest user = new UserLoginRequest();
         user.setUsername(principal.getName());
         user.setPassword(changePassword.getOldPassword());

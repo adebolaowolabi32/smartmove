@@ -58,7 +58,27 @@ public class PassportService {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-        return retrievePassportUser(apiRequestClient.Process(passportUser, headers, null, userUrl, HttpMethod.POST, Object.class).getBody());
+        try {
+            return retrievePassportUser(apiRequestClient.Process(passportUser, headers, null, userUrl, HttpMethod.POST, Object.class).getBody());
+        } catch (ResponseStatusException ex) {
+            String response = "";
+            ObjectMapper mapper = new ObjectMapper();
+            PassportErrorResponse passportErrorResponse;
+            response = ex.getReason();
+            try {
+                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                String message = passportErrorResponse.getDescription();
+                if (message == null || message.isEmpty()) {
+                    message = "";
+                    for (PassportErrorResponse.Error error : passportErrorResponse.getErrors()) {
+                        message += error.getMessage() + ". ";
+                    }
+                }
+                throw new ResponseStatusException(ex.getStatus(), message);
+            } catch (JsonProcessingException e) {
+                throw new ResponseStatusException(ex.getStatus(), "Failed to retrieve response.");
+            }
+        }
     }
 
     public PassportUser updateUser(User user) {
@@ -74,11 +94,32 @@ public class PassportService {
         variables.put("username", username);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
-        ResponseEntity response = apiRequestClient.Process(null, headers, variables, userUrl + "/{username}", HttpMethod.GET, Object.class);
-        return retrievePassportUser(response.getBody());
+        try {
+            ResponseEntity response = apiRequestClient.Process(null, headers, variables, userUrl + "/{username}", HttpMethod.GET, Object.class);
+            return retrievePassportUser(response.getBody());
+        } catch (ResponseStatusException ex) {
+            String response = "";
+            ObjectMapper mapper = new ObjectMapper();
+            PassportErrorResponse passportErrorResponse;
+            response = ex.getReason();
+            try {
+                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                String message = passportErrorResponse.getDescription();
+                if (message == null || message.isEmpty()) {
+                    message = "";
+                    for (PassportErrorResponse.Error error : passportErrorResponse.getErrors()) {
+                        message += error.getMessage() + ". ";
+                    }
+                }
+                throw new ResponseStatusException(ex.getStatus(), message);
+            } catch (JsonProcessingException e) {
+                throw new ResponseStatusException(ex.getStatus(), "Failed to retrieve response.");
+            }
+
+        }
     }
 
-    public UserPassportResponse getUserAccessDetails(UserLoginRequest userLoginRequest) throws JsonProcessingException {
+    public UserPassportResponse getUserAccessDetails(UserLoginRequest userLoginRequest) {
         String auth = clientId + ":" + clientSecret;
         byte[] encodedAuth = Base64.encodeBase64(
                 auth.getBytes(Charset.forName("US-ASCII")));
@@ -100,21 +141,35 @@ public class PassportService {
             String response = "";
             ObjectMapper mapper = new ObjectMapper();
             PassportErrorResponse passportErrorResponse;
-
-            if (ex instanceof HttpClientErrorException.Forbidden) {
-                response = ((HttpClientErrorException) ex).getResponseBodyAsString();
-                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, passportErrorResponse.getDescription());
-            }
-            if (ex instanceof HttpClientErrorException) {
-                response = ((HttpClientErrorException) ex).getResponseBodyAsString();
-                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, passportErrorResponse.getDescription());
-            } else if (ex instanceof HttpServerErrorException || ex instanceof UnknownHttpStatusCodeException) {
-                response = ((HttpClientErrorException) ex).getResponseBodyAsString();
-                mapper = new ObjectMapper();
-                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
-                throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, passportErrorResponse.getDescription());
+            try {
+                if (ex instanceof HttpClientErrorException.Forbidden) {
+                    response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                    passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, passportErrorResponse.getDescription());
+                }
+                if (ex instanceof HttpClientErrorException) {
+                    response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                    passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, passportErrorResponse.getDescription());
+                } else if (ex instanceof HttpServerErrorException || ex instanceof UnknownHttpStatusCodeException) {
+                    response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                    mapper = new ObjectMapper();
+                    passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                    throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, passportErrorResponse.getDescription());
+                } else if (ex instanceof ResponseStatusException) {
+                    response = ((ResponseStatusException) ex).getReason();
+                    passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                    String message = passportErrorResponse.getDescription();
+                    if (message == null || message.isEmpty()) {
+                        message = "";
+                        for (PassportErrorResponse.Error error : passportErrorResponse.getErrors()) {
+                            message += error.getMessage() + ". ";
+                        }
+                    }
+                    throw new ResponseStatusException(((ResponseStatusException) ex).getStatus(), message);
+                }
+            } catch (JsonProcessingException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to retrieve response.");
             }
             return null;
         }
@@ -124,7 +179,27 @@ public class PassportService {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-        apiRequestClient.Process(changePassword, headers, null, changePasswordUrl, HttpMethod.POST, Object.class).getBody();
+        try {
+            apiRequestClient.Process(changePassword, headers, null, changePasswordUrl, HttpMethod.POST, Object.class).getBody();
+        } catch (ResponseStatusException ex) {
+            String response = "";
+            ObjectMapper mapper = new ObjectMapper();
+            PassportErrorResponse passportErrorResponse;
+            response = ex.getReason();
+            try {
+                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                String message = passportErrorResponse.getDescription();
+                if (message == null || message.isEmpty()) {
+                    message = "";
+                    for (PassportErrorResponse.Error error : passportErrorResponse.getErrors()) {
+                        message += error.getMessage() + ". ";
+                    }
+                }
+                throw new ResponseStatusException(ex.getStatus(), message);
+            } catch (JsonProcessingException e) {
+                throw new ResponseStatusException(ex.getStatus(), "Failed to retrieve response.");
+            }
+        }
     }
 
     public boolean initiatePasswordReset(String username) {
@@ -135,10 +210,30 @@ public class PassportService {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-        return apiRequestClient.Process(resetPassword, headers, null, resetPasswordNotificationUrl, HttpMethod.POST, Object.class).getStatusCode() == HttpStatus.OK;
+        try {
+            return apiRequestClient.Process(resetPassword, headers, null, resetPasswordNotificationUrl, HttpMethod.POST, Object.class).getStatusCode() == HttpStatus.OK;
+        } catch (ResponseStatusException ex) {
+            String response = "";
+            ObjectMapper mapper = new ObjectMapper();
+            PassportErrorResponse passportErrorResponse;
+            response = ex.getReason();
+            try {
+                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                String message = passportErrorResponse.getDescription();
+                if (message == null || message.isEmpty()) {
+                    message = "";
+                    for (PassportErrorResponse.Error error : passportErrorResponse.getErrors()) {
+                        message += error.getMessage() + ". ";
+                    }
+                }
+                throw new ResponseStatusException(ex.getStatus(), message);
+            } catch (JsonProcessingException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to retrieve response.");
+            }
+        }
     }
 
-    public boolean doPasswordReset(UserAccountRecovery passwordResetBody) throws JsonProcessingException {
+    public boolean doPasswordReset(UserAccountRecovery passwordResetBody) {
         //returns 204 OK
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
@@ -152,10 +247,25 @@ public class PassportService {
             String response = "";
             ObjectMapper mapper = new ObjectMapper();
             PassportErrorResponse passportErrorResponse;
-            if (ex instanceof RestClientException || ex instanceof HttpClientErrorException) {
-                response = ((HttpClientErrorException) ex).getResponseBodyAsString();
-                passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, passportErrorResponse.getDescription());
+            try {
+                if (ex instanceof RestClientException) {
+                    response = ((HttpClientErrorException) ex).getResponseBodyAsString();
+                    passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, passportErrorResponse.getDescription());
+                } else if (ex instanceof ResponseStatusException) {
+                    response = ((ResponseStatusException) ex).getReason();
+                    passportErrorResponse = mapper.readValue(response, PassportErrorResponse.class);
+                    String message = passportErrorResponse.getDescription();
+                    if (message == null || message.isEmpty()) {
+                        message = "";
+                        for (PassportErrorResponse.Error error : passportErrorResponse.getErrors()) {
+                            message += error.getMessage() + ". ";
+                        }
+                    }
+                    throw new ResponseStatusException(((ResponseStatusException) ex).getStatus(), message);
+                }
+            } catch (JsonProcessingException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to retrieve response.");
             }
             return false;
         }

@@ -91,8 +91,13 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         final HttpStatus status = exception.getStatus();
         final String localizedMessage = exception.getLocalizedMessage();
         final String path = request.getDescription(false);
-        String message = (StringUtils.isNotEmpty(localizedMessage) ?
-                StringUtils.substringBetween(localizedMessage, "\"", "\"") : status.getReasonPhrase());
+        String message = "";
+        if (localizedMessage.contains("\"")) {
+            message = (StringUtils.isNotEmpty(localizedMessage) ?
+                    StringUtils.substringBetween(localizedMessage, "\"", "\"") : status.getReasonPhrase());
+        } else {
+            message = localizedMessage;
+        }
         log.error(String.format(ERROR_MESSAGE_TEMPLATE, message, path), exception);
         return getExceptionResponseEntity(exception, status, request, Collections.singletonList(message));
     }

@@ -1,6 +1,5 @@
 package com.interswitch.smartmoveserver.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.interswitch.smartmoveserver.model.Enum;
 import com.interswitch.smartmoveserver.model.*;
 import com.interswitch.smartmoveserver.model.request.*;
@@ -199,7 +198,7 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String login(UserLoginRequest user, BindingResult result, Model model, RedirectAttributes redirectAttributes) throws JsonProcessingException {
+    public String login(UserLoginRequest user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         String url;
         String token = userService.login(user);
         if (token.equalsIgnoreCase("FirstLogin")) {
@@ -217,44 +216,14 @@ public class HomeController {
         return "redirect:" + url;
     }
 
-    @GetMapping("/changepassword")
-    public String showChangePassword() {
-        return "changepassword";
-    }
-
-    @PostMapping("/changepassword")
-    public String changePassword(Principal principal, ChangePassword changePassword, BindingResult result, Model model) throws JsonProcessingException {
-        boolean successful = userService.changePassword(principal, changePassword);
-        if (successful)
-            model.addAttribute("message", "Password change successful");
-        else
-            model.addAttribute("error", "Password is incorrect");
-        return "changepassword";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session, RedirectAttributes redirectAttributes) {
-        session.invalidate();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null)
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-
-        redirectAttributes.addFlashAttribute("message", "Logout successful");
-        return "redirect:/login";
-    }
-
-    @GetMapping("/setCurrency")
-    public String setCurrency(Model model, @RequestParam(defaultValue = "NGN") String currency, @RequestParam(defaultValue = "/") String path, HttpSession session) {
-        session.setAttribute("currency", currency);
-        return "redirect:" + path;
-    }
-
     @GetMapping("/signup")
-    public String showNewSignupPage(Model model) {
+    public String showNewSignupPage(@RequestParam(required = false) boolean error, Model model) {
+        if (error)
+            model.addAttribute("error", "You do not have a SmartMove account. Please sign up.");
         model.addAttribute("user", new UserRegRequest());
         model.addAttribute("roles", pageUtil.getRoles());
         model.addAttribute("loginUrl", securityUtil.getSmartmoveLoginUrl());
-        return "signupnew";
+        return "signup";
     }
 
     @PostMapping("/signup")
@@ -263,14 +232,14 @@ public class HomeController {
         if (result.hasErrors()) {
             model.addAttribute("user", user);
             model.addAttribute("roles", pageUtil.getRoles());
-            return "signupnew";
+            return "signup";
         }
 
         String message = userService.doSelfSignUp(user);
         model.addAttribute("message", message);
         model.addAttribute("user", new UserRegRequest());
         model.addAttribute("roles", pageUtil.getRoles());
-        return "signupnew";
+        return "signup";
     }
 
     @GetMapping("/verify")
@@ -325,12 +294,44 @@ public class HomeController {
     }
 
     @PostMapping("/resetpassword")
-    public String resetUserPassword(Model model,UserAccountRecovery userAccountRecovery,BindingResult bindingResult) throws JsonProcessingException {
+    public String resetUserPassword(Model model, UserAccountRecovery userAccountRecovery, BindingResult bindingResult) {
         boolean successful = passportService.doPasswordReset(userAccountRecovery);
         if (successful)
             model.addAttribute("message", "Your password has been successfully reset.");
         else
             model.addAttribute("error", "Link is invalid/expired.");
         return "resetpassword";
+    }
+
+    @GetMapping("/changepassword")
+    public String showChangePassword() {
+        return "changepassword";
+    }
+
+    @PostMapping("/changepassword")
+    public String changePassword(Principal principal, ChangePassword changePassword, BindingResult result, Model model) {
+        boolean successful = userService.changePassword(principal, changePassword);
+        if (successful)
+            model.addAttribute("message", "Password change successful");
+        else
+            model.addAttribute("error", "Password is incorrect");
+        return "changepassword";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session, RedirectAttributes redirectAttributes) {
+        session.invalidate();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null)
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+
+        redirectAttributes.addFlashAttribute("message", "Logout successful");
+        return "redirect:/login";
+    }
+
+    @GetMapping("/setCurrency")
+    public String setCurrency(Model model, @RequestParam(defaultValue = "NGN") String currency, @RequestParam(defaultValue = "/") String path, HttpSession session) {
+        session.setAttribute("currency", currency);
+        return "redirect:" + path;
     }
 }

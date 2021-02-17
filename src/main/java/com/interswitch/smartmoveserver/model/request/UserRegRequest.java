@@ -3,8 +3,8 @@ package com.interswitch.smartmoveserver.model.request;
 import com.interswitch.smartmoveserver.model.User;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 @Data
 public class UserRegRequest extends UserRegistration {
@@ -23,15 +23,16 @@ public class UserRegRequest extends UserRegistration {
     @Length(min = 5, max = 50, message = "Email address must be between 5 and 50 characters long.")
     private String email;
 
-
     public User mapUserRequestToUser() {
+        String firstName = this.getFullName().substring(0, this.getFullName().indexOf(" "));
+        String lastName = this.getFullName().substring(this.getFullName().indexOf(" "));
         User user = User.builder()
                 .password(this.getPassword())
                 .address(this.getAddress())
                 .role(this.getRole())
                 .mobileNo(this.getMobileNo())
-                .lastName(this.getFullName())
-                .firstName(this.getFullName())
+                .lastName(lastName)
+                .firstName(firstName)
                 .username(this.getEmail())
                 .email(this.getEmail())
                 .emailVerified(false)

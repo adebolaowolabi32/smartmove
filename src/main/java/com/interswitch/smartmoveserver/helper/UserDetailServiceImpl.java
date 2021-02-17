@@ -34,7 +34,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findOrCreateByUsername(username);
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), "DummyPassword", getGrantedAuthorities(user));
+        if (user != null)
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), "DummyPassword", getGrantedAuthorities(user));
+        return null;
     }
 
     private Set<GrantedAuthority> getGrantedAuthorities(User user) {

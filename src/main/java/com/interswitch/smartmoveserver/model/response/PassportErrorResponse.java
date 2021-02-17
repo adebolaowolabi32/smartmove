@@ -3,6 +3,8 @@ package com.interswitch.smartmoveserver.model.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class PassportErrorResponse {
     @JsonProperty("error")
@@ -15,4 +17,12 @@ public class PassportErrorResponse {
     private String code;
     @JsonProperty("description")
     private String description;
+    @JsonProperty("errors")
+    private List<Error> errors;
+
+    @Data
+    public static class Error {
+        String fieldName;
+        String message;
+    }
 }

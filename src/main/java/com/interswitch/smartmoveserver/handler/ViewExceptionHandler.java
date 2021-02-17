@@ -81,17 +81,11 @@ public class ViewExceptionHandler {
         final String localizedMessage = exception.getLocalizedMessage();
         final String path = request.getServletPath();
         String message = "";
-        if (localizedMessage.contains("{")) {
-            if (localizedMessage.contains("code") && localizedMessage.contains("description")) {
-                message = (StringUtils.isNotEmpty(localizedMessage) ?
-                        StringUtils.substringBetween(localizedMessage, "\"description\":\"", "\",\"errors\"") : status.getReasonPhrase());
-            } else {
-                message = (StringUtils.isNotEmpty(localizedMessage) ?
-                        StringUtils.substringBetween(localizedMessage, "{", "}") : status.getReasonPhrase());
-            }
-        } else {
+        if (localizedMessage.contains("\"")) {
             message = (StringUtils.isNotEmpty(localizedMessage) ?
                     StringUtils.substringBetween(localizedMessage, "\"", "\"") : status.getReasonPhrase());
+        } else {
+            message = localizedMessage;
         }
         log.error(String.format(ERROR_MESSAGE_TEMPLATE, message, path), exception);
         redirectAttributes.addFlashAttribute("error", message);
