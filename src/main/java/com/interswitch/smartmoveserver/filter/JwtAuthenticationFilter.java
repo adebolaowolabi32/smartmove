@@ -54,8 +54,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (userDetails == null)
+            if (userDetails == null) {
                 res.sendRedirect("/signup?error=true");
+                return;
+            }
             else {
                 try {
                     if (jwtTokenUtil.validateToken(token, userDetails)) {

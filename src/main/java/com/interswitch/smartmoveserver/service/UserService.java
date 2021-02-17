@@ -250,7 +250,7 @@ public class UserService {
         }
         save(userReq, owner);
         sendVerificationMail(userReq);
-        String message = String.format("Hi %s,a user verification email has been sent to you.Please kindly check to proceed with your on-boarding process", userReq.getFirstName());
+        String message = String.format("Hi %s, a user verification email has been sent to you.Please kindly check to proceed with your on-boarding process", userReq.getFirstName());
         return message;
     }
 

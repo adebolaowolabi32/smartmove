@@ -219,7 +219,7 @@ public class HomeController {
     @GetMapping("/signup")
     public String showNewSignupPage(@RequestParam(required = false) boolean error, Model model) {
         if (error)
-            model.addAttribute("error", "You do not have a SmartMove account. Please sign up.");
+            model.addAttribute("error", "You do not have a SmartMove account.");
         model.addAttribute("user", new UserRegRequest());
         model.addAttribute("roles", pageUtil.getRoles());
         model.addAttribute("loginUrl", securityUtil.getSmartmoveLoginUrl());
